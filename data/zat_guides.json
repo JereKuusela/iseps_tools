@@ -1,0 +1,1390 @@
+[
+  {
+    "cycle": 1,
+    "run": "se_push",
+    "nodes": [
+      0
+    ]
+  },
+  {
+    "cycle": 2,
+    "run": "se_push",
+    "nodes": [
+      0,
+      1
+    ]
+  },
+  {
+    "cycle": 3,
+    "run": "se_push",
+    "nodes": [
+      0,
+      1,
+      1
+    ],
+    "note": "1 Alpha + 1 DC  only gives an additional ~x1.5 more DC at the cost of ~x1e7 Cash, so 2 Alpha nodes is better here."
+  },
+  {
+    "cycle": 4,
+    "run": "se_push",
+    "nodes": [
+      0,
+      1,
+      1,
+      1
+    ],
+    "note": "2 Alpha + 1 DC node is often better as it gives ~x3 more DC, but ~x1e9 less Cash than 3 Alpha. Only when the extra Cash is needed to get an important research, should 3 Alpha be used."
+  },
+  {
+    "cycle": 5,
+    "run": "se_push",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      4
+    ],
+    "note": "2 Alpha + 2 DC gives ~x2.2 more DC, but ~x1e11 less cash.  The 3 Alpha + 1 DC option is generally better here."
+  },
+  {
+    "cycle": 6,
+    "run": "se_push",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      4,
+      4
+    ]
+  },
+  {
+    "cycle": 7,
+    "run": "se_push",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      4,
+      4,
+      4
+    ]
+  },
+  {
+    "cycle": 8,
+    "run": "se_push",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      3,
+      4,
+      4,
+      4
+    ]
+  },
+  {
+    "cycle": 9,
+    "run": "se_push",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      3,
+      7,
+      4,
+      4,
+      4
+    ]
+  },
+  {
+    "cycle": 10,
+    "run": "se_push",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      3,
+      7,
+      11,
+      4,
+      4,
+      4
+    ]
+  },
+  {
+    "cycle": 11,
+    "run": "se_push",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      2,
+      6,
+      10,
+      14,
+      14,
+      4,
+      4
+    ],
+    "note": "Solutions node is better than 2 AP here because it ends up with slightly more DC which helps in Quantum menu alot."
+  },
+  {
+    "cycle": 12,
+    "run": "se_push",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      2,
+      6,
+      10,
+      14,
+      14,
+      4,
+      4,
+      4
+    ]
+  },
+  {
+    "cycle": 13,
+    "run": "se_push",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      2,
+      6,
+      10,
+      14,
+      14,
+      3,
+      4,
+      4,
+      4
+    ]
+  },
+  {
+    "cycle": 14,
+    "run": "se_push",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      2,
+      6,
+      10,
+      14,
+      14,
+      4,
+      4,
+      4,
+      8,
+      12
+    ],
+    "note": "New info finds that Beta-Fenix nodes are better than Delta-Ixion option because of Fenix node\u0027s large boost (x1.15) compared to Ixion which helps emblems via the more emblems upgrade."
+  },
+  {
+    "cycle": 15,
+    "run": "se_push",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      2,
+      6,
+      10,
+      14,
+      14,
+      3,
+      7,
+      11,
+      4,
+      4,
+      4
+    ]
+  },
+  {
+    "cycle": 16,
+    "run": "se_push",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      5,
+      9,
+      13,
+      13,
+      2,
+      6,
+      10,
+      14,
+      14,
+      4,
+      4,
+      4
+    ]
+  },
+  {
+    "cycle": 17,
+    "run": "se_push",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      2,
+      6,
+      10,
+      14,
+      14,
+      3,
+      7,
+      11,
+      11,
+      11,
+      4,
+      4,
+      4
+    ]
+  },
+  {
+    "cycle": 18,
+    "run": "se_push",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      2,
+      6,
+      10,
+      14,
+      14,
+      3,
+      7,
+      7,
+      11,
+      11,
+      11,
+      4,
+      4,
+      4
+    ]
+  },
+  {
+    "cycle": 19,
+    "run": "se_push",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      5,
+      9,
+      13,
+      13,
+      2,
+      6,
+      10,
+      14,
+      14,
+      3,
+      7,
+      11,
+      4,
+      4,
+      4
+    ]
+  },
+  {
+    "cycle": 20,
+    "run": "se_push",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      5,
+      9,
+      13,
+      13,
+      2,
+      6,
+      10,
+      14,
+      14,
+      3,
+      7,
+      11,
+      11,
+      4,
+      4,
+      4
+    ]
+  },
+  {
+    "cycle": 21,
+    "run": "se_push",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      5,
+      9,
+      13,
+      13,
+      2,
+      6,
+      10,
+      14,
+      14,
+      3,
+      7,
+      11,
+      11,
+      11,
+      4,
+      4,
+      4
+    ]
+  },
+  {
+    "cycle": 45,
+    "run": "se_push",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      5,
+      5,
+      5,
+      9,
+      9,
+      9,
+      13,
+      13,
+      2,
+      2,
+      2,
+      6,
+      6,
+      6,
+      10,
+      10,
+      10,
+      14,
+      14,
+      3,
+      3,
+      3,
+      7,
+      7,
+      7,
+      11,
+      11,
+      11,
+      15,
+      15,
+      4,
+      4,
+      4,
+      8,
+      8,
+      8,
+      12,
+      12,
+      12,
+      16,
+      16
+    ]
+  },
+  {
+    "cycle": 1,
+    "run": "g_points",
+    "nodes": [
+      0
+    ]
+  },
+  {
+    "cycle": 2,
+    "run": "g_points",
+    "nodes": [
+      0,
+      2
+    ]
+  },
+  {
+    "cycle": 3,
+    "run": "g_points",
+    "nodes": [
+      0,
+      2,
+      2
+    ]
+  },
+  {
+    "cycle": 4,
+    "run": "g_points",
+    "nodes": [
+      0,
+      2,
+      2,
+      2
+    ]
+  },
+  {
+    "cycle": 5,
+    "run": "g_points",
+    "nodes": [
+      0,
+      1,
+      2,
+      2,
+      2
+    ],
+    "note": "For the 5th node, Alpha comes out better than Delta for a GP run due mostly extra DC upgrades from the Alpha"
+  },
+  {
+    "cycle": 6,
+    "run": "g_points",
+    "nodes": [
+      0,
+      2,
+      6,
+      10,
+      14,
+      14
+    ]
+  },
+  {
+    "cycle": 7,
+    "run": "g_points",
+    "nodes": [
+      0,
+      2,
+      2,
+      6,
+      10,
+      14,
+      14
+    ]
+  },
+  {
+    "cycle": 8,
+    "run": "g_points",
+    "nodes": [
+      0,
+      2,
+      2,
+      2,
+      6,
+      10,
+      14,
+      14
+    ]
+  },
+  {
+    "cycle": 9,
+    "run": "g_points",
+    "nodes": [
+      0,
+      1,
+      2,
+      2,
+      2,
+      6,
+      10,
+      14,
+      14
+    ]
+  },
+  {
+    "cycle": 10,
+    "run": "g_points",
+    "nodes": [
+      0,
+      1,
+      1,
+      2,
+      2,
+      2,
+      6,
+      10,
+      14,
+      14
+    ]
+  },
+  {
+    "cycle": 11,
+    "run": "g_points",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      6,
+      10,
+      14,
+      14
+    ],
+    "note": "GP end node is not worthwhile here as the losses from dropping Gamma and Alpha nodes are too much"
+  },
+  {
+    "cycle": 12,
+    "run": "g_points",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      6,
+      10,
+      14,
+      14,
+      4
+    ],
+    "note": "GP end node is not worthwhile here as the losses from dropping Gamma and Alpha nodes are too much"
+  },
+  {
+    "cycle": 13,
+    "run": "g_points",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      6,
+      10,
+      14,
+      14,
+      4,
+      4
+    ],
+    "note": "GP end node appears still not worthwhile over dropping from DC and Alpha nodes"
+  },
+  {
+    "cycle": 14,
+    "run": "g_points",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      6,
+      10,
+      14,
+      14,
+      4,
+      4,
+      4
+    ],
+    "note": "GP end node appears still not worthwhile over dropping from DC and Alpha nodes"
+  },
+  {
+    "cycle": 15,
+    "run": "g_points",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      6,
+      10,
+      14,
+      14,
+      4,
+      4,
+      4,
+      8
+    ],
+    "note": "GP end node appears still not worthwhile over dropping from DC and Alpha nodes"
+  },
+  {
+    "cycle": 16,
+    "run": "g_points",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      6,
+      10,
+      14,
+      14,
+      4,
+      4,
+      4,
+      8,
+      12
+    ],
+    "note": "In testing, this beat 1xDC + GP by xe4 GP at SE152. Results may vary at earlier SEs"
+  },
+  {
+    "cycle": 17,
+    "run": "g_points",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      6,
+      10,
+      14,
+      14,
+      4,
+      4,
+      8,
+      12,
+      16,
+      16
+    ]
+  },
+  {
+    "cycle": 18,
+    "run": "g_points",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      6,
+      10,
+      14,
+      14,
+      4,
+      4,
+      4,
+      8,
+      12,
+      16,
+      16
+    ]
+  },
+  {
+    "cycle": 19,
+    "run": "g_points",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      6,
+      10,
+      14,
+      14,
+      4,
+      4,
+      4,
+      8,
+      12,
+      12,
+      16,
+      16
+    ]
+  },
+  {
+    "cycle": 20,
+    "run": "g_points",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      6,
+      10,
+      14,
+      14,
+      4,
+      4,
+      4,
+      8,
+      12,
+      12,
+      12,
+      16,
+      16
+    ]
+  },
+  {
+    "cycle": 1,
+    "run": "juno",
+    "nodes": [
+      0
+    ],
+    "note": "Juno run not feasible until 4 cycles"
+  },
+  {
+    "cycle": 2,
+    "run": "juno",
+    "nodes": [
+      0,
+      1
+    ],
+    "note": "Juno run not feasible until 4 cycles"
+  },
+  {
+    "cycle": 3,
+    "run": "juno",
+    "nodes": [
+      0,
+      1,
+      1
+    ],
+    "note": "Juno run not feasible until 4 cycles"
+  },
+  {
+    "cycle": 4,
+    "run": "juno",
+    "nodes": [
+      0,
+      1,
+      5,
+      9
+    ],
+    "note": "If you complete the 5th cycle in your run, put it in Juno and continue for a bit."
+  },
+  {
+    "cycle": 5,
+    "run": "juno",
+    "nodes": [
+      0,
+      1,
+      5,
+      9,
+      9
+    ],
+    "note": "If you complete the 6th cycle in your run, put it in Juno and continue for a bit."
+  },
+  {
+    "cycle": 6,
+    "run": "juno",
+    "nodes": [
+      0,
+      1,
+      5,
+      9,
+      9,
+      9
+    ],
+    "note": "If you complete the 7th cycle in your run, put it in Alpha and continue for a bit."
+  },
+  {
+    "cycle": 7,
+    "run": "juno",
+    "nodes": [
+      0,
+      1,
+      5,
+      9,
+      9,
+      13,
+      13
+    ],
+    "note": "Artifacts node + 2 Juno is generally better, but around SE 119-122, 2 Alpha + 3 Juno may be better if it gets Research 122 when Artifacts node wouldn\u0027t. If you complete the 8th cycle in your run, put it in Juno and continue for a bit."
+  },
+  {
+    "cycle": 8,
+    "run": "juno",
+    "nodes": [
+      0,
+      1,
+      5,
+      9,
+      9,
+      9,
+      13,
+      13
+    ],
+    "note": "If you complete the 9th cycle in your run, put it in Alpha and continue for a bit."
+  },
+  {
+    "cycle": 9,
+    "run": "juno",
+    "nodes": [
+      0,
+      1,
+      1,
+      5,
+      9,
+      9,
+      9,
+      13,
+      13
+    ],
+    "note": "If you complete the 10th cycle in your run, put it in Alpha and continue for a bit."
+  },
+  {
+    "cycle": 10,
+    "run": "juno",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      5,
+      9,
+      9,
+      9,
+      13,
+      13
+    ],
+    "note": "With ZAT 10, when you can get to e800 DC (or are very close), it can be better to use 2 Alpha and 1 DC for ~x12 DC boost and e18 cash loss.  This works as long as you can still reach Research 126 at e970 Cash with the cash loss."
+  },
+  {
+    "cycle": 11,
+    "run": "juno",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      5,
+      9,
+      9,
+      9,
+      13,
+      13,
+      4
+    ],
+    "note": "If you complete the 12th cycle in your run, put it in DC and continue for a bit."
+  },
+  {
+    "cycle": 12,
+    "run": "juno",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      5,
+      9,
+      9,
+      9,
+      13,
+      13,
+      4,
+      4
+    ],
+    "note": "If you complete the 13th cycle in your run, put it in DC and continue for a bit."
+  },
+  {
+    "cycle": 13,
+    "run": "juno",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      5,
+      9,
+      9,
+      9,
+      13,
+      13,
+      4,
+      4,
+      4
+    ],
+    "note": "If you complete the 14th cycle in your run, put it in Beta and continue for a bit."
+  },
+  {
+    "cycle": 14,
+    "run": "juno",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      5,
+      9,
+      9,
+      9,
+      13,
+      13,
+      4,
+      4,
+      4,
+      8
+    ],
+    "note": "A bit unsure here.  Dropping DC is not worth it for AP node.  Beta (boosting Scientist rounds for talent IC6-1) seems mathematically better than Gamma (boosting C41 levels) for Juno boost."
+  },
+  {
+    "cycle": 15,
+    "run": "juno",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      5,
+      9,
+      9,
+      9,
+      13,
+      13,
+      3,
+      7,
+      11,
+      11,
+      11
+    ],
+    "note": "At this point, trade-off with DC vs. AP nodes is 1-to-1 and each AP node level is better than DC, so we swap to 3 AP here. If you complete the 16th cycle in your run, put it in DC and continue for a bit."
+  },
+  {
+    "cycle": 16,
+    "run": "juno",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      5,
+      9,
+      9,
+      9,
+      13,
+      13,
+      3,
+      7,
+      11,
+      11,
+      11,
+      4
+    ],
+    "note": "If you complete the 17th cycle in your run, put it in DC and continue for a bit."
+  },
+  {
+    "cycle": 17,
+    "run": "juno",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      5,
+      9,
+      9,
+      9,
+      13,
+      13,
+      3,
+      7,
+      11,
+      11,
+      11,
+      4,
+      4
+    ],
+    "note": "If you complete the 18th cycle in your run, put it in DC and continue for a bit."
+  },
+  {
+    "cycle": 18,
+    "run": "juno",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      5,
+      9,
+      9,
+      9,
+      13,
+      13,
+      3,
+      7,
+      11,
+      11,
+      11,
+      4,
+      4,
+      4
+    ],
+    "note": "If you complete the 19th cycle in your run, put it in Beta and continue for a bit."
+  },
+  {
+    "cycle": 19,
+    "run": "juno",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      5,
+      9,
+      9,
+      9,
+      13,
+      13,
+      2,
+      6,
+      3,
+      7,
+      11,
+      11,
+      11,
+      4,
+      4
+    ],
+    "note": "Going to Ceti here is to unlock Kaiper Genesis and Data Center upgrades for the rest of the particles, but you also need enough Epsilon to unlock those upgrades."
+  },
+  {
+    "cycle": 20,
+    "run": "juno",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      5,
+      9,
+      9,
+      9,
+      13,
+      13,
+      2,
+      6,
+      10,
+      14,
+      14,
+      3,
+      7,
+      11,
+      11,
+      11
+    ],
+    "note": "If you complete the 21st cycle in your run, put it in DC and continue for a bit."
+  },
+  {
+    "cycle": 1,
+    "run": "cash",
+    "nodes": [
+      0
+    ],
+    "note": "These runs are minimally useful at this stage in part because companion 34 isn\u0027t level 50 yet, so sacrificing GP can hurt your cash some."
+  },
+  {
+    "cycle": 2,
+    "run": "cash",
+    "nodes": [
+      0,
+      1
+    ],
+    "note": "These runs are minimally useful at this stage in part because companion 34 isn\u0027t level 50 yet, so sacrificing GP can hurt your cash some."
+  },
+  {
+    "cycle": 3,
+    "run": "cash",
+    "nodes": [
+      0,
+      1,
+      1
+    ],
+    "note": "Once companion 34 is level 50, a cash run might be good for a small boost in SE 102-104 push, but generally isn\u0027t very important to do."
+  },
+  {
+    "cycle": 4,
+    "run": "cash",
+    "nodes": [
+      0,
+      1,
+      1,
+      1
+    ],
+    "note": "These runs are not generally recommended and are minimally useful, but could be worthwhile for reaching level 600 reward."
+  },
+  {
+    "cycle": 5,
+    "run": "cash",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      4
+    ],
+    "note": "These runs are not generally recommended and are minimally useful, but are good for reaching level 630 reward before ZAT 6 push."
+  },
+  {
+    "cycle": 6,
+    "run": "cash",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      4,
+      4
+    ],
+    "note": "These runs are not generally recommended and are minimally useful."
+  },
+  {
+    "cycle": 7,
+    "run": "cash",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      4,
+      4,
+      4
+    ],
+    "note": "These runs are not generally recommended and are minimally useful."
+  },
+  {
+    "cycle": 8,
+    "run": "cash",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      4,
+      4,
+      4,
+      8
+    ],
+    "note": "Sticking with DC over 2 AP was found to be better.  Beta is best use of last point."
+  },
+  {
+    "cycle": 9,
+    "run": "cash",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      2,
+      6,
+      10,
+      14,
+      14
+    ]
+  },
+  {
+    "cycle": 10,
+    "run": "cash",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      2,
+      6,
+      10,
+      14,
+      14,
+      4
+    ]
+  },
+  {
+    "cycle": 11,
+    "run": "cash",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      2,
+      6,
+      10,
+      14,
+      14,
+      4,
+      4
+    ]
+  },
+  {
+    "cycle": 12,
+    "run": "cash",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      2,
+      6,
+      10,
+      14,
+      14,
+      4,
+      4,
+      4
+    ]
+  },
+  {
+    "cycle": 13,
+    "run": "cash",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      2,
+      6,
+      10,
+      14,
+      14,
+      4,
+      4,
+      4,
+      8
+    ]
+  },
+  {
+    "cycle": 14,
+    "run": "cash",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      2,
+      6,
+      10,
+      14,
+      14,
+      4,
+      4,
+      4,
+      8,
+      12
+    ]
+  },
+  {
+    "cycle": 15,
+    "run": "cash",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      2,
+      6,
+      10,
+      14,
+      14,
+      3,
+      7,
+      11,
+      11,
+      11,
+      4
+    ]
+  },
+  {
+    "cycle": 16,
+    "run": "cash",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      2,
+      6,
+      10,
+      14,
+      14,
+      3,
+      7,
+      11,
+      11,
+      11,
+      4,
+      4
+    ]
+  },
+  {
+    "cycle": 17,
+    "run": "cash",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      2,
+      6,
+      10,
+      14,
+      14,
+      3,
+      7,
+      11,
+      11,
+      11,
+      4,
+      4,
+      4
+    ]
+  },
+  {
+    "cycle": 18,
+    "run": "cash",
+    "nodes": [
+      0,
+      1,
+      1,
+      1,
+      2,
+      6,
+      10,
+      14,
+      14,
+      3,
+      7,
+      7,
+      11,
+      11,
+      11,
+      4,
+      4,
+      4
+    ],
+    "note": "SE Push meta (adding 2nd Ixion) is better for Cash than other options such as Artifacts, Emblems, or Beta."
+  }
+]

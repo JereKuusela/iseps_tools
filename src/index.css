@@ -1,8 +1,15 @@
 @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap");
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #0c1c30;
+  --color-mist: #f1f6ff;
+  --color-panel: #ffffff;
+  --color-brand: #ff6b35;
+  --color-accent: #0a8f94;
+  --shadow-glow: 0 20px 60px rgba(12, 28, 48, 0.18);
+}
 
 :root {
   font-family: "Space Grotesk", sans-serif;

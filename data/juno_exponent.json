@@ -1,0 +1,122 @@
+[
+  {
+    "type": "crystal",
+    "level:": 0,
+    "exp": 0.005
+  },
+  {
+    "type": "qa",
+    "level:": 0,
+    "exp": 0.01
+  },
+  {
+    "type": "player",
+    "level:": 630,
+    "exp": 0.01
+  },
+  {
+    "type": "player",
+    "level:": 730,
+    "exp": 0.01
+  },
+  {
+    "type": "research",
+    "level:": 115,
+    "exp": 0.01
+  },
+  {
+    "type": "research",
+    "level:": 120,
+    "exp": 0.01
+  },
+  {
+    "type": "research",
+    "level:": 125,
+    "exp": 0.005
+  },
+  {
+    "type": "research",
+    "level:": 130,
+    "exp": 0.005
+  },
+  {
+    "type": "research",
+    "level:": 136,
+    "exp": 0.002
+  },
+  {
+    "type": "research",
+    "level:": 138,
+    "exp": 0.003
+  },
+  {
+    "type": "research",
+    "level:": 140,
+    "exp": 0.005
+  },
+  {
+    "type": "dcm",
+    "level:": 75,
+    "exp": 0.01
+  },
+  {
+    "type": "dcm",
+    "level:": 78,
+    "exp": 0.01
+  },
+  {
+    "type": "dcm",
+    "level:": 103,
+    "exp": 0.005
+  },
+  {
+    "type": "dcm",
+    "level:": 105,
+    "exp": 0.005
+  },
+  {
+    "type": "se",
+    "level:": 123,
+    "exp": 0.001
+  },
+  {
+    "type": "se",
+    "level:": 125,
+    "exp": 0.001
+  },
+  {
+    "type": "se",
+    "level:": 126,
+    "exp": 0.001
+  },
+  {
+    "type": "se",
+    "level:": 127,
+    "exp": 0.001
+  },
+  {
+    "type": "se",
+    "level:": 128,
+    "exp": 0.002
+  },
+  {
+    "type": "se",
+    "level:": 129,
+    "exp": 0.003
+  },
+  {
+    "type": "se",
+    "level:": 130,
+    "exp": 0.003
+  },
+  {
+    "type": "se",
+    "level:": 131,
+    "exp": 0.001
+  },
+  {
+    "type": "se",
+    "level:": 136,
+    "exp": 0.001
+  }
+]

@@ -1,13 +1,16 @@
 import { render } from "solid-js/web";
-import { Router } from "@solidjs/router";
+import { Route, Router } from "@solidjs/router";
 import App from "./App";
+import { ZatDataProvider } from "./lib/zat-data-context";
 import "./index.css";
 
 render(
   () => (
-    <Router>
-      <App />
-    </Router>
+    <ZatDataProvider>
+      <Router>
+        <Route path="/*all" component={App} />
+      </Router>
+    </ZatDataProvider>
   ),
   document.getElementById("root") as HTMLElement,
 );

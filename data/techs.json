@@ -1,0 +1,1054 @@
+[
+  {
+    "id": 0,
+    "initCost": "1.00e01",
+    "costCurve": [
+      {
+        "level": 1,
+        "mult": "1.00e01"
+      },
+      {
+        "level": 21,
+        "mult": "1.00e01"
+      },
+      {
+        "level": 29,
+        "mult": "1.00e01"
+      },
+      {
+        "level": 39,
+        "mult": "1.00e03"
+      },
+      {
+        "level": 45,
+        "mult": "1.00e02"
+      },
+      {
+        "level": 46,
+        "mult": "1.00e01"
+      },
+      {
+        "level": 47,
+        "mult": "1.00e01"
+      },
+      {
+        "level": 48,
+        "mult": "1.00e01"
+      },
+      {
+        "level": 49,
+        "mult": "1.00e05"
+      },
+      {
+        "level": 51,
+        "mult": "1.00e03"
+      },
+      {
+        "level": 54,
+        "mult": "1.00e17"
+      },
+      {
+        "level": 55,
+        "mult": "1.00e-07"
+      },
+      {
+        "level": 56,
+        "mult": "1.00e10"
+      },
+      {
+        "level": 57,
+        "mult": "1.00e01"
+      },
+      {
+        "level": 58,
+        "mult": "1.00e01"
+      },
+      {
+        "level": 59,
+        "mult": "1.00e13"
+      },
+      {
+        "level": 60,
+        "mult": "1.00e01"
+      },
+      {
+        "level": 61,
+        "mult": "1.00e01"
+      },
+      {
+        "level": 62,
+        "mult": "1.00e16"
+      },
+      {
+        "level": 63,
+        "mult": "1.00e01"
+      },
+      {
+        "level": 64,
+        "mult": "1.00e01"
+      },
+      {
+        "level": 65,
+        "mult": "1.00e23"
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "initCost": "1.00e00",
+    "costCurve": [
+      {
+        "level": 1,
+        "mult": "6.00e00"
+      },
+      {
+        "level": 40,
+        "mult": "6.00e00"
+      },
+      {
+        "level": 50,
+        "mult": "3.60e01"
+      },
+      {
+        "level": 70,
+        "mult": "3.60e01"
+      },
+      {
+        "level": 80,
+        "mult": "2.16e02"
+      },
+      {
+        "level": 100,
+        "mult": "2.16e02"
+      }
+    ],
+    "dcBoost": 1.66,
+    "junoBase": 5
+  },
+  {
+    "id": 2,
+    "initCost": "2.50e00",
+    "costCurve": [
+      {
+        "level": 1,
+        "mult": "1.50e01"
+      },
+      {
+        "level": 35,
+        "mult": "2.25e02"
+      },
+      {
+        "level": 40,
+        "mult": "1.50e01"
+      },
+      {
+        "level": 50,
+        "mult": "1.50e01"
+      },
+      {
+        "level": 55,
+        "mult": "1.00e02"
+      },
+      {
+        "level": 56,
+        "mult": "1.00e-01"
+      },
+      {
+        "level": 57,
+        "mult": "2.25e02"
+      },
+      {
+        "level": 63,
+        "mult": "1.50e01"
+      },
+      {
+        "level": 70,
+        "mult": "1.50e01"
+      }
+    ],
+    "dcBoost": 2.47,
+    "junoBase": 1.05,
+    "seMultiplier": 7,
+    "seAdditive": 0,
+    "extraJunoBase": 1.05,
+    "extraJunoExp": 2
+  },
+  {
+    "id": 3,
+    "initCost": "5.00e01",
+    "costCurve": [
+      {
+        "level": 1,
+        "mult": "1.70e00"
+      },
+      {
+        "level": 50,
+        "mult": "1.70e00"
+      },
+      {
+        "level": 80,
+        "mult": "1.70e00"
+      },
+      {
+        "level": 90,
+        "mult": "2.89e00"
+      },
+      {
+        "level": 100,
+        "mult": "1.70e00"
+      },
+      {
+        "level": 145,
+        "mult": "3.20e01"
+      },
+      {
+        "level": 146,
+        "mult": "6.25e-02"
+      },
+      {
+        "level": 150,
+        "mult": "2.89e00"
+      },
+      {
+        "level": 155,
+        "mult": "5.77e01"
+      },
+      {
+        "level": 156,
+        "mult": "2.60e-02"
+      },
+      {
+        "level": 169,
+        "mult": "2.89e00"
+      },
+      {
+        "level": 180,
+        "mult": "2.89e00"
+      },
+      {
+        "level": 190,
+        "mult": "2.89e00"
+      },
+      {
+        "level": 200,
+        "mult": "2.89e00"
+      }
+    ],
+    "dcBoost": 1.02,
+    "junoBase": 1
+  },
+  {
+    "id": 4,
+    "initCost": "1.00e04",
+    "costCurve": [
+      {
+        "level": 1,
+        "mult": "1.70e00"
+      },
+      {
+        "level": 50,
+        "mult": "1.70e00"
+      },
+      {
+        "level": 80,
+        "mult": "2.89e00"
+      },
+      {
+        "level": 90,
+        "mult": "1.70e00"
+      },
+      {
+        "level": 100,
+        "mult": "2.89e00"
+      },
+      {
+        "level": 135,
+        "mult": "3.20e01"
+      },
+      {
+        "level": 136,
+        "mult": "6.25e-02"
+      },
+      {
+        "level": 145,
+        "mult": "1.54e01"
+      },
+      {
+        "level": 146,
+        "mult": "7.79e-02"
+      },
+      {
+        "level": 150,
+        "mult": "2.89e00"
+      },
+      {
+        "level": 160,
+        "mult": "2.89e00"
+      },
+      {
+        "level": 170,
+        "mult": "2.89e00"
+      },
+      {
+        "level": 180,
+        "mult": "2.89e00"
+      },
+      {
+        "level": 190,
+        "mult": "2.89e00"
+      },
+      {
+        "level": 200,
+        "mult": "2.89e00"
+      }
+    ],
+    "dcBoost": 1.28,
+    "junoBase": 1
+  },
+  {
+    "id": 5,
+    "initCost": "2.50e04",
+    "costCurve": [
+      {
+        "level": 1,
+        "mult": "1.70e00"
+      },
+      {
+        "level": 50,
+        "mult": "1.70e00"
+      },
+      {
+        "level": 100,
+        "mult": "1.70e00"
+      },
+      {
+        "level": 150,
+        "mult": "1.75e00"
+      },
+      {
+        "level": 160,
+        "mult": "1.04e00"
+      },
+      {
+        "level": 170,
+        "mult": "1.05e00"
+      },
+      {
+        "level": 185,
+        "mult": "4.83e00"
+      },
+      {
+        "level": 186,
+        "mult": "2.69e-01"
+      },
+      {
+        "level": 190,
+        "mult": "2.85e00"
+      },
+      {
+        "level": 191,
+        "mult": "3.86e-01"
+      },
+      {
+        "level": 200,
+        "mult": "1.70e00"
+      },
+      {
+        "level": 210,
+        "mult": "2.89e00"
+      },
+      {
+        "level": 230,
+        "mult": "2.89e00"
+      },
+      {
+        "level": 240,
+        "mult": "2.89e00"
+      },
+      {
+        "level": 250,
+        "mult": "2.89e00"
+      }
+    ],
+    "dcBoost": 1.07,
+    "junoBase": 1
+  },
+  {
+    "id": 6,
+    "initCost": "5.00e04",
+    "costCurve": [
+      {
+        "level": 1,
+        "mult": "2.10e00"
+      },
+      {
+        "level": 50,
+        "mult": "2.10e00"
+      },
+      {
+        "level": 75,
+        "mult": "2.10e00"
+      },
+      {
+        "level": 80,
+        "mult": "2.10e00"
+      },
+      {
+        "level": 100,
+        "mult": "2.10e00"
+      },
+      {
+        "level": 110,
+        "mult": "1.03e00"
+      },
+      {
+        "level": 125,
+        "mult": "3.20e01"
+      },
+      {
+        "level": 126,
+        "mult": "6.25e-02"
+      },
+      {
+        "level": 130,
+        "mult": "1.15e00"
+      },
+      {
+        "level": 140,
+        "mult": "1.15e00"
+      },
+      {
+        "level": 145,
+        "mult": "2.31e00"
+      },
+      {
+        "level": 146,
+        "mult": "4.97e-01"
+      },
+      {
+        "level": 150,
+        "mult": "9.26e00"
+      },
+      {
+        "level": 160,
+        "mult": "4.41e00"
+      },
+      {
+        "level": 170,
+        "mult": "4.41e00"
+      }
+    ],
+    "dcBoost": 1.13,
+    "junoBase": 1.05,
+    "seMultiplier": 1,
+    "seAdditive": 0.5
+  },
+  {
+    "id": 7,
+    "initCost": "1.00e06",
+    "costCurve": [
+      {
+        "level": 1,
+        "mult": "2.60e00"
+      },
+      {
+        "level": 50,
+        "mult": "2.60e00"
+      },
+      {
+        "level": 65,
+        "mult": "2.60e00"
+      },
+      {
+        "level": 100,
+        "mult": "2.68e00"
+      },
+      {
+        "level": 110,
+        "mult": "1.06e00"
+      },
+      {
+        "level": 115,
+        "mult": "1.14e01"
+      },
+      {
+        "level": 116,
+        "mult": "1.32e-01"
+      },
+      {
+        "level": 120,
+        "mult": "1.08e00"
+      },
+      {
+        "level": 125,
+        "mult": "1.14e01"
+      },
+      {
+        "level": 126,
+        "mult": "1.32e-01"
+      },
+      {
+        "level": 130,
+        "mult": "1.12e00"
+      },
+      {
+        "level": 135,
+        "mult": "6.76e00"
+      },
+      {
+        "level": 140,
+        "mult": "2.33e00"
+      },
+      {
+        "level": 141,
+        "mult": "4.63e-01"
+      },
+      {
+        "level": 150,
+        "mult": "6.76e00"
+      },
+      {
+        "level": 160,
+        "mult": "6.76e00"
+      },
+      {
+        "level": 170,
+        "mult": "6.76e00"
+      }
+    ],
+    "dcBoost": 1.14,
+    "junoBase": 1.5
+  },
+  {
+    "id": 8,
+    "initCost": "2.50e06",
+    "costCurve": [
+      {
+        "level": 1,
+        "mult": "1.70e00"
+      },
+      {
+        "level": 50,
+        "mult": "1.70e00"
+      },
+      {
+        "level": 90,
+        "mult": "1.70e00"
+      },
+      {
+        "level": 100,
+        "mult": "2.89e00"
+      },
+      {
+        "level": 150,
+        "mult": "1.87e00"
+      },
+      {
+        "level": 155,
+        "mult": "6.40e01"
+      },
+      {
+        "level": 156,
+        "mult": "3.13e-02"
+      },
+      {
+        "level": 165,
+        "mult": "2.89e00"
+      },
+      {
+        "level": 170,
+        "mult": "1.10e00"
+      },
+      {
+        "level": 175,
+        "mult": "2.99e00"
+      },
+      {
+        "level": 176,
+        "mult": "4.02e-01"
+      },
+      {
+        "level": 180,
+        "mult": "7.43e00"
+      },
+      {
+        "level": 181,
+        "mult": "1.62e-01"
+      },
+      {
+        "level": 185,
+        "mult": "1.70e00"
+      },
+      {
+        "level": 190,
+        "mult": "1.70e00"
+      },
+      {
+        "level": 195,
+        "mult": "1.70e00"
+      },
+      {
+        "level": 200,
+        "mult": "2.89e00"
+      }
+    ],
+    "dcBoost": 1.03,
+    "junoBase": 1
+  },
+  {
+    "id": 9,
+    "initCost": "5.00e06",
+    "costCurve": [
+      {
+        "level": 1,
+        "mult": "2.60e00"
+      },
+      {
+        "level": 50,
+        "mult": "2.60e00"
+      },
+      {
+        "level": 100,
+        "mult": "2.60e00"
+      },
+      {
+        "level": 130,
+        "mult": "1.76e01"
+      },
+      {
+        "level": 131,
+        "mult": "1.25e-01"
+      },
+      {
+        "level": 140,
+        "mult": "2.49e00"
+      },
+      {
+        "level": 141,
+        "mult": "4.82e-01"
+      },
+      {
+        "level": 145,
+        "mult": "6.19e00"
+      },
+      {
+        "level": 146,
+        "mult": "1.94e-01"
+      },
+      {
+        "level": 150,
+        "mult": "6.76e00"
+      },
+      {
+        "level": 165,
+        "mult": "6.76e00"
+      },
+      {
+        "level": 175,
+        "mult": "6.76e00"
+      },
+      {
+        "level": 185,
+        "mult": "6.76e00"
+      },
+      {
+        "level": 200,
+        "mult": "6.76e00"
+      }
+    ],
+    "dcBoost": 1.13,
+    "junoBase": 1.02,
+    "seMultiplier": 1,
+    "seAdditive": 1
+  },
+  {
+    "id": 10,
+    "initCost": "1.00e09",
+    "costCurve": [
+      {
+        "level": 1,
+        "mult": "5.50e00"
+      },
+      {
+        "level": 50,
+        "mult": "5.50e00"
+      },
+      {
+        "level": 80,
+        "mult": "1.03e00"
+      },
+      {
+        "level": 90,
+        "mult": "1.06e00"
+      },
+      {
+        "level": 95,
+        "mult": "6.40e01"
+      },
+      {
+        "level": 96,
+        "mult": "3.13e-02"
+      },
+      {
+        "level": 100,
+        "mult": "3.78e01"
+      },
+      {
+        "level": 105,
+        "mult": "1.25e00"
+      },
+      {
+        "level": 110,
+        "mult": "6.35e02"
+      },
+      {
+        "level": 111,
+        "mult": "3.28e-01"
+      },
+      {
+        "level": 120,
+        "mult": "3.03e01"
+      },
+      {
+        "level": 130,
+        "mult": "3.03e01"
+      }
+    ],
+    "dcBoost": 1.27,
+    "junoBase": 3,
+    "seMultiplier": 2,
+    "seAdditive": 0
+  },
+  {
+    "id": 11,
+    "initCost": "2.50e09",
+    "costCurve": [
+      {
+        "level": 1,
+        "mult": "1.70e00"
+      },
+      {
+        "level": 50,
+        "mult": "1.70e00"
+      },
+      {
+        "level": 100,
+        "mult": "1.70e00"
+      },
+      {
+        "level": 150,
+        "mult": "1.73e00"
+      },
+      {
+        "level": 160,
+        "mult": "1.04e00"
+      },
+      {
+        "level": 170,
+        "mult": "1.06e00"
+      },
+      {
+        "level": 177,
+        "mult": "5.38e00"
+      },
+      {
+        "level": 178,
+        "mult": "2.60e-01"
+      },
+      {
+        "level": 180,
+        "mult": "1.08e00"
+      },
+      {
+        "level": 183,
+        "mult": "1.10e00"
+      },
+      {
+        "level": 190,
+        "mult": "1.12e00"
+      },
+      {
+        "level": 195,
+        "mult": "2.44e00"
+      },
+      {
+        "level": 196,
+        "mult": "4.76e-01"
+      },
+      {
+        "level": 200,
+        "mult": "4.91e00"
+      },
+      {
+        "level": 210,
+        "mult": "2.26e01"
+      },
+      {
+        "level": 211,
+        "mult": "5.14e-02"
+      },
+      {
+        "level": 230,
+        "mult": "1.70e00"
+      },
+      {
+        "level": 250,
+        "mult": "4.91e00"
+      }
+    ],
+    "dcBoost": 1.08,
+    "junoBase": 1
+  },
+  {
+    "id": 12,
+    "initCost": "5.00e09",
+    "costCurve": [
+      {
+        "level": 1,
+        "mult": "5.50e00"
+      },
+      {
+        "level": 50,
+        "mult": "5.50e00"
+      },
+      {
+        "level": 90,
+        "mult": "7.40e00"
+      },
+      {
+        "level": 91,
+        "mult": "1.49e-01"
+      },
+      {
+        "level": 100,
+        "mult": "3.33e01"
+      },
+      {
+        "level": 105,
+        "mult": "6.33e00"
+      },
+      {
+        "level": 110,
+        "mult": "6.33e00"
+      },
+      {
+        "level": 115,
+        "mult": "6.33e00"
+      },
+      {
+        "level": 120,
+        "mult": "3.03e01"
+      },
+      {
+        "level": 130,
+        "mult": "3.03e01"
+      }
+    ],
+    "dcBoost": 1.38,
+    "junoBase": 1.25,
+    "seMultiplier": 0.5,
+    "seAdditive": 0.5
+  },
+  {
+    "id": 13,
+    "initCost": "1.00e16",
+    "costCurve": [
+      {
+        "level": 1,
+        "mult": "1.00e01"
+      },
+      {
+        "level": 30,
+        "mult": "1.00e01"
+      },
+      {
+        "level": 35,
+        "mult": "1.00e01"
+      },
+      {
+        "level": 40,
+        "mult": "1.00e01"
+      },
+      {
+        "level": 50,
+        "mult": "1.00e01"
+      },
+      {
+        "level": 53,
+        "mult": "1.00e04"
+      },
+      {
+        "level": 54,
+        "mult": "1.00e-03"
+      },
+      {
+        "level": 55,
+        "mult": "1.00e01"
+      },
+      {
+        "level": 60,
+        "mult": "1.00e02"
+      },
+      {
+        "level": 65,
+        "mult": "1.00e01"
+      },
+      {
+        "level": 70,
+        "mult": "1.00e01"
+      },
+      {
+        "level": 75,
+        "mult": "1.00e01"
+      },
+      {
+        "level": 80,
+        "mult": "1.00e01"
+      },
+      {
+        "level": 85,
+        "mult": "1.00e01"
+      },
+      {
+        "level": 90,
+        "mult": "1.00e01"
+      },
+      {
+        "level": 95,
+        "mult": "1.00e01"
+      },
+      {
+        "level": 100,
+        "mult": "1.00e01"
+      }
+    ],
+    "dcBoost": 1.22,
+    "junoBase": 2.2
+  },
+  {
+    "id": 14,
+    "initCost": "2.50e17",
+    "costCurve": [
+      {
+        "level": 1,
+        "mult": "2.00e01"
+      },
+      {
+        "level": 22,
+        "mult": "2.00e01"
+      },
+      {
+        "level": 30,
+        "mult": "2.00e01"
+      },
+      {
+        "level": 44,
+        "mult": "8.00e03"
+      },
+      {
+        "level": 45,
+        "mult": "2.50e-03"
+      },
+      {
+        "level": 50,
+        "mult": "4.00e02"
+      },
+      {
+        "level": 60,
+        "mult": "2.00e01"
+      },
+      {
+        "level": 70,
+        "mult": "2.00e01"
+      }
+    ],
+    "dcBoost": 1.7,
+    "junoBase": 1
+  },
+  {
+    "id": 15,
+    "initCost": "5.00e19",
+    "costCurve": [
+      {
+        "level": 1,
+        "mult": "3.00e01"
+      },
+      {
+        "level": 20,
+        "mult": "3.00e01"
+      },
+      {
+        "level": 40,
+        "mult": "2.43e07"
+      },
+      {
+        "level": 41,
+        "mult": "1.23e-06"
+      },
+      {
+        "level": 50,
+        "mult": "9.00e02"
+      },
+      {
+        "level": 60,
+        "mult": "3.00e01"
+      },
+      {
+        "level": 70,
+        "mult": "3.00e01"
+      }
+    ],
+    "dcBoost": 1.45,
+    "junoBase": 1.05,
+    "seMultiplier": 5,
+    "seAdditive": 1
+  },
+  {
+    "id": 16,
+    "initCost": "1.00e170",
+    "costCurve": [
+      {
+        "level": 1,
+        "mult": "1.00e10"
+      }
+    ],
+    "dcBoost": 1,
+    "junoBase": 1
+  },
+  {
+    "id": 17,
+    "initCost": "1.00e175",
+    "costCurve": [
+      {
+        "level": 1,
+        "mult": "1.00e13"
+      }
+    ],
+    "dcBoost": 1,
+    "junoBase": 1
+  },
+  {
+    "id": 18,
+    "initCost": "1.00e180",
+    "costCurve": [
+      {
+        "level": 1,
+        "mult": "1.00e15"
+      }
+    ],
+    "dcBoost": 1,
+    "junoBase": 1
+  },
+  {
+    "id": 19,
+    "initCost": "1.00e188",
+    "costCurve": [
+      {
+        "level": 1,
+        "mult": "1.00e20"
+      }
+    ],
+    "dcBoost": 1,
+    "junoBase": 1
+  }
+]

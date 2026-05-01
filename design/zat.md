@@ -9,7 +9,7 @@ It has 3 parts, each becoming own tab.
 Left side has resource related inputs. Juno resource is used to purchase OG techs.
 
 - Numeric input for Juno gains per second/minute/hour (unit can be changed).
-- Numeric input for current Jno amount
+- Numeric input for current Juno amount
 - Dropdown for calculation mode. Options are DC and Juno, Juno is default.
   - Tooltip: "During your Juno run, leave this on Juno to maximise your Juno gains, towards the end of your run, swap to DC Note: Some Juno gains take effect after a SR (Artifacts etc.)"
 - Section for premium resources.
@@ -17,7 +17,6 @@ Left side has resource related inputs. Juno resource is used to purchase OG tech
   - Checkbox for "Juno bundle". Shows 50% boost when checked.
   - Checkbox for "Ixion-Juno bundle". Shows 75% boost when checked.
   - Checkbox for "Juno-Kappa bundle". Shows 100% boost when checked.
-  - Checkboxz for "Meltdown bundle". Shows +0.005 exponent when checked.
   - Numeric input for "Juno tokens" (0-1800). Each token up to 1000 gives 1% additive boost, after that 1% multiplicative boost. Visually show the total.
 - Section for "Zagreus"
   - Numeric input for "Zagreys cycles" (0-100).
@@ -31,7 +30,8 @@ Left side has resource related inputs. Juno resource is used to purchase OG tech
     - Numeric input for SE level
     - Numeric input for Player level
     - Numeric input for DCM level
-    - Numeric input forResearch level
+    - Numeric input for Research level
+    - Checkbox for "Meltdown bundle". Shows +0.005 exponent when checked.
     - Checkbox for Quantum Addon 0 (0.01 boost)
     - Data from JSON file that has exponent boost and then optionally SE, player, research or DCM requirement.
   - Display for total exponent (0.01 + extra exponent + OG0 levels *0.01 + Meltdown bundle* 0.005).
@@ -44,6 +44,7 @@ Right side shows the techs and recommendations.
 
 - Top section:
   - Shows total amount of techs.
+  - Small button to auto buy techs that cost less than hour.
   - Name of next best tech. For example "OG3 -> 172" (to indicate OG3 reaching level 172).
   - Remaining time based on gains and current Juno amount. Unit automatically changes (Min, Hr, Days, Years). Up to > 10 years.
   - Small button to buy the tech (automatically increases the tech level).
@@ -91,23 +92,12 @@ DC mode:
 Juno mode:
 
 - OG0 is same as DC mode.
-- For techs with base boost 0, value is always 1.
+- For techs with base boost 1, value is always 1.
 - For other techs:
-  - SE mult: When 80 or more, use 0.001681802, otherwise 0.
-  - For SE multiplier add comment "LOG(1 + X*0.000776) where X depends on SE level."
-  - SE divider: When 130 or more, use 0.3418300569, when 101 or more, use 0.2278867046, otherwise 0.1139433523.
-  - For SE divider add comment "LOG(1.03^X) where X depends on SE level."
-  - Calculate SE effect: "SE mult"/"SE divider"
-  - Calculate exponent (depends on OG tech, these could be in JSON data file as "se multipier" and "se additive" for each tech):
-    - If not specifed, use "SE effect" as it is.
-    - OG2: 7*"SE Effect"
-    - OG6: 0.5 + "SE Effect"
-    - OG9: 1 + "SE Effect"
-    - OG10: 2 * "SE Effect"
-    - OG12: 0.5+0.5*"SE Effect"
-    - OG15: 1+5*"SE Effect"
+  - Calculate SE effect (depends on SE level): "SE mult"/"SE divider"
+  - Calculate exponent per tech: "seAdditive" + "seMultiplier"*"SE Effect"
   - For final value, "base juno boost" ^ "exponent".
-    - For OG2 extra step: 1.05^2*"final value" (JSON data could have this as "extra multiplier" and "extra exponent").
+    - For OG2 extra step: "extraJunoBase"^"extraJunoExp"*"final value"
 
 ZAT boost:
 
