@@ -1,0 +1,27 @@
+[
+  {
+    "name": "44shades44",
+    "credits": [
+      "Original UI design for OG tech, Penrose, SC calculator and ZAT Guide."
+    ]
+  },
+  {
+    "name": "Jere",
+    "credits": [
+      "Calculations for SC calculator.",
+      "Ported spreadsheet for OG tech, Penrose, SC calculator and ZAT Guide."
+    ]
+  },
+  {
+    "name": "NickGlower",
+    "credits": [
+      "Calculations and formulas for OG tech, Penrose and ZAT Guide."
+    ]
+  },
+  {
+    "name": "Parsons",
+    "credits": [
+      "Original UI design and calculations for Premium Crystal and Premium Hauler."
+    ]
+  }
+]

@@ -11,6 +11,13 @@ Rules for calculating ZAT cycle cost.
 
 Base cost is 1, so level 1 costs 1e5, level 2 costs 1e10, level 3 costs 1e20 and so on.
 
+## credits.json
+
+Entries for the Credits tab.
+
+- `name`: Credit group or person name.
+- `credits`: List of credit lines to display under the name.
+
 ## juno_exponent.json
 
 Rules for calculating Juno exponent.

@@ -1,21 +1,23 @@
 import { A, useLocation } from "@solidjs/router"
 import { createEffect, For, Match, Switch } from "solid-js"
 import { createPersistedSignal } from "./lib/persistedSignal"
+import { CreditsPage } from "./pages/CreditsPage"
 import { OgTechPage } from "./pages/OgTechPage"
 import { PenrosePage } from "./pages/PenrosePage"
 import { PremiumCrystalTokenPage, PremiumHaulerMinePage } from "./pages/PremiumPage"
 import { ScPage } from "./pages/ScPage"
 import { ZatGuidePage } from "./pages/ZatGuidePage"
 
-type TabItem = { href: string; label: string; subtitle: string }
+type TabItem = { href: string; label: string }
 
 const tabs: TabItem[] = [
-  { href: "/", label: "OG Tech", subtitle: "Juno run optimiser" },
-  { href: "/zat-guide", label: "ZAT Guide", subtitle: "Tree planning" },
-  { href: "/penrose", label: "Penrose", subtitle: "Cycle goals" },
-  { href: "/sc", label: "SC", subtitle: "Singularity calculator" },
-  { href: "/premium/crystal-token", label: "Premium Crystal", subtitle: "Chest and bot output" },
-  { href: "/premium/hauler-mine", label: "Premium Hauler", subtitle: "Layer income by time" },
+  { href: "/", label: "OG Tech" },
+  { href: "/zat-guide", label: "ZAT Guide" },
+  { href: "/penrose", label: "Penrose" },
+  { href: "/sc", label: "SC" },
+  { href: "/premium/crystal-token", label: "Premium Crystal" },
+  { href: "/premium/hauler-mine", label: "Premium Hauler" },
+  { href: "/credits", label: "Credits" },
 ]
 
 const TopNav = (props: { darkMode: boolean; onToggleDarkMode: () => void }) => {
@@ -36,12 +38,6 @@ const TopNav = (props: { darkMode: boolean; onToggleDarkMode: () => void }) => {
                 }}
               >
                 <p class="text-sm font-semibold tracking-wide">{tab.label}</p>
-                <p
-                  class="text-xs text-ink/65 dark:text-white/65"
-                  classList={{ "text-white/80": location.pathname === tab.href }}
-                >
-                  {tab.subtitle}
-                </p>
               </A>
             )}
           </For>
@@ -86,6 +82,9 @@ const App = () => {
           </Match>
           <Match when={location.pathname === "/sc"}>
             <ScPage />
+          </Match>
+          <Match when={location.pathname === "/credits"}>
+            <CreditsPage />
           </Match>
           <Match
             when={
