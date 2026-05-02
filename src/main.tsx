@@ -9,7 +9,7 @@ render(
   () => (
     <ZatDataProvider>
       <ScProvider>
-        <Router>
+        <Router base="/iseps_tools">
           <Route path="/*all" component={App} />
         </Router>
       </ScProvider>
