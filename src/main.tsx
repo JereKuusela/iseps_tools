@@ -1,5 +1,5 @@
 import { render } from "solid-js/web"
-import { Route, Router } from "@solidjs/router"
+import { HashRouter, Route } from "@solidjs/router"
 import App from "./App"
 import { ROUTES } from "./lib/routes"
 import { createPersistedSignal } from "./lib/persistedSignal"
@@ -75,7 +75,7 @@ render(
   () => (
     <ZatDataProvider>
       <ScProvider>
-        <Router base="iseps_tools">
+        <HashRouter>
           <Route path={ROUTES.home} component={HomeRoute} />
           <Route path={ROUTES.ogTech} component={OgTechRoute} />
           <Route path={ROUTES.zatGuide} component={ZatGuideRoute} />
@@ -85,7 +85,7 @@ render(
           <Route path={ROUTES.premiumCrystal} component={PremiumCrystalRoute} />
           <Route path={ROUTES.premiumHauler} component={PremiumHaulerRoute} />
           <Route path="/*all" component={HomeRoute} />
-        </Router>
+        </HashRouter>
       </ScProvider>
     </ZatDataProvider>
   ),

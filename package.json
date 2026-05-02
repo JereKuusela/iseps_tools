@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "homepage": "/iseps_tools/#",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
