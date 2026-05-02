@@ -1,7 +1,7 @@
 import { A } from "@solidjs/router"
 import { createMemo, createSignal, For, Show } from "solid-js"
 import { NumberField, SelectField, ToggleField } from "../components/ui/formControls"
-import { Panel } from "../components/layout/Panel"
+import { Panel } from "../components/layout/Panel2"
 import { LargeNumber } from "../lib/largeNumber"
 import { createPersistedSignal } from "../lib/persistedSignal"
 import { useZatData, type JunoExponentType } from "../lib/zatContext"
@@ -279,8 +279,8 @@ export function OgTechPage(props: { cycles: string; setCycles: (next: string) =>
     <Panel title="OG Tech" subtitle="Input your run state and compare the highest-value OG upgrades.">
       <div class="grid gap-6 xl:grid-cols-[1.05fr_1.25fr]">
         <section class="space-y-4">
-          <div class="rounded-2xl border border-ink/15 bg-white/70 p-4">
-            <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80">Run Inputs</h3>
+          <div class="rounded-2xl border border-ink/15 bg-white/70 p-4 dark:border-white/15 dark:bg-[#182538]/75">
+            <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80 dark:text-white/80">Run Inputs</h3>
             <div class="mt-3 grid gap-3 sm:grid-cols-2">
               <NumberField
                 label="Juno gains"
@@ -312,8 +312,10 @@ export function OgTechPage(props: { cycles: string; setCycles: (next: string) =>
             </div>
           </div>
 
-          <div class="rounded-2xl border border-ink/15 bg-white/70 p-4">
-            <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80">Premium Resources</h3>
+          <div class="rounded-2xl border border-ink/15 bg-white/70 p-4 dark:border-white/15 dark:bg-[#182538]/75">
+            <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80 dark:text-white/80">
+              Premium Resources
+            </h3>
             <div class="mt-3 space-y-3">
               <NumberField
                 label="Juno output level"
@@ -349,8 +351,8 @@ export function OgTechPage(props: { cycles: string; setCycles: (next: string) =>
             </div>
           </div>
 
-          <div class="rounded-2xl border border-ink/15 bg-white/70 p-4">
-            <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80">Zagreus</h3>
+          <div class="rounded-2xl border border-ink/15 bg-white/70 p-4 dark:border-white/15 dark:bg-[#182538]/75">
+            <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80 dark:text-white/80">Zagreus</h3>
             <div class="mt-3 grid gap-3 sm:grid-cols-2">
               <NumberField
                 label="Zagreys cycles"
@@ -370,7 +372,7 @@ export function OgTechPage(props: { cycles: string; setCycles: (next: string) =>
                 hint={`Shares amount: ${shareAmount().toFixed(2)}`}
               />
             </div>
-            <p class="mt-3 text-xs text-ink/70">
+            <p class="mt-3 text-xs text-ink/70 dark:text-white/70">
               The Z.A.T Guide page has Tree recommendations, and displays the expected boost from each node. Open it in
               the{" "}
               <A href="/zat-guide" class="font-semibold text-accent underline">
@@ -380,12 +382,14 @@ export function OgTechPage(props: { cycles: string; setCycles: (next: string) =>
             </p>
           </div>
 
-          <div class="rounded-2xl border border-ink/15 bg-white/70 p-4">
+          <div class="rounded-2xl border border-ink/15 bg-white/70 p-4 dark:border-white/15 dark:bg-[#182538]/75">
             <div class="flex items-center justify-between gap-3">
-              <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80">Juno Exponent</h3>
+              <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80 dark:text-white/80">
+                Juno Exponent
+              </h3>
               <button
                 type="button"
-                class="rounded-lg border border-ink/25 px-2.5 py-1 text-xs font-semibold text-ink/80 transition hover:bg-ink hover:text-white"
+                class="rounded-lg border border-ink/25 px-2.5 py-1 text-xs font-semibold text-ink/80 transition hover:bg-ink hover:text-white dark:border-white/30 dark:text-white/80 dark:hover:bg-white/20"
                 onClick={() => setShowExpandedExponent((current) => !current)}
               >
                 {showExpandedExponent() ? "Simple input" : "Expand inputs"}
@@ -428,15 +432,17 @@ export function OgTechPage(props: { cycles: string; setCycles: (next: string) =>
               </div>
             </Show>
 
-            <div class="mt-3 grid gap-2 rounded-xl border border-ink/10 bg-mist/70 p-3">
-              <p class="text-sm text-ink/80">
+            <div class="mt-3 grid gap-2 rounded-xl border border-ink/10 bg-mist/70 p-3 dark:border-white/15 dark:bg-[#23344d]">
+              <p class="text-sm text-ink/80 dark:text-white/80">
                 Total exponent: <strong>{totalExponent().toFixed(3)}</strong>
               </p>
-              <p class="text-xs text-ink/70">Base 0.01 + extra + OG0 contribution + meltdown bonus.</p>
+              <p class="text-xs text-ink/70 dark:text-white/70">
+                Base 0.01 + extra + OG0 contribution + meltdown bonus.
+              </p>
               <div class="flex flex-wrap gap-2">
                 <For each={exponentGainEntries()}>
                   {(entry) => (
-                    <span class="rounded-full border border-accent/30 bg-accent/10 px-2.5 py-1 text-xs font-semibold text-ink/85">
+                    <span class="rounded-full border border-accent/30 bg-accent/10 px-2.5 py-1 text-xs font-semibold text-ink/85 dark:text-white/85">
                       +{entry.delta.toFixed(3)}: x{entry.multiplier.toFixed(2)}
                     </span>
                   )}
@@ -447,12 +453,14 @@ export function OgTechPage(props: { cycles: string; setCycles: (next: string) =>
         </section>
 
         <section class="space-y-4">
-          <div class="rounded-2xl border border-ink/15 bg-white/70 p-4">
+          <div class="rounded-2xl border border-ink/15 bg-white/70 p-4 dark:border-white/15 dark:bg-[#182538]/75">
             <div class="flex flex-wrap items-center justify-between gap-2">
-              <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80">Recommendations</h3>
+              <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80 dark:text-white/80">
+                Recommendations
+              </h3>
               <button
                 type="button"
-                class="rounded-lg border border-ink/25 px-2.5 py-1 text-xs font-semibold text-ink/80 transition hover:bg-ink hover:text-white"
+                class="rounded-lg border border-ink/25 px-2.5 py-1 text-xs font-semibold text-ink/80 transition hover:bg-ink hover:text-white dark:border-white/30 dark:text-white/80 dark:hover:bg-white/20"
                 onClick={autoBuyUnderHour}
               >
                 Auto buy &lt; 1hr
@@ -460,23 +468,25 @@ export function OgTechPage(props: { cycles: string; setCycles: (next: string) =>
             </div>
 
             <div class="mt-3 grid gap-3 sm:grid-cols-3">
-              <div class="rounded-xl border border-ink/10 bg-mist/70 p-3">
-                <p class="text-xs uppercase tracking-[0.12em] text-ink/65">Total techs</p>
-                <p class="mt-1 text-lg font-bold text-ink">{totalTechLevels()}</p>
+              <div class="rounded-xl border border-ink/10 bg-mist/70 p-3 dark:border-white/15 dark:bg-[#23344d]">
+                <p class="text-xs uppercase tracking-[0.12em] text-ink/65 dark:text-white/65">Total techs</p>
+                <p class="mt-1 text-lg font-bold text-ink dark:text-white">{totalTechLevels()}</p>
               </div>
-              <div class="rounded-xl border border-ink/10 bg-mist/70 p-3">
-                <p class="text-xs uppercase tracking-[0.12em] text-ink/65">Best next</p>
-                <p class="mt-1 text-sm font-semibold text-ink">
+              <div class="rounded-xl border border-ink/10 bg-mist/70 p-3 dark:border-white/15 dark:bg-[#23344d]">
+                <p class="text-xs uppercase tracking-[0.12em] text-ink/65 dark:text-white/65">Best next</p>
+                <p class="mt-1 text-sm font-semibold text-ink dark:text-white">
                   {bestTech() ? `OG${bestTech()!.id} -> ${bestTech()!.level}` : "-"}
                 </p>
-                <p class="text-xs text-ink/70">{bestTech() ? secondsToLabel(bestTech()!.etaSeconds) : "-"}</p>
+                <p class="text-xs text-ink/70 dark:text-white/70">
+                  {bestTech() ? secondsToLabel(bestTech()!.etaSeconds) : "-"}
+                </p>
               </div>
-              <div class="rounded-xl border border-ink/10 bg-mist/70 p-3">
-                <p class="text-xs uppercase tracking-[0.12em] text-ink/65">SE effect</p>
-                <p class="mt-1 text-lg font-bold text-ink">{seEffect().toFixed(4)}</p>
+              <div class="rounded-xl border border-ink/10 bg-mist/70 p-3 dark:border-white/15 dark:bg-[#23344d]">
+                <p class="text-xs uppercase tracking-[0.12em] text-ink/65 dark:text-white/65">SE effect</p>
+                <p class="mt-1 text-lg font-bold text-ink dark:text-white">{seEffect().toFixed(4)}</p>
                 <button
                   type="button"
-                  class="mt-2 rounded-lg border border-ink/25 px-2.5 py-1 text-xs font-semibold text-ink/80 transition hover:bg-ink hover:text-white"
+                  class="mt-2 rounded-lg border border-ink/25 px-2.5 py-1 text-xs font-semibold text-ink/80 transition hover:bg-ink hover:text-white dark:border-white/30 dark:text-white/80 dark:hover:bg-white/20"
                   onClick={buyNextBest}
                 >
                   Buy best
@@ -484,9 +494,9 @@ export function OgTechPage(props: { cycles: string; setCycles: (next: string) =>
               </div>
             </div>
 
-            <div class="mt-4 overflow-x-auto rounded-xl border border-ink/10 bg-white">
+            <div class="mt-4 overflow-x-auto rounded-xl border border-ink/10 bg-white dark:border-white/15 dark:bg-[#22344d]">
               <table class="w-full min-w-[420px] border-collapse text-left text-sm">
-                <thead class="bg-mist/80 text-xs uppercase tracking-[0.1em] text-ink/70">
+                <thead class="bg-mist/80 text-xs uppercase tracking-[0.1em] text-ink/70 dark:bg-[#1a2a3f] dark:text-white/70">
                   <tr>
                     <th class="px-3 py-2">Up next</th>
                     <th class="px-3 py-2">Remaining</th>
@@ -496,10 +506,10 @@ export function OgTechPage(props: { cycles: string; setCycles: (next: string) =>
                 <tbody>
                   <For each={topFive()}>
                     {(entry) => (
-                      <tr class="border-t border-ink/10">
-                        <td class="px-3 py-2 font-semibold text-ink">{`OG${entry.id} -> ${entry.level}`}</td>
-                        <td class="px-3 py-2 text-ink/80">{secondsToLabel(entry.etaSeconds)}</td>
-                        <td class="px-3 py-2 text-ink/80">{formatPercent(entry.relative / 100)}</td>
+                      <tr class="border-t border-ink/10 dark:border-white/10">
+                        <td class="px-3 py-2 font-semibold text-ink dark:text-white">{`OG${entry.id} -> ${entry.level}`}</td>
+                        <td class="px-3 py-2 text-ink/80 dark:text-white/80">{secondsToLabel(entry.etaSeconds)}</td>
+                        <td class="px-3 py-2 text-ink/80 dark:text-white/80">{formatPercent(entry.relative / 100)}</td>
                       </tr>
                     )}
                   </For>
@@ -508,18 +518,18 @@ export function OgTechPage(props: { cycles: string; setCycles: (next: string) =>
             </div>
           </div>
 
-          <div class="rounded-2xl border border-ink/15 bg-white/70 p-4">
-            <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80">OG Tech Grid</h3>
+          <div class="rounded-2xl border border-ink/15 bg-white/70 p-4 dark:border-white/15 dark:bg-[#182538]/75">
+            <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80 dark:text-white/80">OG Tech Grid</h3>
             <div class="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
               <For each={techCardRows()}>
                 {(tech) => (
-                  <article class="rounded-xl border border-ink/15 bg-white p-3">
+                  <article class="rounded-xl border border-ink/15 bg-white p-3 dark:border-white/15 dark:bg-[#23344d]">
                     <div class="flex items-start justify-between gap-2">
                       <div>
-                        <p class="text-xs uppercase tracking-[0.1em] text-ink/60">Tech</p>
-                        <p class="text-base font-bold text-ink">{tech.label}</p>
+                        <p class="text-xs uppercase tracking-[0.1em] text-ink/60 dark:text-white/60">Tech</p>
+                        <p class="text-base font-bold text-ink dark:text-white">{tech.label}</p>
                       </div>
-                      <span class="rounded-full border border-accent/30 bg-accent/10 px-2 py-0.5 text-xs font-semibold text-ink/85">
+                      <span class="rounded-full border border-accent/30 bg-accent/10 px-2 py-0.5 text-xs font-semibold text-ink/85 dark:text-white/85">
                         {formatPercent(tech.relative / 100)}
                       </span>
                     </div>
@@ -532,13 +542,13 @@ export function OgTechPage(props: { cycles: string; setCycles: (next: string) =>
                       />
                       <button
                         type="button"
-                        class="h-10 rounded-lg border border-ink/25 px-3 text-sm font-semibold text-ink/80 transition hover:bg-ink hover:text-white"
+                        class="h-10 rounded-lg border border-ink/25 px-3 text-sm font-semibold text-ink/80 transition hover:bg-ink hover:text-white dark:border-white/30 dark:text-white/80 dark:hover:bg-white/20"
                         onClick={() => buyTechLevel(tech.id)}
                       >
                         +1
                       </button>
                     </div>
-                    <div class="mt-3 space-y-1 text-xs text-ink/75">
+                    <div class="mt-3 space-y-1 text-xs text-ink/75 dark:text-white/75">
                       <p>ETA: {secondsToLabel(tech.etaSeconds)}</p>
                       <p class="font-mono">Cost: {tech.nextCost}</p>
                     </div>

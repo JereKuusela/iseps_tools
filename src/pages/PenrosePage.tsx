@@ -1,5 +1,5 @@
 import { createMemo, For } from "solid-js"
-import { Panel } from "../components/layout/Panel"
+import { Panel } from "../components/layout/Panel2"
 import { NumberField } from "../components/ui/formControls"
 import { createPersistedSignal } from "../lib/persistedSignal"
 import { useZatData } from "../lib/zatContext"
@@ -116,8 +116,8 @@ export function PenrosePage(props: { cycles: string; setCycles: (next: string) =
     <Panel title="Penrose" subtitle="Track current status, next cycle goal, and ETA based on your cycle pace.">
       <div class="grid gap-6 xl:grid-cols-[0.95fr_1.45fr]">
         <section class="space-y-4">
-          <div class="rounded-2xl border border-ink/15 bg-white/70 p-4">
-            <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80">Inputs</h3>
+          <div class="rounded-2xl border border-ink/15 bg-white/70 p-4 dark:border-white/15 dark:bg-[#182538]/75">
+            <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80 dark:text-white/80">Inputs</h3>
             <div class="mt-3 grid gap-3 sm:grid-cols-2">
               <NumberField
                 label="Status"
@@ -136,18 +136,18 @@ export function PenrosePage(props: { cycles: string; setCycles: (next: string) =
                 tooltip="Average cycles progressed per hour during your current run."
               />
             </div>
-            <p class="mt-3 text-xs text-ink/65">
+            <p class="mt-3 text-xs text-ink/65 dark:text-white/65">
               Goals use known cycle milestones from guide data and automatically switch to a +5 cycle heuristic after
               the last known milestone.
             </p>
           </div>
 
-          <div class="rounded-2xl border border-ink/15 bg-white/70 p-4">
-            <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80">Upcoming Goals</h3>
+          <div class="rounded-2xl border border-ink/15 bg-white/70 p-4 dark:border-white/15 dark:bg-[#182538]/75">
+            <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80 dark:text-white/80">Upcoming Goals</h3>
             <div class="mt-3 flex flex-wrap gap-2">
               <For each={upcomingGoals()}>
                 {(cycle) => (
-                  <span class="rounded-full border border-accent/30 bg-accent/10 px-2.5 py-1 text-xs font-semibold text-ink/90">
+                  <span class="rounded-full border border-accent/30 bg-accent/10 px-2.5 py-1 text-xs font-semibold text-ink/90 dark:text-white/90">
                     Cycle {cycle}
                   </span>
                 )}
@@ -156,26 +156,28 @@ export function PenrosePage(props: { cycles: string; setCycles: (next: string) =
           </div>
         </section>
 
-        <section class="rounded-2xl border border-ink/15 bg-white/75 p-5">
-          <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80">Goal Tracker</h3>
+        <section class="rounded-2xl border border-ink/15 bg-white/75 p-5 dark:border-white/15 dark:bg-[#162235]/80">
+          <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80 dark:text-white/80">Goal Tracker</h3>
 
           <div class="mt-4 grid gap-3 sm:grid-cols-3">
-            <div class="rounded-xl border border-ink/15 bg-white p-3">
-              <p class="text-[11px] font-semibold uppercase tracking-[0.12em] text-ink/60">Goal</p>
-              <p class="mt-1 text-xl font-black text-ink">Cycle {goalWindow().next}</p>
+            <div class="rounded-xl border border-ink/15 bg-white p-3 dark:border-white/15 dark:bg-[#253a56]">
+              <p class="text-[11px] font-semibold uppercase tracking-[0.12em] text-ink/60 dark:text-white/60">Goal</p>
+              <p class="mt-1 text-xl font-black text-ink dark:text-white">Cycle {goalWindow().next}</p>
             </div>
-            <div class="rounded-xl border border-ink/15 bg-white p-3">
-              <p class="text-[11px] font-semibold uppercase tracking-[0.12em] text-ink/60">Remaining</p>
-              <p class="mt-1 text-xl font-black text-ink">{remainingCycles().toFixed(0)}</p>
+            <div class="rounded-xl border border-ink/15 bg-white p-3 dark:border-white/15 dark:bg-[#253a56]">
+              <p class="text-[11px] font-semibold uppercase tracking-[0.12em] text-ink/60 dark:text-white/60">
+                Remaining
+              </p>
+              <p class="mt-1 text-xl font-black text-ink dark:text-white">{remainingCycles().toFixed(0)}</p>
             </div>
-            <div class="rounded-xl border border-ink/15 bg-white p-3">
-              <p class="text-[11px] font-semibold uppercase tracking-[0.12em] text-ink/60">ETA</p>
-              <p class="mt-1 text-xl font-black text-ink">{formatDuration(etaHours())}</p>
+            <div class="rounded-xl border border-ink/15 bg-white p-3 dark:border-white/15 dark:bg-[#253a56]">
+              <p class="text-[11px] font-semibold uppercase tracking-[0.12em] text-ink/60 dark:text-white/60">ETA</p>
+              <p class="mt-1 text-xl font-black text-ink dark:text-white">{formatDuration(etaHours())}</p>
             </div>
           </div>
 
           <div class="mt-5">
-            <div class="mb-1.5 flex items-center justify-between text-xs font-semibold text-ink/70">
+            <div class="mb-1.5 flex items-center justify-between text-xs font-semibold text-ink/70 dark:text-white/70">
               <span>
                 Progress: Cycle {goalWindow().previous} to {goalWindow().next}
               </span>
@@ -187,7 +189,7 @@ export function PenrosePage(props: { cycles: string; setCycles: (next: string) =
                 style={{ width: `${progress().toFixed(2)}%` }}
               />
             </div>
-            <p class="mt-2 text-xs text-ink/65">
+            <p class="mt-2 text-xs text-ink/65 dark:text-white/65">
               Goal source: {goalWindow().source === "known" ? "Known milestone" : "Heuristic (+5 cycles)"}
             </p>
           </div>

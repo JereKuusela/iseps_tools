@@ -33,13 +33,19 @@ describe("calculateDcCostOfGoal", () => {
       currentSe: 119,
       goalType: "battery1",
     })
+    const beforeMultiplier2 = calculateDcCostOfGoal({
+      currentSe: 119,
+      goalType: "battery2",
+    })
 
     const atMultiplier = calculateDcCostOfGoal({
       currentSe: 120,
       goalType: "battery1",
     })
 
+    expect(beforeMultiplier.dcCost.toString(0)).toBe("1e0")
     expect(beforeMultiplier.batteryMultiplier.toString(0)).toBe("1e0")
+    expect(beforeMultiplier2.dcCost.toString(0)).toBe("1e0")
     expect(atMultiplier.batteryMultiplier.toString(0)).toBe("1e5")
   })
 })

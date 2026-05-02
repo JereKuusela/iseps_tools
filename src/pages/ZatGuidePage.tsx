@@ -1,6 +1,6 @@
 import { createMemo, For, Show } from "solid-js"
 import { NumberField, SelectField } from "../components/ui/formControls"
-import { Panel } from "../components/layout/Panel"
+import { Panel } from "../components/layout/Panel2"
 import { createPersistedSignal } from "../lib/persistedSignal"
 import { useZatData } from "../lib/zatContext"
 
@@ -168,8 +168,8 @@ export function ZatGuidePage(props: { cycles: string; setCycles: (next: string) 
     <Panel title="ZAT Guide" subtitle="Cycle- and run-based node recommendations with an interactive tree view.">
       <div class="grid gap-6 xl:grid-cols-[0.92fr_1.4fr]">
         <section class="space-y-4">
-          <div class="rounded-2xl border border-ink/15 bg-white/70 p-4">
-            <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80">Guide Inputs</h3>
+          <div class="rounded-2xl border border-ink/15 bg-white/70 p-4 dark:border-white/15 dark:bg-[#182538]/75">
+            <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80 dark:text-white/80">Guide Inputs</h3>
             <div class="mt-3 grid gap-3 sm:grid-cols-2">
               <NumberField label="Cycles" value={props.cycles} onInput={props.setCycles} min={1} max={100} step={1} />
               <SelectField
@@ -198,20 +198,22 @@ export function ZatGuidePage(props: { cycles: string; setCycles: (next: string) 
             </div>
           </div>
 
-          <div class="rounded-2xl border border-ink/15 bg-white/70 p-4">
-            <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80">Recommendation</h3>
+          <div class="rounded-2xl border border-ink/15 bg-white/70 p-4 dark:border-white/15 dark:bg-[#182538]/75">
+            <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80 dark:text-white/80">Recommendation</h3>
             <Show
               when={selectedGuide()}
-              fallback={<p class="mt-3 text-sm text-ink/70">No guide data found for this run type.</p>}
+              fallback={
+                <p class="mt-3 text-sm text-ink/70 dark:text-white/70">No guide data found for this run type.</p>
+              }
             >
-              <p class="mt-3 text-xs text-ink/65">
+              <p class="mt-3 text-xs text-ink/65 dark:text-white/65">
                 Using cycle {selectedGuide()!.cycle} recommendation
                 {selectedGuide()!.cycle !== normalizedCycles() ? ` (closest at or below ${normalizedCycles()})` : ""}.
               </p>
               <div class="mt-3 flex flex-wrap gap-2">
                 <For each={recommendationLines()}>
                   {(line) => (
-                    <span class="rounded-full border border-accent/30 bg-accent/10 px-2.5 py-1 text-xs font-semibold text-ink/85">
+                    <span class="rounded-full border border-accent/30 bg-accent/10 px-2.5 py-1 text-xs font-semibold text-ink/85 dark:text-white/85">
                       {line}
                     </span>
                   )}
@@ -220,9 +222,9 @@ export function ZatGuidePage(props: { cycles: string; setCycles: (next: string) 
             </Show>
           </div>
 
-          <div class="rounded-2xl border border-ink/15 bg-white/70 p-4">
-            <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80">Notes</h3>
-            <p class="mt-3 text-sm leading-6 text-ink/80">
+          <div class="rounded-2xl border border-ink/15 bg-white/70 p-4 dark:border-white/15 dark:bg-[#182538]/75">
+            <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80 dark:text-white/80">Notes</h3>
+            <p class="mt-3 text-sm leading-6 text-ink/80 dark:text-white/80">
               {selectedGuide()?.note ?? "No special note for this cycle and run type."}
             </p>
           </div>

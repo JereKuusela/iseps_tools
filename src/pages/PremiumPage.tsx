@@ -1,9 +1,9 @@
 import { createMemo, For, Show } from "solid-js"
-import { Panel } from "../components/layout/Panel"
+import { Panel } from "../components/layout/Panel2"
 import { ToggleField } from "../components/ui/formControls"
 import { isValidNumberishInput } from "../components/ui/formControls"
 import { sanitizeNumberishInput } from "../components/ui/formControls"
-import { Tooltip } from "../components/ui/Tooltip"
+import { Tooltip } from "../components/ui/Tooltip2"
 import { createPersistedSignal } from "../lib/persistedSignal"
 import { useZatData, type PremiumCrystalTokenMethod, type PremiumHaulerLayer } from "../lib/zatContext"
 
@@ -60,7 +60,7 @@ function NumberSelectField(props: {
   return (
     <div class="grid gap-1.5">
       <div class="flex items-center gap-2">
-        <label for={props.id} class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75">
+        <label for={props.id} class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
           {props.label}
         </label>
         {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
@@ -76,7 +76,7 @@ function NumberSelectField(props: {
           if (!isValidNumberishInput(next)) return
           props.onInput(next)
         }}
-        class="w-full rounded-xl border border-ink/20 bg-white px-3 py-2 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring"
+        class="w-full rounded-xl border border-ink/20 bg-white px-3 py-2 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
       />
       <datalist id={listId}>
         <For each={props.options}>{(option) => <option value={option} />}</For>
@@ -217,8 +217,8 @@ function CrystalAndTokenTab() {
   return (
     <div class="grid gap-6 xl:grid-cols-[0.96fr_1.34fr]">
       <section class="space-y-4">
-        <div class="rounded-2xl border border-ink/15 bg-white/70 p-4">
-          <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80">Inputs</h3>
+        <div class="rounded-2xl border border-ink/15 bg-white/70 p-4 dark:border-white/15 dark:bg-[#182538]/75">
+          <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80 dark:text-white/80">Inputs</h3>
           <div class="mt-3 grid gap-3 sm:grid-cols-2">
             <NumberSelectField
               id="supply-bot-token"
@@ -319,37 +319,37 @@ function CrystalAndTokenTab() {
         </div>
       </section>
 
-      <section class="rounded-2xl border border-ink/15 bg-white/75 p-4 sm:p-5">
-        <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80">Premium Methods</h3>
+      <section class="rounded-2xl border border-ink/15 bg-white/75 p-4 sm:p-5 dark:border-white/15 dark:bg-[#162235]/80">
+        <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80 dark:text-white/80">Premium Methods</h3>
         <div class="mt-3 overflow-x-auto">
           <table class="min-w-full border-separate border-spacing-0 text-left text-sm">
             <thead>
-              <tr class="text-xs uppercase tracking-[0.12em] text-ink/60">
-                <th class="border-b border-ink/20 px-2 py-2">Method</th>
-                <th class="border-b border-ink/20 px-2 py-2">Time</th>
-                <th class="border-b border-ink/20 px-2 py-2">Base Output</th>
-                <th class="border-b border-ink/20 px-2 py-2">Hourly Output</th>
-                <th class="border-b border-ink/20 px-2 py-2">Daily Output</th>
+              <tr class="text-xs uppercase tracking-[0.12em] text-ink/60 dark:text-white/60">
+                <th class="border-b border-ink/20 px-2 py-2 dark:border-white/20">Method</th>
+                <th class="border-b border-ink/20 px-2 py-2 dark:border-white/20">Time</th>
+                <th class="border-b border-ink/20 px-2 py-2 dark:border-white/20">Base Output</th>
+                <th class="border-b border-ink/20 px-2 py-2 dark:border-white/20">Hourly Output</th>
+                <th class="border-b border-ink/20 px-2 py-2 dark:border-white/20">Daily Output</th>
               </tr>
             </thead>
             <tbody>
               <For each={rows()}>
                 {(row) => (
-                  <tr class="align-top text-ink/90">
-                    <td class="border-b border-ink/10 px-2 py-2.5 font-semibold">{row.name}</td>
-                    <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs">
+                  <tr class="align-top text-ink/90 dark:text-white/90">
+                    <td class="border-b border-ink/10 px-2 py-2.5 font-semibold dark:border-white/10">{row.name}</td>
+                    <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10">
                       {formatValue(row.seconds, 1)}s<br />
                       {formatValue(row.perHourFactor, 2)} per hour
                     </td>
-                    <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs">
+                    <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10">
                       T {formatValue(row.baseTokens)}
                       <br />C {formatValue(row.baseCrystals)}
                     </td>
-                    <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs">
+                    <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10">
                       T {formatValue(row.hourlyTokens)}
                       <br />C {formatValue(row.hourlyCrystals)}
                     </td>
-                    <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs">
+                    <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10">
                       T {formatValue(row.dailyTokens)}
                       <br />C {formatValue(row.dailyCrystals)}
                     </td>
@@ -357,24 +357,28 @@ function CrystalAndTokenTab() {
                 )}
               </For>
               <Show when={includeDailyRewards()}>
-                <tr class="align-top text-ink/90">
-                  <td class="border-b border-ink/10 px-2 py-2.5 font-semibold">Daily Rewards</td>
-                  <td class="border-b border-ink/10 px-2 py-2.5 text-xs text-ink/65">Flat daily grant</td>
-                  <td class="border-b border-ink/10 px-2 py-2.5 text-xs text-ink/65">Included in totals</td>
-                  <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs">
+                <tr class="align-top text-ink/90 dark:text-white/90">
+                  <td class="border-b border-ink/10 px-2 py-2.5 font-semibold dark:border-white/10">Daily Rewards</td>
+                  <td class="border-b border-ink/10 px-2 py-2.5 text-xs text-ink/65 dark:border-white/10 dark:text-white/65">
+                    Flat daily grant
+                  </td>
+                  <td class="border-b border-ink/10 px-2 py-2.5 text-xs text-ink/65 dark:border-white/10 dark:text-white/65">
+                    Included in totals
+                  </td>
+                  <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10">
                     T {formatValue(dailyRewardRow().hourlyTokens)}
                     <br />C {formatValue(dailyRewardRow().hourlyCrystals)}
                   </td>
-                  <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs">
+                  <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10">
                     T {formatValue(dailyRewardRow().dailyTokens)}
                     <br />C {formatValue(dailyRewardRow().dailyCrystals)}
                   </td>
                 </tr>
               </Show>
-              <tr class="align-top font-semibold text-ink">
+              <tr class="align-top font-semibold text-ink dark:text-white">
                 <td class="px-2 py-3">Total</td>
-                <td class="px-2 py-3 text-xs text-ink/65">Across all methods</td>
-                <td class="px-2 py-3 text-xs text-ink/65">-</td>
+                <td class="px-2 py-3 text-xs text-ink/65 dark:text-white/65">Across all methods</td>
+                <td class="px-2 py-3 text-xs text-ink/65 dark:text-white/65">-</td>
                 <td class="px-2 py-3 font-mono text-xs">
                   T {formatValue(totals().hourlyTokens)}
                   <br />C {formatValue(totals().hourlyCrystals)}
@@ -493,8 +497,8 @@ function HaulerMineTab() {
   return (
     <div class="grid gap-6 xl:grid-cols-[0.96fr_1.34fr]">
       <section class="space-y-4">
-        <div class="rounded-2xl border border-ink/15 bg-white/70 p-4">
-          <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80">Inputs</h3>
+        <div class="rounded-2xl border border-ink/15 bg-white/70 p-4 dark:border-white/15 dark:bg-[#182538]/75">
+          <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80 dark:text-white/80">Inputs</h3>
           <div class="mt-3 grid gap-3 sm:grid-cols-2">
             <NumberSelectField
               id="hauler-unlocked-layers"
@@ -528,52 +532,72 @@ function HaulerMineTab() {
         </div>
       </section>
 
-      <section class="rounded-2xl border border-ink/15 bg-white/75 p-4 sm:p-5">
-        <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80">Hauler Mine Income</h3>
-        <p class="mt-1 text-xs text-ink/65">
+      <section class="rounded-2xl border border-ink/15 bg-white/75 p-4 sm:p-5 dark:border-white/15 dark:bg-[#162235]/80">
+        <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80 dark:text-white/80">Hauler Mine Income</h3>
+        <p class="mt-1 text-xs text-ink/65 dark:text-white/65">
           Cycle time uses {(normalizedLayers() + 1).toFixed(0)} layers at {premium.layerHours} hours each.
         </p>
 
         <div class="mt-4 overflow-x-auto">
           <table class="min-w-full border-separate border-spacing-0 text-left text-sm">
             <thead>
-              <tr class="text-xs uppercase tracking-[0.12em] text-ink/60">
-                <th class="border-b border-ink/20 px-2 py-2">Resource</th>
-                <th class="border-b border-ink/20 px-2 py-2">Per Cycle</th>
-                <th class="border-b border-ink/20 px-2 py-2">Per Hour</th>
-                <th class="border-b border-ink/20 px-2 py-2">Per Day</th>
+              <tr class="text-xs uppercase tracking-[0.12em] text-ink/60 dark:text-white/60">
+                <th class="border-b border-ink/20 px-2 py-2 dark:border-white/20">Resource</th>
+                <th class="border-b border-ink/20 px-2 py-2 dark:border-white/20">Per Cycle</th>
+                <th class="border-b border-ink/20 px-2 py-2 dark:border-white/20">Per Hour</th>
+                <th class="border-b border-ink/20 px-2 py-2 dark:border-white/20">Per Day</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td class="border-b border-ink/10 px-2 py-2.5 font-semibold">Tokens</td>
-                <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs">
+                <td class="border-b border-ink/10 px-2 py-2.5 font-semibold dark:border-white/10 dark:text-white">
+                  Tokens
+                </td>
+                <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10 dark:text-white/90">
                   {formatValue(totalsPerCycle().tokens)}
                 </td>
-                <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs">{formatValue(hourly().tokens)}</td>
-                <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs">{formatValue(daily().tokens)}</td>
+                <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10 dark:text-white/90">
+                  {formatValue(hourly().tokens)}
+                </td>
+                <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10 dark:text-white/90">
+                  {formatValue(daily().tokens)}
+                </td>
               </tr>
               <tr>
-                <td class="border-b border-ink/10 px-2 py-2.5 font-semibold">Crystals</td>
-                <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs">
+                <td class="border-b border-ink/10 px-2 py-2.5 font-semibold dark:border-white/10 dark:text-white">
+                  Crystals
+                </td>
+                <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10 dark:text-white/90">
                   {formatValue(totalsPerCycle().crystals)}
                 </td>
-                <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs">{formatValue(hourly().crystals)}</td>
-                <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs">{formatValue(daily().crystals)}</td>
+                <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10 dark:text-white/90">
+                  {formatValue(hourly().crystals)}
+                </td>
+                <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10 dark:text-white/90">
+                  {formatValue(daily().crystals)}
+                </td>
               </tr>
               <tr>
-                <td class="border-b border-ink/10 px-2 py-2.5 font-semibold">Rare Dirt</td>
-                <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs">
+                <td class="border-b border-ink/10 px-2 py-2.5 font-semibold dark:border-white/10 dark:text-white">
+                  Rare Dirt
+                </td>
+                <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10 dark:text-white/90">
                   {formatValue(totalsPerCycle().rareDirt)}
                 </td>
-                <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs">{formatValue(hourly().rareDirt)}</td>
-                <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs">{formatValue(daily().rareDirt)}</td>
+                <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10 dark:text-white/90">
+                  {formatValue(hourly().rareDirt)}
+                </td>
+                <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10 dark:text-white/90">
+                  {formatValue(daily().rareDirt)}
+                </td>
               </tr>
               <tr>
-                <td class="px-2 py-3 font-semibold">Exotic Dirt</td>
-                <td class="px-2 py-3 font-mono text-xs">{formatValue(totalsPerCycle().exoticDirt)}</td>
-                <td class="px-2 py-3 font-mono text-xs">{formatValue(hourly().exoticDirt)}</td>
-                <td class="px-2 py-3 font-mono text-xs">{formatValue(daily().exoticDirt)}</td>
+                <td class="px-2 py-3 font-semibold dark:text-white">Exotic Dirt</td>
+                <td class="px-2 py-3 font-mono text-xs dark:text-white/90">
+                  {formatValue(totalsPerCycle().exoticDirt)}
+                </td>
+                <td class="px-2 py-3 font-mono text-xs dark:text-white/90">{formatValue(hourly().exoticDirt)}</td>
+                <td class="px-2 py-3 font-mono text-xs dark:text-white/90">{formatValue(daily().exoticDirt)}</td>
               </tr>
             </tbody>
           </table>

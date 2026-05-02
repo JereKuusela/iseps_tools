@@ -1,6 +1,7 @@
 import { createMemo, For, Show } from "solid-js"
+import { Panel } from "../components/layout/Panel2"
 import { isValidNumberishInput, NumberField, sanitizeNumberishInput, SelectField } from "../components/ui/formControls"
-import { Tooltip } from "../components/ui/Tooltip"
+import { Tooltip } from "../components/ui/Tooltip2"
 import {
   calculateDcCostOfGoal,
   calculateScMultiplierFromBattery1Dc,
@@ -257,21 +258,21 @@ export function ScPage() {
   })
 
   return (
-    <section class="rounded-3xl border border-white/60 bg-[linear-gradient(145deg,#121416,#202326)] p-3 text-white shadow-glow sm:p-5">
+    <Panel title="SC" subtitle="Singularity calculator with projected timelines, skips, and replicator outcomes.">
       <div class="grid gap-4 xl:grid-cols-[390px_1fr]">
-        <aside class="space-y-3 rounded-2xl border border-white/25 bg-[#171a1d] p-3">
-          <h2 class="rounded-md border border-white/40 bg-[#5f6368] px-3 py-2 text-center font-mono text-3xl font-black tracking-wide text-[#f2f4f7]">
+        <aside class="space-y-3 rounded-2xl border border-ink/15 bg-white/70 p-3 dark:border-white/15 dark:bg-[#182538]/75">
+          <h2 class="rounded-md border border-ink/20 bg-white/90 px-3 py-2 text-center font-mono text-3xl font-black tracking-wide text-ink dark:border-white/20 dark:bg-[#21324a] dark:text-white">
             Singularity Calculator
           </h2>
-          <p class="rounded-sm border border-white/50 bg-[#5f6368] px-3 py-0.5 text-center font-mono text-xs font-bold text-[#f2f4f7]">
+          <p class="rounded-sm border border-ink/20 bg-white/80 px-3 py-0.5 text-center font-mono text-xs font-bold text-ink/80 dark:border-white/20 dark:bg-[#22344d] dark:text-white/80">
             Please make a copy to use this calculator
           </p>
 
-          <div class="grid gap-2 border border-white/25 bg-[#46494d] p-2">
-            <div class="grid grid-cols-[auto_1fr_auto_1fr] overflow-hidden rounded border border-white/30">
-              <span class="bg-[#35393d] px-2 py-1 font-mono text-xl font-bold">Setup</span>
+          <div class="grid gap-2 rounded-xl border border-ink/15 bg-white/80 p-2 dark:border-white/15 dark:bg-[#1d2c42]">
+            <div class="grid grid-cols-[auto_1fr_auto_1fr] overflow-hidden rounded border border-ink/20 dark:border-white/15">
+              <span class="bg-ink px-2 py-1 font-mono text-xl font-bold text-white dark:bg-[#223753]">Setup</span>
               <NumberField label="SE" value={sc.currentSe()} onInput={sc.setCurrentSe} min={0} step={1} />
-              <span class="bg-[#4a4d52] px-2 py-1 font-mono text-xl font-bold">UTC</span>
+              <span class="bg-ink/75 px-2 py-1 font-mono text-xl font-bold text-white dark:bg-[#2a3d58]">UTC</span>
               <SelectField
                 label="Time Zone"
                 value={sc.timezone()}
@@ -281,7 +282,7 @@ export function ScPage() {
             </div>
           </div>
 
-          <div class="space-y-2 border border-white/25 bg-[#46494d] p-2">
+          <div class="space-y-2 rounded-xl border border-ink/15 bg-white/80 p-2 dark:border-white/15 dark:bg-[#1d2c42]">
             <div class="grid gap-2">
               <NumberField label="Battery 1 DC" value={sc.battery1DcCost()} onInput={sc.setBattery1DcCost} />
               <NumberField label="Current DC" value={sc.currentDc()} onInput={sc.setCurrentDc} />
@@ -297,8 +298,8 @@ export function ScPage() {
             </div>
           </div>
 
-          <div class="space-y-2 border border-white/25 bg-[#46494d] p-2">
-            <h3 class="font-mono text-2xl font-black text-[#f1f4f8]">Replicators</h3>
+          <div class="space-y-2 rounded-xl border border-ink/15 bg-white/80 p-2 dark:border-white/15 dark:bg-[#1d2c42]">
+            <h3 class="font-mono text-2xl font-black text-ink dark:text-white">Replicators</h3>
             <div class="grid grid-cols-3 gap-2">
               <NumberField label="Days" value={sc.replicatorDays()} onInput={sc.setReplicatorDays} min={0} step={1} />
               <NumberField
@@ -335,8 +336,8 @@ export function ScPage() {
             </div>
           </div>
 
-          <div class="space-y-2 border border-white/25 bg-[#46494d] p-2">
-            <h3 class="font-mono text-2xl font-black text-[#f1f4f8]">Time Skips</h3>
+          <div class="space-y-2 rounded-xl border border-ink/15 bg-white/80 p-2 dark:border-white/15 dark:bg-[#1d2c42]">
+            <h3 class="font-mono text-2xl font-black text-ink dark:text-white">Time Skips</h3>
             <div class="grid grid-cols-3 gap-2">
               <NumberField label="Small" value={sc.timeSkipSmall()} onInput={sc.setTimeSkipSmall} min={0} step={1} />
               <NumberField label="Medium" value={sc.timeSkipMedium()} onInput={sc.setTimeSkipMedium} min={0} step={1} />
@@ -345,7 +346,9 @@ export function ScPage() {
             <div class="grid grid-cols-2 gap-2">
               <div>
                 <div class="mb-1 flex items-center gap-2">
-                  <p class="text-xs font-semibold uppercase tracking-[0.12em] text-white/80">Online Hours/Day</p>
+                  <p class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/80 dark:text-white/80">
+                    Online Hours/Day
+                  </p>
                   <Tooltip content="First 10 hours add 38 skip minutes each hour. Alpha level scales the bonus minutes by +1% per level." />
                 </div>
                 <input
@@ -357,7 +360,7 @@ export function ScPage() {
                     if (!isValidNumberishInput(next)) return
                     sc.setOnlineHoursPerDay(next)
                   }}
-                  class="w-full rounded border border-white/30 bg-[#2e3236] px-2 py-2 text-sm font-semibold text-white outline-none ring-cyan-500/45 focus:ring"
+                  class="w-full rounded border border-ink/20 bg-white px-2 py-2 text-sm font-semibold text-ink outline-none ring-brand/40 focus:ring dark:border-white/20 dark:bg-[#1a2638] dark:text-white"
                 />
               </div>
               <NumberField
@@ -368,11 +371,13 @@ export function ScPage() {
                 step={1}
               />
             </div>
-            <p class="text-xs text-white/70">Total skip: {formatDurationMinutes(totalSkipMinutes())}</p>
+            <p class="text-xs text-ink/70 dark:text-white/70">
+              Total skip: {formatDurationMinutes(totalSkipMinutes())}
+            </p>
           </div>
 
-          <div class="space-y-2 border border-white/25 bg-[#46494d] p-2">
-            <h3 class="font-mono text-xl font-black text-[#f1f4f8]">Future Boosts</h3>
+          <div class="space-y-2 rounded-xl border border-ink/15 bg-white/80 p-2 dark:border-white/15 dark:bg-[#1d2c42]">
+            <h3 class="font-mono text-xl font-black text-ink dark:text-white">Future Boosts</h3>
             <div class="grid grid-cols-2 gap-2">
               <NumberField
                 label="DC %"
@@ -392,16 +397,16 @@ export function ScPage() {
           </div>
         </aside>
 
-        <section class="overflow-x-auto rounded-2xl border border-white/20 bg-[#25292d] p-3">
+        <section class="overflow-x-auto rounded-2xl border border-ink/15 bg-white/75 p-3 dark:border-white/15 dark:bg-[#162235]/80">
           <div class="flex min-w-[640px] items-start gap-3">
             <For each={outputs()}>
               {(panel, index) => (
-                <article class="w-[290px] shrink-0 rounded border border-white/35 bg-[#3a3d41] p-2">
+                <article class="w-[290px] shrink-0 rounded-xl border border-ink/15 bg-white/85 p-2 dark:border-white/15 dark:bg-[#1c2c43]">
                   <div class="grid grid-cols-[1fr_auto] gap-2">
                     <select
                       value={panel.goalType}
                       onChange={(event) => sc.setPanelGoal(panel.id, event.currentTarget.value as ScGoalType)}
-                      class="rounded border border-white/35 bg-[#55595e] px-2 py-2 font-mono text-2xl font-black text-white outline-none ring-cyan-500/45 focus:ring"
+                      class="rounded border border-ink/20 bg-white px-2 py-2 font-mono text-2xl font-black text-ink outline-none ring-brand/40 focus:ring dark:border-white/20 dark:bg-[#253a56] dark:text-white"
                     >
                       <For each={goalOptions}>{(option) => <option value={option.value}>{option.label}</option>}</For>
                     </select>
@@ -409,7 +414,7 @@ export function ScPage() {
                       <button
                         type="button"
                         onClick={() => sc.removePanel(panel.id)}
-                        class="rounded border border-white/40 bg-[#2f3337] px-2 text-sm font-bold text-white hover:bg-[#3e4348]"
+                        class="rounded border border-ink/20 bg-white px-2 text-sm font-bold text-ink hover:bg-ink/5 dark:border-white/20 dark:bg-[#233752] dark:text-white dark:hover:bg-[#2f496b]"
                         aria-label="Close panel"
                       >
                         X
@@ -427,77 +432,93 @@ export function ScPage() {
                     </div>
                   </Show>
 
-                  <div class="mt-2 rounded border border-white/30 bg-[#4a4d52]">
-                    <div class="grid grid-cols-[1fr_auto] border-b border-white/25 px-2 py-1.5 font-mono text-lg font-bold">
+                  <div class="mt-2 rounded border border-ink/20 bg-white dark:border-white/15 dark:bg-[#253a56]">
+                    <div class="grid grid-cols-[1fr_auto] border-b border-ink/15 px-2 py-1.5 font-mono text-lg font-bold dark:border-white/15 dark:text-white">
                       <span>DC Cost</span>
-                      <span class="text-[#9fcdff]">{formatLargeNumber(panel.dcCost, 2)}</span>
+                      <span class="text-accent dark:text-[#8ce3ff]">{formatLargeNumber(panel.dcCost, 2)}</span>
                     </div>
-                    <div class="grid grid-cols-[1fr_auto] border-b border-white/25 px-2 py-1.5 font-mono text-lg font-bold">
+                    <div class="grid grid-cols-[1fr_auto] border-b border-ink/15 px-2 py-1.5 font-mono text-lg font-bold dark:border-white/15 dark:text-white">
                       <span>Total Time</span>
-                      <span class="text-[#9fcdff]">{formatDurationMinutes(panel.totalMinutes)}</span>
+                      <span class="text-accent dark:text-[#8ce3ff]">{formatDurationMinutes(panel.totalMinutes)}</span>
                     </div>
-                    <div class="grid grid-cols-[1fr_auto] px-2 py-1.5 font-mono text-lg font-bold">
+                    <div class="grid grid-cols-[1fr_auto] px-2 py-1.5 font-mono text-lg font-bold dark:text-white">
                       <span>Progress</span>
-                      <span class="text-[#9fcdff]">{formatPercent(panel.progressPct, 2)}</span>
+                      <span class="text-accent dark:text-[#8ce3ff]">{formatPercent(panel.progressPct, 2)}</span>
                     </div>
                   </div>
 
-                  <div class="mt-2 rounded border border-white/30 bg-[#4a4d52]">
-                    <div class="grid grid-cols-[1fr_auto] border-b border-white/25 px-2 py-1.5 font-mono text-lg font-bold">
+                  <div class="mt-2 rounded border border-ink/20 bg-white dark:border-white/15 dark:bg-[#253a56]">
+                    <div class="grid grid-cols-[1fr_auto] border-b border-ink/15 px-2 py-1.5 font-mono text-lg font-bold dark:border-white/15 dark:text-white">
                       <span>Remaining</span>
-                      <span class="text-[#9fcdff]">{formatDurationMinutes(panel.remainingMinutes)}</span>
+                      <span class="text-accent dark:text-[#8ce3ff]">
+                        {formatDurationMinutes(panel.remainingMinutes)}
+                      </span>
                     </div>
-                    <div class="px-2 py-1.5 text-center font-mono text-2xl font-black text-[#9fcdff]">
+                    <div class="px-2 py-1.5 text-center font-mono text-2xl font-black text-accent dark:text-[#8ce3ff]">
                       {formatTimestampFromMinutes(panel.remainingMinutes, sc.timezone())}
                     </div>
                   </div>
 
                   <Show when={totalSkipMinutes() > 0}>
-                    <div class="mt-2 rounded border border-white/30 bg-[#4a4d52]">
-                      <div class="grid grid-cols-[1fr_auto] border-b border-white/25 px-2 py-1.5 font-mono text-lg font-bold">
+                    <div class="mt-2 rounded border border-ink/20 bg-white dark:border-white/15 dark:bg-[#253a56]">
+                      <div class="grid grid-cols-[1fr_auto] border-b border-ink/15 px-2 py-1.5 font-mono text-lg font-bold dark:border-white/15 dark:text-white">
                         <span>After Skips</span>
-                        <span class="text-[#9fcdff]">{formatDurationMinutes(panel.afterSkipsMinutes)}</span>
+                        <span class="text-accent dark:text-[#8ce3ff]">
+                          {formatDurationMinutes(panel.afterSkipsMinutes)}
+                        </span>
                       </div>
-                      <div class="px-2 py-1.5 text-center font-mono text-2xl font-black text-[#9fcdff]">
+                      <div class="px-2 py-1.5 text-center font-mono text-2xl font-black text-accent dark:text-[#8ce3ff]">
                         {formatTimestampFromMinutes(panel.afterSkipsMinutes, sc.timezone())}
                       </div>
                     </div>
                   </Show>
 
                   <div class="mt-2 grid grid-cols-[1fr_24px] gap-2">
-                    <div class="rounded border border-white/30 bg-[#4a4d52]">
-                      <h4 class="border-b border-white/25 px-2 py-1.5 text-center font-mono text-2xl font-black text-[#f4f6fb]">
+                    <div class="rounded border border-ink/20 bg-white dark:border-white/15 dark:bg-[#253a56]">
+                      <h4 class="border-b border-ink/15 px-2 py-1.5 text-center font-mono text-2xl font-black text-ink dark:border-white/15 dark:text-white">
                         Projected Values
                       </h4>
-                      <div class="grid grid-cols-[1fr_auto] border-b border-white/25 px-2 py-1.5 font-mono text-lg font-bold">
+                      <div class="grid grid-cols-[1fr_auto] border-b border-ink/15 px-2 py-1.5 font-mono text-lg font-bold dark:border-white/15 dark:text-white">
                         <span>Progress</span>
-                        <span class="text-[#9fcdff]">{formatPercent(panel.projectedProgressPct, 0)}</span>
+                        <span class="text-accent dark:text-[#8ce3ff]">
+                          {formatPercent(panel.projectedProgressPct, 0)}
+                        </span>
                       </div>
-                      <div class="grid grid-cols-[1fr_auto] border-b border-white/25 px-2 py-1.5 font-mono text-lg font-bold">
+                      <div class="grid grid-cols-[1fr_auto] border-b border-ink/15 px-2 py-1.5 font-mono text-lg font-bold dark:border-white/15 dark:text-white">
                         <span>DC Cost</span>
-                        <span class="text-[#9fcdff]">{formatLargeNumber(panel.projectedDcCost, 1)}</span>
+                        <span class="text-accent dark:text-[#8ce3ff]">
+                          {formatLargeNumber(panel.projectedDcCost, 1)}
+                        </span>
                       </div>
-                      <div class="grid grid-cols-[1fr_auto] border-b border-white/25 px-2 py-1.5 font-mono text-lg font-bold">
+                      <div class="grid grid-cols-[1fr_auto] border-b border-ink/15 px-2 py-1.5 font-mono text-lg font-bold dark:border-white/15 dark:text-white">
                         <span>SC Gained</span>
-                        <span class="text-[#9fcdff]">{formatLargeNumber(panel.projectedScGained, 2)}</span>
+                        <span class="text-accent dark:text-[#8ce3ff]">
+                          {formatLargeNumber(panel.projectedScGained, 2)}
+                        </span>
                       </div>
-                      <div class="grid grid-cols-[1fr_auto] border-b border-white/25 px-2 py-1.5 font-mono text-lg font-bold">
+                      <div class="grid grid-cols-[1fr_auto] border-b border-ink/15 px-2 py-1.5 font-mono text-lg font-bold dark:border-white/15 dark:text-white">
                         <span>Daily Boost</span>
-                        <span class="text-[#9fcdff]">{formatMultiplier(panel.projectedDailyBoost)}</span>
+                        <span class="text-accent dark:text-[#8ce3ff]">
+                          {formatMultiplier(panel.projectedDailyBoost)}
+                        </span>
                       </div>
-                      <div class="grid grid-cols-[1fr_auto] border-b border-white/25 px-2 py-1.5 font-mono text-lg font-bold">
+                      <div class="grid grid-cols-[1fr_auto] border-b border-ink/15 px-2 py-1.5 font-mono text-lg font-bold dark:border-white/15 dark:text-white">
                         <span>SC Replic.</span>
-                        <span class="text-[#9fcdff]">{formatMultiplier(panel.projectedScReplicator)}</span>
+                        <span class="text-accent dark:text-[#8ce3ff]">
+                          {formatMultiplier(panel.projectedScReplicator)}
+                        </span>
                       </div>
-                      <div class="grid grid-cols-[1fr_auto] px-2 py-1.5 font-mono text-lg font-bold">
+                      <div class="grid grid-cols-[1fr_auto] px-2 py-1.5 font-mono text-lg font-bold dark:text-white">
                         <span>DC Replic.</span>
-                        <span class="text-[#9fcdff]">{formatMultiplier(panel.projectedDcReplicator)}</span>
+                        <span class="text-accent dark:text-[#8ce3ff]">
+                          {formatMultiplier(panel.projectedDcReplicator)}
+                        </span>
                       </div>
                     </div>
 
-                    <div class="relative rounded border border-white/30 bg-[#2f3337]">
+                    <div class="relative rounded border border-ink/20 bg-ink/10 dark:border-white/15 dark:bg-white/10">
                       <div
-                        class="absolute bottom-0 left-0 right-0 rounded-sm bg-gradient-to-t from-[#54d2ff] to-[#88f7ff]"
+                        class="absolute bottom-0 left-0 right-0 rounded-sm bg-gradient-to-t from-accent to-brand"
                         style={{ height: `${panel.projectedProgressPct}%` }}
                       />
                     </div>
@@ -509,13 +530,13 @@ export function ScPage() {
             <button
               type="button"
               onClick={sc.addPanel}
-              class="h-10 rounded border border-white/45 bg-[#3a3f44] px-3 font-mono text-base font-bold text-white hover:bg-[#4a4f55]"
+              class="h-10 rounded border border-ink/20 bg-white px-3 font-mono text-base font-bold text-ink hover:bg-ink/5 dark:border-white/20 dark:bg-[#253a56] dark:text-white dark:hover:bg-[#2f496b]"
             >
               + Panel
             </button>
           </div>
         </section>
       </div>
-    </section>
+    </Panel>
   )
 }

@@ -15,11 +15,23 @@
   font-family: "Space Grotesk", sans-serif;
   color: #0c1c30;
   background-color: #f1f6ff;
+  color-scheme: light;
+}
+
+:root.dark {
+  color: #e8f0ff;
+  background-color: #070d16;
+  color-scheme: dark;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
+  background-color: inherit;
+  color: inherit;
+  transition:
+    background-color 200ms ease,
+    color 200ms ease;
 }
 
 * {
