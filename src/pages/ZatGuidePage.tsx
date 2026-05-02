@@ -1,8 +1,8 @@
 import { createMemo, For, Show } from "solid-js"
 import { NumberField, SelectField } from "../components/ui/formControls"
 import { Panel } from "../components/layout/Panel"
-import { createPersistedSignal } from "../lib/persistedSignal.js"
-import { useZatData } from "../lib/zatContext.jsx"
+import { createPersistedSignal } from "../lib/persistedSignal"
+import { useZatData } from "../lib/zatContext"
 
 type GuideRunType = "se_push" | "g_points" | "juno" | "cash"
 

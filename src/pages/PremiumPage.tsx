@@ -4,8 +4,8 @@ import { ToggleField } from "../components/ui/formControls"
 import { isValidNumberishInput } from "../components/ui/formControls"
 import { sanitizeNumberishInput } from "../components/ui/formControls"
 import { Tooltip } from "../components/ui/Tooltip"
-import { createPersistedSignal } from "../lib/persistedSignal.js"
-import { useZatData, type PremiumCrystalTokenMethod, type PremiumHaulerLayer } from "../lib/zatContext.jsx"
+import { createPersistedSignal } from "../lib/persistedSignal"
+import { useZatData, type PremiumCrystalTokenMethod, type PremiumHaulerLayer } from "../lib/zatContext"
 
 type HaulerToggleKey =
   | "layer1TokenIncome"

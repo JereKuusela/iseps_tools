@@ -1,6 +1,6 @@
 import { A, useLocation } from "@solidjs/router"
 import { For, Match, Switch } from "solid-js"
-import { createPersistedSignal } from "./lib/persistedSignal.js"
+import { createPersistedSignal } from "./lib/persistedSignal"
 import { OgTechPage } from "./pages/OgTechPage"
 import { PenrosePage } from "./pages/PenrosePage"
 import { PremiumCrystalTokenPage, PremiumHaulerMinePage } from "./pages/PremiumPage"

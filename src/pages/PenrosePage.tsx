@@ -1,8 +1,8 @@
 import { createMemo, For } from "solid-js"
 import { Panel } from "../components/layout/Panel"
 import { NumberField } from "../components/ui/formControls"
-import { createPersistedSignal } from "../lib/persistedSignal.js"
-import { useZatData } from "../lib/zatContext.jsx"
+import { createPersistedSignal } from "../lib/persistedSignal"
+import { useZatData } from "../lib/zatContext"
 
 function parseNumberish(value: string): number {
   const parsed = Number(value)

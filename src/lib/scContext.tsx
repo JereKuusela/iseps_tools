@@ -1,5 +1,5 @@
 import { createContext, type ParentProps, useContext } from "solid-js"
-import { createPersistedSignal } from "./persistedSignal.js"
+import { createPersistedSignal } from "./persistedSignal"
 import type { ScGoalType } from "./scCalculator"
 
 export type ScGainUnit = "min" | "hour" | "day"

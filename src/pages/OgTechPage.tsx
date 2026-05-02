@@ -2,9 +2,9 @@ import { A } from "@solidjs/router"
 import { createMemo, createSignal, For, Show } from "solid-js"
 import { NumberField, SelectField, ToggleField } from "../components/ui/formControls"
 import { Panel } from "../components/layout/Panel"
-import { LargeNumber } from "../lib/largeNumber.js"
-import { createPersistedSignal } from "../lib/persistedSignal.js"
-import { useZatData, type JunoExponentType } from "../lib/zatContext.jsx"
+import { LargeNumber } from "../lib/largeNumber"
+import { createPersistedSignal } from "../lib/persistedSignal"
+import { useZatData, type JunoExponentType } from "../lib/zatContext"
 import {
   calculateExponentIncreaseMultipliers,
   calculateNextThreeTechCosts,
@@ -13,7 +13,7 @@ import {
   calculateTotalPremiumMultiplier,
   calculateZatBoostPerTech,
   type ZatMode,
-} from "../lib/zatCalculator.js"
+} from "../lib/zatCalculator"
 
 type GainUnit = "sec" | "min" | "hour"
 
