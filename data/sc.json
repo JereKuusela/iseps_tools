@@ -5,13 +5,13 @@
       "rules": [
         {
           "se": 0,
-          "base": 1.11,
+          "base": 0.11,
           "linear": 0.0000229,
           "quadratic": 0.0000000118
         },
         {
           "se": 110,
-          "base": 1.11,
+          "base": 0.11,
           "linear": 0.0000248,
           "quadratic": 0.0000000156
         }
@@ -46,23 +46,23 @@
   "batteryGoalMultipliers": [
     {
       "se": 120,
-      "mult": "1e5"
+      "exp": 5
     },
     {
       "se": 153,
-      "mult": "1e2"
+      "exp": 2
     },
     {
       "se": 156,
-      "mult": "1e2"
+      "exp": 2
     },
     {
       "se": 160,
-      "mult": "1e3"
+      "exp": 3
     },
     {
       "se": 163,
-      "mult": "1e3"
+      "exp": 3
     }
   ]
 }

@@ -6,7 +6,7 @@ export class LargeNumber {
 
   constructor(mantissa: number, exponent: number) {
     this.mantissa = mantissa
-    this.exponent = Math.trunc(exponent)
+    this.exponent = exponent
     this.normalize()
   }
 
@@ -123,7 +123,10 @@ export class LargeNumber {
 
   toString(decimals = 2): string {
     if (this.isZero()) return "0"
-    return `${this.mantissa.toFixed(decimals)}e${this.exponent}`
+    const mantissa = this.mantissa.toFixed(decimals)
+    // Fail safe for rounding issue.
+    if (mantissa == "10.00") return `1.00e${this.exponent + 1}`
+    return `${mantissa}e${this.exponent}`
   }
 
   private normalize(): void {
@@ -131,8 +134,8 @@ export class LargeNumber {
       throw new Error("Mantissa is not finite")
     }
 
-    if (!Number.isInteger(this.exponent)) {
-      throw new Error("Exponent must be an integer")
+    if (!Number.isFinite(this.exponent)) {
+      throw new Error("Exponent is not finite")
     }
 
     if (this.mantissa === 0) {

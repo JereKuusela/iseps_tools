@@ -4,17 +4,17 @@ import { NumberField } from "../components/ui/formControls"
 import { createPersistedSignal } from "../lib/persistedSignal"
 import { useZatData } from "../lib/zatContext"
 
-function parseNumberish(value: string): number {
+const parseNumberish = (value: string) => {
   const parsed = Number(value)
   if (!Number.isFinite(parsed)) return 0
   return parsed
 }
 
-function clamp(value: number, min: number, max: number): number {
+const clamp = (value: number, min: number, max: number) => {
   return Math.min(max, Math.max(min, value))
 }
 
-function formatDuration(hours: number): string {
+const formatDuration = (hours: number) => {
   if (!Number.isFinite(hours) || hours < 0) return "Unknown"
   if (hours < 1 / 60) return "< 1 min"
 
@@ -29,7 +29,7 @@ function formatDuration(hours: number): string {
   return "> 10 years"
 }
 
-export function PenrosePage(props: { cycles: string; setCycles: (next: string) => void }) {
+export const PenrosePage = (props: { cycles: string; setCycles: (next: string) => void }) => {
   const data = useZatData()
 
   const [cycleRatePerHour, setCycleRatePerHour] = createPersistedSignal("penrose.cycleRatePerHour", "0.25")

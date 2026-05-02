@@ -17,6 +17,12 @@ describe("LargeNumber.parse", () => {
   it("rejects invalid format", () => {
     expect(() => LargeNumber.parse("abc")).toThrow("Invalid number format")
   })
+
+  it("supports non-integer exponent in constructor", () => {
+    const value = new LargeNumber(1, 2.5)
+    expect(value.mantissa).toBeCloseTo(1)
+    expect(value.exponent).toBeCloseTo(2.5)
+  })
 })
 
 describe("LargeNumber arithmetic", () => {

@@ -30,21 +30,21 @@ const toggleLabels: { key: HaulerToggleKey; label: string }[] = [
   { key: "layer9ExoticIncome", label: "Layer 9 #2 exotic dirt income" },
 ]
 
-function parseNumberish(value: string): number {
+const parseNumberish = (value: string) => {
   const parsed = Number(value)
   if (!Number.isFinite(parsed)) return 0
   return parsed
 }
 
-function clamp(value: number, min: number, max: number): number {
+const clamp = (value: number, min: number, max: number) => {
   return Math.min(max, Math.max(min, value))
 }
 
-function formatValue(value: number, digits = 2): string {
+const formatValue = (value: number, digits = 2) => {
   return value.toFixed(digits)
 }
 
-function NumberSelectField(props: {
+const NumberSelectField = (props: {
   id: string
   label: string
   value: string
@@ -54,7 +54,7 @@ function NumberSelectField(props: {
   max: number
   step?: number
   tooltip?: string
-}) {
+}) => {
   const listId = `premium-${props.id}-list`
 
   return (
@@ -85,7 +85,7 @@ function NumberSelectField(props: {
   )
 }
 
-function CrystalAndTokenTab() {
+const CrystalAndTokenTab = () => {
   const data = useZatData()
   const premium = data().premium.crystalToken
   const [tokenBooster, setTokenBooster] = createPersistedSignal("premium.tokenBooster", "0")
@@ -396,7 +396,7 @@ function CrystalAndTokenTab() {
   )
 }
 
-function HaulerMineTab() {
+const HaulerMineTab = () => {
   const data = useZatData()
   const premium = data().premium.haulerMine
   const [tokenBooster, setTokenBooster] = createPersistedSignal("premium.tokenBooster", "0")
@@ -607,7 +607,7 @@ function HaulerMineTab() {
   )
 }
 
-export function PremiumCrystalTokenPage() {
+export const PremiumCrystalTokenPage = () => {
   return (
     <Panel title="Premium Crystal and Token" subtitle="Chest and bot output with premium upgrades.">
       <CrystalAndTokenTab />
@@ -615,7 +615,7 @@ export function PremiumCrystalTokenPage() {
   )
 }
 
-export function PremiumHaulerMinePage() {
+export const PremiumHaulerMinePage = () => {
   return (
     <Panel title="Premium Hauler Mine" subtitle="Layer income by time with premium toggles.">
       <HaulerMineTab />

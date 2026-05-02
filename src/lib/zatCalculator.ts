@@ -82,20 +82,20 @@ export type NextZatCostResult = {
   cost: LargeNumber
 }
 
-function clamp(value: number, min: number, max: number): number {
+const clamp = (value: number, min: number, max: number) => {
   return Math.min(Math.max(value, min), max)
 }
 
-function toSafeNumber(value: number): number {
+const toSafeNumber = (value: number) => {
   if (!Number.isFinite(value) || value < 0) return 0
   return value
 }
 
-function normalizeKey(value: string): string {
+const normalizeKey = (value: string) => {
   return value.toLowerCase().replace(/[^a-z0-9]/g, "")
 }
 
-function resolvePurchaseAmount(rule: PremiumRule, input: PremiumInput): number {
+const resolvePurchaseAmount = (rule: PremiumRule, input: PremiumInput) => {
   const direct = input[rule.name]
   if (typeof direct === "boolean") return direct ? 1 : 0
   if (typeof direct === "number") return toSafeNumber(direct)
@@ -116,7 +116,7 @@ function resolvePurchaseAmount(rule: PremiumRule, input: PremiumInput): number {
   return 0
 }
 
-function getActiveCycleMultiplier(cycle: number): number {
+const getActiveCycleMultiplier = (cycle: number) => {
   let multiplier = 5
   for (const rule of cycleRules) {
     if (rule.cycle > cycle) break
@@ -125,7 +125,7 @@ function getActiveCycleMultiplier(cycle: number): number {
   return multiplier
 }
 
-function getTechById(id: number): TechData {
+const getTechById = (id: number): TechData => {
   const tech = techs.find((entry) => entry.id === id)
   if (!tech) {
     throw new Error(`Unknown tech id: ${id}`)
@@ -133,18 +133,18 @@ function getTechById(id: number): TechData {
   return tech
 }
 
-function largeFromPow10(exponent: number): LargeNumber {
+const largeFromPow10 = (exponent: number): LargeNumber => {
   const exponentFloor = Math.floor(exponent)
   const fractional = exponent - exponentFloor
   return new LargeNumber(10 ** fractional, exponentFloor)
 }
 
-function log10LargeNumber(value: LargeNumber): number {
+const log10LargeNumber = (value: LargeNumber) => {
   if (value.isZero()) return Number.NEGATIVE_INFINITY
   return Math.log10(Math.abs(value.mantissa)) + value.exponent
 }
 
-function findActiveSeRule(kind: "mul" | "div", seAmount: number): SeEffectRule | null {
+const findActiveSeRule = (kind: "mul" | "div", seAmount: number): SeEffectRule | null => {
   let active: SeEffectRule | null = null
   for (const rule of seRules) {
     if (rule.kind !== kind) continue
@@ -154,7 +154,7 @@ function findActiveSeRule(kind: "mul" | "div", seAmount: number): SeEffectRule |
   return active
 }
 
-export function calculateZatBoostPerTech(cycles: number, mode: ZatMode): number {
+export const calculateZatBoostPerTech = (cycles: number, mode: ZatMode) => {
   const totalCycles = Math.max(0, Math.floor(cycles))
   const cycleMultiplier = getActiveCycleMultiplier(totalCycles)
 
@@ -164,7 +164,7 @@ export function calculateZatBoostPerTech(cycles: number, mode: ZatMode): number 
   return junoBoost ** 1.48
 }
 
-export function calculateSeEffect(seAmount: number): number {
+export const calculateSeEffect = (seAmount: number) => {
   const normalizedSe = Math.max(0, Math.floor(seAmount))
   const mulRule = findActiveSeRule("mul", normalizedSe)
   const divRule = findActiveSeRule("div", normalizedSe)
@@ -176,7 +176,7 @@ export function calculateSeEffect(seAmount: number): number {
   return multiplier / divider
 }
 
-export function calculateNextThreeTechCosts(id: number, currentLevel: number): TechCostEntry[] {
+export const calculateNextThreeTechCosts = (id: number, currentLevel: number): TechCostEntry[] => {
   const tech = getTechById(id)
   const startingLevel = Math.max(0, Math.floor(currentLevel))
 
@@ -215,7 +215,7 @@ export function calculateNextThreeTechCosts(id: number, currentLevel: number): T
   return nextCosts
 }
 
-export function calculateTechBoost(zatBoost: number, seEffect: number, id: number, mode: ZatMode): TechBoostResult {
+export const calculateTechBoost = (zatBoost: number, seEffect: number, id: number, mode: ZatMode): TechBoostResult => {
   const tech = getTechById(id)
   const effectiveZatBoost = Math.max(zatBoost, Number.EPSILON)
 
@@ -248,12 +248,12 @@ export function calculateTechBoost(zatBoost: number, seEffect: number, id: numbe
   }
 }
 
-export function calculateExponentIncreaseMultipliers(
+export const calculateExponentIncreaseMultipliers = (
   junoGain: LargeNumber | string | number,
   junoExponent: number,
   totalPremiumMultiplier: number,
   deltas: number[] = [0.001, 0.005, 0.01],
-): ExponentIncreaseEntry[] {
+): ExponentIncreaseEntry[] => {
   const gain = LargeNumber.from(junoGain)
   const premiumMultiplier = Math.max(totalPremiumMultiplier, Number.EPSILON)
 
@@ -280,7 +280,7 @@ export function calculateExponentIncreaseMultipliers(
   })
 }
 
-export function calculateTotalPremiumMultiplier(purchases: PremiumInput): PremiumSummary {
+export const calculateTotalPremiumMultiplier = (purchases: PremiumInput): PremiumSummary => {
   let additive = 0
   let multiplicative = 1
   let exponentAdd = 0
@@ -318,7 +318,7 @@ export function calculateTotalPremiumMultiplier(purchases: PremiumInput): Premiu
   }
 }
 
-function calculateZatCostExponent(cycle: number): number {
+const calculateZatCostExponent = (cycle: number) => {
   const normalizedCycle = Math.max(1, Math.floor(cycle))
   let exponent = 5
 
@@ -330,11 +330,11 @@ function calculateZatCostExponent(cycle: number): number {
   return exponent
 }
 
-function getZatCostForCycle(cycle: number): LargeNumber {
+const getZatCostForCycle = (cycle: number): LargeNumber => {
   return largeFromPow10(calculateZatCostExponent(cycle))
 }
 
-export function calculateNextZatCost(junoAmount: LargeNumber | string | number): NextZatCostResult {
+export const calculateNextZatCost = (junoAmount: LargeNumber | string | number): NextZatCostResult => {
   const amount = LargeNumber.from(junoAmount)
   let cycle = 1
 

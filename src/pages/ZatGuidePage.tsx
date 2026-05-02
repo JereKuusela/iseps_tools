@@ -32,22 +32,22 @@ const guideRunOptions: { value: GuideRunType; label: string }[] = [
   { value: "cash", label: "Cash" },
 ]
 
-function parseNumberish(value: string): number {
+const parseNumberish = (value: string) => {
   const parsed = Number(value)
   if (!Number.isFinite(parsed)) return 0
   return parsed
 }
 
-function toFiniteNumber(value: unknown, fallback = 0): number {
+const toFiniteNumber = (value: unknown, fallback = 0) => {
   const parsed = typeof value === "number" ? value : Number(value)
   return Number.isFinite(parsed) ? parsed : fallback
 }
 
-function clamp(value: number, min: number, max: number): number {
+const clamp = (value: number, min: number, max: number) => {
   return Math.min(max, Math.max(min, value))
 }
 
-function formatMultiplier(value: number): string {
+const formatMultiplier = (value: number) => {
   if (!Number.isFinite(value) || value <= 0) return "x0"
   if (value < 1000) return `x${value.toFixed(2)}`
 
@@ -57,7 +57,7 @@ function formatMultiplier(value: number): string {
   return `x${mantissa.toFixed(2)}E${signedExponent}`
 }
 
-export function ZatGuidePage(props: { cycles: string; setCycles: (next: string) => void }) {
+export const ZatGuidePage = (props: { cycles: string; setCycles: (next: string) => void }) => {
   const TREE_MIN_Y = -8
   const TREE_MAX_Y = 8
   const TREE_MIN_X = -6

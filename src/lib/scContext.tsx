@@ -15,8 +15,6 @@ type ScContextValue = {
   setCurrentSe: (next: string) => string
   battery1DcCost: () => string
   setBattery1DcCost: (next: string) => string
-  timezone: () => string
-  setTimezone: (next: string) => string
   currentDc: () => string
   setCurrentDc: (next: string) => string
   dcGainValue: () => string
@@ -58,7 +56,7 @@ const ScContext = createContext<ScContextValue>()
 
 const GOAL_ORDER: ScGoalType[] = ["battery1", "battery2", "battery3", "customSc", "customDc"]
 
-function normalizePanels(panels: ScGoalPanel[]): ScGoalPanel[] {
+const normalizePanels = (panels: ScGoalPanel[]): ScGoalPanel[] => {
   const validPanels = panels.filter((panel) => Number.isFinite(panel.id) && panel.id > 0)
   if (validPanels.length > 0) return validPanels
 
@@ -68,10 +66,9 @@ function normalizePanels(panels: ScGoalPanel[]): ScGoalPanel[] {
   ]
 }
 
-export function ScProvider(props: ParentProps) {
+export const ScProvider = (props: ParentProps) => {
   const [currentSe, setCurrentSe] = createPersistedSignal("sc.currentSe", "166")
   const [battery1DcCost, setBattery1DcCost] = createPersistedSignal("sc.battery1DcCost", "1e14")
-  const [timezone, setTimezone] = createPersistedSignal("sc.timezone", "0")
   const [currentDc, setCurrentDc] = createPersistedSignal("sc.currentDc", "2.58e1500")
   const [dcGainValue, setDcGainValue] = createPersistedSignal("sc.dcGainValue", "2.58e1540")
   const [dcGainUnit, setDcGainUnit] = createPersistedSignal<ScGainUnit>("sc.dcGainUnit", "day")
@@ -92,7 +89,7 @@ export function ScProvider(props: ParentProps) {
     { id: 2, goalType: "battery2", customGoal: "1e120" },
   ])
 
-  const setPanelGoal = (panelId: number, goalType: ScGoalType): void => {
+  const setPanelGoal = (panelId: number, goalType: ScGoalType) => {
     setPanels((previous) => {
       const current = normalizePanels(previous)
       const panelIndex = current.findIndex((panel) => panel.id === panelId)
@@ -114,14 +111,14 @@ export function ScProvider(props: ParentProps) {
     })
   }
 
-  const setPanelCustomGoal = (panelId: number, customGoal: string): void => {
+  const setPanelCustomGoal = (panelId: number, customGoal: string) => {
     setPanels((previous) => {
       const current = normalizePanels(previous)
       return current.map((panel) => (panel.id === panelId ? { ...panel, customGoal } : panel))
     })
   }
 
-  const addPanel = (): void => {
+  const addPanel = () => {
     setPanels((previous) => {
       const current = normalizePanels(previous)
       const usedGoals = new Set(current.map((panel) => panel.goalType))
@@ -132,7 +129,7 @@ export function ScProvider(props: ParentProps) {
     })
   }
 
-  const removePanel = (panelId: number): void => {
+  const removePanel = (panelId: number) => {
     setPanels((previous) => {
       const current = normalizePanels(previous)
       if (current.length <= 1) return current
@@ -150,8 +147,6 @@ export function ScProvider(props: ParentProps) {
         setCurrentSe,
         battery1DcCost,
         setBattery1DcCost,
-        timezone,
-        setTimezone,
         currentDc,
         setCurrentDc,
         dcGainValue,
@@ -194,7 +189,7 @@ export function ScProvider(props: ParentProps) {
   )
 }
 
-export function useScContext(): ScContextValue {
+export const useScContext = (): ScContextValue => {
   const context = useContext(ScContext)
   if (!context) {
     throw new Error("useScContext must be used inside ScProvider")

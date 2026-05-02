@@ -1,6 +1,6 @@
 import { createSignal, type Signal } from "solid-js"
 
-function readStoredValue<T>(key: string, fallbackValue: T): T {
+const readStoredValue = <T>(key: string, fallbackValue: T) => {
   if (!("localStorage" in globalThis)) return fallbackValue
 
   try {
@@ -12,7 +12,7 @@ function readStoredValue<T>(key: string, fallbackValue: T): T {
   }
 }
 
-function writeStoredValue<T>(key: string, value: T): void {
+const writeStoredValue = <T>(key: string, value: T) => {
   if (!("localStorage" in globalThis)) return
 
   try {
@@ -22,7 +22,7 @@ function writeStoredValue<T>(key: string, value: T): void {
   }
 }
 
-export function createPersistedSignal<T>(key: string, initialValue: T): Signal<T> {
+export const createPersistedSignal = <T>(key: string, initialValue: T): Signal<T> => {
   const [value, setValue] = createSignal(readStoredValue(key, initialValue))
 
   const setPersistedValue = ((...args: unknown[]) => {

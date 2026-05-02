@@ -4,6 +4,7 @@ import { NumberField, SelectField, ToggleField } from "../components/ui/formCont
 import { Panel } from "../components/layout/Panel"
 import { LargeNumber } from "../lib/largeNumber"
 import { createPersistedSignal } from "../lib/persistedSignal"
+import { formatTimeDurationFromSeconds } from "../lib/timeFormat"
 import { useZatData, type JunoExponentType } from "../lib/zatContext"
 import {
   calculateExponentIncreaseMultipliers,
@@ -37,23 +38,23 @@ const modeOptions = [
   { value: "dc", label: "DC" },
 ]
 
-function formatPercent(value: number): string {
+const formatPercent = (value: number) => {
   return `${(value * 100).toFixed(2)}%`
 }
 
-function parseNumberish(value: string): number {
+const parseNumberish = (value: string) => {
   const parsed = Number(value)
   if (!Number.isFinite(parsed)) return 0
   return parsed
 }
 
-function toRatePerSecond(value: number, unit: GainUnit): number {
+const toRatePerSecond = (value: number, unit: GainUnit) => {
   if (unit === "min") return value / 60
   if (unit === "hour") return value / 3600
   return value
 }
 
-function parseLargeNumberSafe(value: string): LargeNumber {
+const parseLargeNumberSafe = (value: string): LargeNumber => {
   try {
     return LargeNumber.parse(value.trim() === "" ? "0" : value)
   } catch {
@@ -61,24 +62,9 @@ function parseLargeNumberSafe(value: string): LargeNumber {
   }
 }
 
-function secondsToLabel(seconds: number): string {
-  if (!Number.isFinite(seconds)) return "> 10 years"
-  if (seconds <= 0) return "Ready"
-  if (seconds < 120) return `${Math.ceil(seconds)} sec`
+const secondsToLabel = (seconds: number) => formatTimeDurationFromSeconds(seconds)
 
-  const minutes = seconds / 60
-  if (minutes < 120) return `${minutes.toFixed(1)} min`
-
-  const hours = minutes / 60
-  if (hours < 72) return `${hours.toFixed(1)} hr`
-
-  const days = hours / 24
-  if (days < 3650) return `${days.toFixed(1)} days`
-
-  return "> 10 years"
-}
-
-function estimateSeconds(cost: LargeNumber, current: LargeNumber, gainPerSecond: number): number {
+const estimateSeconds = (cost: LargeNumber, current: LargeNumber, gainPerSecond: number) => {
   if (gainPerSecond <= 0) return Number.POSITIVE_INFINITY
   if (cost.compare(current) <= 0) return 0
 
@@ -87,12 +73,12 @@ function estimateSeconds(cost: LargeNumber, current: LargeNumber, gainPerSecond:
   return remaining.mantissa * 10 ** remaining.exponent
 }
 
-function logScore(value: number, cost: LargeNumber): number {
+const logScore = (value: number, cost: LargeNumber) => {
   const safeValue = Math.max(value, Number.EPSILON)
   return Math.log(safeValue) - (Math.log(Math.max(cost.mantissa, Number.EPSILON)) + cost.exponent * Math.log(10))
 }
 
-export function OgTechPage(props: { cycles: string; setCycles: (next: string) => void }) {
+export const OgTechPage = (props: { cycles: string; setCycles: (next: string) => void }) => {
   const data = useZatData()
 
   const [gainValue, setGainValue] = createPersistedSignal("zat.og.gain", "1e12")

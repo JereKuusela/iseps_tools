@@ -18,7 +18,7 @@ const tabs: TabItem[] = [
   { href: "/premium/hauler-mine", label: "Premium Hauler", subtitle: "Layer income by time" },
 ]
 
-function TopNav(props: { darkMode: boolean; onToggleDarkMode: () => void }) {
+const TopNav = (props: { darkMode: boolean; onToggleDarkMode: () => void }) => {
   const location = useLocation()
 
   return (
@@ -60,7 +60,7 @@ function TopNav(props: { darkMode: boolean; onToggleDarkMode: () => void }) {
   )
 }
 
-export default function App() {
+const App = () => {
   const location = useLocation()
   const [cycles, setCycles] = createPersistedSignal("zat.og.cycles", "0")
   const [darkMode, setDarkMode] = createPersistedSignal("ui.darkMode", false)
@@ -104,3 +104,5 @@ export default function App() {
     </div>
   )
 }
+
+export default App

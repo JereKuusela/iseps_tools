@@ -137,7 +137,7 @@ export type ZatDataBundle = {
   zatNodes: ZatNodeRule[]
 }
 
-const parseJunoExponent = (raw: unknown[]): JunoExponentRule[] => {
+const parseJunoExponent = (raw: unknown[]) => {
   return raw
     .map((entry) => {
       const candidate = entry as {
@@ -176,12 +176,12 @@ const dataBundle: ZatDataBundle = {
 
 const ZatDataContext = createContext<Accessor<ZatDataBundle>>()
 
-export function ZatDataProvider(props: ParentProps) {
+export const ZatDataProvider = (props: ParentProps) => {
   const accessor = () => dataBundle
   return <ZatDataContext.Provider value={accessor}>{props.children}</ZatDataContext.Provider>
 }
 
-export function useZatData(): Accessor<ZatDataBundle> {
+export const useZatData = (): Accessor<ZatDataBundle> => {
   const context = useContext(ZatDataContext)
   if (!context) {
     throw new Error("useZatData must be used inside ZatDataProvider")
