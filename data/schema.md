@@ -1,6 +1,6 @@
 # Data schema
 
-Explains what eacch field is.
+Explains what each field is.
 
 ## cycles.json
 
@@ -38,6 +38,69 @@ Available premium purchases that affect Juno output.
   - `mul`: Total value is `value ^ level`.
 
 Tokens are special case, with the mode changing after 1000 tokens.
+
+## premium.json
+
+Rules and base values for Premium tab calculations.
+
+- `crystalToken`: Data for Crystal and Token calculations.
+  - `dailyRewards`: Daily rewards included by optional checkbox.
+    - `tokens`: Base daily token rewards before modifiers.
+    - `crystals`: Base daily crystal rewards.
+  - `seDailyTokenMultipliers`: Token multiplier by selected SE item.
+    - `se`: SE item value.
+    - `mult`: Multiplier applied to daily reward tokens.
+  - `methods`: Premium methods shown in output table.
+    - `id`: Stable method identifier.
+    - `name`: Display name.
+    - `seconds`: Base interval in seconds.
+    - `tokens`: Base token output per interval.
+    - `crystals`: Base crystal output per interval.
+    - `tokenBooster`: Whether token booster affects this method.
+    - `chestEnhancer`: Whether module #17 affects this method.
+    - `luckyLeafClover`: Whether lucky leaf clover affects this method.
+    - `tokenUpgradePerLevel`: Optional additive token bonus per level.
+    - `crystalUpgradePerLevel`: Optional additive crystal bonus per level.
+    - `durationTokenPerLevel`: Optional BB-Bot additive token bonus per duration level.
+    - `tokenUpgradeUnlockLevel`: Optional BB-Bot duration level required before token upgrade applies.
+- `haulerMine`: Data for Hauler Mine calculations.
+  - `layerHours`: Duration of one completed layer.
+  - `layers`: Per-layer base and optional rewards.
+    - `layer`: Layer index.
+    - `rareDirt`: Base rare dirt reward.
+    - `tokens`: Optional token reward.
+    - `crystals`: Optional crystal reward.
+    - `exoticDirt`: Optional exotic dirt reward.
+    - `rareDirtBonus`: Optional extra rare dirt reward.
+    - `tokenToggle`: Optional toggle key required to apply token reward.
+    - `crystalToggle`: Optional toggle key required to apply crystal reward.
+    - `exoticToggle`: Optional toggle key required to apply exotic dirt reward.
+    - `rareBonusToggle`: Optional toggle key required to apply rare dirt bonus.
+
+## sc.json
+
+Rules for calculating SC tool values.
+
+- `replicators`: Replicator formulas and thresholds.
+  - `dc`: Rules for DC replicator boost.
+    - `unlockMinutes`: Minutes in SE required before polynomial boost is active.
+    - `rules`: Per-SE polynomial coefficients.
+      - `se`: SE level where this rule becomes active.
+      - `base`: Base multiplier value.
+      - `linear`: Linear coefficient applied to minutes in SE.
+      - `quadratic`: Quadratic coefficient applied to minutes in SE squared.
+  - `se`: Rules for SC replicator boost.
+    - `stepMinutes`: Minute step used when counting boost increments.
+    - `rules`: Per-SE step and cap values.
+      - `se`: SE level where this rule becomes active.
+      - `perStep`: Boost increment per `stepMinutes` block.
+      - `cap`: Maximum SC replicator multiplier.
+- `dailyBoost`: Daily multiplicative boost by SE.
+  - `se`: SE level where this rule becomes active.
+  - `dailyMultiplier`: Daily multiplicative factor for projected values.
+- `batteryGoalMultipliers`: Extra DC multipliers applied to battery goals.
+  - `se`: SE level where this multiplier becomes active.
+  - `mult`: Multiplier applied cumulatively at and above this SE.
 
 ## techs.json
 

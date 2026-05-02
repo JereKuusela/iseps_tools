@@ -1,4 +1,4 @@
-import type { ParentProps } from "solid-js";
+import type { ParentProps } from "solid-js"
 
 export function Panel(props: ParentProps<{ title: string; subtitle: string }>) {
   return (
@@ -7,5 +7,5 @@ export function Panel(props: ParentProps<{ title: string; subtitle: string }>) {
       <p class="mt-2 text-sm text-ink/70">{props.subtitle}</p>
       <div class="mt-5 sm:mt-6">{props.children}</div>
     </section>
-  );
+  )
 }

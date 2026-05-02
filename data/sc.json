@@ -1,0 +1,68 @@
+{
+  "replicators": {
+    "dc": {
+      "unlockMinutes": 720,
+      "rules": [
+        {
+          "se": 0,
+          "base": 1.11,
+          "linear": 0.0000229,
+          "quadratic": 0.0000000118
+        },
+        {
+          "se": 110,
+          "base": 1.11,
+          "linear": 0.0000248,
+          "quadratic": 0.0000000156
+        }
+      ]
+    },
+    "se": {
+      "stepMinutes": 15,
+      "rules": [
+        {
+          "se": 0,
+          "perStep": 0.0003,
+          "cap": 2
+        },
+        {
+          "se": 120,
+          "perStep": 0.0004,
+          "cap": 4
+        }
+      ]
+    }
+  },
+  "dailyBoost": [
+    {
+      "se": 0,
+      "dailyMultiplier": 1.01
+    },
+    {
+      "se": 118,
+      "dailyMultiplier": 1.02
+    }
+  ],
+  "batteryGoalMultipliers": [
+    {
+      "se": 120,
+      "mult": "1e5"
+    },
+    {
+      "se": 153,
+      "mult": "1e2"
+    },
+    {
+      "se": 156,
+      "mult": "1e2"
+    },
+    {
+      "se": 160,
+      "mult": "1e3"
+    },
+    {
+      "se": 163,
+      "mult": "1e3"
+    }
+  ]
+}

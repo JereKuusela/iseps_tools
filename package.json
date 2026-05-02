@@ -27,5 +27,10 @@
     "vite": "8.0.10",
     "vite-plugin-solid": "2.11.12",
     "vitest": "4.1.5"
+  },
+  "prettier": {
+    "printWidth": 120,
+    "semi": false,
+    "tabWidth": 2
   }
 }

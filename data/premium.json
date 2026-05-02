@@ -1,0 +1,142 @@
+{
+  "crystalToken": {
+    "dailyRewards": {
+      "tokens": 34.375,
+      "crystals": 100
+    },
+    "seDailyTokenMultipliers": [
+      {
+        "se": 11,
+        "mult": 1
+      },
+      {
+        "se": 81,
+        "mult": 1.25
+      },
+      {
+        "se": 101,
+        "mult": 1.5
+      },
+      {
+        "se": 133,
+        "mult": 1.75
+      },
+      {
+        "se": 158,
+        "mult": 2
+      }
+    ],
+    "methods": [
+      {
+        "id": "basic_chest",
+        "name": "Basic Chest",
+        "seconds": 360,
+        "tokens": 1,
+        "crystals": 8,
+        "tokenBooster": true,
+        "chestEnhancer": true,
+        "luckyLeafClover": true
+      },
+      {
+        "id": "rare_chest",
+        "name": "Rare Chest",
+        "seconds": 1200,
+        "tokens": 6,
+        "crystals": 20,
+        "tokenBooster": true,
+        "chestEnhancer": true,
+        "luckyLeafClover": true
+      },
+      {
+        "id": "supply_bot",
+        "name": "Supply Bot",
+        "seconds": 420,
+        "tokens": 2,
+        "crystals": 6,
+        "tokenBooster": true,
+        "tokenUpgradePerLevel": 0.1,
+        "crystalUpgradePerLevel": 1
+      },
+      {
+        "id": "bb_bot",
+        "name": "BB-Bot",
+        "seconds": 1200,
+        "tokens": 1,
+        "crystals": 0,
+        "tokenBooster": true,
+        "durationTokenPerLevel": 0.05,
+        "tokenUpgradePerLevel": 0.5,
+        "tokenUpgradeUnlockLevel": 40
+      }
+    ]
+  },
+  "haulerMine": {
+    "layerHours": 6,
+    "layers": [
+      {
+        "layer": 0,
+        "rareDirt": 10
+      },
+      {
+        "layer": 1,
+        "rareDirt": 14,
+        "tokens": 10,
+        "tokenToggle": "layer1TokenIncome",
+        "crystals": 10,
+        "crystalToggle": "layer1CrystalIncome"
+      },
+      {
+        "layer": 2,
+        "rareDirt": 18,
+        "exoticDirt": 1,
+        "exoticToggle": "layer2ExoticIncome"
+      },
+      {
+        "layer": 3,
+        "rareDirt": 22,
+        "crystals": 12,
+        "crystalToggle": "layer3CrystalIncome"
+      },
+      {
+        "layer": 4,
+        "rareDirt": 25,
+        "rareDirtBonus": 20,
+        "rareBonusToggle": "layer4RareDirtIncome"
+      },
+      {
+        "layer": 5,
+        "rareDirt": 35
+      },
+      {
+        "layer": 6,
+        "rareDirt": 50,
+        "exoticDirt": 1,
+        "exoticToggle": "layer6ExoticIncome"
+      },
+      {
+        "layer": 7,
+        "rareDirt": 70,
+        "rareDirtBonus": 15,
+        "rareBonusToggle": "layer7RareDirtIncome"
+      },
+      {
+        "layer": 8,
+        "rareDirt": 100
+      },
+      {
+        "layer": 9,
+        "rareDirt": 140,
+        "exoticDirt": 1,
+        "exoticToggle": "layer9ExoticIncome"
+      },
+      {
+        "layer": 10,
+        "exoticDirt": 3
+      },
+      {
+        "layer": 11,
+        "exoticDirt": 5
+      }
+    ]
+  }
+}
