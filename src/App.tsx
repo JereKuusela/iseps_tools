@@ -1,27 +1,19 @@
 import { A, useLocation } from "@solidjs/router"
-import { createEffect, For, Match, Switch } from "solid-js"
+import { createEffect, For, type ParentComponent } from "solid-js"
 import { createPersistedSignal } from "./lib/persistedSignal"
-import { CreditsPage } from "./pages/CreditsPage"
-import { OgTechPage } from "./pages/OgTechPage"
-import { PenrosePage } from "./pages/PenrosePage"
-import { PremiumCrystalTokenPage, PremiumHaulerMinePage } from "./pages/PremiumPage"
-import { ScPage } from "./pages/ScPage"
-import { ZatGuidePage } from "./pages/ZatGuidePage"
+import { tabs } from "./lib/routes"
 
-type TabItem = { href: string; label: string }
+const normalizePath = (path: string) => {
+  if (!path || path === "/") {
+    return "/"
+  }
 
-const tabs: TabItem[] = [
-  { href: "", label: "OG Tech" },
-  { href: "zat-guide", label: "ZAT Guide" },
-  { href: "penrose", label: "Penrose" },
-  { href: "sc", label: "SC" },
-  { href: "crystal-token", label: "Premium Crystal" },
-  { href: "hauler-mine", label: "Premium Hauler" },
-  { href: "credits", label: "Credits" },
-]
+  return path.endsWith("/") ? path.slice(0, -1) : path
+}
 
 const TopNav = (props: { darkMode: boolean; onToggleDarkMode: () => void }) => {
   const location = useLocation()
+  const isActivePath = (href: string) => normalizePath(location.pathname) === href
 
   return (
     <header class="relative z-10 px-4 pt-5 sm:px-8 sm:pt-8 lg:px-10">
@@ -33,8 +25,8 @@ const TopNav = (props: { darkMode: boolean; onToggleDarkMode: () => void }) => {
                 href={tab.href}
                 class="rounded-xl px-4 py-2.5 text-left transition hover:-translate-y-0.5 hover:bg-ink hover:text-white dark:hover:bg-white/15"
                 classList={{
-                  "bg-ink text-white": location.pathname === tab.href,
-                  "dark:bg-white/15": location.pathname === tab.href,
+                  "bg-ink text-white": isActivePath(tab.href),
+                  "dark:bg-white/15": isActivePath(tab.href),
                 }}
               >
                 <p class="text-sm font-semibold tracking-wide">{tab.label}</p>
@@ -56,9 +48,7 @@ const TopNav = (props: { darkMode: boolean; onToggleDarkMode: () => void }) => {
   )
 }
 
-const App = () => {
-  const location = useLocation()
-  const [cycles, setCycles] = createPersistedSignal("zat.og.cycles", "0")
+const App: ParentComponent = (props) => {
   const [darkMode, setDarkMode] = createPersistedSignal("ui.darkMode", false)
 
   createEffect(() => {
@@ -69,31 +59,7 @@ const App = () => {
     <div class="relative min-h-screen overflow-x-auto overflow-y-visible bg-mist text-ink transition-colors dark:bg-[#070d16] dark:text-[#e8f0ff]">
       <div class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_10%_20%,rgba(255,107,53,0.2),transparent_50%),radial-gradient(circle_at_90%_10%,rgba(10,143,148,0.25),transparent_45%),radial-gradient(circle_at_40%_85%,rgba(12,28,48,0.18),transparent_40%)] dark:bg-[radial-gradient(circle_at_12%_20%,rgba(255,107,53,0.22),transparent_46%),radial-gradient(circle_at_84%_16%,rgba(10,143,148,0.24),transparent_42%),radial-gradient(circle_at_50%_82%,rgba(143,182,255,0.2),transparent_40%)]" />
       <TopNav darkMode={darkMode()} onToggleDarkMode={() => setDarkMode((value) => !value)} />
-      <main class="w-full px-4 pb-10 pt-4 sm:px-8 sm:pb-12 sm:pt-6 lg:px-10 lg:pb-14 lg:pt-8">
-        <Switch fallback={<OgTechPage cycles={cycles()} setCycles={setCycles} />}>
-          <Match when={location.pathname === "/"}>
-            <OgTechPage cycles={cycles()} setCycles={setCycles} />
-          </Match>
-          <Match when={location.pathname === "/zat-guide"}>
-            <ZatGuidePage cycles={cycles()} setCycles={setCycles} />
-          </Match>
-          <Match when={location.pathname === "/penrose"}>
-            <PenrosePage cycles={cycles()} setCycles={setCycles} />
-          </Match>
-          <Match when={location.pathname === "/sc"}>
-            <ScPage />
-          </Match>
-          <Match when={location.pathname === "/credits"}>
-            <CreditsPage />
-          </Match>
-          <Match when={location.pathname === "/crystal-token"}>
-            <PremiumCrystalTokenPage />
-          </Match>
-          <Match when={location.pathname === "/hauler-mine" || location.pathname === "premium/hauler"}>
-            <PremiumHaulerMinePage />
-          </Match>
-        </Switch>
-      </main>
+      <main class="w-full px-4 pb-10 pt-4 sm:px-8 sm:pb-12 sm:pt-6 lg:px-10 lg:pb-14 lg:pt-8">{props.children}</main>
     </div>
   )
 }
