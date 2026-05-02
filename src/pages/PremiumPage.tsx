@@ -1,10 +1,12 @@
 import { createMemo, For, Show } from "solid-js"
 import { Panel } from "../components/layout/Panel"
+import { blurOnEnterOrEscape } from "../components/ui/formControls"
 import { ToggleField } from "../components/ui/formControls"
 import { isValidNumberishInput } from "../components/ui/formControls"
 import { sanitizeNumberishInput } from "../components/ui/formControls"
 import { Tooltip } from "../components/ui/Tooltip"
 import { createPersistedSignal } from "../lib/persistedSignal"
+import type { TooltipKey } from "../lib/tooltips"
 import { useZatData, type PremiumCrystalTokenMethod, type PremiumHaulerLayer } from "../lib/zatContext"
 
 type HaulerToggleKey =
@@ -53,7 +55,7 @@ const NumberSelectField = (props: {
   min: number
   max: number
   step?: number
-  tooltip?: string
+  tooltip?: TooltipKey
 }) => {
   const listId = `premium-${props.id}-list`
 
@@ -71,6 +73,7 @@ const NumberSelectField = (props: {
         type="text"
         inputMode="decimal"
         value={props.value}
+        onKeyDown={blurOnEnterOrEscape}
         onInput={(event) => {
           const next = sanitizeNumberishInput(event.currentTarget.value)
           if (!isValidNumberishInput(next)) return
@@ -228,7 +231,7 @@ const CrystalAndTokenTab = () => {
               options={[0, 5, 10, 15, 20, 25]}
               min={0}
               max={25}
-              tooltip="In the Token Shop under Supplies Upgrades. Gives +0.1 token per level."
+              tooltip="premium.supplyBotTokenUpgrade"
             />
             <NumberSelectField
               id="supply-bot-crystal"
@@ -238,7 +241,7 @@ const CrystalAndTokenTab = () => {
               options={[0, 2, 4, 6, 8]}
               min={0}
               max={8}
-              tooltip="In the Token Shop under Supplies Upgrades. Gives +1 crystal per level."
+              tooltip="premium.supplyBotCrystalUpgrade"
             />
             <NumberSelectField
               id="bb-duration"
@@ -248,7 +251,7 @@ const CrystalAndTokenTab = () => {
               options={[0, 10, 20, 30, 40]}
               min={0}
               max={40}
-              tooltip="In the Token Shop under BB-Bot Upgrades. Adds 60 seconds and +0.05 tokens per level."
+              tooltip="premium.bbDurationUpgrade"
             />
             <NumberSelectField
               id="bb-token"
@@ -258,7 +261,7 @@ const CrystalAndTokenTab = () => {
               options={[0, 5, 10, 15, 20]}
               min={0}
               max={20}
-              tooltip="In the Token Shop under BB-Bot Upgrades. Requires BB-Bot Duration level 40 and adds 0.5 tokens per level."
+              tooltip="premium.bbTokenUpgrade"
             />
             <NumberSelectField
               id="token-booster"
@@ -268,7 +271,7 @@ const CrystalAndTokenTab = () => {
               options={[0, 10, 25, 50, 75, 100]}
               min={0}
               max={100}
-              tooltip="In the Crystal Shop special upgrades tab. Adds 1% token gain per level to all token sources."
+              tooltip="premium.tokenBooster"
             />
             <NumberSelectField
               id="chest-enhancer"
@@ -278,7 +281,7 @@ const CrystalAndTokenTab = () => {
               options={[0, 2, 4, 6, 8, 10]}
               min={0}
               max={10}
-              tooltip="In the Gamma Corporation module collection. Gives +10% chest tokens per level."
+              tooltip="premium.chestEnhancer"
             />
             <NumberSelectField
               id="hours-per-day"
@@ -289,7 +292,7 @@ const CrystalAndTokenTab = () => {
               min={0}
               max={24}
               step={0.25}
-              tooltip="How many hours per day you actively collect with optimal timing."
+              tooltip="premium.averageHoursPerDay"
             />
             <NumberSelectField
               id="se-item"
@@ -299,7 +302,7 @@ const CrystalAndTokenTab = () => {
               options={seItemOptions}
               min={11}
               max={158}
-              tooltip="Selected SE threshold for daily token reward multiplier."
+              tooltip="premium.seItem"
             />
           </div>
           <div class="mt-3 space-y-2">
@@ -307,13 +310,13 @@ const CrystalAndTokenTab = () => {
               label="Total includes daily rewards"
               checked={includeDailyRewards()}
               onChange={setIncludeDailyRewards}
-              tooltip="Adds 100 crystals and 34.375 tokens daily, then applies token booster and selected SE multiplier to the token part."
+              tooltip="premium.includeDailyRewards"
             />
             <ToggleField
               label="Lucky Leaf Clover perk (L4)"
               checked={luckyLeafClover()}
               onChange={setLuckyLeafClover}
-              tooltip="Reduces chest cooldown by 10% for Basic and Rare chest cycles."
+              tooltip="premium.luckyLeafClover"
             />
           </div>
         </div>
@@ -508,7 +511,7 @@ const HaulerMineTab = () => {
               options={[0, 2, 4, 6, 8, 10, 11]}
               min={0}
               max={11}
-              tooltip="Highest unlocked layer in the hauler mine route."
+              tooltip="premium.unlockedLayers"
             />
             <NumberSelectField
               id="hauler-token-booster"
@@ -518,7 +521,7 @@ const HaulerMineTab = () => {
               options={[0, 10, 25, 50, 75, 100]}
               min={0}
               max={100}
-              tooltip="Shared with Crystal and Token tab. Applies to all hauler token rewards."
+              tooltip="premium.haulerTokenBooster"
             />
           </div>
 
@@ -609,7 +612,7 @@ const HaulerMineTab = () => {
 
 export const PremiumCrystalTokenPage = () => {
   return (
-    <Panel title="Premium Crystal and Token" subtitle="Chest and bot output with premium upgrades.">
+    <Panel title="Premium Crystal and Token" tooltip="premium.panelCrystalToken">
       <CrystalAndTokenTab />
     </Panel>
   )
@@ -617,7 +620,7 @@ export const PremiumCrystalTokenPage = () => {
 
 export const PremiumHaulerMinePage = () => {
   return (
-    <Panel title="Premium Hauler Mine" subtitle="Layer income by time with premium toggles.">
+    <Panel title="Premium Hauler Mine" tooltip="premium.panelHaulerMine">
       <HaulerMineTab />
     </Panel>
   )

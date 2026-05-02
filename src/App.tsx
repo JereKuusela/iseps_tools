@@ -66,10 +66,10 @@ const App = () => {
   })
 
   return (
-    <div class="relative min-h-screen overflow-hidden bg-mist text-ink transition-colors dark:bg-[#070d16] dark:text-[#e8f0ff]">
+    <div class="relative min-h-screen overflow-x-auto overflow-y-visible bg-mist text-ink transition-colors dark:bg-[#070d16] dark:text-[#e8f0ff]">
       <div class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_10%_20%,rgba(255,107,53,0.2),transparent_50%),radial-gradient(circle_at_90%_10%,rgba(10,143,148,0.25),transparent_45%),radial-gradient(circle_at_40%_85%,rgba(12,28,48,0.18),transparent_40%)] dark:bg-[radial-gradient(circle_at_12%_20%,rgba(255,107,53,0.22),transparent_46%),radial-gradient(circle_at_84%_16%,rgba(10,143,148,0.24),transparent_42%),radial-gradient(circle_at_50%_82%,rgba(143,182,255,0.2),transparent_40%)]" />
       <TopNav darkMode={darkMode()} onToggleDarkMode={() => setDarkMode((value) => !value)} />
-      <main class="mx-auto w-full max-w-6xl px-4 pb-10 pt-4 sm:px-8 sm:pb-12 sm:pt-6 lg:px-10 lg:pb-14 lg:pt-8">
+      <main class="w-full px-4 pb-10 pt-4 sm:px-8 sm:pb-12 sm:pt-6 lg:px-10 lg:pb-14 lg:pt-8">
         <Switch fallback={<OgTechPage cycles={cycles()} setCycles={setCycles} />}>
           <Match when={location.pathname === "/"}>
             <OgTechPage cycles={cycles()} setCycles={setCycles} />

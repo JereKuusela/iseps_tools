@@ -1,17 +1,9 @@
-import { createMemo, For, Show } from "solid-js"
+import { createMemo } from "solid-js"
 import { Panel } from "../components/layout/Panel"
 import {
-  IntegerField,
-  isValidNumberishInput,
-  NumberField,
-  PercentField,
-  sanitizeNumberishInput,
-  SelectField,
-} from "../components/ui/formControls"
-import { SummaryInputModal } from "../components/ui/SummaryInputModal"
-import { Tooltip } from "../components/ui/Tooltip"
-import {
+  calculateDcReplicator,
   calculateGoal,
+  calculateSeReplicator,
   calculateScMultiplierFromGoal,
   calculateScFromDc,
   iterateTimeToReachGoal,
@@ -19,40 +11,19 @@ import {
 } from "../lib/scCalculator"
 import { LargeNumber } from "../lib/largeNumber"
 import { useScContext } from "../lib/scContext"
-import { formatLocalTimestampFromMinutes, formatTimeDuration, formatTimeDurationFromMinutes } from "../lib/timeFormat"
-
-type PanelOutput = {
-  id: number
-  goalType: ScGoalType
-  goalTypeLabel: string
-  customGoal: string
-  dcCost: LargeNumber
-  progressPct: number
-  totalMinutes: number
-  remainingMinutes: number
-  afterSkipsMinutes: number
-  projectedProgressPct: number
-  projectedDcCost: LargeNumber
-  projectedScGained: LargeNumber
-  projectedDailyBoost: number
-  projectedScReplicator: number
-  projectedDcReplicator: number
-}
+import { formatTimeDurationFromMinutes } from "../lib/timeFormat"
+import { ScLeftColumn } from "./sc/ScLeftColumn"
+import { ScRightColumn } from "./sc/ScRightColumn"
+import type { PanelOutput, ScGoalOption } from "./sc/scTypes"
 
 type GainUnit = "min" | "hour" | "day"
 
-const goalOptions: { value: ScGoalType; label: string }[] = [
+const goalOptions: ScGoalOption[] = [
   { value: "battery1", label: "Battery 1" },
   { value: "battery2", label: "Battery 2" },
   { value: "battery3", label: "Battery 3" },
   { value: "customSc", label: "Custom SC" },
   { value: "customDc", label: "Custom DC" },
-]
-
-const gainUnitOptions: { value: GainUnit; label: string }[] = [
-  { value: "min", label: "/min" },
-  { value: "hour", label: "/hour" },
-  { value: "day", label: "/day" },
 ]
 
 const parsePositive = (value: string) => Math.max(0, parseNumberish(value))
@@ -135,6 +106,10 @@ export const ScPage = () => {
 
   const retainedDc = createMemo(() => Math.max(1, parseNumberish(sc.retainedDcReplicator())))
   const retainedSc = createMemo(() => Math.max(1, parseNumberish(sc.retainedSeReplicator())))
+  const dcReplicatorTotal = createMemo(() => calculateDcReplicator(currentSe(), minutesInSe(), retainedDc()))
+  const scReplicatorTotal = createMemo(() => calculateSeReplicator(currentSe(), minutesInSe(), retainedSc()))
+  const dcReplicatorTimeBonus = createMemo(() => calculateDcReplicator(currentSe(), minutesInSe(), 0))
+  const scReplicatorTimeBonus = createMemo(() => calculateSeReplicator(currentSe(), minutesInSe(), 0))
 
   const baseSkips = createMemo(() => ({
     small: Math.max(0, Math.floor(parseNumberish(sc.timeSkipSmall()))),
@@ -234,314 +209,27 @@ export const ScPage = () => {
   })
 
   return (
-    <Panel
-      title="Singularity Calculator"
-      subtitle="Compact singularity planner. Enter your current state and compare timeline, skip-adjusted ETA, and projected replicator effects per goal panel."
-    >
-      <div class="grid gap-3 xl:grid-cols-[350px_1fr]">
-        <aside class="space-y-3 rounded-2xl border border-ink/15 bg-white/70 p-3 dark:border-white/15 dark:bg-[#182538]/75">
-          <div class="space-y-2 rounded-xl border border-ink/15 bg-white/80 p-2 dark:border-white/15 dark:bg-[#1d2c42]">
-            <div class="grid gap-2">
-              <NumberField label="SE" value={sc.currentSe()} onInput={sc.setCurrentSe} min={0} step={1} inline />
-              <NumberField label="Battery 1 DC" value={sc.battery1DcCost()} onInput={sc.setBattery1DcCost} inline />
-              <NumberField label="Current DC" value={sc.currentDc()} onInput={sc.setCurrentDc} inline />
-              <div class="grid grid-cols-[1fr_auto] gap-1">
-                <NumberField label="Output" value={sc.dcGainValue()} onInput={sc.setDcGainValue} inline />
-                <SelectField
-                  label="Unit"
-                  value={sc.dcGainUnit()}
-                  onChange={(next) => sc.setDcGainUnit(next as GainUnit)}
-                  options={gainUnitOptions}
-                  inline
-                />
-              </div>
-            </div>
-          </div>
+    <Panel title="Singularity Calculator" tooltip="sc.panel" width="full">
+      <div class="grid gap-3 xl:grid-cols-[350px_max-content]">
+        <ScLeftColumn
+          replicatorDurationLabel={replicatorDurationLabel()}
+          dcReplicatorTotal={dcReplicatorTotal()}
+          scReplicatorTotal={scReplicatorTotal()}
+          dcReplicatorTimeBonus={dcReplicatorTimeBonus()}
+          scReplicatorTimeBonus={scReplicatorTimeBonus()}
+          totalSkipMinutes={totalSkipMinutes()}
+          onlineBonusMultiplier={onlineBonusMultiplier()}
+          formatMultiplier={formatMultiplier}
+        />
 
-          <div class="space-y-2 rounded-xl border border-ink/15 bg-white/80 p-2 dark:border-white/15 dark:bg-[#1d2c42]">
-            <h3 class="font-mono text-lg font-black text-ink dark:text-white">Replicators</h3>
-            <SummaryInputModal label="Time in SE" value={replicatorDurationLabel()}>
-              <div class="grid grid-cols-1 gap-2 sm:grid-cols-3">
-                <IntegerField
-                  label="D"
-                  value={sc.replicatorDays()}
-                  onInput={sc.setReplicatorDays}
-                  min={0}
-                  step={1}
-                  inline
-                />
-                <IntegerField
-                  label="H"
-                  value={sc.replicatorHours()}
-                  onInput={sc.setReplicatorHours}
-                  min={0}
-                  step={1}
-                  inline
-                />
-                <IntegerField
-                  label="M"
-                  value={sc.replicatorMinutes()}
-                  onInput={sc.setReplicatorMinutes}
-                  min={0}
-                  step={1}
-                  inline
-                />
-              </div>
-            </SummaryInputModal>
-
-            <div class="grid grid-cols-2 gap-2">
-              <NumberField
-                label="Retained DC"
-                value={sc.retainedDcReplicator()}
-                onInput={sc.setRetainedDcReplicator}
-                min={1}
-                step={0.01}
-                inline
-              />
-              <NumberField
-                label="Retained SC"
-                value={sc.retainedSeReplicator()}
-                onInput={sc.setRetainedSeReplicator}
-                min={1}
-                step={0.01}
-                inline
-              />
-            </div>
-
-            <div class="grid grid-cols-3 gap-1.5 rounded-lg border border-ink/15 bg-white/70 p-1.5 dark:border-white/15 dark:bg-[#243954]/40">
-              <div class="rounded-md bg-ink/5 px-2 py-1 text-center dark:bg-white/10">
-                <p class="text-[10px] font-semibold uppercase tracking-[0.1em] text-ink/65 dark:text-white/70">
-                  DC Retain
-                </p>
-                <p class="font-mono text-sm font-black text-accent dark:text-[#8ce3ff]">
-                  {formatMultiplier(retainedDc())}
-                </p>
-              </div>
-              <div class="rounded-md bg-ink/5 px-2 py-1 text-center dark:bg-white/10">
-                <p class="text-[10px] font-semibold uppercase tracking-[0.1em] text-ink/65 dark:text-white/70">
-                  SC Retain
-                </p>
-                <p class="font-mono text-sm font-black text-accent dark:text-[#8ce3ff]">
-                  {formatMultiplier(retainedSc())}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div class="space-y-2 rounded-xl border border-ink/15 bg-white/80 p-2 dark:border-white/15 dark:bg-[#1d2c42]">
-            <SummaryInputModal label="Time Skips" value={formatTimeDurationFromMinutes(totalSkipMinutes())}>
-              <div class="grid grid-cols-1 gap-2 sm:grid-cols-3">
-                <IntegerField
-                  label="S"
-                  value={sc.timeSkipSmall()}
-                  onInput={sc.setTimeSkipSmall}
-                  min={0}
-                  step={1}
-                  inline
-                />
-                <IntegerField
-                  label="M"
-                  value={sc.timeSkipMedium()}
-                  onInput={sc.setTimeSkipMedium}
-                  min={0}
-                  step={1}
-                  inline
-                />
-                <IntegerField
-                  label="L"
-                  value={sc.timeSkipLarge()}
-                  onInput={sc.setTimeSkipLarge}
-                  min={0}
-                  step={1}
-                  inline
-                />
-              </div>
-            </SummaryInputModal>
-
-            <SummaryInputModal
-              label="Online bonus"
-              value={formatMultiplier(onlineBonusMultiplier())}
-              tooltipContent="First 10 online hours add 38 skip minutes each hour.<br>Alpha Supplies increases this online bonus by 1% per level."
-            >
-              <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                <div class="grid grid-cols-[auto_1fr] items-center gap-2">
-                  <p class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/80 dark:text-white/80">
-                    Online Hrs
-                  </p>
-                  <input
-                    type="text"
-                    inputMode="decimal"
-                    value={sc.onlineHoursPerDay()}
-                    onInput={(event) => {
-                      const next = sanitizeNumberishInput(event.currentTarget.value)
-                      if (!isValidNumberishInput(next)) return
-                      sc.setOnlineHoursPerDay(next)
-                    }}
-                    class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-semibold text-ink outline-none ring-brand/40 focus:ring dark:border-white/20 dark:bg-[#1a2638] dark:text-white"
-                  />
-                </div>
-                <NumberField
-                  label="Alpha"
-                  value={sc.alphaSuppliesLevel()}
-                  onInput={sc.setAlphaSuppliesLevel}
-                  min={0}
-                  step={1}
-                  inline
-                />
-              </div>
-            </SummaryInputModal>
-          </div>
-
-          <div class="space-y-2 rounded-xl border border-ink/15 bg-white/80 p-2 dark:border-white/15 dark:bg-[#1d2c42]">
-            <h3 class="font-mono text-lg font-black text-ink dark:text-white">Future Boosts</h3>
-            <div class="grid grid-cols-2 gap-2">
-              <PercentField label="DC %" value={sc.futureDcBoostPct()} onInput={sc.setFutureDcBoostPct} inline />
-              <PercentField label="SC %" value={sc.futureScBoostPct()} onInput={sc.setFutureScBoostPct} inline />
-            </div>
-          </div>
-        </aside>
-
-        <section class="overflow-x-auto rounded-2xl border border-ink/15 bg-white/75 p-3 dark:border-white/15 dark:bg-[#162235]/80">
-          <div class="flex min-w-[560px] items-start gap-2.5">
-            <For each={outputs()}>
-              {(panel, index) => (
-                <article class="w-[260px] shrink-0 rounded-xl border border-ink/15 bg-white/85 p-2 dark:border-white/15 dark:bg-[#1c2c43]">
-                  <div class="grid grid-cols-[1fr_auto] gap-2">
-                    <select
-                      value={panel.goalType}
-                      onChange={(event) => sc.setPanelGoal(panel.id, event.currentTarget.value as ScGoalType)}
-                      class="rounded border border-ink/20 bg-white px-2 py-1.5 font-mono text-lg font-black text-ink outline-none ring-brand/40 focus:ring dark:border-white/20 dark:bg-[#253a56] dark:text-white"
-                    >
-                      <For each={goalOptions}>{(option) => <option value={option.value}>{option.label}</option>}</For>
-                    </select>
-                    <Show when={index() > 0}>
-                      <button
-                        type="button"
-                        onClick={() => sc.removePanel(panel.id)}
-                        class="rounded border border-ink/20 bg-white px-2 text-sm font-bold text-ink hover:bg-ink/5 dark:border-white/20 dark:bg-[#233752] dark:text-white dark:hover:bg-[#2f496b]"
-                        aria-label="Close panel"
-                      >
-                        X
-                      </button>
-                    </Show>
-                  </div>
-
-                  <Show when={panel.goalType === "customSc" || panel.goalType === "customDc"}>
-                    <div class="mt-2">
-                      <NumberField
-                        label={panel.goalType === "customSc" ? "Custom SC Goal" : "Custom DC Goal"}
-                        value={panel.customGoal}
-                        onInput={(next) => sc.setPanelCustomGoal(panel.id, next)}
-                        inline
-                      />
-                    </div>
-                  </Show>
-
-                  <div class="mt-2 rounded border border-ink/20 bg-white dark:border-white/15 dark:bg-[#253a56]">
-                    <div class="grid grid-cols-[1fr_auto] border-b border-ink/15 px-2 py-1.5 font-mono text-lg font-bold dark:border-white/15 dark:text-white">
-                      <span>DC Cost</span>
-                      <span class="text-accent dark:text-[#8ce3ff]">{formatLargeNumber(panel.dcCost, 2)}</span>
-                    </div>
-                    <div class="grid grid-cols-[1fr_auto] border-b border-ink/15 px-2 py-1.5 font-mono text-lg font-bold dark:border-white/15 dark:text-white">
-                      <span>Total Time</span>
-                      <span class="text-accent dark:text-[#8ce3ff]">{formatTimeDuration(panel.totalMinutes)}</span>
-                    </div>
-                    <div class="grid grid-cols-[1fr_auto] px-2 py-1.5 font-mono text-lg font-bold dark:text-white">
-                      <span>Progress</span>
-                      <span class="text-accent dark:text-[#8ce3ff]">{formatPercent(panel.progressPct, 2)}</span>
-                    </div>
-                  </div>
-
-                  <div class="mt-2 rounded border border-ink/20 bg-white dark:border-white/15 dark:bg-[#253a56]">
-                    <div class="grid grid-cols-[1fr_auto] border-b border-ink/15 px-2 py-1.5 font-mono text-lg font-bold dark:border-white/15 dark:text-white">
-                      <span>Remaining</span>
-                      <span class="text-accent dark:text-[#8ce3ff]">{formatTimeDuration(panel.remainingMinutes)}</span>
-                    </div>
-                    <div class="grid grid-cols-[1fr_auto] border-b border-ink/15 px-2 py-1.5 font-mono text-lg font-bold dark:border-white/15 dark:text-white">
-                      <span>End date</span>
-                      <span class="text-accent dark:text-[#8ce3ff]">
-                        {formatLocalTimestampFromMinutes(panel.remainingMinutes)}
-                      </span>
-                    </div>
-                  </div>
-
-                  <Show when={totalSkipMinutes() > 0}>
-                    <div class="mt-2 rounded border border-ink/20 bg-white dark:border-white/15 dark:bg-[#253a56]">
-                      <div class="grid grid-cols-[1fr_auto] border-b border-ink/15 px-2 py-1.5 font-mono text-lg font-bold dark:border-white/15 dark:text-white">
-                        <span>After Skips</span>
-                        <span class="text-accent dark:text-[#8ce3ff]">
-                          {formatTimeDuration(panel.afterSkipsMinutes)}
-                        </span>
-                      </div>
-                      <div class="px-2 py-1.5 text-center font-mono text-2xl font-black text-accent dark:text-[#8ce3ff]">
-                        {formatLocalTimestampFromMinutes(panel.afterSkipsMinutes)}
-                      </div>
-                    </div>
-                  </Show>
-
-                  <div class="mt-2 grid grid-cols-[1fr_24px] gap-2">
-                    <div class="rounded border border-ink/20 bg-white dark:border-white/15 dark:bg-[#253a56]">
-                      <h4 class="border-b border-ink/15 px-2 py-1.5 text-center font-mono text-lg font-black text-ink dark:border-white/15 dark:text-white">
-                        Projected Values
-                      </h4>
-                      <div class="grid grid-cols-[1fr_auto] border-b border-ink/15 px-2 py-1.5 font-mono text-lg font-bold dark:border-white/15 dark:text-white">
-                        <span>Progress</span>
-                        <span class="text-accent dark:text-[#8ce3ff]">
-                          {formatPercent(panel.projectedProgressPct, 0)}
-                        </span>
-                      </div>
-                      <div class="grid grid-cols-[1fr_auto] border-b border-ink/15 px-2 py-1.5 font-mono text-lg font-bold dark:border-white/15 dark:text-white">
-                        <span>DC Cost</span>
-                        <span class="text-accent dark:text-[#8ce3ff]">
-                          {formatLargeNumber(panel.projectedDcCost, 1)}
-                        </span>
-                      </div>
-                      <div class="grid grid-cols-[1fr_auto] border-b border-ink/15 px-2 py-1.5 font-mono text-lg font-bold dark:border-white/15 dark:text-white">
-                        <span>SC Gained</span>
-                        <span class="text-accent dark:text-[#8ce3ff]">
-                          {formatLargeNumber(panel.projectedScGained, 2)}
-                        </span>
-                      </div>
-                      <div class="grid grid-cols-[1fr_auto] border-b border-ink/15 px-2 py-1.5 font-mono text-lg font-bold dark:border-white/15 dark:text-white">
-                        <span>Daily Boost</span>
-                        <span class="text-accent dark:text-[#8ce3ff]">
-                          {formatMultiplier(panel.projectedDailyBoost)}
-                        </span>
-                      </div>
-                      <div class="grid grid-cols-[1fr_auto] border-b border-ink/15 px-2 py-1.5 font-mono text-lg font-bold dark:border-white/15 dark:text-white">
-                        <span>SC Replic.</span>
-                        <span class="text-accent dark:text-[#8ce3ff]">
-                          {formatMultiplier(panel.projectedScReplicator)}
-                        </span>
-                      </div>
-                      <div class="grid grid-cols-[1fr_auto] px-2 py-1.5 font-mono text-lg font-bold dark:text-white">
-                        <span>DC Replic.</span>
-                        <span class="text-accent dark:text-[#8ce3ff]">
-                          {formatMultiplier(panel.projectedDcReplicator)}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div class="relative rounded border border-ink/20 bg-ink/10 dark:border-white/15 dark:bg-white/10">
-                      <div
-                        class="absolute bottom-0 left-0 right-0 rounded-sm bg-gradient-to-t from-accent to-brand"
-                        style={{ height: `${panel.projectedProgressPct}%` }}
-                      />
-                    </div>
-                  </div>
-                </article>
-              )}
-            </For>
-
-            <button
-              type="button"
-              onClick={sc.addPanel}
-              class="h-10 rounded border border-ink/20 bg-white px-3 font-mono text-base font-bold text-ink hover:bg-ink/5 dark:border-white/20 dark:bg-[#253a56] dark:text-white dark:hover:bg-[#2f496b]"
-            >
-              + Panel
-            </button>
-          </div>
-        </section>
+        <ScRightColumn
+          outputs={outputs()}
+          totalSkipMinutes={totalSkipMinutes()}
+          goalOptions={goalOptions}
+          formatLargeNumber={formatLargeNumber}
+          formatPercent={formatPercent}
+          formatMultiplier={formatMultiplier}
+        />
       </div>
     </Panel>
   )

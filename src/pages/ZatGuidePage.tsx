@@ -165,7 +165,7 @@ export const ZatGuidePage = (props: { cycles: string; setCycles: (next: string) 
   })
 
   return (
-    <Panel title="ZAT Guide" subtitle="Cycle- and run-based node recommendations with an interactive tree view.">
+    <Panel title="ZAT Guide" tooltip="zatGuide.panel">
       <div class="grid gap-6 xl:grid-cols-[0.92fr_1.4fr]">
         <section class="space-y-4">
           <div class="rounded-2xl border border-ink/15 bg-white/70 p-4 dark:border-white/15 dark:bg-[#182538]/75">

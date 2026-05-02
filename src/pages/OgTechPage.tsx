@@ -262,7 +262,7 @@ export const OgTechPage = (props: { cycles: string; setCycles: (next: string) =>
   })
 
   return (
-    <Panel title="OG Tech" subtitle="Input your run state and compare the highest-value OG upgrades.">
+    <Panel title="OG Tech" tooltip="og.panel">
       <div class="grid gap-6 xl:grid-cols-[1.05fr_1.25fr]">
         <section class="space-y-4">
           <div class="rounded-2xl border border-ink/15 bg-white/70 p-4 dark:border-white/15 dark:bg-[#182538]/75">
@@ -273,7 +273,7 @@ export const OgTechPage = (props: { cycles: string; setCycles: (next: string) =>
                 value={gainValue()}
                 onInput={setGainValue}
                 placeholder="1e12"
-                tooltip="Juno gain in the selected unit."
+                tooltip="og.junoGains"
               />
               <SelectField
                 label="Gain unit"
@@ -286,14 +286,14 @@ export const OgTechPage = (props: { cycles: string; setCycles: (next: string) =>
                 value={junoAmount()}
                 onInput={setJunoAmount}
                 placeholder="1e13"
-                tooltip="Current Juno available for purchases."
+                tooltip="og.currentJuno"
               />
               <SelectField
                 label="Calculation mode"
                 value={mode()}
                 onChange={(next) => setMode(next as ZatMode)}
                 options={modeOptions}
-                tooltip="During your Juno run keep Juno mode, then switch to DC near the end."
+                tooltip="og.calculationMode"
               />
             </div>
           </div>

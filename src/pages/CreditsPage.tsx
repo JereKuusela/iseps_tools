@@ -11,7 +11,7 @@ export const CreditsPage = () => {
   const credits = (creditsJson as CreditEntry[]).slice()
 
   return (
-    <Panel title="Credits" subtitle="Contributors, references, and acknowledgements from data/credits.json.">
+    <Panel title="Credits" tooltip="credits.panel">
       <Show
         when={credits.length > 0}
         fallback={
