@@ -11,13 +11,13 @@ import { ZatGuidePage } from "./pages/ZatGuidePage"
 type TabItem = { href: string; label: string }
 
 const tabs: TabItem[] = [
-  { href: "/", label: "OG Tech" },
-  { href: "/zat-guide", label: "ZAT Guide" },
-  { href: "/penrose", label: "Penrose" },
-  { href: "/sc", label: "SC" },
-  { href: "/premium/crystal-token", label: "Premium Crystal" },
-  { href: "/premium/hauler-mine", label: "Premium Hauler" },
-  { href: "/credits", label: "Credits" },
+  { href: "", label: "OG Tech" },
+  { href: "zat-guide", label: "ZAT Guide" },
+  { href: "penrose", label: "Penrose" },
+  { href: "sc", label: "SC" },
+  { href: "crystal-token", label: "Premium Crystal" },
+  { href: "hauler-mine", label: "Premium Hauler" },
+  { href: "credits", label: "Credits" },
 ]
 
 const TopNav = (props: { darkMode: boolean; onToggleDarkMode: () => void }) => {
@@ -86,16 +86,10 @@ const App = () => {
           <Match when={location.pathname === "/credits"}>
             <CreditsPage />
           </Match>
-          <Match
-            when={
-              location.pathname === "/premium" ||
-              location.pathname === "/premium/crystal-token" ||
-              location.pathname === "/premium/crystal"
-            }
-          >
+          <Match when={location.pathname === "/crystal-token"}>
             <PremiumCrystalTokenPage />
           </Match>
-          <Match when={location.pathname === "/premium/hauler-mine" || location.pathname === "/premium/hauler"}>
+          <Match when={location.pathname === "/hauler-mine" || location.pathname === "premium/hauler"}>
             <PremiumHaulerMinePage />
           </Match>
         </Switch>
