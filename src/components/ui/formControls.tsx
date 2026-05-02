@@ -1,5 +1,5 @@
 import * as TextField from "@kobalte/core/text-field"
-import { Tooltip } from "./Tooltip2"
+import { Tooltip } from "./Tooltip"
 
 type NumberFieldProps = {
   label: string

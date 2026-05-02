@@ -1,4 +1,4 @@
-import { Panel } from "../components/layout/Panel2"
+import { Panel } from "../components/layout/Panel"
 
 export function PlaceholderPage(props: { title: string; subtitle: string }) {
   return (

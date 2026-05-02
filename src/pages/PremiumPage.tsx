@@ -1,9 +1,9 @@
 import { createMemo, For, Show } from "solid-js"
-import { Panel } from "../components/layout/Panel2"
+import { Panel } from "../components/layout/Panel"
 import { ToggleField } from "../components/ui/formControls"
 import { isValidNumberishInput } from "../components/ui/formControls"
 import { sanitizeNumberishInput } from "../components/ui/formControls"
-import { Tooltip } from "../components/ui/Tooltip2"
+import { Tooltip } from "../components/ui/Tooltip"
 import { createPersistedSignal } from "../lib/persistedSignal"
 import { useZatData, type PremiumCrystalTokenMethod, type PremiumHaulerLayer } from "../lib/zatContext"
 

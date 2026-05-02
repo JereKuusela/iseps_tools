@@ -1,7 +1,7 @@
 import { A } from "@solidjs/router"
 import { createMemo, createSignal, For, Show } from "solid-js"
 import { NumberField, SelectField, ToggleField } from "../components/ui/formControls"
-import { Panel } from "../components/layout/Panel2"
+import { Panel } from "../components/layout/Panel"
 import { LargeNumber } from "../lib/largeNumber"
 import { createPersistedSignal } from "../lib/persistedSignal"
 import { useZatData, type JunoExponentType } from "../lib/zatContext"

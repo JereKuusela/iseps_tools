@@ -1,7 +1,7 @@
 import { createMemo, For, Show } from "solid-js"
-import { Panel } from "../components/layout/Panel2"
+import { Panel } from "../components/layout/Panel"
 import { isValidNumberishInput, NumberField, sanitizeNumberishInput, SelectField } from "../components/ui/formControls"
-import { Tooltip } from "../components/ui/Tooltip2"
+import { Tooltip } from "../components/ui/Tooltip"
 import {
   calculateDcCostOfGoal,
   calculateScMultiplierFromBattery1Dc,

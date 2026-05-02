@@ -1,6 +1,6 @@
 import { createMemo, For, Show } from "solid-js"
 import { NumberField, SelectField } from "../components/ui/formControls"
-import { Panel } from "../components/layout/Panel2"
+import { Panel } from "../components/layout/Panel"
 import { createPersistedSignal } from "../lib/persistedSignal"
 import { useZatData } from "../lib/zatContext"
 
