@@ -1,5 +1,5 @@
 import { createMemo } from "solid-js"
-import { Panel } from "../components/layout/Panel"
+import { Panel } from "../../components/layout/Panel"
 import {
   calculateDcReplicator,
   calculateGoal,
@@ -8,13 +8,13 @@ import {
   calculateScFromDc,
   iterateTimeToReachGoal,
   type ScGoalType,
-} from "../lib/scCalculator"
-import { LargeNumber } from "../lib/largeNumber"
-import { useScContext } from "../lib/scContext"
-import { formatTimeDurationFromMinutes } from "../lib/timeFormat"
-import { ScLeftColumn } from "./sc/ScLeftColumn"
-import { ScRightColumn } from "./sc/ScRightColumn"
-import type { PanelOutput, ScGoalOption } from "./sc/scTypes"
+} from "../../lib/scCalculator"
+import { LargeNumber } from "../../lib/largeNumber"
+import { useScContext } from "../../lib/scContext"
+import { formatTimeDurationFromMinutes } from "../../lib/timeFormat"
+import { ScLeftColumn } from "./ScLeftColumn"
+import { ScRightColumn } from "./ScRightColumn"
+import type { PanelOutput, ScGoalOption } from "./scTypes"
 
 type GainUnit = "min" | "hour" | "day"
 

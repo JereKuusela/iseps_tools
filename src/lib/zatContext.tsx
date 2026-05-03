@@ -55,9 +55,10 @@ export type TechSeEffectRule = {
 export type ZatNodeRule = {
   id: number
   name: string
+  info: string
   maxLv?: number
   cost?: number
-  techMul?: number
+  techMul: number
   shareMul?: number
   junoMul?: number
   dcMul?: number

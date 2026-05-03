@@ -8,7 +8,6 @@ type NumberFieldProps = {
   value: string
   onInput: (next: string) => void
   placeholder?: string
-  hint?: string
   min?: number
   max?: number
   step?: number
@@ -41,7 +40,6 @@ type PercentFieldProps = {
   value: string
   onInput: (next: string) => void
   placeholder?: string
-  hint?: string
   tooltip?: TooltipKey
   inline?: boolean
   inlineGridClass?: string
@@ -54,7 +52,6 @@ type MultiplierFieldProps = {
   value: string
   onInput: (next: string) => void
   placeholder?: string
-  hint?: string
   tooltip?: TooltipKey
   inline?: boolean
   inlineGridClass?: string
@@ -65,7 +62,6 @@ type MultiplierFieldProps = {
 type LabelFieldProps = {
   label: string
   value: string
-  hint?: string
   tooltip?: TooltipKey
   inline?: boolean
   inlineGridClass?: string
@@ -170,7 +166,129 @@ export const NumberField = (props: NumberFieldProps) => {
           />
         </>
       )}
-      {props.hint ? <p class="text-xs text-ink/60 dark:text-white/60">{props.hint}</p> : null}
+    </TextField.Root>
+  )
+}
+
+const formatDecimalValue = (value: string) => {
+  const normalized = sanitizeNumberishInput(value)
+  if (normalized === "") return "0.00"
+  if (!isValidNumberishInput(normalized)) return "0.00"
+
+  const parsed = Number(normalized)
+  if (!Number.isFinite(parsed)) return "0.00"
+  return parsed.toFixed(2)
+}
+
+export const DecimalField = (props: NumberFieldProps) => {
+  const [isFocused, setIsFocused] = createSignal(false)
+  const [editingValue, setEditingValue] = createSignal("")
+
+  const displayedValue = createMemo(() => {
+    if (isFocused()) return editingValue()
+    return formatDecimalValue(props.value)
+  })
+
+  const onInput = (next: string) => {
+    const normalized = sanitizeNumberishInput(next)
+    if (!isValidNumberishInput(normalized)) return
+
+    setEditingValue(normalized)
+    props.onInput(normalized)
+  }
+
+  const onBlur = (next: string) => {
+    const normalized = sanitizeNumberishInput(next)
+    if (normalized === "") {
+      props.onInput("0.00")
+      setEditingValue("0.00")
+      setIsFocused(false)
+      return
+    }
+
+    if (!isValidNumberishInput(normalized)) {
+      const fallback = formatDecimalValue(props.value)
+      setEditingValue(fallback)
+      props.onInput(fallback)
+      setIsFocused(false)
+      return
+    }
+
+    const parsed = Number(normalized)
+    const fixed = Number.isFinite(parsed) ? parsed.toFixed(2) : "0.00"
+    props.onInput(fixed)
+    setEditingValue(fixed)
+    setIsFocused(false)
+  }
+
+  return (
+    <TextField.Root value={displayedValue()} class="grid gap-1.5">
+      {props.inline ? (
+        <div class={`grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2 ${props.inlineGridClass ?? ""}`}>
+          <div class={`min-w-0 flex items-center gap-2 ${props.inlineLabelClass ?? ""}`}>
+            <TextField.Label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
+              {props.label}
+            </TextField.Label>
+            {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
+          </div>
+          <div class={`min-w-0 ${props.inlineControlClass ?? ""}`}>
+            <div class={props.inlineAccessory ? "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-1" : undefined}>
+              <TextField.Input
+                type="number"
+                inputMode="decimal"
+                autocapitalize="off"
+                autocomplete="off"
+                autocorrect="off"
+                spellcheck={false}
+                value={displayedValue()}
+                placeholder={props.placeholder}
+                min={props.min}
+                max={props.max}
+                step={props.step}
+                onInput={(event) => onInput(event.currentTarget.value)}
+                onKeyDown={blurOnEnterOrEscape}
+                onBlur={(event) => onBlur(event.currentTarget.value)}
+                onFocus={() => {
+                  setEditingValue(sanitizeNumberishInput(props.value))
+                  setIsFocused(true)
+                }}
+                class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+              />
+              {props.inlineAccessory}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <>
+          <div class="flex items-center gap-2">
+            <TextField.Label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
+              {props.label}
+            </TextField.Label>
+            {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
+          </div>
+          <TextField.Input
+            type="number"
+            inputMode="decimal"
+            autocapitalize="off"
+            autocomplete="off"
+            autocorrect="off"
+            spellcheck={false}
+            value={displayedValue()}
+            placeholder={props.placeholder}
+            min={props.min}
+            max={props.max}
+            step={props.step}
+            onInput={(event) => onInput(event.currentTarget.value)}
+            onKeyDown={blurOnEnterOrEscape}
+            onBlur={(event) => onBlur(event.currentTarget.value)}
+            onFocus={() => {
+              setEditingValue(sanitizeNumberishInput(props.value))
+              setIsFocused(true)
+            }}
+            class="w-full rounded-xl border border-ink/20 bg-white px-3 py-2 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+          />
+        </>
+      )}
     </TextField.Root>
   )
 }
@@ -185,6 +303,11 @@ export const IntegerField = (props: IntegerFieldProps) => {
     const normalized = sanitizeNumberishInput(next)
     if (!isValidIntegerInput(normalized)) return
     props.onInput(normalized)
+  }
+
+  const onBlur = (next: string) => {
+    if (sanitizeNumberishInput(next) !== "") return
+    props.onInput("0")
   }
 
   return (
@@ -205,9 +328,13 @@ export const IntegerField = (props: IntegerFieldProps) => {
               autocomplete="off"
               autocorrect="off"
               spellcheck={false}
+              min={props.min}
+              max={props.max}
+              step={props.step}
               value={props.value || "0"}
               placeholder={props.placeholder}
               onKeyDown={blurOnEnterOrEscape}
+              onBlur={(event) => onBlur(event.currentTarget.value)}
               class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
             />
           </div>
@@ -230,11 +357,11 @@ export const IntegerField = (props: IntegerFieldProps) => {
             value={props.value || "0"}
             placeholder={props.placeholder}
             onKeyDown={blurOnEnterOrEscape}
+            onBlur={(event) => onBlur(event.currentTarget.value)}
             class="w-full rounded-xl border border-ink/20 bg-white px-3 py-2 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
           />
         </>
       )}
-      {props.hint ? <p class="text-xs text-ink/60 dark:text-white/60">{props.hint}</p> : null}
     </TextField.Root>
   )
 }
@@ -348,7 +475,6 @@ export const PercentField = (props: PercentFieldProps) => {
           />
         </>
       )}
-      {props.hint ? <p class="text-xs text-ink/60 dark:text-white/60">{props.hint}</p> : null}
     </TextField.Root>
   )
 }
@@ -462,7 +588,6 @@ export const MultiplierField = (props: MultiplierFieldProps) => {
           />
         </>
       )}
-      {props.hint ? <p class="text-xs text-ink/60 dark:text-white/60">{props.hint}</p> : null}
     </TextField.Root>
   )
 }
@@ -497,7 +622,6 @@ export const LabelField = (props: LabelFieldProps) => {
           </p>
         </>
       )}
-      {props.hint ? <p class="text-xs text-ink/60 dark:text-white/60">{props.hint}</p> : null}
     </div>
   )
 }

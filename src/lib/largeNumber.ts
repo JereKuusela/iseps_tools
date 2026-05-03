@@ -98,9 +98,19 @@ export class LargeNumber {
 
     if (power === 0) return new LargeNumber(1, 0)
 
+    if (this.isZero()) {
+      if (power < 0) {
+        throw new Error("Zero cannot be raised to a negative power")
+      }
+      return LargeNumber.zero()
+    }
+
     const sign = this.mantissa < 0 && power % 2 !== 0 ? -1 : 1
-    const magnitudeMantissa = Math.abs(this.mantissa) ** power
-    return new LargeNumber(sign * magnitudeMantissa, this.exponent * power)
+    const magnitudeLog10 = power * Math.log10(Math.abs(this.mantissa))
+    const magnitudeExponent = Math.floor(magnitudeLog10)
+    const magnitudeMantissa = 10 ** (magnitudeLog10 - magnitudeExponent)
+
+    return new LargeNumber(sign * magnitudeMantissa, this.exponent * power + magnitudeExponent)
   }
 
   compare(otherInput: string | number | LargeNumber): -1 | 0 | 1 {

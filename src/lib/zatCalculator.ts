@@ -46,6 +46,12 @@ type PremiumRule = {
 
 const cycleRules: CycleRule[] = (cyclesJson as CycleRule[]).slice().sort((a, b) => a.cycle - b.cycle)
 
+const cycleMultiplierIncreases = cycleRules.reduce((map, rule) => {
+  const current = map.get(rule.cycle) ?? 0
+  map.set(rule.cycle, current + rule.mult)
+  return map
+}, new Map<number, number>())
+
 const seRules: SeEffectRule[] = (techsSeEffectJson as SeEffectRule[]).slice().sort((a, b) => a.se - b.se)
 
 const techs: TechData[] = (techsJson as TechData[]).slice().sort((a, b) => a.id - b.id)
@@ -76,11 +82,7 @@ export type ExponentIncreaseEntry = {
   multiplier: number
 }
 
-export type NextZatCostResult = {
-  nextCycle: number
-  exponent: number
-  cost: LargeNumber
-}
+export type NextZatCostResult = { cycle: number; cost: LargeNumber }
 
 const clamp = (value: number, min: number, max: number) => {
   return Math.min(Math.max(value, min), max)
@@ -318,42 +320,15 @@ export const calculateTotalPremiumMultiplier = (purchases: PremiumInput): Premiu
   }
 }
 
-const calculateZatCostExponent = (cycle: number) => {
-  const normalizedCycle = Math.max(1, Math.floor(cycle))
-  let exponent = 5
-
-  for (let index = 2; index <= normalizedCycle; index += 1) {
-    const cycleMultiplier = getActiveCycleMultiplier(index)
-    exponent *= 2 * (cycleMultiplier / 5)
-  }
-
-  return exponent
-}
-
-const getZatCostForCycle = (cycle: number): LargeNumber => {
-  return largeFromPow10(calculateZatCostExponent(cycle))
-}
-
-export const calculateNextZatCost = (junoAmount: LargeNumber | string | number): NextZatCostResult => {
-  const amount = LargeNumber.from(junoAmount)
+export const calculateNextZatCost = (amount: LargeNumber): NextZatCostResult => {
+  let cost = 0
+  let exponent = 0
   let cycle = 1
-
-  while (cycle < 10_000) {
-    const cost = getZatCostForCycle(cycle)
-    if (amount.compare(cost) < 0) {
-      return {
-        nextCycle: cycle,
-        exponent: calculateZatCostExponent(cycle),
-        cost,
-      }
-    }
-    cycle += 1
+  for (; cycle < 10_000; cycle += 1) {
+    exponent += cycleMultiplierIncreases.get(cycle) ?? 0
+    cost += exponent
+    if (amount.exponent < cost) break
   }
 
-  const fallbackCycle = 10_000
-  return {
-    nextCycle: fallbackCycle,
-    exponent: calculateZatCostExponent(fallbackCycle),
-    cost: getZatCostForCycle(fallbackCycle),
-  }
+  return { cycle, cost: largeFromPow10(cost) }
 }

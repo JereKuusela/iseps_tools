@@ -1,7 +1,10 @@
 import type { JSX, ParentProps } from "solid-js"
+import type { TooltipKey } from "../../lib/tooltips"
+import { Tooltip } from "../ui/Tooltip"
 
 type InfoCardProps = ParentProps<{
   title?: string
+  tooltip?: TooltipKey
   class?: string
   titleClass?: string
   contentClass?: string
@@ -13,7 +16,12 @@ export const InfoCard = (props: InfoCardProps) => {
 
   return (
     <div class={cardClass.trim()}>
-      {props.title ? <h3 class={headingClass.trim()}>{props.title}</h3> : null}
+      {props.title ? (
+        <div class="flex items-center gap-2">
+          <h3 class={headingClass.trim()}>{props.title}</h3>
+          {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
+        </div>
+      ) : null}
       <div class={props.contentClass ?? (props.title ? "mt-3" : "")}>{props.children}</div>
     </div>
   )

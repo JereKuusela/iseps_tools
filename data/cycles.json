@@ -1,18 +1,18 @@
 [
   {
-    "cycle": 0,
+    "cycle": 1,
     "mult": 5
   },
   {
-    "cycle": 2,
+    "cycle": 3,
     "mult": 5
   },
   {
-    "cycle": 14,
+    "cycle": 15,
     "mult": 5
   },
   {
-    "cycle": 17,
+    "cycle": 18,
     "mult": 5
   }
 ]

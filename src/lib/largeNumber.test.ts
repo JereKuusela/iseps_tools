@@ -69,6 +69,26 @@ describe("LargeNumber arithmetic", () => {
   it("rejects non-integer power", () => {
     expect(() => LargeNumber.parse("2e3").powInt(1.5)).toThrow("Power must be an integer")
   })
+
+  it("handles very large powers without overflow", () => {
+    const result = LargeNumber.from(1.1).powInt(50000)
+    expect(result.mantissa).toBeCloseTo(4.307823600796836, 10)
+    expect(result.exponent).toBe(2069)
+  })
+
+  it("handles very large negative powers without underflow", () => {
+    const positive = LargeNumber.from(1.1).powInt(50000)
+    const negative = LargeNumber.from(1.1).powInt(-50000)
+    const product = positive.multiply(negative)
+
+    expect(negative.exponent).toBe(-2070)
+    expect(product.mantissa).toBeCloseTo(1, 5)
+    expect(product.exponent).toBe(0)
+  })
+
+  it("throws when zero is raised to a negative power", () => {
+    expect(() => LargeNumber.zero().powInt(-1)).toThrow("Zero cannot be raised to a negative power")
+  })
 })
 
 describe("LargeNumber compare and format", () => {

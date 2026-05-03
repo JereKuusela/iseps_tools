@@ -46,6 +46,19 @@ const formatValue = (value: number, digits = 2) => {
   return value.toFixed(digits)
 }
 
+const styles = {
+  inputSection: "space-y-4",
+  inputCard: "rounded-2xl border border-ink/15 bg-white/70 p-4 dark:border-white/15 dark:bg-[#182538]/75",
+  outputCard: "rounded-2xl border border-ink/15 bg-white/75 p-4 sm:p-5 dark:border-white/15 dark:bg-[#162235]/80",
+  tableHeadCell: "border-b border-ink/20 px-2 py-2 dark:border-white/20",
+  tableTextRow: "align-top text-ink/90 dark:text-white/90",
+  tableCellStrong: "border-b border-ink/10 px-2 py-2.5 font-semibold dark:border-white/10",
+  tableCellMono: "border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10",
+  tableCellMuted: "border-b border-ink/10 px-2 py-2.5 text-xs text-ink/65 dark:border-white/10 dark:text-white/65",
+  haulerCellStrong: "border-b border-ink/10 px-2 py-2.5 font-semibold dark:border-white/10 dark:text-white",
+  haulerCellMono: "border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10 dark:text-white/90",
+} as const
+
 const NumberSelectField = (props: {
   id: string
   label: string
@@ -219,8 +232,8 @@ const CrystalAndTokenTab = () => {
 
   return (
     <div class="grid gap-6 xl:grid-cols-[0.96fr_1.34fr]">
-      <section class="space-y-4">
-        <div class="rounded-2xl border border-ink/15 bg-white/70 p-4 dark:border-white/15 dark:bg-[#182538]/75">
+      <section class={styles.inputSection}>
+        <div class={styles.inputCard}>
           <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80 dark:text-white/80">Inputs</h3>
           <div class="mt-3 grid gap-3 sm:grid-cols-2">
             <NumberSelectField
@@ -322,37 +335,37 @@ const CrystalAndTokenTab = () => {
         </div>
       </section>
 
-      <section class="rounded-2xl border border-ink/15 bg-white/75 p-4 sm:p-5 dark:border-white/15 dark:bg-[#162235]/80">
+      <section class={styles.outputCard}>
         <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80 dark:text-white/80">Premium Methods</h3>
         <div class="mt-3 overflow-x-auto">
           <table class="min-w-full border-separate border-spacing-0 text-left text-sm">
             <thead>
               <tr class="text-xs uppercase tracking-[0.12em] text-ink/60 dark:text-white/60">
-                <th class="border-b border-ink/20 px-2 py-2 dark:border-white/20">Method</th>
-                <th class="border-b border-ink/20 px-2 py-2 dark:border-white/20">Time</th>
-                <th class="border-b border-ink/20 px-2 py-2 dark:border-white/20">Base Output</th>
-                <th class="border-b border-ink/20 px-2 py-2 dark:border-white/20">Hourly Output</th>
-                <th class="border-b border-ink/20 px-2 py-2 dark:border-white/20">Daily Output</th>
+                <th class={styles.tableHeadCell}>Method</th>
+                <th class={styles.tableHeadCell}>Time</th>
+                <th class={styles.tableHeadCell}>Base Output</th>
+                <th class={styles.tableHeadCell}>Hourly Output</th>
+                <th class={styles.tableHeadCell}>Daily Output</th>
               </tr>
             </thead>
             <tbody>
               <For each={rows()}>
                 {(row) => (
-                  <tr class="align-top text-ink/90 dark:text-white/90">
-                    <td class="border-b border-ink/10 px-2 py-2.5 font-semibold dark:border-white/10">{row.name}</td>
-                    <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10">
+                  <tr class={styles.tableTextRow}>
+                    <td class={styles.tableCellStrong}>{row.name}</td>
+                    <td class={styles.tableCellMono}>
                       {formatValue(row.seconds, 1)}s<br />
                       {formatValue(row.perHourFactor, 2)} per hour
                     </td>
-                    <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10">
+                    <td class={styles.tableCellMono}>
                       T {formatValue(row.baseTokens)}
                       <br />C {formatValue(row.baseCrystals)}
                     </td>
-                    <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10">
+                    <td class={styles.tableCellMono}>
                       T {formatValue(row.hourlyTokens)}
                       <br />C {formatValue(row.hourlyCrystals)}
                     </td>
-                    <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10">
+                    <td class={styles.tableCellMono}>
                       T {formatValue(row.dailyTokens)}
                       <br />C {formatValue(row.dailyCrystals)}
                     </td>
@@ -360,19 +373,15 @@ const CrystalAndTokenTab = () => {
                 )}
               </For>
               <Show when={includeDailyRewards()}>
-                <tr class="align-top text-ink/90 dark:text-white/90">
-                  <td class="border-b border-ink/10 px-2 py-2.5 font-semibold dark:border-white/10">Daily Rewards</td>
-                  <td class="border-b border-ink/10 px-2 py-2.5 text-xs text-ink/65 dark:border-white/10 dark:text-white/65">
-                    Flat daily grant
-                  </td>
-                  <td class="border-b border-ink/10 px-2 py-2.5 text-xs text-ink/65 dark:border-white/10 dark:text-white/65">
-                    Included in totals
-                  </td>
-                  <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10">
+                <tr class={styles.tableTextRow}>
+                  <td class={styles.tableCellStrong}>Daily Rewards</td>
+                  <td class={styles.tableCellMuted}>Flat daily grant</td>
+                  <td class={styles.tableCellMuted}>Included in totals</td>
+                  <td class={styles.tableCellMono}>
                     T {formatValue(dailyRewardRow().hourlyTokens)}
                     <br />C {formatValue(dailyRewardRow().hourlyCrystals)}
                   </td>
-                  <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10">
+                  <td class={styles.tableCellMono}>
                     T {formatValue(dailyRewardRow().dailyTokens)}
                     <br />C {formatValue(dailyRewardRow().dailyCrystals)}
                   </td>
@@ -499,8 +508,8 @@ const HaulerMineTab = () => {
 
   return (
     <div class="grid gap-6 xl:grid-cols-[0.96fr_1.34fr]">
-      <section class="space-y-4">
-        <div class="rounded-2xl border border-ink/15 bg-white/70 p-4 dark:border-white/15 dark:bg-[#182538]/75">
+      <section class={styles.inputSection}>
+        <div class={styles.inputCard}>
           <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80 dark:text-white/80">Inputs</h3>
           <div class="mt-3 grid gap-3 sm:grid-cols-2">
             <NumberSelectField
@@ -535,7 +544,7 @@ const HaulerMineTab = () => {
         </div>
       </section>
 
-      <section class="rounded-2xl border border-ink/15 bg-white/75 p-4 sm:p-5 dark:border-white/15 dark:bg-[#162235]/80">
+      <section class={styles.outputCard}>
         <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80 dark:text-white/80">Hauler Mine Income</h3>
         <p class="mt-1 text-xs text-ink/65 dark:text-white/65">
           Cycle time uses {(normalizedLayers() + 1).toFixed(0)} layers at {premium.layerHours} hours each.
@@ -545,54 +554,30 @@ const HaulerMineTab = () => {
           <table class="min-w-full border-separate border-spacing-0 text-left text-sm">
             <thead>
               <tr class="text-xs uppercase tracking-[0.12em] text-ink/60 dark:text-white/60">
-                <th class="border-b border-ink/20 px-2 py-2 dark:border-white/20">Resource</th>
-                <th class="border-b border-ink/20 px-2 py-2 dark:border-white/20">Per Cycle</th>
-                <th class="border-b border-ink/20 px-2 py-2 dark:border-white/20">Per Hour</th>
-                <th class="border-b border-ink/20 px-2 py-2 dark:border-white/20">Per Day</th>
+                <th class={styles.tableHeadCell}>Resource</th>
+                <th class={styles.tableHeadCell}>Per Cycle</th>
+                <th class={styles.tableHeadCell}>Per Hour</th>
+                <th class={styles.tableHeadCell}>Per Day</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td class="border-b border-ink/10 px-2 py-2.5 font-semibold dark:border-white/10 dark:text-white">
-                  Tokens
-                </td>
-                <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10 dark:text-white/90">
-                  {formatValue(totalsPerCycle().tokens)}
-                </td>
-                <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10 dark:text-white/90">
-                  {formatValue(hourly().tokens)}
-                </td>
-                <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10 dark:text-white/90">
-                  {formatValue(daily().tokens)}
-                </td>
+                <td class={styles.haulerCellStrong}>Tokens</td>
+                <td class={styles.haulerCellMono}>{formatValue(totalsPerCycle().tokens)}</td>
+                <td class={styles.haulerCellMono}>{formatValue(hourly().tokens)}</td>
+                <td class={styles.haulerCellMono}>{formatValue(daily().tokens)}</td>
               </tr>
               <tr>
-                <td class="border-b border-ink/10 px-2 py-2.5 font-semibold dark:border-white/10 dark:text-white">
-                  Crystals
-                </td>
-                <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10 dark:text-white/90">
-                  {formatValue(totalsPerCycle().crystals)}
-                </td>
-                <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10 dark:text-white/90">
-                  {formatValue(hourly().crystals)}
-                </td>
-                <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10 dark:text-white/90">
-                  {formatValue(daily().crystals)}
-                </td>
+                <td class={styles.haulerCellStrong}>Crystals</td>
+                <td class={styles.haulerCellMono}>{formatValue(totalsPerCycle().crystals)}</td>
+                <td class={styles.haulerCellMono}>{formatValue(hourly().crystals)}</td>
+                <td class={styles.haulerCellMono}>{formatValue(daily().crystals)}</td>
               </tr>
               <tr>
-                <td class="border-b border-ink/10 px-2 py-2.5 font-semibold dark:border-white/10 dark:text-white">
-                  Rare Dirt
-                </td>
-                <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10 dark:text-white/90">
-                  {formatValue(totalsPerCycle().rareDirt)}
-                </td>
-                <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10 dark:text-white/90">
-                  {formatValue(hourly().rareDirt)}
-                </td>
-                <td class="border-b border-ink/10 px-2 py-2.5 font-mono text-xs dark:border-white/10 dark:text-white/90">
-                  {formatValue(daily().rareDirt)}
-                </td>
+                <td class={styles.haulerCellStrong}>Rare Dirt</td>
+                <td class={styles.haulerCellMono}>{formatValue(totalsPerCycle().rareDirt)}</td>
+                <td class={styles.haulerCellMono}>{formatValue(hourly().rareDirt)}</td>
+                <td class={styles.haulerCellMono}>{formatValue(daily().rareDirt)}</td>
               </tr>
               <tr>
                 <td class="px-2 py-3 font-semibold dark:text-white">Exotic Dirt</td>
