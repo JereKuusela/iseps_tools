@@ -136,14 +136,19 @@ const safeLog10 = (value: number) => {
   return Math.log10(value)
 }
 
-const relativeReplicatorMultiplier = (projected: number, retained: number) => {
-  if (retained <= 0) return clampMin(projected, 0)
-  return clampMin(projected / retained, 0)
+const relativeReplicatorMultiplier = (projected: number, current: number) => {
+  if (current <= 0) return projected
+  return projected / current
 }
 
 const scExponentForSe = (se: number, branchSe = se) => {
   if (branchSe < 100) return 0.1754 - (3 * se ** 2.13) / 1e6
   else return 1 / (0.1754 + 0.026 * se ** 1.25)
+}
+
+const scExponentForSeInversed = (se: number, branchSe = se) => {
+  if (branchSe < 100) return 1 / (0.1754 - (3 * se ** 2.13) / 1e6)
+  else return 0.1754 + 0.026 * se ** 1.25
 }
 
 const calculateScLog10FromDcLog10 = (
@@ -178,7 +183,9 @@ const calculateDcFromSc = (
 }
 
 const extraBatteryGoal = (goalSe: number) =>
-  batteryGoalMultiplierRules.filter((rule) => rule.se <= goalSe).reduce((acc, rule) => acc + rule.exp, 0)
+  batteryGoalMultiplierRules
+    .filter((rule) => rule.se <= goalSe)
+    .reduce((acc, rule) => acc + (1 + goalSe - rule.se) * rule.exp, 0)
 
 export const calculateDcReplicator = (se: number, minutesInSe: number, retained: number) => {
   const unlockMinutes = scData.replicators.dc.unlockMinutes
@@ -252,10 +259,11 @@ export const calculateGoal = ({ se, type, customGoal, scMult }: GoalInput): Goal
   const goalSeOffset = type === "battery2" ? 1 : type === "battery3" ? 2 : 0
   const goalSe = se + goalSeOffset
 
-  const targetSc = fromLog10(goalSe)
-  const baseCost = calculateDcFromSc(targetSc, goalSe, scMult, goalSe)
+  const baseTargetSc = fromLog10(goalSe)
+  const baseCost = calculateDcFromSc(baseTargetSc, goalSe, scMult, goalSe)
   const extraGoal = extraBatteryGoal(goalSe)
   const dcCost = extraGoal > 0 ? baseCost.multiply(new LargeNumber(1, extraGoal)) : baseCost
+  const targetSc = extraGoal > 0 ? scFromDc(dcCost, goalSe, scMult, goalSe) : baseTargetSc
 
   return { type, se: goalSe, targetSc, dcCost, extraGoal }
 }
@@ -267,9 +275,8 @@ type CustomScGoalInput = {
 }
 
 const MAX_ITERATIONS = 150
-const TOLERANCE = 0.001
+const TOLERANCE = 0.000001
 const TOLERANCE_LOG10 = Math.log10(1 + TOLERANCE)
-
 export const findCustomScGoal = ({ se, targetSc, scMult }: CustomScGoalInput): LargeNumber => {
   const targetScLog10 = log10LargeNumber(targetSc)
 
@@ -308,7 +315,6 @@ export const findCustomScGoal = ({ se, targetSc, scMult }: CustomScGoalInput): L
       }
       continue
     }
-
     maxDcLog10 = guessDcLog10
     guessDcLog10 = (minDcLog10 + maxDcLog10) / 2
   }
@@ -324,10 +330,8 @@ export const iterateTimeToReachGoal = (input: TimeToGoalInput): TimeToGoalResult
 
   const baselineDcReplicator = calculateDcReplicator(input.se, input.minutesInSe, input.retainedDc)
   const baselineScReplicator = calculateSeReplicator(input.se, input.minutesInSe, input.retainedSc)
-  const replicatedDc = relativeReplicatorMultiplier(baselineDcReplicator, input.retainedDc)
-  const replicatedSc = relativeReplicatorMultiplier(baselineScReplicator, input.retainedSc)
   const minutesInSeBase = toSafePositiveNumber(input.minutesInSe)
-  const dcExponent = Math.max(scExponentForSe(currentSe, currentSe), Number.EPSILON)
+  const dcExponent = scExponentForSeInversed(currentSe, currentSe)
 
   const currentAfterSkips = applyTimeSkips(currentDc, dcGainPerMinute, input.timeSkips)
   const extraMinutesPerDay = Math.max(0, toSafePositiveNumber(input.extraMinutesPerDay ?? 0))
@@ -340,7 +344,7 @@ export const iterateTimeToReachGoal = (input: TimeToGoalInput): TimeToGoalResult
   const preBoostGoalDc =
     input.customDcGoal || futureScScaleLog10 === 0
       ? goalDc
-      : fromLog10(log10LargeNumber(goalDc) - futureScScaleLog10 / dcExponent)
+      : fromLog10(log10LargeNumber(goalDc) - futureScScaleLog10 * dcExponent)
 
   const initialMinutes = directMinutesToGoal(preBoostGoalDc, preBoostCurrentDc, preBoostDcGainPerMinute)
   if (!Number.isFinite(initialMinutes)) {
@@ -348,8 +352,8 @@ export const iterateTimeToReachGoal = (input: TimeToGoalInput): TimeToGoalResult
       minutes: Number.POSITIVE_INFINITY,
       iterations: 0,
       converged: false,
-      dcReplicator: replicatedDc,
-      scReplicator: replicatedSc,
+      dcReplicator: baselineDcReplicator,
+      scReplicator: baselineScReplicator,
       dailyMult: 1,
       effectiveGoalDc: preBoostGoalDc,
       effectiveCurrentDc: preBoostCurrentDc,
@@ -362,7 +366,6 @@ export const iterateTimeToReachGoal = (input: TimeToGoalInput): TimeToGoalResult
   let maxGuess = Math.max(1, initialMinutes)
 
   let iterations = 0
-  const maxIterations = 150
 
   let converged = false
   let finalMinutes = maxGuess
@@ -374,7 +377,7 @@ export const iterateTimeToReachGoal = (input: TimeToGoalInput): TimeToGoalResult
   let effectiveCurrentDc = preBoostCurrentDc
   let effectiveDcGainPerMinute = preBoostDcGainPerMinute
   let scReplicated = input.futureSc
-  while (iterations < maxIterations) {
+  while (iterations < MAX_ITERATIONS) {
     iterations += 1
 
     const guess = logarithmicMean(minGuess, maxGuess)
@@ -382,8 +385,8 @@ export const iterateTimeToReachGoal = (input: TimeToGoalInput): TimeToGoalResult
 
     const projectedDcReplicatorRaw = calculateDcReplicator(input.se, projectedMinutesInSe, input.retainedDc)
     const projectedScReplicatorRaw = calculateSeReplicator(input.se, projectedMinutesInSe, input.retainedSc)
-    projectedDcReplicator = relativeReplicatorMultiplier(projectedDcReplicatorRaw, input.retainedDc)
-    projectedScReplicator = relativeReplicatorMultiplier(projectedScReplicatorRaw, input.retainedSc)
+    projectedDcReplicator = relativeReplicatorMultiplier(projectedDcReplicatorRaw, baselineDcReplicator)
+    projectedScReplicator = relativeReplicatorMultiplier(projectedScReplicatorRaw, baselineScReplicator)
     scReplicated = input.futureSc * projectedScReplicator
     const dailyMultiplierBase = activeDailyMultiplier(input.se)
     const dailyLog10 = Math.floor(guess / 1440) * safeLog10(dailyMultiplierBase)
@@ -391,7 +394,6 @@ export const iterateTimeToReachGoal = (input: TimeToGoalInput): TimeToGoalResult
       Number.isFinite(dailyLog10) && dailyLog10 < 308 ? 10 ** dailyLog10 : Number.POSITIVE_INFINITY
 
     const dcScaleLog10 = safeLog10(projectedDcReplicator) + dailyLog10
-    const scScaleLog10 = input.customDcGoal ? 0 : safeLog10(projectedScReplicator)
 
     const dcScale = fromLog10(dcScaleLog10)
 
@@ -399,8 +401,7 @@ export const iterateTimeToReachGoal = (input: TimeToGoalInput): TimeToGoalResult
       effectiveGoalDc = preBoostGoalDc
     } else {
       // SC multipliers are multiplicative on SC, but DC required for the same SC target follows the inverse power law.
-      const effectiveGoalLog10 = log10LargeNumber(preBoostGoalDc) - scScaleLog10 / dcExponent
-      effectiveGoalDc = fromLog10(effectiveGoalLog10)
+      effectiveGoalDc = preBoostGoalDc.divide(projectedScReplicator ** dcExponent)
     }
 
     effectiveCurrentDc = preBoostCurrentDc.multiply(dcScale)
@@ -412,12 +413,14 @@ export const iterateTimeToReachGoal = (input: TimeToGoalInput): TimeToGoalResult
       break
     }
 
-    const closeByMinute = Math.abs(recalculated - guess) <= 1
-    const closeByRatio = Math.abs(recalculated - guess) <= Math.max(1, guess) * 0.001
+    const diff = Math.abs(recalculated - guess)
+    const closeByMinute = diff < 1
+    const closeByRatio = diff <= Math.max(1, guess) * TOLERANCE
 
     finalMinutes = recalculated
 
     if (closeByMinute || closeByRatio) {
+      console.log(closeByMinute, closeByRatio, iterations, guess)
       converged = true
       break
     }
@@ -464,11 +467,11 @@ export const calculateScMultiplierFromGoal = ({ se, dc }: ScMultFromGoalInput) =
   const battery1DcCost = dc
   const battery1DcLog10 = log10LargeNumber(battery1DcCost)
   const extraGoal = extraBatteryGoal(se)
-
   const exponent = scExponentForSe(se)
   const targetScLog10 = se
   const baseDcLog10 = battery1DcLog10 - extraGoal - 14
   const multiplierLog10 = targetScLog10 - exponent * baseDcLog10
-
-  return new LargeNumber(1, multiplierLog10)
+  const exp = Math.floor(multiplierLog10)
+  const mantissa = 10 ** (multiplierLog10 - exp)
+  return new LargeNumber(mantissa, exp)
 }

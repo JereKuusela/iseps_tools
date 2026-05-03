@@ -161,29 +161,32 @@ export const ScPage = () => {
         retainedSc: retainedSc(),
         futureDc,
         futureSc,
-        customDcGoal: isCustomDc,
-      })
-
-      const withSkips = iterateTimeToReachGoal({
-        se: currentSe(),
-        goalDc: goalResult.dcCost,
-        currentDc: currentDc(),
-        dcGainPerMinute: dcGainPerMinute(),
-        minutesInSe: minutesInSe(),
-        retainedDc: retainedDc(),
-        retainedSc: retainedSc(),
-        futureDc,
-        futureSc,
-        timeSkips: totalSkipMinutes(),
         extraMinutesPerDay: onlineExtraMinutes(),
         customDcGoal: isCustomDc,
       })
+      let afterSkipsMinutes = 0
+      if (totalSkipMinutes() > 0) {
+        const withSkips = iterateTimeToReachGoal({
+          se: currentSe(),
+          goalDc: goalResult.dcCost,
+          currentDc: currentDc(),
+          dcGainPerMinute: dcGainPerMinute(),
+          minutesInSe: minutesInSe(),
+          retainedDc: retainedDc(),
+          retainedSc: retainedSc(),
+          futureDc,
+          futureSc,
+          timeSkips: totalSkipMinutes(),
+          extraMinutesPerDay: onlineExtraMinutes(),
+          customDcGoal: isCustomDc,
+        })
+        afterSkipsMinutes = withSkips.minutes
+      }
 
       const progressPct = progressPercent(currentDc(), goalResult.dcCost)
       const projectedProgressPct = progressPercent(currentDc(), noSkips.effectiveGoalDc)
 
       const projectedDc = currentDc().compare(noSkips.effectiveGoalDc) >= 0 ? currentDc() : noSkips.effectiveGoalDc
-
       return {
         id: panel.id,
         goalType: panel.goalType,
@@ -193,7 +196,7 @@ export const ScPage = () => {
         progressPct,
         totalMinutes: noSkips.minutes,
         remainingMinutes: noSkips.minutes,
-        afterSkipsMinutes: withSkips.minutes,
+        afterSkipsMinutes,
         projectedProgressPct,
         projectedDcCost: noSkips.effectiveGoalDc,
         projectedScGained: calculateScFromDc({

@@ -40,7 +40,7 @@ export const formatTimeDurationFromSeconds = (seconds: number) => {
 
 export const formatLocalTimestampFromMinutes = (minutes: number, now = new Date()) => {
   if (!Number.isFinite(minutes)) return "Unknown"
-
+  if (minutes > 100 * MINUTES_PER_YEAR) return "1 eternity"
   const target = new Date(now.getTime() + minutes * MINUTES_PER_HOUR * 1000)
   const includeYear = target.getFullYear() !== now.getFullYear()
   if (includeYear) {

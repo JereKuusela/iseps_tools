@@ -38,6 +38,7 @@ export type TechRule = {
   id: number
   initCost: string
   costCurve: TechCostCurveRule[]
+  maxLevel: number
   dcBoost?: number
   junoBase?: number
   extraJunoBase?: number

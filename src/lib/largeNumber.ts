@@ -141,11 +141,15 @@ export class LargeNumber {
 
   private normalize(): void {
     if (!Number.isFinite(this.mantissa)) {
-      throw new Error("Mantissa is not finite")
+      this.mantissa = 1
+      this.exponent = 0
+      return
     }
 
     if (!Number.isFinite(this.exponent)) {
-      throw new Error("Exponent is not finite")
+      this.mantissa = 1
+      this.exponent = 0
+      return
     }
 
     if (this.mantissa === 0) {

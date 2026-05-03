@@ -12,7 +12,7 @@ import { LargeNumber } from "./largeNumber"
 
 const compareLarge = (a: LargeNumber, b: LargeNumber) => {
   expect(a.mantissa).toBeCloseTo(b.mantissa, 2)
-  expect(a.exponent).toBeCloseTo(b.exponent, 2)
+  expect(a.exponent).toEqual(b.exponent)
 }
 
 describe("calculateDcCostOfGoal", () => {
@@ -40,7 +40,7 @@ describe("calculateDcCostOfGoal", () => {
     expect(beforeMultiplier.extraGoal).toBe(0)
     expect(beforeMultiplier2.extraGoal).toBe(5)
     expect(atMultiplier.extraGoal).toBe(5)
-    expect(atMultiplier2.extraGoal).toBe(5)
+    expect(atMultiplier2.extraGoal).toBe(10)
   })
 })
 
@@ -73,6 +73,16 @@ describe("calculateScFromDc", () => {
 
     compareLarge(battery1Sc, new LargeNumber(1, 90))
     compareLarge(battery2Sc, new LargeNumber(9.53, 90))
+  })
+  it("returns expected SC for overfilled SE 150 battery", () => {
+    const se = 150
+    const battery1DcCost = new LargeNumber(1.99, 1167)
+    const scMult = calculateScMultiplierFromGoal({ se, dc: battery1DcCost })
+    console.log(scMult)
+    const dc = new LargeNumber(2.66, 1170)
+    const battery1Sc = calculateScFromDc({ se, dc, scMult })
+
+    compareLarge(battery1Sc, new LargeNumber(4.59, 157))
   })
 })
 

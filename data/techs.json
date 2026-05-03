@@ -91,7 +91,8 @@
         "level": 65,
         "mult": "1.00e23"
       }
-    ]
+    ],
+    "maxLevel": 65
   },
   {
     "id": 1,
@@ -122,6 +123,7 @@
         "mult": "2.16e02"
       }
     ],
+    "maxLevel": 999,
     "dcBoost": 1.66,
     "junoBase": 5
   },
@@ -166,6 +168,7 @@
         "mult": "1.50e01"
       }
     ],
+    "maxLevel": 999,
     "dcBoost": 2.47,
     "junoBase": 1.05,
     "seMultiplier": 7,
@@ -234,6 +237,7 @@
         "mult": "2.89e00"
       }
     ],
+    "maxLevel": 999,
     "dcBoost": 1.02,
     "junoBase": 1
   },
@@ -302,6 +306,7 @@
         "mult": "2.89e00"
       }
     ],
+    "maxLevel": 999,
     "dcBoost": 1.28,
     "junoBase": 1
   },
@@ -370,6 +375,7 @@
         "mult": "2.89e00"
       }
     ],
+    "maxLevel": 999,
     "dcBoost": 1.07,
     "junoBase": 1
   },
@@ -438,6 +444,7 @@
         "mult": "4.41e00"
       }
     ],
+    "maxLevel": 999,
     "dcBoost": 1.13,
     "junoBase": 1.05,
     "seMultiplier": 1,
@@ -516,6 +523,7 @@
         "mult": "6.76e00"
       }
     ],
+    "maxLevel": 999,
     "dcBoost": 1.14,
     "junoBase": 1.5
   },
@@ -592,6 +600,7 @@
         "mult": "2.89e00"
       }
     ],
+    "maxLevel": 999,
     "dcBoost": 1.03,
     "junoBase": 1
   },
@@ -656,6 +665,7 @@
         "mult": "6.76e00"
       }
     ],
+    "maxLevel": 999,
     "dcBoost": 1.13,
     "junoBase": 1.02,
     "seMultiplier": 1,
@@ -714,6 +724,7 @@
         "mult": "3.03e01"
       }
     ],
+    "maxLevel": 999,
     "dcBoost": 1.27,
     "junoBase": 3,
     "seMultiplier": 2,
@@ -796,6 +807,7 @@
         "mult": "4.91e00"
       }
     ],
+    "maxLevel": 999,
     "dcBoost": 1.08,
     "junoBase": 1
   },
@@ -844,6 +856,7 @@
         "mult": "3.03e01"
       }
     ],
+    "maxLevel": 999,
     "dcBoost": 1.38,
     "junoBase": 1.25,
     "seMultiplier": 0.5,
@@ -922,6 +935,7 @@
         "mult": "1.00e01"
       }
     ],
+    "maxLevel": 999,
     "dcBoost": 1.22,
     "junoBase": 2.2
   },
@@ -962,6 +976,7 @@
         "mult": "2.00e01"
       }
     ],
+    "maxLevel": 999,
     "dcBoost": 1.7,
     "junoBase": 1
   },
@@ -998,6 +1013,7 @@
         "mult": "3.00e01"
       }
     ],
+    "maxLevel": 999,
     "dcBoost": 1.45,
     "junoBase": 1.05,
     "seMultiplier": 5,
@@ -1012,6 +1028,7 @@
         "mult": "1.00e10"
       }
     ],
+    "maxLevel": 100,
     "dcBoost": 1,
     "junoBase": 1
   },
@@ -1024,6 +1041,7 @@
         "mult": "1.00e13"
       }
     ],
+    "maxLevel": 100,
     "dcBoost": 1,
     "junoBase": 1
   },
@@ -1036,6 +1054,7 @@
         "mult": "1.00e15"
       }
     ],
+    "maxLevel": 100,
     "dcBoost": 1,
     "junoBase": 1
   },
@@ -1048,6 +1067,7 @@
         "mult": "1.00e20"
       }
     ],
+    "maxLevel": 100,
     "dcBoost": 1,
     "junoBase": 1
   }

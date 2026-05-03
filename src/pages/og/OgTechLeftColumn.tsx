@@ -66,7 +66,6 @@ export const OgTechLeftColumn = (props: OgTechLeftColumnProps) => {
             label="Juno gains"
             value={props.gainValue}
             onInput={props.setGainValue}
-            placeholder="1e12"
             tooltip="og.junoGains"
             inline
             inlineAccessory={
@@ -87,7 +86,6 @@ export const OgTechLeftColumn = (props: OgTechLeftColumnProps) => {
             label="Current Juno"
             value={props.junoAmount}
             onInput={props.setJunoAmount}
-            placeholder="1e13"
             tooltip="og.currentJuno"
             inline
           />

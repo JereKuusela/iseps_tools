@@ -178,19 +178,31 @@ export const calculateSeEffect = (seAmount: number) => {
   return multiplier / divider
 }
 
-export const calculateNextThreeTechCosts = (id: number, currentLevel: number): TechCostEntry[] => {
-  const tech = getTechById(id)
-  const startingLevel = Math.max(0, Math.floor(currentLevel))
-
-  const sortedCurve = tech.costCurve
-    .slice()
-    .sort((a, b) => a.level - b.level)
+const techCostCurve = techs.map((tech) =>
+  tech.costCurve
     .map((entry) => ({
       level: entry.level,
       mult: LargeNumber.parse(entry.mult),
     }))
+    .sort((a, b) => a.level - b.level),
+)
+const techCostCache = techs.map(() => [] as LargeNumber[])
 
-  const targetLevel = startingLevel + 3
+export const calculateNextThreeTechCosts = (id: number, currentLevel: number): TechCostEntry[] => {
+  // No point to always recalculate.
+  const cache = techCostCache[id]
+  if (cache.length > currentLevel + 2) {
+    return [
+      { level: currentLevel, cost: cache[currentLevel] },
+      { level: currentLevel + 1, cost: cache[currentLevel + 1] },
+      { level: currentLevel + 2, cost: cache[currentLevel + 2] },
+    ]
+  }
+
+  const tech = getTechById(id)
+  const costCurve = techCostCurve[id]
+
+  const targetLevel = currentLevel + 2
 
   let cost = LargeNumber.parse(tech.initCost)
   let growth = new LargeNumber(1, 0)
@@ -199,19 +211,16 @@ export const calculateNextThreeTechCosts = (id: number, currentLevel: number): T
   const nextCosts: TechCostEntry[] = []
 
   for (let level = 1; level <= targetLevel; level += 1) {
-    while (curveIndex < sortedCurve.length && sortedCurve[curveIndex].level === level) {
-      growth = growth.multiply(sortedCurve[curveIndex].mult)
+    while (curveIndex < costCurve.length && costCurve[curveIndex].level === level) {
+      growth = growth.multiply(costCurve[curveIndex].mult)
       curveIndex += 1
     }
 
     cost = cost.multiply(growth)
+    cache[level - 1] = cost
+    if (level < currentLevel) continue
 
-    if (level > startingLevel) {
-      nextCosts.push({
-        level,
-        cost,
-      })
-    }
+    nextCosts.push({ level, cost })
   }
 
   return nextCosts

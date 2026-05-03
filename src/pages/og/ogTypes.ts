@@ -19,6 +19,7 @@ export type TechCardRow = {
   id: number
   label: string
   level: number
+  maxLevel: number
   relative: number
   etaSeconds: number
   nextCost: string

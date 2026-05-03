@@ -118,6 +118,7 @@ Rules for calculating tech cost and tech value.
 - `costCurve`: Array of cost multipliers.
   - `level`: Tech level where this multiplier become active.
   - `mult`: Multiplier applies to tech cost.
+- `maxLevel`: Maximum level of the tech. Default is 999 if not specified.
 - `dcBoost`: Fixed tech value for DC mode.
 - `junoBase`: Base tech value for Juno mode.
 - `extraJunoBase`: Extra multiplier for Juno mode.

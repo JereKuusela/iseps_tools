@@ -83,7 +83,7 @@ export const OgTechPage = (props: { cycles: string; setCycles: (next: string) =>
   const [junoKappaBundle, setJunoKappaBundle] = createPersistedSignal("zat.og.bundle.kappa", false)
   const [tokens, setTokens] = createPersistedSignal("zat.og.tokens", "0")
 
-  const [sharesPercent, setSharesPercent] = createPersistedSignal("zat.og.shares", "0")
+  const [sharesPercent, setSharesPercent] = createPersistedSignal("zat.guide.shares", "0")
 
   const [extraExponent, setExtraExponent] = createPersistedSignal("zat.og.extraExponent", "0.001")
   const [showExpandedExponent, setShowExpandedExponent] = createSignal(false)
@@ -94,11 +94,16 @@ export const OgTechPage = (props: { cycles: string; setCycles: (next: string) =>
   const [meltdownBundle, setMeltdownBundle] = createPersistedSignal("zat.og.meltdown", false)
   const [quantumAddon0, setQuantumAddon0] = createPersistedSignal("zat.og.qa0", false)
 
-  const [techLevels, setTechLevels] = createSignal<number[]>(Array.from({ length: data().techs.length }, () => 0))
+  const [techLevels, setTechLevels] = createPersistedSignal<number[]>(
+    "zat.og.techLevels",
+    Array.from({ length: data().techs.length }, () => 0),
+  )
 
   const gainPerSecond = createMemo(() => {
     return Math.max(0, toRatePerSecond(parseNumberish(gainValue()), gainUnit()))
   })
+
+  const shareAmount = createMemo(() => Math.max(0, parseNumberish(sharesPercent()) / 0.05))
 
   const currentJuno = createMemo(() => parseLargeNumberSafe(junoAmount()))
   const seEffect = createMemo(() => calculateSeEffect(parseNumberish(seLevel())))
@@ -205,6 +210,7 @@ export const OgTechPage = (props: { cycles: string; setCycles: (next: string) =>
       return {
         id: tech.id,
         label: `OG${tech.id}`,
+        maxLevel: tech.maxLevel,
         level: currentLevel,
         relative: ranked.length > 0 ? Math.max(0, Math.min(100, Math.exp(score - bestScore) * 100)) : 0,
         etaSeconds: next ? estimateSeconds(next.cost, currentJuno(), gainPerSecond()) : Number.POSITIVE_INFINITY,
@@ -233,24 +239,50 @@ export const OgTechPage = (props: { cycles: string; setCycles: (next: string) =>
     setTechLevel(best.id, best.level)
   }
 
-  const autoBuyUnderHour = () => {
-    const nextByTech = new Map<number, RankedTech>()
-    for (const entry of rankedTechs()) {
-      if (!nextByTech.has(entry.id)) {
-        nextByTech.set(entry.id, entry)
-      }
-    }
+  const autoBuyUnderLimit = (thresholdSeconds: number) => {
+    const updatedLevels = techLevels().slice()
+    const current = currentJuno()
+    const gain = gainPerSecond()
 
-    for (const [id, entry] of nextByTech.entries()) {
-      if (entry.etaSeconds <= 3600) {
-        setTechLevel(id, entry.level)
+    if (gain <= 0) return
+
+    let foundInPass = false
+    let iterations = 0
+    const maxIterations = 10_000
+
+    do {
+      foundInPass = false
+
+      for (const tech of data().techs) {
+        const currentLevel = updatedLevels[tech.id] ?? 0
+        const next = calculateNextThreeTechCosts(tech.id, currentLevel)[0]
+        if (!next) continue
+
+        const etaSeconds = estimateSeconds(next.cost, current, gain)
+        if (etaSeconds <= thresholdSeconds) {
+          updatedLevels[tech.id] = next.level + 1
+          foundInPass = true
+        }
       }
-    }
+
+      iterations += 1
+      if (iterations >= maxIterations) break
+    } while (foundInPass)
+
+    setTechLevels(updatedLevels)
   }
 
-  const shareAmount = createMemo(() => {
-    return parseNumberish(sharesPercent()) / 0.05
-  })
+  const autoBuyUnderHour = () => {
+    autoBuyUnderLimit(3600)
+  }
+
+  const autoBuyUnderDay = () => {
+    autoBuyUnderLimit(86400)
+  }
+
+  const clearTechLevels = () => {
+    setTechLevels(Array.from({ length: data().techs.length }, () => 0))
+  }
 
   const exponentEntries = createMemo<ExponentGainEntry[]>(() => {
     return exponentGainEntries().map((entry) => ({
@@ -271,6 +303,8 @@ export const OgTechPage = (props: { cycles: string; setCycles: (next: string) =>
             topFive={topFive()}
             techCardRows={techCardRows()}
             onAutoBuyUnderHour={autoBuyUnderHour}
+            onAutoBuyUnderDay={autoBuyUnderDay}
+            onClearTechLevels={clearTechLevels}
             onBuyNextBest={buyNextBest}
             onSetTechLevel={setTechLevel}
             onBuyTechLevel={buyTechLevel}

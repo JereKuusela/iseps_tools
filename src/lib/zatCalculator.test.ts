@@ -10,6 +10,11 @@ import {
 } from "./zatCalculator"
 import { LargeNumber } from "./largeNumber"
 
+const compareLarge = (a: LargeNumber, b: LargeNumber) => {
+  expect(a.mantissa).toBeCloseTo(b.mantissa, 2)
+  expect(a.exponent).toEqual(b.exponent)
+}
+
 describe("calculateZatBoostPerTech", () => {
   it("returns a positive boost for juno mode", () => {
     const boost = calculateZatBoostPerTech(10, "juno")
@@ -36,19 +41,15 @@ describe("calculateSeEffect", () => {
 
 describe("calculateNextThreeTechCosts", () => {
   it("returns next three levels and increasing costs", () => {
-    const result = calculateNextThreeTechCosts(1, 0)
+    const result = calculateNextThreeTechCosts(0, 50)
 
     expect(result).toHaveLength(3)
-    expect(result[0].level).toBe(1)
-    expect(result[1].level).toBe(2)
-    expect(result[2].level).toBe(3)
-
-    const first = Number(result[0].cost.mantissa) * 10 ** result[0].cost.exponent
-    const second = Number(result[1].cost.mantissa) * 10 ** result[1].cost.exponent
-    const third = Number(result[2].cost.mantissa) * 10 ** result[2].cost.exponent
-
-    expect(first).toBeLessThan(second)
-    expect(second).toBeLessThan(third)
+    expect(result[0].level).toBe(50)
+    compareLarge(result[0].cost, new LargeNumber(1, 173))
+    expect(result[1].level).toBe(51)
+    compareLarge(result[1].cost, new LargeNumber(1, 192))
+    expect(result[2].level).toBe(52)
+    compareLarge(result[2].cost, new LargeNumber(1, 211))
   })
 })
 
@@ -94,18 +95,18 @@ describe("calculateNextZatCost", () => {
   it("returns cycle 2 for exactly cycle 1 cost", () => {
     const next = calculateNextZatCost(new LargeNumber(1, 5))
     expect(next.cycle).toBe(2)
-    expect(next.cost.toString(0)).toBe("1e10")
+    compareLarge(next.cost, new LargeNumber(1, 10))
   })
 
   it("returns cycle 1 for low juno", () => {
     const next = calculateNextZatCost(new LargeNumber(1, 4))
     expect(next.cycle).toBe(1)
-    expect(next.cost.toString(0)).toBe("1e5")
+    compareLarge(next.cost, new LargeNumber(1, 5))
   })
 
   it("returns cycle 5 with 1e60 cost for 1e50 juno", () => {
     const next = calculateNextZatCost(new LargeNumber(1, 50))
     expect(next.cycle).toBe(7)
-    expect(next.cost.toString(0)).toBe("1e60")
+    compareLarge(next.cost, new LargeNumber(1, 60))
   })
 })

@@ -67,10 +67,10 @@ const normalizePanels = (panels: ScGoalPanel[]): ScGoalPanel[] => {
 }
 
 export const ScProvider = (props: ParentProps) => {
-  const [currentSe, setCurrentSe] = createPersistedSignal("sc.currentSe", "166")
-  const [battery1DcCost, setBattery1DcCost] = createPersistedSignal("sc.battery1DcCost", "1e14")
-  const [currentDc, setCurrentDc] = createPersistedSignal("sc.currentDc", "2.58e1500")
-  const [dcGainValue, setDcGainValue] = createPersistedSignal("sc.dcGainValue", "2.58e1540")
+  const [currentSe, setCurrentSe] = createPersistedSignal("sc.currentSe", "102")
+  const [battery1DcCost, setBattery1DcCost] = createPersistedSignal("sc.battery1DcCost", "2.7e204")
+  const [currentDc, setCurrentDc] = createPersistedSignal("sc.currentDc", "1e204")
+  const [dcGainValue, setDcGainValue] = createPersistedSignal("sc.dcGainValue", "1e203")
   const [dcGainUnit, setDcGainUnit] = createPersistedSignal<ScGainUnit>("sc.dcGainUnit", "day")
   const [replicatorDays, setReplicatorDays] = createPersistedSignal("sc.replicatorDays", "0")
   const [replicatorHours, setReplicatorHours] = createPersistedSignal("sc.replicatorHours", "0")
