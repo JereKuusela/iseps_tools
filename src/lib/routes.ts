@@ -13,21 +13,21 @@ export const ROUTES = {
 } as const
 
 export const tabs: TabItem[] = [
-  { href: ROUTES.ogTech, label: "OG Tech" },
+  // { href: ROUTES.ogTech, label: "OG Tech" },
   { href: ROUTES.zatGuide, label: "ZAT Guide" },
   { href: ROUTES.penrose, label: "Penrose" },
   { href: ROUTES.sc, label: "SC" },
-  { href: ROUTES.premiumCrystal, label: "Premium Crystal" },
-  { href: ROUTES.premiumHauler, label: "Premium Hauler" },
+  //  { href: ROUTES.premiumCrystal, label: "Premium Crystal" },
+  // { href: ROUTES.premiumHauler, label: "Premium Hauler" },
   { href: ROUTES.credits, label: "Credits" },
 ]
 
 export const toolCards: ToolCardItem[] = [
-  {
+  /* {
     href: ROUTES.ogTech,
     label: "OG Tech",
     description: "Plan OG tech upgrades by comparing gains, costs, and ETA based on your current output.",
-  },
+  },*/
   {
     href: ROUTES.zatGuide,
     label: "ZAT Guide",
@@ -43,7 +43,7 @@ export const toolCards: ToolCardItem[] = [
     label: "SC",
     description: "Calculate Super Cluster scenarios and compare setup tradeoffs before committing resources.",
   },
-  {
+  /* {
     href: ROUTES.premiumCrystal,
     label: "Premium Crystal",
     description: "Model Premium Crystal token-related multipliers and their practical impact.",
@@ -52,7 +52,7 @@ export const toolCards: ToolCardItem[] = [
     href: ROUTES.premiumHauler,
     label: "Premium Hauler",
     description: "Evaluate Hauler mine premium choices and expected return from each option.",
-  },
+  },*/
   {
     href: ROUTES.credits,
     label: "Credits",
