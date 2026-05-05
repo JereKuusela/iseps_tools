@@ -78,7 +78,6 @@ describe("calculateScFromDc", () => {
     const se = 150
     const battery1DcCost = new LargeNumber(1.99, 1167)
     const scMult = calculateScMultiplierFromGoal({ se, dc: battery1DcCost })
-    console.log(scMult)
     const dc = new LargeNumber(2.66, 1170)
     const battery1Sc = calculateScFromDc({ se, dc, scMult })
 
@@ -98,9 +97,10 @@ describe("iterateTimeToReachGoal", () => {
       retainedSc: 1,
       futureDc: 1,
       futureSc: 1,
+      type: "battery1",
     })
 
-    expect(result.minutes).toEqual(4100)
+    expect(result.minutes).toEqual(1966)
   })
   it("returns finite minutes when gain is positive", () => {
     const result = iterateTimeToReachGoal({
@@ -115,7 +115,7 @@ describe("iterateTimeToReachGoal", () => {
       futureSc: 1.4,
       timeSkips: 79,
       extraMinutesPerDay: 180,
-      customDcGoal: false,
+      type: "battery1",
     })
 
     expect(Number.isFinite(result.minutes)).toBe(true)

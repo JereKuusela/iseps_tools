@@ -1,7 +1,7 @@
 import { For, Index, Show } from "solid-js"
 import { MetricRow } from "../../components/layout/contentBlocks"
 import { blurOnEnterOrEscape } from "../../components/ui/formControls"
-import { NumberField } from "../../components/ui/formControls"
+import { MetricField } from "../../components/ui/formControls"
 import type { ScGoalType } from "../../lib/scCalculator"
 import { useScContext } from "../../lib/scContext"
 import { formatLocalTimestampFromMinutes, formatTimeDuration } from "../../lib/timeFormat"
@@ -56,19 +56,17 @@ export const ScRightColumn = (props: ScRightColumnProps) => {
                 </Show>
               </div>
 
-              <Show when={panel().goalType === "customSc" || panel().goalType === "customDc"}>
-                <div class="mt-2">
-                  <NumberField
+              <div class="mt-2 rounded border border-ink/20 bg-white dark:border-white/15 dark:bg-[#253a56]">
+                <Show when={panel().goalType === "customSc" || panel().goalType === "customDc"}>
+                  <MetricField
                     label={panel().goalType === "customSc" ? "Custom SC" : "Custom DC"}
                     value={panel().customGoal}
                     onInput={(next) => sc.setPanelCustomGoal(panel().id, next)}
-                    inline
                   />
-                </div>
-              </Show>
-
-              <div class="mt-2 rounded border border-ink/20 bg-white dark:border-white/15 dark:bg-[#253a56]">
-                <MetricRow label="DC Cost" value={props.formatLargeNumber(panel().dcCost, 2)} />
+                </Show>
+                <Show when={panel().goalType != "customSc" && panel().goalType != "customDc"}>
+                  <MetricRow label="DC Cost" value={props.formatLargeNumber(panel().dcCost, 2)} />
+                </Show>
                 <MetricRow label="Total Time" value={formatTimeDuration(panel().totalMinutes)} />
                 <MetricRow label="Progress" value={props.formatPercent(panel().progressPct, 2)} withBorder={false} />
               </div>

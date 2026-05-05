@@ -69,6 +69,14 @@ type LabelFieldProps = {
   inlineControlClass?: string
 }
 
+type MetricFieldProps = {
+  label: string
+  value: string
+  onInput: (next: string) => void
+  tooltip?: TooltipKey
+  withBorder?: boolean
+}
+
 export const sanitizeNumberishInput = (value: string) => {
   const trimmed = value.trim()
 
@@ -166,6 +174,38 @@ export const NumberField = (props: NumberFieldProps) => {
           />
         </>
       )}
+    </TextField.Root>
+  )
+}
+
+export const MetricField = (props: MetricFieldProps) => {
+  const onChange = (next: string) => {
+    const normalized = sanitizeNumberishInput(next)
+    if (!isValidNumberishInput(normalized)) return
+    props.onInput(normalized)
+  }
+
+  const rowClass = `grid grid-cols-[1fr_auto] px-2 py-1.5 font-mono text-md font-bold dark:text-white ${props.withBorder === false ? "" : "border-b border-ink/15 dark:border-white/15"}`
+
+  return (
+    <TextField.Root value={props.value} onChange={onChange} class="grid gap-0">
+      <div class={rowClass}>
+        <div class="min-w-0 flex items-center gap-2">
+          <TextField.Label>{props.label}</TextField.Label>
+          {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
+        </div>
+        <TextField.Input
+          type="text"
+          inputMode="decimal"
+          autocapitalize="off"
+          autocomplete="off"
+          autocorrect="off"
+          spellcheck={false}
+          value={props.value}
+          onKeyDown={blurOnEnterOrEscape}
+          class="w-[9ch] min-w-[9ch] max-w-[12ch] rounded-xl border border-ink/20 bg-white px-2 py-0.5 text-right text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+        />
+      </div>
     </TextField.Root>
   )
 }

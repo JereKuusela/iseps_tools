@@ -162,7 +162,8 @@ export const ScPage = () => {
         futureDc,
         futureSc,
         extraMinutesPerDay: onlineExtraMinutes(),
-        customDcGoal: isCustomDc,
+        type: panel.goalType,
+        customScGoal: isCustomSc ? customGoal : undefined,
       })
       let afterSkipsMinutes = 0
       if (totalSkipMinutes() > 0) {
@@ -178,7 +179,8 @@ export const ScPage = () => {
           futureSc,
           timeSkips: totalSkipMinutes(),
           extraMinutesPerDay: onlineExtraMinutes(),
-          customDcGoal: isCustomDc,
+          type: panel.goalType,
+          customScGoal: isCustomSc ? customGoal : undefined,
         })
         afterSkipsMinutes = withSkips.minutes
       }

@@ -38,10 +38,35 @@ const TopNav = (props: { darkMode: boolean; onToggleDarkMode: () => void }) => {
         <button
           type="button"
           onClick={props.onToggleDarkMode}
-          class="rounded-xl border border-ink/15 bg-white/85 px-4 py-2.5 text-sm font-semibold text-ink transition hover:border-ink/35 dark:border-white/20 dark:bg-[#1b2a3e] dark:text-white"
-          aria-label="Toggle dark mode"
+          class="grid h-10 w-10 place-items-center rounded-xl border border-ink/15 bg-white/85 text-ink transition hover:-translate-y-0.5 hover:border-ink/35 dark:border-white/20 dark:bg-[#1b2a3e] dark:text-white"
+          aria-label={props.darkMode ? "Switch to light mode" : "Switch to dark mode"}
+          title={props.darkMode ? "Switch to light mode" : "Switch to dark mode"}
         >
-          {props.darkMode ? "Dark" : "Light"}
+          {props.darkMode ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              class="h-5 w-5"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2.5v2.2M12 19.3v2.2M21.5 12h-2.2M4.7 12H2.5M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6M18.7 18.7l-1.6-1.6M6.9 6.9 5.3 5.3" />
+            </svg>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="h-5 w-5"
+              aria-hidden="true"
+            >
+              <path d="M20.7 15.4A9 9 0 1 1 12.6 3.3a.8.8 0 0 1 .9 1.1 7 7 0 0 0 7.1 9.9.8.8 0 0 1 .1 1.1Z" />
+            </svg>
+          )}
+          <span class="sr-only">{props.darkMode ? "Switch to light mode" : "Switch to dark mode"}</span>
         </button>
       </div>
     </header>

@@ -74,7 +74,8 @@ export type TimeToGoalInput = {
   futureSc: number
   timeSkips?: number
   extraMinutesPerDay?: number
-  customDcGoal?: boolean
+  type: ScGoalType
+  customScGoal?: LargeNumber
 }
 
 export type TimeToGoalResult = {
@@ -259,11 +260,10 @@ export const calculateGoal = ({ se, type, customGoal, scMult }: GoalInput): Goal
   const goalSeOffset = type === "battery2" ? 1 : type === "battery3" ? 2 : 0
   const goalSe = se + goalSeOffset
 
-  const baseTargetSc = fromLog10(goalSe)
-  const baseCost = calculateDcFromSc(baseTargetSc, goalSe, scMult, goalSe)
+  const targetSc = fromLog10(goalSe)
+  const baseCost = calculateDcFromSc(targetSc, goalSe, scMult, goalSe)
   const extraGoal = extraBatteryGoal(goalSe)
   const dcCost = extraGoal > 0 ? baseCost.multiply(new LargeNumber(1, extraGoal)) : baseCost
-  const targetSc = extraGoal > 0 ? scFromDc(dcCost, goalSe, scMult, goalSe) : baseTargetSc
 
   return { type, se: goalSe, targetSc, dcCost, extraGoal }
 }
@@ -291,7 +291,7 @@ export const findCustomScGoal = ({ se, targetSc, scMult }: CustomScGoalInput): L
 
   const calculateProjectedScLog10 = (dcLog10: number) => {
     const rawScLog10 = calculateScLog10FromDcLog10(dcLog10, se, scMult, se)
-    const revisedSe = Math.max(se, (rawScLog10 + se) / 2)
+    const revisedSe = getRevisedSeLog10(se, rawScLog10)
     return calculateScLog10FromDcLog10(dcLog10, revisedSe, scMult, se)
   }
 
@@ -331,7 +331,10 @@ export const iterateTimeToReachGoal = (input: TimeToGoalInput): TimeToGoalResult
   const baselineDcReplicator = calculateDcReplicator(input.se, input.minutesInSe, input.retainedDc)
   const baselineScReplicator = calculateSeReplicator(input.se, input.minutesInSe, input.retainedSc)
   const minutesInSeBase = toSafePositiveNumber(input.minutesInSe)
-  const dcExponent = scExponentForSeInversed(currentSe, currentSe)
+  let effectiveSe = currentSe
+  if (input.customScGoal) effectiveSe = input.customScGoal.exponent
+
+  const dcExponent = scExponentForSeInversed(effectiveSe, currentSe)
 
   const currentAfterSkips = applyTimeSkips(currentDc, dcGainPerMinute, input.timeSkips)
   const extraMinutesPerDay = Math.max(0, toSafePositiveNumber(input.extraMinutesPerDay ?? 0))
@@ -340,9 +343,9 @@ export const iterateTimeToReachGoal = (input: TimeToGoalInput): TimeToGoalResult
   const preBoostCurrentDc = currentAfterSkips.multiply(input.futureDc)
   const preBoostDcGainPerMinute = dcGainPerMinute.multiply(input.futureDc * extraMinuteMultiplier)
 
-  const futureScScaleLog10 = input.customDcGoal ? 0 : safeLog10(input.futureSc)
+  const futureScScaleLog10 = input.type == "customDc" ? 0 : safeLog10(input.futureSc)
   const preBoostGoalDc =
-    input.customDcGoal || futureScScaleLog10 === 0
+    input.type == "customDc" || futureScScaleLog10 === 0
       ? goalDc
       : fromLog10(log10LargeNumber(goalDc) - futureScScaleLog10 * dcExponent)
 
@@ -377,6 +380,7 @@ export const iterateTimeToReachGoal = (input: TimeToGoalInput): TimeToGoalResult
   let effectiveCurrentDc = preBoostCurrentDc
   let effectiveDcGainPerMinute = preBoostDcGainPerMinute
   let scReplicated = input.futureSc
+
   while (iterations < MAX_ITERATIONS) {
     iterations += 1
 
@@ -397,7 +401,7 @@ export const iterateTimeToReachGoal = (input: TimeToGoalInput): TimeToGoalResult
 
     const dcScale = fromLog10(dcScaleLog10)
 
-    if (input.customDcGoal) {
+    if (input.type == "customDc") {
       effectiveGoalDc = preBoostGoalDc
     } else {
       // SC multipliers are multiplicative on SC, but DC required for the same SC target follows the inverse power law.
@@ -407,29 +411,17 @@ export const iterateTimeToReachGoal = (input: TimeToGoalInput): TimeToGoalResult
     effectiveCurrentDc = preBoostCurrentDc.multiply(dcScale)
     effectiveDcGainPerMinute = preBoostDcGainPerMinute.multiply(dcScale)
 
-    const recalculated = directMinutesToGoal(effectiveGoalDc, effectiveCurrentDc, effectiveDcGainPerMinute)
+    const projectedDcAtGuess = effectiveCurrentDc.add(effectiveDcGainPerMinute.multiply(guess))
+    const reachedTarget = projectedDcAtGuess.compare(effectiveGoalDc) >= 0
 
-    if (!Number.isFinite(recalculated)) {
-      break
-    }
+    if (reachedTarget) maxGuess = guess
+    else minGuess = guess
 
-    const diff = Math.abs(recalculated - guess)
-    const closeByMinute = diff < 1
-    const closeByRatio = diff <= Math.max(1, guess) * TOLERANCE
+    finalMinutes = maxGuess
 
-    finalMinutes = recalculated
-
-    if (closeByMinute || closeByRatio) {
-      console.log(closeByMinute, closeByRatio, iterations, guess)
+    if (maxGuess - minGuess < 1) {
       converged = true
       break
-    }
-
-    if (recalculated > guess) {
-      minGuess = guess
-      maxGuess = Math.max(maxGuess, recalculated)
-    } else {
-      maxGuess = guess
     }
   }
 
@@ -474,4 +466,13 @@ export const calculateScMultiplierFromGoal = ({ se, dc }: ScMultFromGoalInput) =
   const exp = Math.floor(multiplierLog10)
   const mantissa = 10 ** (multiplierLog10 - exp)
   return new LargeNumber(mantissa, exp)
+}
+
+const getRevisedSe = (se: number, sc: LargeNumber) => {
+  const scLog10 = log10LargeNumber(sc)
+  return Math.max(se, (scLog10 + se) / 2)
+}
+
+const getRevisedSeLog10 = (se: number, scLog10: number) => {
+  return Math.max(se, (scLog10 + se) / 2)
 }
