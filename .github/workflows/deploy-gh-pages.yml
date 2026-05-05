@@ -27,6 +27,9 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Copy CNAME
+        run: cp CNAME dist/CNAME
+
       - name: Publish To gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
