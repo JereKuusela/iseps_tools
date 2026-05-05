@@ -56,11 +56,12 @@ export const formatLocalTimestampFromMinutes = (minutes: number, now = new Date(
       minute: "2-digit",
     }).format(target)
 
-    const dateText = new Intl.DateTimeFormat(undefined, {
+    let dateText = new Intl.DateTimeFormat(undefined, {
       day: "numeric",
       month: "numeric",
     }).format(target)
+    if (dateText.endsWith(".")) dateText = dateText.slice(0, -1)
 
-    return `${timeText} ${dateText.substring(0, dateText.length - 1)}`
+    return `${timeText} ${dateText}`
   }
 }

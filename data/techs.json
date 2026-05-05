@@ -1037,7 +1037,8 @@
       },
       {
         "level": 40,
-        "mult": "1.00e10"
+        "mult": "1.00e10",
+        "single": "1.00e40"
       },
       {
         "level": 50,
@@ -1132,7 +1133,7 @@
         "mult": "1.00e10"
       }
     ],
-    "maxLevel": 999,
+    "maxLevel": 100,
     "dcBoost": 1,
     "junoBase": 1
   },
@@ -1154,7 +1155,8 @@
       },
       {
         "level": 40,
-        "mult": "1.00e13"
+        "mult": "1.00e13",
+        "single": "1.00e52"
       },
       {
         "level": 50,
@@ -1249,7 +1251,7 @@
         "mult": "1.00e13"
       }
     ],
-    "maxLevel": 999,
+    "maxLevel": 100,
     "dcBoost": 1,
     "junoBase": 1
   },
@@ -1271,7 +1273,8 @@
       },
       {
         "level": 40,
-        "mult": "1.00e15"
+        "mult": "1.00e15",
+        "single": "1.00e60"
       },
       {
         "level": 50,
@@ -1366,7 +1369,7 @@
         "mult": "1.00e15"
       }
     ],
-    "maxLevel": 999,
+    "maxLevel": 100,
     "dcBoost": 1,
     "junoBase": 1
   },
@@ -1388,7 +1391,8 @@
       },
       {
         "level": 40,
-        "mult": "1.00e20"
+        "mult": "1.00e20",
+        "single": "1.00e80"
       },
       {
         "level": 50,
@@ -1483,7 +1487,7 @@
         "mult": "1.00e20"
       }
     ],
-    "maxLevel": 999,
+    "maxLevel": 100,
     "dcBoost": 1,
     "junoBase": 1
   }

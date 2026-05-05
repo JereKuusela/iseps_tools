@@ -143,7 +143,6 @@ export const ScPage = () => {
       let customGoal: LargeNumber | undefined = undefined
       if (isCustomDc) customGoal = parseLargeNumberSafe(panel.customGoal)
       if (isCustomSc) customGoal = parseLargeNumberSafe(panel.customGoal)
-
       const goalResult = calculateGoal({
         se: currentSe(),
         type: panel.goalType,
@@ -187,8 +186,8 @@ export const ScPage = () => {
 
       const progressPct = progressPercent(currentDc(), goalResult.dcCost)
       const projectedProgressPct = progressPercent(currentDc(), noSkips.effectiveGoalDc)
-
       const projectedDc = currentDc().compare(noSkips.effectiveGoalDc) >= 0 ? currentDc() : noSkips.effectiveGoalDc
+
       return {
         id: panel.id,
         goalType: panel.goalType,
@@ -196,7 +195,7 @@ export const ScPage = () => {
         customGoal: panel.customGoal,
         dcCost: goalResult.dcCost,
         progressPct,
-        totalMinutes: noSkips.minutes,
+        totalMinutes: minutesInSe() + noSkips.minutes,
         remainingMinutes: noSkips.minutes,
         afterSkipsMinutes,
         projectedProgressPct,

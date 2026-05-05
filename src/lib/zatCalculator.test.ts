@@ -40,16 +40,52 @@ describe("calculateSeEffect", () => {
 })
 
 describe("calculateNextThreeTechCosts", () => {
-  it("returns next three levels and increasing costs", () => {
+  it("returns next three purchasable levels and increasing costs", () => {
     const result = calculateNextThreeTechCosts(0, 50)
 
     expect(result).toHaveLength(3)
-    expect(result[0].level).toBe(50)
+    expect(result[0].level).toBe(51)
     compareLarge(result[0].cost, new LargeNumber(1, 173))
-    expect(result[1].level).toBe(51)
+    expect(result[1].level).toBe(52)
     compareLarge(result[1].cost, new LargeNumber(1, 192))
-    expect(result[2].level).toBe(52)
+    expect(result[2].level).toBe(53)
     compareLarge(result[2].cost, new LargeNumber(1, 211))
+  })
+
+  it("applies a one-time fixed bump at level 40 for LT16", () => {
+    const result = calculateNextThreeTechCosts(16, 39)
+
+    expect(result).toHaveLength(3)
+    expect(result[0].level).toBe(40)
+    expect(result[1].level).toBe(41)
+
+    const ratio = result[1].cost.divide(result[0].cost)
+    compareLarge(ratio, new LargeNumber(1, 80))
+  })
+
+  it("uses initCost as first purchase cost for OG16", () => {
+    const fromLevel0 = calculateNextThreeTechCosts(16, 0)[0]
+    const fromLevel1 = calculateNextThreeTechCosts(16, 1)[0]
+
+    expect(fromLevel0.level).toBe(1)
+    compareLarge(fromLevel0.cost, new LargeNumber(1, 170))
+
+    expect(fromLevel1.level).toBe(2)
+    compareLarge(fromLevel1.cost, new LargeNumber(1, 180))
+  })
+
+  it("returns identical results when cache is already warm", () => {
+    const first = calculateNextThreeTechCosts(0, 50)
+    const second = calculateNextThreeTechCosts(0, 50)
+
+    expect(second).toHaveLength(3)
+    expect(second[0].level).toBe(51)
+    expect(second[1].level).toBe(52)
+    expect(second[2].level).toBe(53)
+
+    expect(second[0].cost.toString()).toBe(first[0].cost.toString())
+    expect(second[1].cost.toString()).toBe(first[1].cost.toString())
+    expect(second[2].cost.toString()).toBe(first[2].cost.toString())
   })
 })
 
@@ -76,18 +112,14 @@ describe("calculateExponentIncreaseMultipliers", () => {
 })
 
 describe("calculateTotalPremiumMultiplier", () => {
-  it("handles additive, multiplicative and exponent premiums", () => {
+  it("multiplies per-source factors and handles token split rules", () => {
     const result = calculateTotalPremiumMultiplier({
       "Juno Output": 100,
       "Juno Bundle": true,
       tokens: 1100,
-      "Meltdown Bundle": true,
     })
 
-    expect(result.additive).toBeCloseTo(3.5, 5)
-    expect(result.multiplicative).toBeCloseTo(1.01 ** 100, 5)
-    expect(result.multiplier).toBeGreaterThan(4.5)
-    expect(result.exponentAdd).toBeCloseTo(0.005, 5)
+    expect(result).toBeCloseTo((1 + 100 * 0.02) * (1 + 0.5) * (1 + 1000 * 0.01) * 1.01 ** 100, 8)
   })
 })
 

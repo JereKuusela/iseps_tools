@@ -89,7 +89,7 @@ export const ScRightColumn = (props: ScRightColumnProps) => {
                     Projected Values
                   </h4>
                   <MetricRow label="Progress" value={props.formatPercent(panel().projectedProgressPct, 0)} />
-                  <MetricRow label="DC Cost" value={props.formatLargeNumber(panel().projectedDcCost, 1)} />
+                  <MetricRow label="DC Cost" value={props.formatLargeNumber(panel().projectedDcCost, 2)} />
                   <MetricRow label="SC Gained" value={props.formatLargeNumber(panel().projectedScGained, 2)} />
                   <MetricRow label="Daily Boost" value={props.formatMultiplier(panel().projectedDailyBoost)} />
                   <MetricRow label="SC Replic." value={props.formatMultiplier(panel().projectedScReplicator)} />

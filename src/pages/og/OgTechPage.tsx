@@ -109,7 +109,7 @@ export const OgTechPage = (props: { cycles: string; setCycles: (next: string) =>
   const seEffect = createMemo(() => calculateSeEffect(parseNumberish(seLevel())))
   const zatBoost = createMemo(() => calculateZatBoostPerTech(parseNumberish(props.cycles), mode()))
 
-  const premiumSummary = createMemo(() => {
+  const premiumMultiplier = createMemo(() => {
     return calculateTotalPremiumMultiplier({
       "Juno Output": parseNumberish(junoOutput()),
       "Juno Bundle": junoBundle(),
@@ -150,7 +150,7 @@ export const OgTechPage = (props: { cycles: string; setCycles: (next: string) =>
     return calculateExponentIncreaseMultipliers(
       gainPerSecond(),
       Math.max(totalExponent(), 0.001),
-      premiumSummary().multiplier,
+      premiumMultiplier(),
       [0.01, 0.005, 0.001],
     )
   })
@@ -260,7 +260,7 @@ export const OgTechPage = (props: { cycles: string; setCycles: (next: string) =>
 
         const etaSeconds = estimateSeconds(next.cost, current, gain)
         if (etaSeconds <= thresholdSeconds) {
-          updatedLevels[tech.id] = next.level + 1
+          updatedLevels[tech.id] = next.level
           foundInPass = true
         }
       }
@@ -337,7 +337,7 @@ export const OgTechPage = (props: { cycles: string; setCycles: (next: string) =>
           setJunoKappaBundle={setJunoKappaBundle}
           tokens={tokens()}
           setTokens={setTokens}
-          premiumMultiplier={premiumSummary().multiplier}
+          premiumMultiplier={premiumMultiplier()}
           sharesPercent={sharesPercent()}
           setSharesPercent={setSharesPercent}
           shareAmount={shareAmount()}

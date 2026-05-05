@@ -20,6 +20,7 @@ type SeEffectRule = {
 type TechCurveRule = {
   level: number
   mult: string
+  single?: string
 }
 
 type TechData = {
@@ -69,13 +70,6 @@ export type TechBoostResult = {
 }
 
 export type PremiumInput = Record<string, number | boolean | undefined>
-
-export type PremiumSummary = {
-  additive: number
-  multiplicative: number
-  multiplier: number
-  exponentAdd: number
-}
 
 export type ExponentIncreaseEntry = {
   delta: number
@@ -183,6 +177,7 @@ const techCostCurve = techs.map((tech) =>
     .map((entry) => ({
       level: entry.level,
       mult: LargeNumber.parse(entry.mult),
+      single: entry.single ? LargeNumber.parse(entry.single) : undefined,
     }))
     .sort((a, b) => a.level - b.level),
 )
@@ -193,16 +188,16 @@ export const calculateNextThreeTechCosts = (id: number, currentLevel: number): T
   const cache = techCostCache[id]
   if (cache.length > currentLevel + 2) {
     return [
-      { level: currentLevel, cost: cache[currentLevel] },
-      { level: currentLevel + 1, cost: cache[currentLevel + 1] },
-      { level: currentLevel + 2, cost: cache[currentLevel + 2] },
+      { level: currentLevel + 1, cost: cache[currentLevel] },
+      { level: currentLevel + 2, cost: cache[currentLevel + 1] },
+      { level: currentLevel + 3, cost: cache[currentLevel + 2] },
     ]
   }
 
   const tech = getTechById(id)
   const costCurve = techCostCurve[id]
 
-  const targetLevel = currentLevel + 2
+  const targetLevel = currentLevel + 3
 
   let cost = LargeNumber.parse(tech.initCost)
   let growth = new LargeNumber(1, 0)
@@ -211,16 +206,20 @@ export const calculateNextThreeTechCosts = (id: number, currentLevel: number): T
   const nextCosts: TechCostEntry[] = []
 
   for (let level = 1; level <= targetLevel; level += 1) {
+    cache[level - 1] = cost
+    if (level > currentLevel) {
+      nextCosts.push({ level, cost })
+    }
+
     while (curveIndex < costCurve.length && costCurve[curveIndex].level === level) {
-      growth = growth.multiply(costCurve[curveIndex].mult)
+      const { mult, single } = costCurve[curveIndex]
+      growth = growth.multiply(mult)
+      if (single) cost = cost.multiply(single)
+
       curveIndex += 1
     }
 
     cost = cost.multiply(growth)
-    cache[level - 1] = cost
-    if (level < currentLevel) continue
-
-    nextCosts.push({ level, cost })
   }
 
   return nextCosts
@@ -291,10 +290,8 @@ export const calculateExponentIncreaseMultipliers = (
   })
 }
 
-export const calculateTotalPremiumMultiplier = (purchases: PremiumInput): PremiumSummary => {
-  let additive = 0
-  let multiplicative = 1
-  let exponentAdd = 0
+export const calculateTotalPremiumMultiplier = (purchases: PremiumInput): number => {
+  let multiplier = 1
 
   for (const rule of premiumRules) {
     const amount = resolvePurchaseAmount(rule, purchases)
@@ -309,24 +306,19 @@ export const calculateTotalPremiumMultiplier = (purchases: PremiumInput): Premiu
     level = Math.max(0, level)
 
     if (rule.mode === "add") {
-      additive += level * rule.value
+      // Additive-with-self sources (for example Juno Output or linear tokens)
+      // contribute their own factor and still multiply with other sources.
+      multiplier *= 1 + level * rule.value
       continue
     }
 
     if (rule.mode === "mul") {
-      multiplicative *= rule.value ** level
+      multiplier *= (1 + rule.value) ** level
       continue
     }
-
-    exponentAdd += level * rule.value
   }
 
-  return {
-    additive,
-    multiplicative,
-    multiplier: (1 + additive) * multiplicative,
-    exponentAdd,
-  }
+  return multiplier
 }
 
 export const calculateNextZatCost = (amount: LargeNumber): NextZatCostResult => {

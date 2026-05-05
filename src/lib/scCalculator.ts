@@ -328,8 +328,8 @@ export const iterateTimeToReachGoal = (input: TimeToGoalInput): TimeToGoalResult
   const currentDc = LargeNumber.from(input.currentDc)
   const dcGainPerMinute = LargeNumber.from(input.dcGainPerMinute)
 
-  const baselineDcReplicator = calculateDcReplicator(input.se, input.minutesInSe, input.retainedDc)
-  const baselineScReplicator = calculateSeReplicator(input.se, input.minutesInSe, input.retainedSc)
+  const baselineDcRep = calculateDcReplicator(input.se, input.minutesInSe, input.retainedDc)
+  const baselineScRepl = calculateSeReplicator(input.se, input.minutesInSe, input.retainedSc)
   const minutesInSeBase = toSafePositiveNumber(input.minutesInSe)
   let effectiveSe = currentSe
   if (input.customScGoal) effectiveSe = input.customScGoal.exponent
@@ -355,8 +355,8 @@ export const iterateTimeToReachGoal = (input: TimeToGoalInput): TimeToGoalResult
       minutes: Number.POSITIVE_INFINITY,
       iterations: 0,
       converged: false,
-      dcReplicator: baselineDcReplicator,
-      scReplicator: baselineScReplicator,
+      dcReplicator: baselineDcRep,
+      scReplicator: baselineScRepl,
       dailyMult: 1,
       effectiveGoalDc: preBoostGoalDc,
       effectiveCurrentDc: preBoostCurrentDc,
@@ -366,15 +366,14 @@ export const iterateTimeToReachGoal = (input: TimeToGoalInput): TimeToGoalResult
   }
 
   let minGuess = 0
-  let maxGuess = Math.max(1, initialMinutes)
+  let maxGuess = initialMinutes
 
-  let iterations = 0
+  let iterations = initialMinutes ? 0 : MAX_ITERATIONS
 
-  let converged = false
-  let finalMinutes = maxGuess
+  let converged = initialMinutes == 0
 
-  let projectedDcReplicator = 1
-  let projectedScReplicator = 1
+  let projectedDcRepl = baselineDcRep
+  let projectedScRepl = baselineScRepl
   let projectedDailyMultiplier = 1
   let effectiveGoalDc = preBoostGoalDc
   let effectiveCurrentDc = preBoostCurrentDc
@@ -387,17 +386,17 @@ export const iterateTimeToReachGoal = (input: TimeToGoalInput): TimeToGoalResult
     const guess = logarithmicMean(minGuess, maxGuess)
     const projectedMinutesInSe = minutesInSeBase + guess
 
-    const projectedDcReplicatorRaw = calculateDcReplicator(input.se, projectedMinutesInSe, input.retainedDc)
-    const projectedScReplicatorRaw = calculateSeReplicator(input.se, projectedMinutesInSe, input.retainedSc)
-    projectedDcReplicator = relativeReplicatorMultiplier(projectedDcReplicatorRaw, baselineDcReplicator)
-    projectedScReplicator = relativeReplicatorMultiplier(projectedScReplicatorRaw, baselineScReplicator)
-    scReplicated = input.futureSc * projectedScReplicator
+    projectedDcRepl = calculateDcReplicator(input.se, projectedMinutesInSe, input.retainedDc)
+    projectedScRepl = calculateSeReplicator(input.se, projectedMinutesInSe, input.retainedSc)
+    const relativeDcRepl = relativeReplicatorMultiplier(projectedDcRepl, baselineDcRep)
+    const relativeScRepl = relativeReplicatorMultiplier(projectedScRepl, baselineScRepl)
+    scReplicated = input.futureSc * relativeScRepl
     const dailyMultiplierBase = activeDailyMultiplier(input.se)
     const dailyLog10 = Math.floor(guess / 1440) * safeLog10(dailyMultiplierBase)
     projectedDailyMultiplier =
       Number.isFinite(dailyLog10) && dailyLog10 < 308 ? 10 ** dailyLog10 : Number.POSITIVE_INFINITY
 
-    const dcScaleLog10 = safeLog10(projectedDcReplicator) + dailyLog10
+    const dcScaleLog10 = safeLog10(relativeDcRepl) + dailyLog10
 
     const dcScale = fromLog10(dcScaleLog10)
 
@@ -405,7 +404,7 @@ export const iterateTimeToReachGoal = (input: TimeToGoalInput): TimeToGoalResult
       effectiveGoalDc = preBoostGoalDc
     } else {
       // SC multipliers are multiplicative on SC, but DC required for the same SC target follows the inverse power law.
-      effectiveGoalDc = preBoostGoalDc.divide(projectedScReplicator ** dcExponent)
+      effectiveGoalDc = preBoostGoalDc.divide(relativeScRepl ** dcExponent)
     }
 
     effectiveCurrentDc = preBoostCurrentDc.multiply(dcScale)
@@ -417,8 +416,6 @@ export const iterateTimeToReachGoal = (input: TimeToGoalInput): TimeToGoalResult
     if (reachedTarget) maxGuess = guess
     else minGuess = guess
 
-    finalMinutes = maxGuess
-
     if (maxGuess - minGuess < 1) {
       converged = true
       break
@@ -426,11 +423,11 @@ export const iterateTimeToReachGoal = (input: TimeToGoalInput): TimeToGoalResult
   }
 
   return {
-    minutes: Math.max(0, Math.ceil(finalMinutes)),
+    minutes: Math.max(0, Math.ceil(maxGuess)),
     iterations,
     converged,
-    dcReplicator: projectedDcReplicator,
-    scReplicator: projectedScReplicator,
+    dcReplicator: projectedDcRepl,
+    scReplicator: projectedScRepl,
     dailyMult: projectedDailyMultiplier,
     effectiveGoalDc,
     effectiveCurrentDc,

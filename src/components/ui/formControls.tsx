@@ -101,6 +101,8 @@ export const isValidNumberishInput = (value: string) => {
   if (rest.length > 0) return false
 
   if (exponent !== undefined) {
+    // Allow transient leading exponent states during typing ("e", "e+", "e-").
+    if (mantissa == "") return /^[+-]?\d*$/.test(exponent)
     const hasMantissa = /^[+-]?(?:\d+\.?\d*|\.\d+)$/.test(mantissa)
     if (!hasMantissa) return false
     return /^[+-]?\d*$/.test(exponent)
