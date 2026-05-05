@@ -1,5 +1,5 @@
 import { For, Index, Show, createSignal, onCleanup, onMount } from "solid-js"
-import { InfoCard } from "../../components/layout/contentBlocks"
+import { InfoCard, MetricRow } from "../../components/layout/contentBlocks"
 import { StatTile } from "../../components/layout/StatTile"
 import { IntegerField } from "../../components/ui/formControls"
 import type { TechCardRow, TopTechEntry } from "./ogTypes"
@@ -63,9 +63,8 @@ export const OgTechRightColumn = (props: OgTechRightColumnProps) => {
 
   return (
     <>
-      <InfoCard title="Recommendations" contentClass="">
+      <InfoCard contentClass="">
         <div class="relative z-20 flex flex-wrap items-center justify-between gap-2">
-          <p class="text-xs text-ink/70 dark:text-white/70">Score compares next purchases by value per cost.</p>
           <div class="relative z-30" ref={actionsMenuRef}>
             <button
               type="button"
@@ -108,7 +107,6 @@ export const OgTechRightColumn = (props: OgTechRightColumnProps) => {
 
         <div class="mt-3 grid gap-3 lg:grid-cols-[220px_minmax(0,1fr)] lg:items-start">
           <div class="grid gap-2">
-            <StatTile label="Total techs" value={props.totalTechLevels} />
             <StatTile
               label="Best next"
               value={props.bestTech ? `OG${props.bestTech.id} -> ${props.bestTech.level + 1}` : "-"}

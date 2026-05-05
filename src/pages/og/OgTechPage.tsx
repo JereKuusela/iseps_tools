@@ -151,7 +151,7 @@ export const OgTechPage = (props: { cycles: string; setCycles: (next: string) =>
       gainPerSecond(),
       Math.max(totalExponent(), 0.001),
       premiumSummary().multiplier,
-      [0.001, 0.005, 0.01],
+      [0.01, 0.005, 0.001],
     )
   })
 
@@ -357,6 +357,7 @@ export const OgTechPage = (props: { cycles: string; setCycles: (next: string) =>
           setMeltdownBundle={setMeltdownBundle}
           quantumAddon0={quantumAddon0()}
           setQuantumAddon0={setQuantumAddon0}
+          totalTechLevels={totalTechLevels()}
           totalExponent={totalExponent()}
           exponentGainEntries={exponentEntries()}
         />

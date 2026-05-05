@@ -1,6 +1,6 @@
 import { A } from "@solidjs/router"
 import { For, Show } from "solid-js"
-import { InfoCard } from "../../components/layout/contentBlocks"
+import { InfoCard, MetricRow } from "../../components/layout/contentBlocks"
 import { NumberField, SelectField, ToggleField, blurOnEnterOrEscape } from "../../components/ui/formControls"
 import type { ZatMode } from "../../lib/zatCalculator"
 import type { ExponentGainEntry, GainUnit } from "./ogTypes"
@@ -53,6 +53,7 @@ type OgTechLeftColumnProps = {
   setMeltdownBundle: (checked: boolean) => void
   quantumAddon0: boolean
   setQuantumAddon0: (checked: boolean) => void
+  totalTechLevels: number
   totalExponent: number
   exponentGainEntries: ExponentGainEntry[]
 }
@@ -60,7 +61,7 @@ type OgTechLeftColumnProps = {
 export const OgTechLeftColumn = (props: OgTechLeftColumnProps) => {
   return (
     <>
-      <InfoCard title="Run Inputs">
+      <InfoCard>
         <div class="grid gap-2">
           <NumberField
             label="Juno gains"
@@ -140,9 +141,14 @@ export const OgTechLeftColumn = (props: OgTechLeftColumnProps) => {
             tooltip="og.junoTokens"
             inline
           />
-          <p class="text-xs text-ink/70 dark:text-white/70">
-            Total premium multiplier: x{props.premiumMultiplier.toFixed(3)}
-          </p>
+          <MetricRow
+            label="Premium multiplier"
+            value={`x${props.premiumMultiplier.toFixed(3)}`}
+            withBorder={false}
+            class="mt-1 rounded-lg border border-ink/10 bg-mist/60 text-sm dark:border-white/10 dark:bg-[#23344d]/60"
+            labelClass="text-ink/80 dark:text-white/80"
+            valueClass="justify-self-start text-ink dark:text-white"
+          />
         </div>
       </InfoCard>
 
@@ -169,7 +175,14 @@ export const OgTechLeftColumn = (props: OgTechLeftColumnProps) => {
             inline
           />
         </div>
-        <p class="mt-3 text-xs text-ink/70 dark:text-white/70">Shares amount: {props.shareAmount.toFixed(2)}</p>
+        <MetricRow
+          label="Shares amount"
+          value={props.shareAmount.toFixed(2)}
+          withBorder={false}
+          class="mt-3 rounded-lg border border-ink/10 bg-mist/60 text-sm dark:border-white/10 dark:bg-[#23344d]/60"
+          labelClass="text-ink/80 dark:text-white/80"
+          valueClass="justify-self-start text-ink dark:text-white"
+        />
         <p class="mt-2 text-xs text-ink/70 dark:text-white/70">
           The Z.A.T Guide page has Tree recommendations and expected boost by node. Open it in the{" "}
           <A href="/zat-guide" class="font-semibold text-accent underline">
@@ -256,20 +269,18 @@ export const OgTechLeftColumn = (props: OgTechLeftColumnProps) => {
           </div>
         </Show>
 
-        <div class="mt-3 grid gap-2 rounded-xl border border-ink/10 bg-mist/70 p-3 dark:border-white/15 dark:bg-[#23344d]">
-          <p class="text-sm text-ink/80 dark:text-white/80">
-            Total exponent: <strong>{props.totalExponent.toFixed(3)}</strong>
-          </p>
-          <p class="text-xs text-ink/70 dark:text-white/70">Base 0.01 + extra + OG0 contribution + meltdown bonus.</p>
-          <div class="flex flex-wrap gap-2">
-            <For each={props.exponentGainEntries}>
-              {(entry) => (
-                <span class="rounded-full border border-accent/30 bg-accent/10 px-2.5 py-1 text-xs font-semibold text-ink/85 dark:text-white/85">
-                  +{entry.delta.toFixed(3)}: x{entry.multiplier.toFixed(2)}
-                </span>
-              )}
-            </For>
-          </div>
+        <div class="rounded border border-ink/20 bg-white dark:border-white/15 dark:bg-[#253a56]">
+          <MetricRow label="Total techs" value={props.totalTechLevels} />
+          <MetricRow label="Total exponent" value={props.totalExponent.toFixed(3)} />
+          <For each={props.exponentGainEntries}>
+            {(entry, index) => (
+              <MetricRow
+                label={`Exponent +${entry.delta}`}
+                value={`x${entry.multiplier.toFixed(2)}`}
+                withBorder={index() !== props.exponentGainEntries.length - 1}
+              />
+            )}
+          </For>
         </div>
       </InfoCard>
     </>
