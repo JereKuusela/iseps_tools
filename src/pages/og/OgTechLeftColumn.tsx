@@ -1,4 +1,4 @@
-import { For, Show } from "solid-js"
+import { createEffect, For, Show } from "solid-js"
 import { InfoCard, MetricRow } from "../../components/layout/contentBlocks"
 import {
   DecimalField,
@@ -11,6 +11,7 @@ import {
 import { SummaryInputModal } from "../../components/ui/SummaryInputModal"
 import { formatCompactMultiplier, formatFixed, formatMultiplier } from "../../lib/numberFormat"
 import type { ZatMode } from "../../lib/zatCalculator"
+import { useZatData, type JunoExponentType } from "../../lib/zatContext"
 import type { GainUnit } from "./ogTypes"
 import { useOgTechContext } from "./ogTechContext"
 
@@ -32,12 +33,77 @@ type Option<T extends string> = {
 
 export const OgTechLeftColumn = () => {
   const og = useOgTechContext()
+  const data = useZatData()
   const shareAmount = () => Math.max(0, Number(og.sharesPercent()) / 0.05)
   const parseNumberish = (value: string) => {
     const parsed = Number(value)
     if (!Number.isFinite(parsed)) return 0
     return parsed
   }
+
+  const buildLevelOptions = (type: Extract<JunoExponentType, "se" | "player" | "dcm" | "research">) => {
+    const expByLevel = new Map<number, number>()
+
+    for (const rule of data().junoExponent) {
+      if (rule.type !== type) continue
+      expByLevel.set(rule.level, (expByLevel.get(rule.level) ?? 0) + rule.exp)
+    }
+
+    const options = [
+      { value: "0", label: "0" },
+      ...Array.from(expByLevel.entries())
+        .sort(([leftLevel], [rightLevel]) => leftLevel - rightLevel)
+        .map(([level, exp]) => ({
+          value: String(level),
+          label: `${level} (+${formatFixed(exp, 3, "0.000")})`,
+        })),
+    ]
+
+    return options
+  }
+
+  const seLevelOptions = () => buildLevelOptions("se")
+  const playerLevelOptions = () => buildLevelOptions("player")
+  const dcmLevelOptions = () => buildLevelOptions("dcm")
+  const researchLevelOptions = () => buildLevelOptions("research")
+
+  const resolvePreviousLevel = (options: Array<{ value: string; label: string }>, current: string) => {
+    const currentLevel = Math.max(0, Math.floor(parseNumberish(current)))
+    const levels = options.map((option) => Math.floor(parseNumberish(option.value))).sort((a, b) => a - b)
+
+    let resolved = levels[0] ?? 0
+    for (const level of levels) {
+      if (level > currentLevel) break
+      resolved = level
+    }
+
+    return String(resolved)
+  }
+
+  const resolvedSeLevel = () => resolvePreviousLevel(seLevelOptions(), og.seLevel())
+  const resolvedPlayerLevel = () => resolvePreviousLevel(playerLevelOptions(), og.playerLevel())
+  const resolvedDcmLevel = () => resolvePreviousLevel(dcmLevelOptions(), og.dcmLevel())
+  const resolvedResearchLevel = () => resolvePreviousLevel(researchLevelOptions(), og.researchLevel())
+
+  createEffect(() => {
+    const resolved = resolvedSeLevel()
+    if (og.seLevel() !== resolved) og.setSeLevel(resolved)
+  })
+
+  createEffect(() => {
+    const resolved = resolvedPlayerLevel()
+    if (og.playerLevel() !== resolved) og.setPlayerLevel(resolved)
+  })
+
+  createEffect(() => {
+    const resolved = resolvedDcmLevel()
+    if (og.dcmLevel() !== resolved) og.setDcmLevel(resolved)
+  })
+
+  createEffect(() => {
+    const resolved = resolvedResearchLevel()
+    if (og.researchLevel() !== resolved) og.setResearchLevel(resolved)
+  })
 
   const handleTotalExtraInput = (next: string) => {
     const totalExtra = Math.max(0, parseNumberish(next))
@@ -136,40 +202,36 @@ export const OgTechLeftColumn = () => {
               step={0.001}
               tooltip="og.extraExponent"
             />
-            <NumberField label="SE level" value={og.seLevel()} onInput={og.setSeLevel} step={1} tooltip="og.seLevel" />
-            <NumberField
+            <SelectField
+              label="SE level"
+              value={resolvedSeLevel()}
+              onChange={og.setSeLevel}
+              options={seLevelOptions()}
+            />
+            <SelectField
               label="Player level"
-              value={og.playerLevel()}
-              onInput={og.setPlayerLevel}
-              step={1}
-              tooltip="og.playerLevel"
+              value={resolvedPlayerLevel()}
+              onChange={og.setPlayerLevel}
+              options={playerLevelOptions()}
             />
-            <NumberField
+            <SelectField
               label="DCM level"
-              value={og.dcmLevel()}
-              onInput={og.setDcmLevel}
-              step={1}
-              tooltip="og.dcmLevel"
+              value={resolvedDcmLevel()}
+              onChange={og.setDcmLevel}
+              options={dcmLevelOptions()}
             />
-            <NumberField
+            <SelectField
               label="Research level"
-              value={og.researchLevel()}
-              onInput={og.setResearchLevel}
-              step={1}
-              tooltip="og.researchLevel"
+              value={resolvedResearchLevel()}
+              onChange={og.setResearchLevel}
+              options={researchLevelOptions()}
             />
             <ToggleField
-              label="Meltdown bundle"
+              label="Meltdown bundle (+0.005)"
               checked={og.meltdownBundle()}
               onChange={og.setMeltdownBundle}
-              tooltip="og.meltdownBundle"
             />
-            <ToggleField
-              label="Quantum Addon 0"
-              checked={og.quantumAddon0()}
-              onChange={og.setQuantumAddon0}
-              tooltip="og.quantumAddon0"
-            />
+            <ToggleField label="Quantum Addon 0 (+0.01)" checked={og.quantumAddon0()} onChange={og.setQuantumAddon0} />
           </div>
         </SummaryInputModal>
 
