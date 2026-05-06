@@ -80,7 +80,9 @@ export const ZatGuideLeftColumn = () => {
 
       <InfoCard title="Total boost">
         <div class="grid gap-2">
-          <IntegerField label="Tech levels" value={guide.techCount()} onInput={guide.setTechCount} min={0} step={1} />
+          <div class="rounded border border-ink/15 bg-white/70 px-3 py-2 text-sm text-ink/85 dark:border-white/20 dark:bg-white/5 dark:text-white/85">
+            <span class="font-semibold">Tech levels (OG Tech):</span> {guide.techCount()}
+          </div>
           <DecimalField
             label="Shares %"
             value={guide.sharesPercent()}

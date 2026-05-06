@@ -24,7 +24,6 @@ type ZatGuideContextValue = {
   setRunType: (next: GuideRunType) => GuideRunType
   runOptions: () => { value: GuideRunType; label: string }[]
   techCount: () => string
-  setTechCount: (next: string) => string
   sharesPercent: () => string
   setSharesPercent: (next: string) => string
   recommendationNodeIds: () => number[]
@@ -44,12 +43,23 @@ export const ZatGuideProvider = (props: ParentProps) => {
   const [cycles, setCycles] = createPersistedSignal("zat.og.cycles", "0")
   const [runType, setRunType] = createPersistedSignal<GuideRunType>("zat.guide.runType", "se_push")
   const [sharesPercent, setSharesPercent] = createPersistedSignal("zat.guide.shares", "0")
-  const [techCount, setTechCount] = createPersistedSignal("zat.guide.techCount", "0")
+  const [ogTechLevels] = createPersistedSignal<number[]>("zat.og.techLevels", [])
   const [selectedNodeId, setSelectedNodeId] = createSignal(0)
 
   const normalizedCycles = createMemo(() => Math.max(1, Math.floor(parseNumberish(cycles()))))
   const shareAmount = createMemo(() => Math.max(0, parseNumberish(sharesPercent()) / 0.05))
-  const normalizedTechCount = createMemo(() => Math.max(0, Math.floor(parseNumberish(techCount()))))
+  const totalTechLevels = createMemo(() => {
+    const levels = ogTechLevels()
+    if (!Array.isArray(levels)) return 0
+
+    return levels.reduce((sum, value) => {
+      const parsed = Number(value)
+      if (!Number.isFinite(parsed)) return sum
+      return sum + Math.max(0, Math.floor(parsed))
+    }, 0)
+  })
+  const normalizedTechCount = createMemo(() => totalTechLevels())
+  const techCount = createMemo(() => String(totalTechLevels()))
 
   const runGuides = createMemo(() => {
     return (data().zatGuides as GuideEntry[])
@@ -132,7 +142,6 @@ export const ZatGuideProvider = (props: ParentProps) => {
         setRunType,
         runOptions: () => guideRunOptions,
         techCount,
-        setTechCount,
         sharesPercent,
         setSharesPercent,
         recommendationNodeIds: () => selectedGuide()?.nodes ?? [],
