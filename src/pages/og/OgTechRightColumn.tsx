@@ -84,7 +84,7 @@ export const OgTechRightColumn = () => {
                   {formatPercentFromRatio(tech().relative / 100, 0)}
                 </span>
               </div>
-              <div class="mt-3 grid grid-cols-[1fr_auto] items-end gap-2">
+              <div class="mt-3 grid grid-cols-[1fr_auto] items-end">
                 <IntegerField
                   label="Level"
                   value={String(tech().level)}
