@@ -163,8 +163,8 @@ export const OgTechProvider = (props: ParentProps) => {
       player: parseNumberish(playerLevel()),
       research: parseNumberish(researchLevel()),
       dcm: parseNumberish(dcmLevel()),
-      qa: quantumAddon0() ? 1 : 0,
-      crystal: 1,
+      qa: quantumAddon0() ? 1 : -1,
+      crystal: meltdownBundle() ? 1 : -1,
     }
 
     return data().junoExponent.reduce((total, rule) => {
@@ -180,8 +180,7 @@ export const OgTechProvider = (props: ParentProps) => {
 
   const og0Level = createMemo(() => techLevels()[0] ?? 0)
   const totalExponent = createMemo(() => {
-    const meltdown = meltdownBundle() ? 0.005 : 0
-    return 0.01 + totalExtraExponent() + og0Level() * 0.01 + meltdown
+    return 0.01 + totalExtraExponent() + og0Level() * 0.01
   })
 
   const exponentGainEntries = createMemo(() => {
