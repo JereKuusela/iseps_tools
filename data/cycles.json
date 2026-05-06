@@ -16,7 +16,11 @@
     "mult": 5
   },
   {
-    "cycle": 20,
+    "cycle": 21,
+    "mult": 10
+  },
+  {
+    "cycle": 22,
     "mult": 5
   }
 ]
