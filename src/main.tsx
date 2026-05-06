@@ -2,7 +2,6 @@ import { render } from "solid-js/web"
 import { Router, Route } from "@solidjs/router"
 import App from "./App"
 import { ROUTES } from "./lib/routes"
-import { createPersistedSignal } from "./lib/persistedSignal"
 import { ScProvider } from "./lib/scContext"
 import { ZatDataProvider } from "./lib/zatContext"
 import { CreditsPage } from "./pages/CreditsPage"
@@ -20,32 +19,23 @@ const HomeRoute = () => (
   </App>
 )
 
-const OgTechRoute = () => {
-  const [cycles, setCycles] = createPersistedSignal("zat.og.cycles", "0")
-  return (
-    <App>
-      <OgTechPage cycles={cycles()} setCycles={setCycles} />
-    </App>
-  )
-}
+const OgTechRoute = () => (
+  <App>
+    <OgTechPage />
+  </App>
+)
 
-const ZatGuideRoute = () => {
-  const [cycles, setCycles] = createPersistedSignal("zat.og.cycles", "0")
-  return (
-    <App>
-      <ZatGuidePage cycles={cycles()} setCycles={setCycles} />
-    </App>
-  )
-}
+const ZatGuideRoute = () => (
+  <App>
+    <ZatGuidePage />
+  </App>
+)
 
-const PenroseRoute = () => {
-  const [cycles, setCycles] = createPersistedSignal("zat.og.cycles", "0")
-  return (
-    <App>
-      <PenrosePage cycles={cycles()} setCycles={setCycles} />
-    </App>
-  )
-}
+const PenroseRoute = () => (
+  <App>
+    <PenrosePage />
+  </App>
+)
 
 const ScRoute = () => (
   <App>

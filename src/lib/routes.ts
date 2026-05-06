@@ -13,7 +13,7 @@ export const ROUTES = {
 } as const
 
 export const tabs: TabItem[] = [
-  // { href: ROUTES.ogTech, label: "OG Tech" },
+  { href: ROUTES.ogTech, label: "OG Tech" },
   { href: ROUTES.zatGuide, label: "ZAT Guide" },
   { href: ROUTES.penrose, label: "Penrose" },
   { href: ROUTES.sc, label: "SC" },

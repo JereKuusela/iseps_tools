@@ -1,153 +1,79 @@
-import { A } from "@solidjs/router"
 import { For, Show } from "solid-js"
 import { InfoCard, MetricRow } from "../../components/layout/contentBlocks"
-import { NumberField, SelectField, ToggleField, blurOnEnterOrEscape } from "../../components/ui/formControls"
+import {
+  DecimalField,
+  LabelField,
+  NumberField,
+  SelectField,
+  ToggleField,
+  blurOnEnterOrEscape,
+} from "../../components/ui/formControls"
+import { SummaryInputModal } from "../../components/ui/SummaryInputModal"
+import { formatCompactMultiplier, formatFixed, formatMultiplier } from "../../lib/numberFormat"
 import type { ZatMode } from "../../lib/zatCalculator"
-import type { ExponentGainEntry, GainUnit } from "./ogTypes"
+import type { GainUnit } from "./ogTypes"
+import { useOgTechContext } from "./ogTechContext"
+
+const gainUnits: Array<{ value: GainUnit; label: string }> = [
+  { value: "hour", label: "hour" },
+  { value: "sec", label: "sec" },
+  { value: "min", label: "min" },
+]
+
+const modeOptions: Array<{ value: ZatMode; label: string }> = [
+  { value: "juno", label: "Juno" },
+  { value: "dc", label: "DC" },
+]
 
 type Option<T extends string> = {
   value: T
   label: string
 }
 
-type OgTechLeftColumnProps = {
-  cycles: string
-  setCycles: (next: string) => void
-  gainValue: string
-  setGainValue: (next: string) => void
-  gainUnit: GainUnit
-  setGainUnit: (next: GainUnit) => void
-  gainUnits: Option<GainUnit>[]
-  junoAmount: string
-  setJunoAmount: (next: string) => void
-  mode: ZatMode
-  setMode: (next: ZatMode) => void
-  modeOptions: Option<ZatMode>[]
-  junoOutput: string
-  setJunoOutput: (next: string) => void
-  junoBundle: boolean
-  setJunoBundle: (checked: boolean) => void
-  ixionJunoBundle: boolean
-  setIxionJunoBundle: (checked: boolean) => void
-  junoKappaBundle: boolean
-  setJunoKappaBundle: (checked: boolean) => void
-  tokens: string
-  setTokens: (next: string) => void
-  premiumMultiplier: number
-  sharesPercent: string
-  setSharesPercent: (next: string) => void
-  shareAmount: number
-  extraExponent: string
-  setExtraExponent: (next: string) => void
-  showExpandedExponent: boolean
-  onToggleExpandedExponent: () => void
-  seLevel: string
-  setSeLevel: (next: string) => void
-  playerLevel: string
-  setPlayerLevel: (next: string) => void
-  dcmLevel: string
-  setDcmLevel: (next: string) => void
-  researchLevel: string
-  setResearchLevel: (next: string) => void
-  meltdownBundle: boolean
-  setMeltdownBundle: (checked: boolean) => void
-  quantumAddon0: boolean
-  setQuantumAddon0: (checked: boolean) => void
-  totalTechLevels: number
-  totalExponent: number
-  exponentGainEntries: ExponentGainEntry[]
-}
+export const OgTechLeftColumn = () => {
+  const og = useOgTechContext()
+  const shareAmount = () => Math.max(0, Number(og.sharesPercent()) / 0.05)
+  const parseNumberish = (value: string) => {
+    const parsed = Number(value)
+    if (!Number.isFinite(parsed)) return 0
+    return parsed
+  }
 
-export const OgTechLeftColumn = (props: OgTechLeftColumnProps) => {
+  const handleTotalExtraInput = (next: string) => {
+    const totalExtra = Math.max(0, parseNumberish(next))
+    const manualExtra = Math.max(0, totalExtra - og.autoExtraExponent())
+    og.setExtraExponent(formatFixed(manualExtra, 3, "0.000"))
+  }
+
   return (
     <>
       <InfoCard>
         <div class="grid gap-2">
           <NumberField
-            label="Juno gains"
-            value={props.gainValue}
-            onInput={props.setGainValue}
-            tooltip="og.junoGains"
-            inline
+            label="Juno"
+            value={og.gainValue()}
+            onInput={og.setGainValue}
             inlineAccessory={
               <div class="flex items-center gap-1">
                 <span class="text-xs font-semibold uppercase tracking-[0.1em] text-ink/70 dark:text-white/70">/</span>
                 <select
-                  value={props.gainUnit}
-                  onChange={(event) => props.setGainUnit(event.currentTarget.value as GainUnit)}
+                  value={og.gainUnit()}
+                  onChange={(event) => og.setGainUnit(event.currentTarget.value as GainUnit)}
                   onKeyDown={blurOnEnterOrEscape}
-                  class="w-[7rem] rounded-xl border border-ink/20 bg-white px-2 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+                  class="w-[5.5rem] rounded-xl border border-ink/20 bg-white px-2 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
                 >
-                  <For each={props.gainUnits}>{(option) => <option value={option.value}>{option.label}</option>}</For>
+                  <For each={gainUnits}>{(option) => <option value={option.value}>{option.label}</option>}</For>
                 </select>
               </div>
             }
           />
-          <NumberField
-            label="Current Juno"
-            value={props.junoAmount}
-            onInput={props.setJunoAmount}
-            tooltip="og.currentJuno"
-            inline
-          />
+          <NumberField label="Current" value={og.junoAmount()} onInput={og.setJunoAmount} />
           <SelectField
-            label="Calculation mode"
-            value={props.mode}
-            onChange={(next) => props.setMode(next as ZatMode)}
-            options={props.modeOptions}
+            label="Mode"
+            value={og.mode()}
+            onChange={(next) => og.setMode(next as ZatMode)}
+            options={modeOptions as Option<ZatMode>[]}
             tooltip="og.calculationMode"
-            inline
-          />
-        </div>
-      </InfoCard>
-
-      <InfoCard title="Premium Resources">
-        <div class="space-y-2">
-          <NumberField
-            label="Juno output level"
-            value={props.junoOutput}
-            onInput={props.setJunoOutput}
-            min={0}
-            max={750}
-            step={1}
-            tooltip="og.junoOutputLevel"
-            inline
-          />
-          <ToggleField
-            label="Juno bundle"
-            checked={props.junoBundle}
-            onChange={props.setJunoBundle}
-            tooltip="og.junoBundle"
-          />
-          <ToggleField
-            label="Ixion-Juno bundle"
-            checked={props.ixionJunoBundle}
-            onChange={props.setIxionJunoBundle}
-            tooltip="og.ixionJunoBundle"
-          />
-          <ToggleField
-            label="Juno-Kappa bundle"
-            checked={props.junoKappaBundle}
-            onChange={props.setJunoKappaBundle}
-            tooltip="og.junoKappaBundle"
-          />
-          <NumberField
-            label="Juno tokens"
-            value={props.tokens}
-            onInput={props.setTokens}
-            min={0}
-            max={1800}
-            step={1}
-            tooltip="og.junoTokens"
-            inline
-          />
-          <MetricRow
-            label="Premium multiplier"
-            value={`x${props.premiumMultiplier.toFixed(3)}`}
-            withBorder={false}
-            class="mt-1 rounded-lg border border-ink/10 bg-mist/60 text-sm dark:border-white/10 dark:bg-[#23344d]/60"
-            labelClass="text-ink/80 dark:text-white/80"
-            valueClass="justify-self-start text-ink dark:text-white"
           />
         </div>
       </InfoCard>
@@ -155,129 +81,107 @@ export const OgTechLeftColumn = (props: OgTechLeftColumnProps) => {
       <InfoCard title="Zagreus">
         <div class="grid gap-2">
           <NumberField
-            label="Zagreis cycles"
-            value={props.cycles}
-            onInput={props.setCycles}
+            label="Cycles"
+            value={og.cycles()}
+            onInput={og.setCycles}
             min={0}
             max={100}
             step={1}
             tooltip="og.zagreusCycles"
-            inline
           />
           <NumberField
             label="Shares %"
-            value={props.sharesPercent}
-            onInput={props.setSharesPercent}
+            value={og.sharesPercent()}
+            onInput={og.setSharesPercent}
             min={0}
             max={100}
             step={0.01}
             tooltip="og.sharesPercent"
-            inline
           />
         </div>
-        <MetricRow
-          label="Shares amount"
-          value={props.shareAmount.toFixed(2)}
-          withBorder={false}
-          class="mt-3 rounded-lg border border-ink/10 bg-mist/60 text-sm dark:border-white/10 dark:bg-[#23344d]/60"
-          labelClass="text-ink/80 dark:text-white/80"
-          valueClass="justify-self-start text-ink dark:text-white"
-        />
-        <p class="mt-2 text-xs text-ink/70 dark:text-white/70">
-          The Z.A.T Guide page has Tree recommendations and expected boost by node. Open it in the{" "}
-          <A href="/zat-guide" class="font-semibold text-accent underline">
-            ZAT Guide tab
-          </A>
-          .
-        </p>
       </InfoCard>
 
-      <InfoCard title="Juno Exponent" contentClass="">
-        <div class="flex items-center justify-between gap-3">
-          <p class="text-xs text-ink/70 dark:text-white/70">Use simple input or expand rule-based fields.</p>
-          <button
-            type="button"
-            class="rounded-lg border border-ink/25 px-2.5 py-1 text-xs font-semibold text-ink/80 transition hover:bg-ink hover:text-white dark:border-white/30 dark:text-white/80 dark:hover:bg-white/20"
-            onClick={props.onToggleExpandedExponent}
-          >
-            {props.showExpandedExponent ? "Simple input" : "Expand inputs"}
-          </button>
-        </div>
-
-        <Show
-          when={props.showExpandedExponent}
-          fallback={
-            <div class="mt-3">
-              <NumberField
-                label="Extra exponent"
-                value={props.extraExponent}
-                onInput={props.setExtraExponent}
-                min={0.001}
-                max={1}
-                step={0.001}
-                tooltip="og.extraExponent"
-                inline
-              />
-            </div>
-          }
-        >
-          <div class="mt-3 grid gap-2">
+      <InfoCard title="Juno Value" contentClass="">
+        <SummaryInputModal label="Shop" value={formatCompactMultiplier(og.premiumMultiplier())} tooltip="og.premium">
+          <div class="space-y-2">
             <NumberField
-              label="SE level"
-              value={props.seLevel}
-              onInput={props.setSeLevel}
+              label="Juno output level"
+              value={og.junoOutput()}
+              onInput={og.setJunoOutput}
+              min={0}
+              max={750}
               step={1}
-              tooltip="og.seLevel"
-              inline
             />
+            <ToggleField label="Juno bundle" checked={og.junoBundle()} onChange={og.setJunoBundle} />
+            <ToggleField label="Ixion-Juno bundle" checked={og.ixionJunoBundle()} onChange={og.setIxionJunoBundle} />
+            <ToggleField label="Juno-Kappa bundle" checked={og.junoKappaBundle()} onChange={og.setJunoKappaBundle} />
+            <NumberField label="Juno tokens" value={og.tokens()} onInput={og.setTokens} min={0} max={1800} step={1} />
+          </div>
+        </SummaryInputModal>
+
+        <SummaryInputModal
+          label="Extra"
+          value={formatFixed(og.totalExtraExponent(), 3, "0.000")}
+          onInput={handleTotalExtraInput}
+          tooltip="og.extraExponent"
+        >
+          <div class="space-y-2">
+            <DecimalField
+              label="Manual extra"
+              value={og.extraExponent()}
+              onInput={og.setExtraExponent}
+              digits={3}
+              min={0.001}
+              max={1}
+              step={0.001}
+              tooltip="og.extraExponent"
+            />
+            <NumberField label="SE level" value={og.seLevel()} onInput={og.setSeLevel} step={1} tooltip="og.seLevel" />
             <NumberField
               label="Player level"
-              value={props.playerLevel}
-              onInput={props.setPlayerLevel}
+              value={og.playerLevel()}
+              onInput={og.setPlayerLevel}
               step={1}
               tooltip="og.playerLevel"
-              inline
             />
             <NumberField
               label="DCM level"
-              value={props.dcmLevel}
-              onInput={props.setDcmLevel}
+              value={og.dcmLevel()}
+              onInput={og.setDcmLevel}
               step={1}
               tooltip="og.dcmLevel"
-              inline
             />
             <NumberField
               label="Research level"
-              value={props.researchLevel}
-              onInput={props.setResearchLevel}
+              value={og.researchLevel()}
+              onInput={og.setResearchLevel}
               step={1}
               tooltip="og.researchLevel"
-              inline
             />
             <ToggleField
               label="Meltdown bundle"
-              checked={props.meltdownBundle}
-              onChange={props.setMeltdownBundle}
+              checked={og.meltdownBundle()}
+              onChange={og.setMeltdownBundle}
               tooltip="og.meltdownBundle"
             />
             <ToggleField
               label="Quantum Addon 0"
-              checked={props.quantumAddon0}
-              onChange={props.setQuantumAddon0}
+              checked={og.quantumAddon0()}
+              onChange={og.setQuantumAddon0}
               tooltip="og.quantumAddon0"
             />
           </div>
-        </Show>
+        </SummaryInputModal>
 
         <div class="rounded border border-ink/20 bg-white dark:border-white/15 dark:bg-[#253a56]">
-          <MetricRow label="Total techs" value={props.totalTechLevels} />
-          <MetricRow label="Total exponent" value={props.totalExponent.toFixed(3)} />
-          <For each={props.exponentGainEntries}>
+          <MetricRow label="Total techs" value={og.totalTechLevels()} />
+          <MetricRow label="Total exponent" value={formatFixed(og.totalExponent(), 3, "0.000")} />
+          <For each={og.exponentGainEntries()}>
             {(entry, index) => (
               <MetricRow
                 label={`Exponent +${entry.delta}`}
-                value={`x${entry.multiplier.toFixed(2)}`}
-                withBorder={index() !== props.exponentGainEntries.length - 1}
+                value={formatMultiplier(entry.multiplier, 2, "x0.00")}
+                withBorder={index() !== og.exponentGainEntries().length - 1}
               />
             )}
           </For>

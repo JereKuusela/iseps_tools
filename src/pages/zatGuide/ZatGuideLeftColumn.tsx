@@ -1,31 +1,16 @@
 import { For, Show, createMemo } from "solid-js"
 import { InfoCard } from "../../components/layout/contentBlocks"
 import { DecimalField, IntegerField, SelectField } from "../../components/ui/formControls"
-import type { GuideNodeView, GuideRunType } from "./zatGuideTypes"
+import type { GuideRunType } from "./zatGuideTypes"
+import { useZatGuideContext } from "./zatGuideContext"
 
-type ZatGuideLeftColumnProps = {
-  cycles: string
-  setCycles: (next: string) => void
-  runType: GuideRunType
-  setRunType: (next: GuideRunType) => void
-  runOptions: { value: GuideRunType; label: string }[]
-  techCount: string
-  setTechCount: (next: string) => void
-  sharesPercent: string
-  setSharesPercent: (next: string) => void
-  recommendationNodeIds: number[]
-  nodeViews: GuideNodeView[]
-  selectedNode?: GuideNodeView
-  selectedGuideNote?: string
-  hasGuide: boolean
-}
-
-export const ZatGuideLeftColumn = (props: ZatGuideLeftColumnProps) => {
+export const ZatGuideLeftColumn = () => {
+  const guide = useZatGuideContext()
   const recommendationItems = createMemo(() => {
-    const nodesById = new Map(props.nodeViews.map((node) => [node.id, node]))
+    const nodesById = new Map(guide.nodeViews().map((node) => [node.id, node]))
     const items: { key: string; title: string; level: number; isSingleLevel: boolean }[] = []
 
-    for (const nodeId of props.recommendationNodeIds) {
+    for (const nodeId of guide.recommendationNodeIds()) {
       const node = nodesById.get(nodeId)
       if (!node) continue
 
@@ -48,28 +33,19 @@ export const ZatGuideLeftColumn = (props: ZatGuideLeftColumnProps) => {
     <>
       <InfoCard>
         <div class="grid gap-2">
-          <IntegerField
-            label="Cycles"
-            value={props.cycles}
-            onInput={props.setCycles}
-            min={1}
-            max={100}
-            step={1}
-            inline
-          />
+          <IntegerField label="Cycles" value={guide.cycles()} onInput={guide.setCycles} min={1} max={100} step={1} />
           <SelectField
             label="Run type"
-            value={props.runType}
-            onChange={(next) => props.setRunType(next as GuideRunType)}
-            options={props.runOptions}
-            inline
+            value={guide.runType()}
+            onChange={(next) => guide.setRunType(next as GuideRunType)}
+            options={guide.runOptions()}
           />
         </div>
       </InfoCard>
 
       <InfoCard title="Guide">
         <Show
-          when={props.hasGuide}
+          when={guide.hasGuide()}
           fallback={<p class="text-sm text-ink/70 dark:text-white/70">No guide data found for this run type.</p>}
         >
           <div class="space-y-2">
@@ -92,34 +68,26 @@ export const ZatGuideLeftColumn = (props: ZatGuideLeftColumnProps) => {
         </Show>
       </InfoCard>
 
-      <Show when={props.selectedGuideNote}>
+      <Show when={guide.selectedGuideNote()}>
         <InfoCard title="Notes">
-          <p class="text-sm leading-6 text-ink/80 dark:text-white/80">{props.selectedGuideNote}</p>
+          <p class="text-sm leading-6 text-ink/80 dark:text-white/80">{guide.selectedGuideNote()}</p>
         </InfoCard>
       </Show>
 
       <InfoCard title="Node info">
-        <p class="text-sm leading-6 text-ink/75 dark:text-white/75">{props.selectedNode?.info ?? "Select node"}</p>
+        <p class="text-sm leading-6 text-ink/75 dark:text-white/75">{guide.selectedNode()?.info ?? "Select node"}</p>
       </InfoCard>
 
       <InfoCard title="Total boost">
         <div class="grid gap-2">
-          <IntegerField
-            label="Tech levels"
-            value={props.techCount}
-            onInput={props.setTechCount}
-            min={0}
-            step={1}
-            inline
-          />
+          <IntegerField label="Tech levels" value={guide.techCount()} onInput={guide.setTechCount} min={0} step={1} />
           <DecimalField
             label="Shares %"
-            value={props.sharesPercent}
-            onInput={props.setSharesPercent}
+            value={guide.sharesPercent()}
+            onInput={guide.setSharesPercent}
             min={0}
             max={100}
             step={0.05}
-            inline
           />
         </div>
       </InfoCard>

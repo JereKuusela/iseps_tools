@@ -1,6 +1,7 @@
 import { Show, createMemo, createSignal, type JSX } from "solid-js"
 import { Tooltip } from "./Tooltip"
 import { TooltipKey } from "../../lib/tooltips"
+import { formatMultiplier } from "../../lib/numberFormat"
 import { blurOnEnterOrEscape, isValidNumberishInput, sanitizeNumberishInput } from "./formControls"
 
 type SummaryInputModalProps = {
@@ -20,14 +21,13 @@ export const SummaryInputModal = (props: SummaryInputModalProps) => {
   const valueFormat = () => props.valueFormat ?? "plain"
   const isEditable = () => !!props.onInput
 
-  const formatMultiplier = (value: string) => {
+  const formatMultiplierValue = (value: string) => {
     const normalized = sanitizeNumberishInput(value)
     if (normalized === "") return "x0.00"
     if (!isValidNumberishInput(normalized)) return normalized
 
     const parsed = Number(normalized)
-    if (!Number.isFinite(parsed)) return "x0.00"
-    return `x${parsed.toFixed(2)}`
+    return formatMultiplier(parsed, 2, "x0.00")
   }
 
   const toEditableMultiplier = (value: string) => {
@@ -42,7 +42,7 @@ export const SummaryInputModal = (props: SummaryInputModalProps) => {
 
   const displayedValue = createMemo(() => {
     if (isEditable() && isInputFocused()) return editingValue()
-    if (valueFormat() === "multiplier") return formatMultiplier(props.value)
+    if (valueFormat() === "multiplier") return formatMultiplierValue(props.value)
     return props.value
   })
 

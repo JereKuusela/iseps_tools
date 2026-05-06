@@ -27,6 +27,8 @@ type ScContextValue = {
   setReplicatorHours: (next: string) => string
   replicatorMinutes: () => string
   setReplicatorMinutes: (next: string) => string
+  replicatorTimeEditedAtMs: () => string
+  setReplicatorTimeEditedAtMs: (next: string) => string
   retainedDcReplicator: () => string
   setRetainedDcReplicator: (next: string) => string
   retainedSeReplicator: () => string
@@ -75,6 +77,7 @@ export const ScProvider = (props: ParentProps) => {
   const [replicatorDays, setReplicatorDays] = createPersistedSignal("sc.replicatorDays", "0")
   const [replicatorHours, setReplicatorHours] = createPersistedSignal("sc.replicatorHours", "0")
   const [replicatorMinutes, setReplicatorMinutes] = createPersistedSignal("sc.replicatorMinutes", "0")
+  const [replicatorTimeEditedAtMs, setReplicatorTimeEditedAtMs] = createPersistedSignal("sc.replicatorTimeEditedAtMs", "")
   const [retainedDcReplicator, setRetainedDcReplicator] = createPersistedSignal("sc.retainedDcReplicator", "1")
   const [retainedSeReplicator, setRetainedSeReplicator] = createPersistedSignal("sc.retainedSeReplicator", "1")
   const [timeSkipSmall, setTimeSkipSmall] = createPersistedSignal("sc.timeSkipSmall", "0")
@@ -159,6 +162,8 @@ export const ScProvider = (props: ParentProps) => {
         setReplicatorHours,
         replicatorMinutes,
         setReplicatorMinutes,
+        replicatorTimeEditedAtMs,
+        setReplicatorTimeEditedAtMs,
         retainedDcReplicator,
         setRetainedDcReplicator,
         retainedSeReplicator,

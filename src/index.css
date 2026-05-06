@@ -36,6 +36,35 @@ body {
     color 200ms ease;
 }
 
+button {
+  transition:
+    transform 120ms ease,
+    box-shadow 160ms ease,
+    border-color 160ms ease,
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+button:not(:disabled):hover {
+  box-shadow: 0 8px 18px rgba(12, 28, 48, 0.16);
+  border-color: rgba(12, 28, 48, 0.42);
+}
+
+:root.dark button:not(:disabled):hover {
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.45);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+button:not(:disabled):active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 2px 6px rgba(12, 28, 48, 0.2);
+}
+
+button:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--color-brand) 65%, transparent);
+  outline-offset: 2px;
+}
+
 * {
   box-sizing: border-box;
 }

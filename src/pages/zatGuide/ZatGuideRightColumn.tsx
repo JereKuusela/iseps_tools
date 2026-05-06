@@ -1,14 +1,9 @@
 import { For } from "solid-js"
-import { LargeNumber } from "../../lib/largeNumber"
+import { formatLargeNumberMultiplier } from "../../lib/numberFormat"
 import type { GuideNodeView } from "./zatGuideTypes"
+import { useZatGuideContext } from "./zatGuideContext"
 
 type Position = { x: number; y: number }
-
-type ZatGuideRightColumnProps = {
-  nodeViews: GuideNodeView[]
-  selectedNodeId: number
-  onSelectNode: (nodeId: number) => void
-}
 
 const TREE_MIN_Y = -8
 const TREE_MAX_Y = 8
@@ -38,26 +33,8 @@ const nodePosition = (node: GuideNodeView): Position => {
   return { x, y }
 }
 
-const formatMultiplier = (value: LargeNumber) => {
-  if (value.compare(0) <= 0) return "x0"
-
-  if (value.exponent <= 2) {
-    const asNumber = value.mantissa * 10 ** value.exponent
-    if (Number.isFinite(asNumber)) {
-      if (asNumber < 10) return `x${asNumber.toFixed(2)}`
-      if (asNumber < 100) return `x${asNumber.toFixed(1)}`
-      if (asNumber < 1000) return `x${asNumber.toFixed(0)}`
-    }
-  }
-
-  return `x${value.mantissa.toFixed(2)}e${value.exponent}`
-}
-
-export const ZatGuideRightColumn = (props: ZatGuideRightColumnProps) => {
-  const seletNode = (nodeId: number) => {
-    if (props.selectedNodeId === nodeId) props.onSelectNode(0)
-    else props.onSelectNode(nodeId)
-  }
+export const ZatGuideRightColumn = () => {
+  const guide = useZatGuideContext()
 
   return (
     <section class="relative bg-ink h-[540px] overflow-hidden rounded-2xl border border-white/10 bg-[radial-gradient(circle_at_15%_15%,rgba(255,255,255,0.06),transparent_45%),radial-gradient(circle_at_85%_70%,rgba(255,255,255,0.04),transparent_42%)] sm:h-[620px]">
@@ -67,9 +44,9 @@ export const ZatGuideRightColumn = (props: ZatGuideRightColumnProps) => {
           viewBox={`0 0 ${TREE_WIDTH} ${TREE_HEIGHT}`}
           preserveAspectRatio="xMidYMid meet"
         >
-          <For each={props.nodeViews.filter((node) => node.req != undefined)}>
+          <For each={guide.nodeViews().filter((node) => node.req != undefined)}>
             {(node) => {
-              const fromNode = props.nodeViews.find((candidate) => candidate.id === node.req)
+              const fromNode = guide.nodeViews().find((candidate) => candidate.id === node.req)
               if (!fromNode) return null
 
               const from = nodePosition(fromNode)
@@ -82,11 +59,11 @@ export const ZatGuideRightColumn = (props: ZatGuideRightColumnProps) => {
           </For>
         </svg>
 
-        <For each={props.nodeViews}>
+        <For each={guide.nodeViews()}>
           {(node) => {
             const position = nodePosition(node)
             const isActive = node.activeLevel > 0
-            const isSelected = () => props.selectedNodeId === node.id
+            const isSelected = () => guide.selectedNodeId() === node.id
             const nodeSize = node.isSingleLevel ? "90px" : "68px"
 
             return (
@@ -106,11 +83,11 @@ export const ZatGuideRightColumn = (props: ZatGuideRightColumnProps) => {
                 }}
                 role="button"
                 tabindex={0}
-                onClick={() => seletNode(node.id)}
+                onClick={() => guide.selectNode(node.id)}
                 onKeyDown={(event) => {
                   if (event.key === "Enter" || event.key === " ") {
                     event.preventDefault()
-                    seletNode(node.id)
+                    guide.selectNode(node.id)
                   }
                 }}
               >
@@ -142,7 +119,7 @@ export const ZatGuideRightColumn = (props: ZatGuideRightColumnProps) => {
                       "mt-1 text-[11px]": node.isSingleLevel,
                     }}
                   >
-                    {formatMultiplier(node.boost)}
+                    {formatLargeNumberMultiplier(node.boost)}
                   </p>
                 </div>
               </article>

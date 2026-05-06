@@ -1,5 +1,6 @@
 import * as TextField from "@kobalte/core/text-field"
 import { createMemo, createSignal, type JSX } from "solid-js"
+import { formatFixed, formatMultiplier, formatPercentFromRatio } from "../../lib/numberFormat"
 import type { TooltipKey } from "../../lib/tooltips"
 import { Tooltip } from "./Tooltip"
 
@@ -12,11 +13,11 @@ type NumberFieldProps = {
   max?: number
   step?: number
   tooltip?: TooltipKey
-  inline?: boolean
-  inlineGridClass?: string
-  inlineLabelClass?: string
-  inlineControlClass?: string
   inlineAccessory?: JSX.Element
+}
+
+type DecimalFieldProps = NumberFieldProps & {
+  digits?: number
 }
 
 type IntegerFieldProps = {
@@ -29,10 +30,6 @@ type IntegerFieldProps = {
   max?: number
   step?: number
   tooltip?: TooltipKey
-  inline?: boolean
-  inlineGridClass?: string
-  inlineLabelClass?: string
-  inlineControlClass?: string
 }
 
 type PercentFieldProps = {
@@ -41,10 +38,6 @@ type PercentFieldProps = {
   onInput: (next: string) => void
   placeholder?: string
   tooltip?: TooltipKey
-  inline?: boolean
-  inlineGridClass?: string
-  inlineLabelClass?: string
-  inlineControlClass?: string
 }
 
 type MultiplierFieldProps = {
@@ -53,20 +46,12 @@ type MultiplierFieldProps = {
   onInput: (next: string) => void
   placeholder?: string
   tooltip?: TooltipKey
-  inline?: boolean
-  inlineGridClass?: string
-  inlineLabelClass?: string
-  inlineControlClass?: string
 }
 
 type LabelFieldProps = {
   label: string
   value: string
   tooltip?: TooltipKey
-  inline?: boolean
-  inlineGridClass?: string
-  inlineLabelClass?: string
-  inlineControlClass?: string
 }
 
 type MetricFieldProps = {
@@ -128,54 +113,30 @@ export const NumberField = (props: NumberFieldProps) => {
 
   return (
     <TextField.Root value={props.value} onChange={onChange} class="grid gap-1.5">
-      {props.inline ? (
-        <div class={`grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2 ${props.inlineGridClass ?? ""}`}>
-          <div class={`min-w-0 flex items-center gap-2 ${props.inlineLabelClass ?? ""}`}>
-            <TextField.Label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
-              {props.label}
-            </TextField.Label>
-            {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
-          </div>
-          <div class={`min-w-0 ${props.inlineControlClass ?? ""}`}>
-            <div class={props.inlineAccessory ? "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-1" : undefined}>
-              <TextField.Input
-                type="text"
-                inputMode="decimal"
-                autocapitalize="off"
-                autocomplete="off"
-                autocorrect="off"
-                spellcheck={false}
-                value={props.value}
-                placeholder={props.placeholder}
-                onKeyDown={blurOnEnterOrEscape}
-                class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
-              />
-              {props.inlineAccessory}
-            </div>
+      <div class={"grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2"}>
+        <div class={"min-w-0 flex items-center gap-2"}>
+          <TextField.Label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
+            {props.label}
+          </TextField.Label>
+          {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
+        </div>
+        <div class={"min-w-0"}>
+          <div class={props.inlineAccessory ? "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-1" : undefined}>
+            <TextField.Input
+              type="text"
+              autocapitalize="off"
+              autocomplete="off"
+              autocorrect="off"
+              spellcheck={false}
+              value={props.value}
+              placeholder={props.placeholder}
+              onKeyDown={blurOnEnterOrEscape}
+              class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+            />
+            {props.inlineAccessory}
           </div>
         </div>
-      ) : (
-        <>
-          <div class="flex items-center gap-2">
-            <TextField.Label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
-              {props.label}
-            </TextField.Label>
-            {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
-          </div>
-          <TextField.Input
-            type="text"
-            inputMode="decimal"
-            autocapitalize="off"
-            autocomplete="off"
-            autocorrect="off"
-            spellcheck={false}
-            value={props.value}
-            placeholder={props.placeholder}
-            onKeyDown={blurOnEnterOrEscape}
-            class="w-full rounded-xl border border-ink/20 bg-white px-3 py-2 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
-          />
-        </>
-      )}
+      </div>
     </TextField.Root>
   )
 }
@@ -198,7 +159,6 @@ export const MetricField = (props: MetricFieldProps) => {
         </div>
         <TextField.Input
           type="text"
-          inputMode="decimal"
           autocapitalize="off"
           autocomplete="off"
           autocorrect="off"
@@ -212,23 +172,30 @@ export const MetricField = (props: MetricFieldProps) => {
   )
 }
 
-const formatDecimalValue = (value: string) => {
-  const normalized = sanitizeNumberishInput(value)
-  if (normalized === "") return "0.00"
-  if (!isValidNumberishInput(normalized)) return "0.00"
-
-  const parsed = Number(normalized)
-  if (!Number.isFinite(parsed)) return "0.00"
-  return parsed.toFixed(2)
+const zeroDecimalString = (digits: number) => {
+  if (digits <= 0) return "0"
+  return `0.${"0".repeat(digits)}`
 }
 
-export const DecimalField = (props: NumberFieldProps) => {
+const formatDecimalValue = (value: string, digits = 2) => {
+  const normalized = sanitizeNumberishInput(value)
+  const fallback = zeroDecimalString(digits)
+  if (normalized === "") return fallback
+  if (!isValidNumberishInput(normalized)) return fallback
+
+  const parsed = Number(normalized)
+  return formatFixed(parsed, digits, fallback)
+}
+
+export const DecimalField = (props: DecimalFieldProps) => {
   const [isFocused, setIsFocused] = createSignal(false)
   const [editingValue, setEditingValue] = createSignal("")
+  const digits = () => props.digits ?? 2
+  const fallback = () => zeroDecimalString(digits())
 
   const displayedValue = createMemo(() => {
     if (isFocused()) return editingValue()
-    return formatDecimalValue(props.value)
+    return formatDecimalValue(props.value, digits())
   })
 
   const onInput = (next: string) => {
@@ -242,22 +209,22 @@ export const DecimalField = (props: NumberFieldProps) => {
   const onBlur = (next: string) => {
     const normalized = sanitizeNumberishInput(next)
     if (normalized === "") {
-      props.onInput("0.00")
-      setEditingValue("0.00")
+      props.onInput(fallback())
+      setEditingValue(fallback())
       setIsFocused(false)
       return
     }
 
     if (!isValidNumberishInput(normalized)) {
-      const fallback = formatDecimalValue(props.value)
-      setEditingValue(fallback)
-      props.onInput(fallback)
+      const normalizedFallback = formatDecimalValue(props.value, digits())
+      setEditingValue(normalizedFallback)
+      props.onInput(normalizedFallback)
       setIsFocused(false)
       return
     }
 
     const parsed = Number(normalized)
-    const fixed = Number.isFinite(parsed) ? parsed.toFixed(2) : "0.00"
+    const fixed = formatFixed(parsed, digits(), fallback())
     props.onInput(fixed)
     setEditingValue(fixed)
     setIsFocused(false)
@@ -265,72 +232,39 @@ export const DecimalField = (props: NumberFieldProps) => {
 
   return (
     <TextField.Root value={displayedValue()} class="grid gap-1.5">
-      {props.inline ? (
-        <div class={`grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2 ${props.inlineGridClass ?? ""}`}>
-          <div class={`min-w-0 flex items-center gap-2 ${props.inlineLabelClass ?? ""}`}>
-            <TextField.Label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
-              {props.label}
-            </TextField.Label>
-            {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
-          </div>
-          <div class={`min-w-0 ${props.inlineControlClass ?? ""}`}>
-            <div class={props.inlineAccessory ? "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-1" : undefined}>
-              <TextField.Input
-                type="number"
-                inputMode="decimal"
-                autocapitalize="off"
-                autocomplete="off"
-                autocorrect="off"
-                spellcheck={false}
-                value={displayedValue()}
-                placeholder={props.placeholder}
-                min={props.min}
-                max={props.max}
-                step={props.step}
-                onInput={(event) => onInput(event.currentTarget.value)}
-                onKeyDown={blurOnEnterOrEscape}
-                onBlur={(event) => onBlur(event.currentTarget.value)}
-                onFocus={() => {
-                  setEditingValue(sanitizeNumberishInput(props.value))
-                  setIsFocused(true)
-                }}
-                class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
-              />
-              {props.inlineAccessory}
-            </div>
+      <div class={"grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2"}>
+        <div class={"min-w-0 flex items-center gap-2"}>
+          <TextField.Label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
+            {props.label}
+          </TextField.Label>
+          {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
+        </div>
+        <div class={"min-w-0"}>
+          <div class={props.inlineAccessory ? "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-1" : undefined}>
+            <TextField.Input
+              type="text"
+              autocapitalize="off"
+              autocomplete="off"
+              autocorrect="off"
+              spellcheck={false}
+              value={displayedValue()}
+              placeholder={props.placeholder}
+              min={props.min}
+              max={props.max}
+              step={props.step}
+              onInput={(event) => onInput(event.currentTarget.value)}
+              onKeyDown={blurOnEnterOrEscape}
+              onBlur={(event) => onBlur(event.currentTarget.value)}
+              onFocus={() => {
+                setEditingValue(sanitizeNumberishInput(props.value))
+                setIsFocused(true)
+              }}
+              class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+            />
+            {props.inlineAccessory}
           </div>
         </div>
-      ) : (
-        <>
-          <div class="flex items-center gap-2">
-            <TextField.Label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
-              {props.label}
-            </TextField.Label>
-            {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
-          </div>
-          <TextField.Input
-            type="number"
-            inputMode="decimal"
-            autocapitalize="off"
-            autocomplete="off"
-            autocorrect="off"
-            spellcheck={false}
-            value={displayedValue()}
-            placeholder={props.placeholder}
-            min={props.min}
-            max={props.max}
-            step={props.step}
-            onInput={(event) => onInput(event.currentTarget.value)}
-            onKeyDown={blurOnEnterOrEscape}
-            onBlur={(event) => onBlur(event.currentTarget.value)}
-            onFocus={() => {
-              setEditingValue(sanitizeNumberishInput(props.value))
-              setIsFocused(true)
-            }}
-            class="w-full rounded-xl border border-ink/20 bg-white px-3 py-2 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
-          />
-        </>
-      )}
+      </div>
     </TextField.Root>
   )
 }
@@ -354,56 +288,32 @@ export const IntegerField = (props: IntegerFieldProps) => {
 
   return (
     <TextField.Root value={props.value} onChange={onChange} class="grid gap-1.5">
-      {props.inline ? (
-        <div class={`grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2 ${props.inlineGridClass ?? ""}`}>
-          <div class={`min-w-0 flex items-center gap-2 ${props.inlineLabelClass ?? ""}`}>
-            <TextField.Label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
-              {props.label}
-            </TextField.Label>
-            {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
-          </div>
-          <div class={`min-w-0 ${props.inlineControlClass ?? ""}`}>
-            <TextField.Input
-              type="number"
-              inputMode="numeric"
-              autocapitalize="off"
-              autocomplete="off"
-              autocorrect="off"
-              spellcheck={false}
-              min={props.min}
-              max={props.max}
-              step={props.step}
-              value={props.value || "0"}
-              placeholder={props.placeholder}
-              onKeyDown={blurOnEnterOrEscape}
-              onBlur={(event) => onBlur(event.currentTarget.value)}
-              class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
-            />
-          </div>
+      <div class={"grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2"}>
+        <div class={"min-w-0 flex items-center gap-2"}>
+          <TextField.Label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
+            {props.label}
+          </TextField.Label>
+          {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
         </div>
-      ) : (
-        <>
-          <div class="flex items-center gap-2">
-            <TextField.Label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
-              {props.label}
-            </TextField.Label>
-            {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
-          </div>
+        <div class={"min-w-0"}>
           <TextField.Input
-            type="text"
+            type="number"
             inputMode="numeric"
             autocapitalize="off"
             autocomplete="off"
             autocorrect="off"
             spellcheck={false}
+            min={props.min}
+            max={props.max}
+            step={props.step}
             value={props.value || "0"}
             placeholder={props.placeholder}
             onKeyDown={blurOnEnterOrEscape}
             onBlur={(event) => onBlur(event.currentTarget.value)}
-            class="w-full rounded-xl border border-ink/20 bg-white px-3 py-2 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+            class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
           />
-        </>
-      )}
+        </div>
+      </div>
     </TextField.Root>
   )
 }
@@ -418,8 +328,7 @@ const formatPercentValue = (value: string) => {
   if (!isValidNumberishInput(normalized)) return normalized
 
   const parsed = Number(normalized)
-  if (!Number.isFinite(parsed)) return "0%"
-  return `${(parsed * 100).toString()}%`
+  return formatPercentFromRatio(parsed, undefined, "0%")
 }
 
 const toEditablePercentValue = (value: string) => {
@@ -460,46 +369,16 @@ export const PercentField = (props: PercentFieldProps) => {
 
   return (
     <TextField.Root value={displayedValue()} class="grid gap-1.5">
-      {props.inline ? (
-        <div class={`grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2 ${props.inlineGridClass ?? ""}`}>
-          <div class={`min-w-0 flex items-center gap-2 ${props.inlineLabelClass ?? ""}`}>
-            <TextField.Label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
-              {props.label}
-            </TextField.Label>
-            {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
-          </div>
-          <div class={`min-w-0 ${props.inlineControlClass ?? ""}`}>
-            <TextField.Input
-              type="text"
-              inputMode="decimal"
-              autocapitalize="off"
-              autocomplete="off"
-              autocorrect="off"
-              spellcheck={false}
-              value={displayedValue()}
-              onInput={(event) => onInput(event.currentTarget.value)}
-              onKeyDown={blurOnEnterOrEscape}
-              onFocus={() => {
-                setEditingValue(toEditablePercentValue(props.value))
-                setIsFocused(true)
-              }}
-              onBlur={() => setIsFocused(false)}
-              placeholder={props.placeholder}
-              class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
-            />
-          </div>
+      <div class={"grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2"}>
+        <div class={"min-w-0 flex items-center gap-2"}>
+          <TextField.Label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
+            {props.label}
+          </TextField.Label>
+          {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
         </div>
-      ) : (
-        <>
-          <div class="flex items-center gap-2">
-            <TextField.Label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
-              {props.label}
-            </TextField.Label>
-            {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
-          </div>
+        <div class={"min-w-0"}>
           <TextField.Input
             type="text"
-            inputMode="decimal"
             autocapitalize="off"
             autocomplete="off"
             autocorrect="off"
@@ -513,10 +392,10 @@ export const PercentField = (props: PercentFieldProps) => {
             }}
             onBlur={() => setIsFocused(false)}
             placeholder={props.placeholder}
-            class="w-full rounded-xl border border-ink/20 bg-white px-3 py-2 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+            class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
           />
-        </>
-      )}
+        </div>
+      </div>
     </TextField.Root>
   )
 }
@@ -531,8 +410,7 @@ const formatMultiplierValue = (value: string) => {
   if (!isValidNumberishInput(normalized)) return normalized
 
   const parsed = Number(normalized)
-  if (!Number.isFinite(parsed)) return "x0.00"
-  return `x${parsed.toFixed(2)}`
+  return formatMultiplier(parsed, 2, "x0.00")
 }
 
 const toEditableMultiplierValue = (value: string) => {
@@ -573,46 +451,16 @@ export const MultiplierField = (props: MultiplierFieldProps) => {
 
   return (
     <TextField.Root value={displayedValue()} class="grid gap-1.5">
-      {props.inline ? (
-        <div class={`grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2 ${props.inlineGridClass ?? ""}`}>
-          <div class={`min-w-0 flex items-center gap-2 ${props.inlineLabelClass ?? ""}`}>
-            <TextField.Label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
-              {props.label}
-            </TextField.Label>
-            {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
-          </div>
-          <div class={`min-w-0 ${props.inlineControlClass ?? ""}`}>
-            <TextField.Input
-              type="text"
-              inputMode="decimal"
-              autocapitalize="off"
-              autocomplete="off"
-              autocorrect="off"
-              spellcheck={false}
-              value={displayedValue()}
-              onInput={(event) => onInput(event.currentTarget.value)}
-              onKeyDown={blurOnEnterOrEscape}
-              onFocus={() => {
-                setEditingValue(toEditableMultiplierValue(props.value))
-                setIsFocused(true)
-              }}
-              onBlur={() => setIsFocused(false)}
-              placeholder={props.placeholder}
-              class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
-            />
-          </div>
+      <div class={"grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2"}>
+        <div class={"min-w-0 flex items-center gap-2"}>
+          <TextField.Label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
+            {props.label}
+          </TextField.Label>
+          {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
         </div>
-      ) : (
-        <>
-          <div class="flex items-center gap-2">
-            <TextField.Label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
-              {props.label}
-            </TextField.Label>
-            {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
-          </div>
+        <div class={"min-w-0"}>
           <TextField.Input
             type="text"
-            inputMode="decimal"
             autocapitalize="off"
             autocomplete="off"
             autocorrect="off"
@@ -626,10 +474,10 @@ export const MultiplierField = (props: MultiplierFieldProps) => {
             }}
             onBlur={() => setIsFocused(false)}
             placeholder={props.placeholder}
-            class="w-full rounded-xl border border-ink/20 bg-white px-3 py-2 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+            class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
           />
-        </>
-      )}
+        </div>
+      </div>
     </TextField.Root>
   )
 }
@@ -637,33 +485,19 @@ export const MultiplierField = (props: MultiplierFieldProps) => {
 export const LabelField = (props: LabelFieldProps) => {
   return (
     <div class="grid gap-1.5">
-      {props.inline ? (
-        <div class={`grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2 ${props.inlineGridClass ?? ""}`}>
-          <div class={`min-w-0 flex items-center gap-2 ${props.inlineLabelClass ?? ""}`}>
-            <label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
-              {props.label}
-            </label>
-            {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
-          </div>
-          <div class={`min-w-0 ${props.inlineControlClass ?? ""}`}>
-            <p class="w-full bg-white px-2.5 py-1.5 text-sm font-medium text-ink dark:bg-[#1a2638] dark:text-white">
-              {props.value}
-            </p>
-          </div>
+      <div class={"grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2"}>
+        <div class={"min-w-0 flex items-center gap-2"}>
+          <label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
+            {props.label}
+          </label>
+          {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
         </div>
-      ) : (
-        <>
-          <div class="flex items-center gap-2">
-            <label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
-              {props.label}
-            </label>
-            {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
-          </div>
-          <p class="w-full bg-white px-3 py-2 text-sm font-medium text-ink dark:bg-[#1a2638] dark:text-white">
+        <div class={"min-w-0"}>
+          <p class="w-full bg-white px-2.5 py-1.5 text-sm font-medium text-ink dark:bg-[#1a2638] dark:text-white">
             {props.value}
           </p>
-        </>
-      )}
+        </div>
+      </div>
     </div>
   )
 }
@@ -708,56 +542,31 @@ type SelectFieldProps = {
   onChange: (next: string) => void
   options: SelectOption[]
   tooltip?: TooltipKey
-  inline?: boolean
-  inlineGridClass?: string
-  inlineLabelClass?: string
-  inlineControlClass?: string
 }
 
 export const SelectField = (props: SelectFieldProps) => {
   return (
     <div class="grid gap-1.5">
-      {props.inline ? (
-        <div class={`grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2 ${props.inlineGridClass ?? ""}`}>
-          <div class={`min-w-0 flex items-center gap-2 ${props.inlineLabelClass ?? ""}`}>
-            <label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
-              {props.label}
-            </label>
-            {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
-          </div>
-          <div class={`min-w-0 ${props.inlineControlClass ?? ""}`}>
-            <select
-              value={props.value}
-              onChange={(event) => props.onChange(event.currentTarget.value)}
-              onKeyDown={blurOnEnterOrEscape}
-              class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
-            >
-              {props.options.map((option) => (
-                <option value={option.value}>{option.label}</option>
-              ))}
-            </select>
-          </div>
+      <div class={"grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2"}>
+        <div class={"min-w-0 flex items-center gap-2"}>
+          <label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
+            {props.label}
+          </label>
+          {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
         </div>
-      ) : (
-        <>
-          <div class="flex items-center gap-2">
-            <label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
-              {props.label}
-            </label>
-            {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
-          </div>
+        <div class={"min-w-0"}>
           <select
             value={props.value}
             onChange={(event) => props.onChange(event.currentTarget.value)}
             onKeyDown={blurOnEnterOrEscape}
-            class="w-full rounded-xl border border-ink/20 bg-white px-3 py-2 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+            class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
           >
             {props.options.map((option) => (
               <option value={option.value}>{option.label}</option>
             ))}
           </select>
-        </>
-      )}
+        </div>
+      </div>
     </div>
   )
 }

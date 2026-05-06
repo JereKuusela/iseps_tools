@@ -2,13 +2,19 @@ import * as KTooltip from "@kobalte/core/tooltip"
 import { For, type ParentProps } from "solid-js"
 import { getTooltip, TooltipKey } from "../../lib/tooltips"
 
-type TooltipProps = ParentProps<{ content: TooltipKey }>
+type TooltipProps = ParentProps<{ content: TooltipKey; asChild?: boolean }>
 
 export const Tooltip = (props: TooltipProps) => {
   const split = () => getTooltip(props.content).split("<br>")
   return (
     <KTooltip.Root openDelay={300} closeDelay={80} ignoreSafeArea>
-      <KTooltip.Trigger class="inline-flex h-5 w-5 items-center justify-center rounded-full border border-ink/25 bg-white text-xs font-semibold text-ink/80 transition hover:border-ink/45 hover:text-ink dark:border-white/25 dark:bg-[#172438] dark:text-white/85 dark:hover:border-white/50 dark:hover:text-white">
+      <KTooltip.Trigger
+        class={
+          props.asChild
+            ? undefined
+            : "inline-flex h-5 w-5 items-center justify-center rounded-full border border-ink/25 bg-white text-xs font-semibold text-ink/80 transition hover:border-ink/45 hover:text-ink dark:border-white/25 dark:bg-[#172438] dark:text-white/85 dark:hover:border-white/50 dark:hover:text-white"
+        }
+      >
         {props.children ?? "?"}
       </KTooltip.Trigger>
       <KTooltip.Portal>

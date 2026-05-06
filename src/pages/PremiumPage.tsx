@@ -5,6 +5,7 @@ import { ToggleField } from "../components/ui/formControls"
 import { isValidNumberishInput } from "../components/ui/formControls"
 import { sanitizeNumberishInput } from "../components/ui/formControls"
 import { Tooltip } from "../components/ui/Tooltip"
+import { formatFixed } from "../lib/numberFormat"
 import { createPersistedSignal } from "../lib/persistedSignal"
 import type { TooltipKey } from "../lib/tooltips"
 import { useZatData, type PremiumCrystalTokenMethod, type PremiumHaulerLayer } from "../lib/zatContext"
@@ -43,7 +44,7 @@ const clamp = (value: number, min: number, max: number) => {
 }
 
 const formatValue = (value: number, digits = 2) => {
-  return value.toFixed(digits)
+  return formatFixed(value, digits)
 }
 
 const styles = {
@@ -84,7 +85,6 @@ const NumberSelectField = (props: {
         id={props.id}
         list={listId}
         type="text"
-        inputMode="decimal"
         value={props.value}
         onKeyDown={blurOnEnterOrEscape}
         onInput={(event) => {
