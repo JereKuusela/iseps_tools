@@ -10,6 +10,7 @@ export const ROUTES = {
   premiumCrystal: "/premium",
   premiumHauler: "/hauler",
   credits: "/credits",
+  settings: "/settings",
 } as const
 
 export const tabs: TabItem[] = [
@@ -57,5 +58,10 @@ export const toolCards: ToolCardItem[] = [
     href: ROUTES.credits,
     label: "Credits",
     description: "View contributors, data origins, and acknowledgements behind these tools.",
+  },
+  {
+    href: ROUTES.settings,
+    label: "Settings",
+    description: "Manage app preferences and sync options.",
   },
 ]

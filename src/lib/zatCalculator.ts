@@ -213,7 +213,6 @@ export const calculateNextThreeTechCosts = (id: number, currentLevel: number): T
 
     cost = cost.multiply(growth)
   }
-  console.log(cache.map((c, i) => `${i}: ${c.mantissa}e${c.exponent}`).join("\n"))
   return nextCosts
 }
 

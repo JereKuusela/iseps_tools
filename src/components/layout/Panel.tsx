@@ -1,7 +1,7 @@
 import { A, useLocation } from "@solidjs/router"
 import { For, Show, createEffect, createSignal, onCleanup, onMount, type JSX, type ParentProps } from "solid-js"
 import { useDarkModeSignal } from "../../lib/darkMode"
-import { tabs } from "../../lib/routes"
+import { ROUTES, tabs } from "../../lib/routes"
 import type { TooltipKey } from "../../lib/tooltips"
 import { Tooltip } from "../ui/Tooltip"
 
@@ -103,6 +103,31 @@ export const Panel = (
                     </A>
                   )}
                 </For>
+                <A
+                  href={ROUTES.settings}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  class="rounded-xl px-4 py-2.5 text-left text-sm font-semibold transition hover:-translate-y-0.5 hover:bg-ink hover:text-white dark:hover:bg-white/15"
+                  classList={{
+                    "bg-ink text-white": isActivePath(ROUTES.settings),
+                    "dark:bg-white/15": isActivePath(ROUTES.settings),
+                  }}
+                >
+                  <span class="inline-flex items-center gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      class="h-4 w-4"
+                      aria-hidden="true"
+                    >
+                      <circle cx="12" cy="12" r="3.2" />
+                      <path d="M12 2.8v2.1M12 19.1v2.1M21.2 12h-2.1M4.9 12H2.8M18.6 5.4l-1.5 1.5M6.9 17.1l-1.5 1.5M18.6 18.6l-1.5-1.5M6.9 6.9 5.4 5.4" />
+                    </svg>
+                    Settings
+                  </span>
+                </A>
                 <button
                   type="button"
                   onClick={() => {

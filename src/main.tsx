@@ -9,8 +9,12 @@ import { OgTechPage } from "./pages/og/OgTechPage"
 import { PenrosePage } from "./pages/penrose/PenrosePage"
 import { PremiumCrystalTokenPage, PremiumHaulerMinePage } from "./pages/PremiumPage"
 import { ScPage } from "./pages/sc/ScPage"
+import { SettingsPage } from "./pages/SettingsPage"
 import { ZatGuidePage } from "./pages/zatGuide/ZatGuidePage"
+import { initCloudSync } from "./lib/cloudSync"
 import "./index.css"
+
+initCloudSync()
 
 const HomeRoute = () => (
   <App>
@@ -48,6 +52,12 @@ const CreditsRoute = () => (
   </App>
 )
 
+const SettingsRoute = () => (
+  <App>
+    <SettingsPage />
+  </App>
+)
+
 const PremiumCrystalRoute = () => (
   <App>
     <PremiumCrystalTokenPage />
@@ -70,6 +80,7 @@ render(
         <Route path={ROUTES.penrose} component={PenroseRoute} />
         <Route path={ROUTES.sc} component={ScRoute} />
         <Route path={ROUTES.credits} component={CreditsRoute} />
+        <Route path={ROUTES.settings} component={SettingsRoute} />
         <Route path={ROUTES.premiumCrystal} component={PremiumCrystalRoute} />
         <Route path={ROUTES.premiumHauler} component={PremiumHaulerRoute} />
         <Route path="/*all" component={HomeRoute} />

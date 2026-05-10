@@ -1100,6 +1100,34 @@
     "note": "If you complete the 21st cycle in your run, put it in DC and continue for a bit."
   },
   {
+    "cycle": 21,
+    "run": "juno",
+    "nodes": [
+      1,
+      2,
+      2,
+      2,
+      6,
+      10,
+      10,
+      10,
+      14,
+      14,
+      3,
+      7,
+      11,
+      15,
+      15,
+      4,
+      8,
+      12,
+      12,
+      12,
+      5
+    ],
+    "note": "End of guide. Good luck."
+  },
+  {
     "cycle": 1,
     "run": "cash",
     "nodes": [

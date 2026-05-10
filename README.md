@@ -36,6 +36,31 @@ npm run build
 npm run test
 ```
 
+## Firebase Sync
+
+Set Firebase values in [src/lib/firebaseConfig.ts](src/lib/firebaseConfig.ts) to enable cloud sync:
+
+```ts
+export const firebaseSyncConfig = {
+ apiKey: "...",
+ authDomain: "...",
+ databaseURL: "...",
+ projectId: "...",
+ storageBucket: "...",
+ messagingSenderId: "...",
+ appId: "...",
+ syncPath: "appSync",
+}
+```
+
+Notes:
+
+- `syncPath` is optional and defaults to `appSync` in the checked-in config.
+- A device hash is generated automatically and saved in local storage under `sync.hash`.
+- Local changes are uploaded with a 5s debounce.
+- Hash edits trigger a debounced pull from Firebase.
+- Incoming data is applied only when remote `sync.timestamp` is newer than local.
+
 ## Deploy
 
 A GitHub Actions workflow at `.github/workflows/deploy-gh-pages.yml` builds and deploys `dist` to the `gh-pages` branch whenever `main` updates.

@@ -1,7 +1,7 @@
 import { A, useLocation } from "@solidjs/router"
 import { For, type ParentComponent } from "solid-js"
 import { useDarkModeSignal } from "./lib/darkMode"
-import { tabs } from "./lib/routes"
+import { ROUTES, tabs } from "./lib/routes"
 
 const normalizePath = (path: string) => {
   if (!path || path === "/") {
@@ -34,6 +34,19 @@ const TopNav = (props: { darkMode: boolean; onToggleDarkMode: () => void }) => {
             )}
           </For>
         </div>
+
+        <A
+          href={ROUTES.settings}
+          class="grid h-10 w-10 place-items-center rounded-xl border border-ink/15 bg-white/85 text-ink transition hover:-translate-y-0.5 hover:border-ink/35 dark:border-white/20 dark:bg-[#1b2a3e] dark:text-white"
+          classList={{
+            "border-ink/35 bg-ink text-white dark:border-white/30 dark:bg-white/15": isActivePath(ROUTES.settings),
+          }}
+          aria-label="Open settings"
+          title="Open settings"
+        >
+          🛠️
+          <span class="sr-only">Open settings</span>
+        </A>
 
         <button
           type="button"

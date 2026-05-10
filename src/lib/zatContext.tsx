@@ -31,12 +31,13 @@ export type JunoPremiumRule = {
 
 export type TechCostCurveRule = {
   level: number
-  mult: string
+  mult: number
+  single?: number
 }
 
 export type TechRule = {
   id: number
-  initCost: string
+  initCost: number
   costCurve: TechCostCurveRule[]
   maxLevel: number
   dcBoost?: number
