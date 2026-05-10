@@ -100,7 +100,7 @@ describe("iterateTimeToReachGoal", () => {
       type: "battery1",
     })
 
-    expect(result.minutes).toEqual(1966)
+    expect(result.minutes).toEqual(4101)
   })
   it("returns finite minutes when gain is positive", () => {
     const result = iterateTimeToReachGoal({

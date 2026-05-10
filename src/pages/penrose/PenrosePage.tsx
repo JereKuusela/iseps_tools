@@ -1,4 +1,5 @@
 import { Panel } from "../../components/layout/Panel"
+import { ZatDataProvider } from "../../lib/zatContext"
 import { PenroseLeftColumn } from "./PenroseLeftColumn"
 import { PenroseProvider } from "./penroseContext"
 
@@ -14,8 +15,10 @@ const PenroseContent = () => {
 
 export const PenrosePage = () => {
   return (
-    <PenroseProvider>
-      <PenroseContent />
-    </PenroseProvider>
+    <ZatDataProvider>
+      <PenroseProvider>
+        <PenroseContent />
+      </PenroseProvider>
+    </ZatDataProvider>
   )
 }

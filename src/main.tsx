@@ -3,7 +3,6 @@ import { Router, Route } from "@solidjs/router"
 import App from "./App"
 import { ROUTES } from "./lib/routes"
 import { ScProvider } from "./lib/scContext"
-import { ZatDataProvider } from "./lib/zatContext"
 import { CreditsPage } from "./pages/CreditsPage"
 import { HomePage } from "./pages/HomePage"
 import { OgTechPage } from "./pages/og/OgTechPage"
@@ -63,21 +62,19 @@ const PremiumHaulerRoute = () => (
 
 render(
   () => (
-    <ZatDataProvider>
-      <ScProvider>
-        <Router>
-          <Route path={ROUTES.home} component={HomeRoute} />
-          <Route path={ROUTES.ogTech} component={OgTechRoute} />
-          <Route path={ROUTES.zatGuide} component={ZatGuideRoute} />
-          <Route path={ROUTES.penrose} component={PenroseRoute} />
-          <Route path={ROUTES.sc} component={ScRoute} />
-          <Route path={ROUTES.credits} component={CreditsRoute} />
-          <Route path={ROUTES.premiumCrystal} component={PremiumCrystalRoute} />
-          <Route path={ROUTES.premiumHauler} component={PremiumHaulerRoute} />
-          <Route path="/*all" component={HomeRoute} />
-        </Router>
-      </ScProvider>
-    </ZatDataProvider>
+    <ScProvider>
+      <Router>
+        <Route path={ROUTES.home} component={HomeRoute} />
+        <Route path={ROUTES.ogTech} component={OgTechRoute} />
+        <Route path={ROUTES.zatGuide} component={ZatGuideRoute} />
+        <Route path={ROUTES.penrose} component={PenroseRoute} />
+        <Route path={ROUTES.sc} component={ScRoute} />
+        <Route path={ROUTES.credits} component={CreditsRoute} />
+        <Route path={ROUTES.premiumCrystal} component={PremiumCrystalRoute} />
+        <Route path={ROUTES.premiumHauler} component={PremiumHaulerRoute} />
+        <Route path="/*all" component={HomeRoute} />
+      </Router>
+    </ScProvider>
   ),
   document.getElementById("root") as HTMLElement,
 )

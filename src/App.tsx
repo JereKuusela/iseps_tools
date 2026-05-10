@@ -1,6 +1,6 @@
 import { A, useLocation } from "@solidjs/router"
-import { createEffect, For, type ParentComponent } from "solid-js"
-import { createPersistedSignal } from "./lib/persistedSignal"
+import { For, type ParentComponent } from "solid-js"
+import { useDarkModeSignal } from "./lib/darkMode"
 import { tabs } from "./lib/routes"
 
 const normalizePath = (path: string) => {
@@ -16,9 +16,9 @@ const TopNav = (props: { darkMode: boolean; onToggleDarkMode: () => void }) => {
   const isActivePath = (href: string) => normalizePath(location.pathname) === href
 
   return (
-    <header class="relative z-10 px-4 pt-5 sm:px-8 sm:pt-8 lg:px-10">
-      <div class="mx-auto flex w-full max-w-6xl flex-wrap gap-2.5 rounded-2xl border border-white/60 bg-white/70 p-2.5 shadow-glow backdrop-blur dark:border-white/10 dark:bg-[#111a28]/75 sm:gap-3 sm:p-3">
-        <div class="grid min-w-[240px] flex-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-6">
+    <header class="relative z-10 hidden px-4 pt-5 sm:block sm:px-8 sm:pt-8 lg:px-10">
+      <div class="mx-auto flex w-full max-w-6xl items-center gap-2.5 rounded-2xl border border-white/60 bg-white/70 p-2.5 shadow-glow backdrop-blur dark:border-white/10 dark:bg-[#111a28]/75 sm:gap-3 sm:p-3">
+        <div class="min-w-[240px] flex-1 gap-2.5 sm:grid sm:grid-cols-2 lg:grid-cols-6">
           <For each={tabs}>
             {(tab) => (
               <A
@@ -74,11 +74,7 @@ const TopNav = (props: { darkMode: boolean; onToggleDarkMode: () => void }) => {
 }
 
 const App: ParentComponent = (props) => {
-  const [darkMode, setDarkMode] = createPersistedSignal("ui.darkMode", false)
-
-  createEffect(() => {
-    document.documentElement.classList.toggle("dark", darkMode())
-  })
+  const [darkMode, setDarkMode] = useDarkModeSignal()
 
   return (
     <div class="relative min-h-screen overflow-x-auto overflow-y-visible bg-mist text-ink transition-colors dark:bg-[#070d16] dark:text-[#e8f0ff]">

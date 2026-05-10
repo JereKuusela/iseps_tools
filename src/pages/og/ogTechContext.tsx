@@ -113,9 +113,9 @@ export const OgTechProvider = (props: ParentProps) => {
   const data = useZatData()
 
   const [cycles, setCycles] = createPersistedSignal("zat.og.cycles", "0")
-  const [gainValue, setGainValue] = createPersistedSignal("zat.og.gain", "1e12")
-  const [gainUnit, setGainUnit] = createPersistedSignal<GainUnit>("zat.og.gainUnit", "sec")
-  const [junoAmount, setJunoAmount] = createPersistedSignal("zat.og.junoAmount", "1e13")
+  const [gainValue, setGainValue] = createPersistedSignal("zat.og.gain", "1.00e1")
+  const [gainUnit, setGainUnit] = createPersistedSignal<GainUnit>("zat.og.gainUnit", "hour")
+  const [junoAmount, setJunoAmount] = createPersistedSignal("zat.og.junoAmount", "")
   const [mode, setMode] = createPersistedSignal<ZatMode>("zat.og.mode", "juno")
 
   const [junoOutput, setJunoOutput] = createPersistedSignal("zat.og.junoOutput", "0")

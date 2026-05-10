@@ -1,5 +1,6 @@
 import { Panel } from "../../components/layout/Panel"
 import { SplitColumns } from "../../components/layout/SplitColumns"
+import { ZatDataProvider } from "../../lib/zatContext"
 import { ZatGuideLeftColumn } from "./ZatGuideLeftColumn"
 import { ZatGuideRightColumn } from "./ZatGuideRightColumn"
 import { ZatGuideProvider } from "./zatGuideContext"
@@ -16,8 +17,10 @@ const ZatGuideContent = () => {
 
 export const ZatGuidePage = () => {
   return (
-    <ZatGuideProvider>
-      <ZatGuideContent />
-    </ZatGuideProvider>
+    <ZatDataProvider>
+      <ZatGuideProvider>
+        <ZatGuideContent />
+      </ZatGuideProvider>
+    </ZatDataProvider>
   )
 }

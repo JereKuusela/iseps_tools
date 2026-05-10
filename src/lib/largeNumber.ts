@@ -160,15 +160,5 @@ export class LargeNumber {
     const magnitude = Math.floor(Math.log10(Math.abs(this.mantissa)))
     this.mantissa /= 10 ** magnitude
     this.exponent += magnitude
-
-    while (Math.abs(this.mantissa) >= 10) {
-      this.mantissa /= 10
-      this.exponent += 1
-    }
-
-    while (Math.abs(this.mantissa) < 1) {
-      this.mantissa *= 10
-      this.exponent -= 1
-    }
   }
 }

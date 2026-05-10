@@ -2,7 +2,7 @@ import { createEffect, For, Show } from "solid-js"
 import { InfoCard, MetricRow } from "../../components/layout/contentBlocks"
 import {
   DecimalField,
-  LabelField,
+  IntegerField,
   NumberField,
   SelectField,
   ToggleField,
@@ -16,9 +16,9 @@ import type { GainUnit } from "./ogTypes"
 import { useOgTechContext } from "./ogTechContext"
 
 const gainUnits: Array<{ value: GainUnit; label: string }> = [
-  { value: "hour", label: "hour" },
-  { value: "sec", label: "sec" },
-  { value: "min", label: "min" },
+  { value: "hour", label: "h" },
+  { value: "min", label: "m" },
+  { value: "sec", label: "s" },
 ]
 
 const modeOptions: Array<{ value: ZatMode; label: string }> = [
@@ -34,7 +34,6 @@ type Option<T extends string> = {
 export const OgTechLeftColumn = () => {
   const og = useOgTechContext()
   const data = useZatData()
-  const shareAmount = () => Math.max(0, Number(og.sharesPercent()) / 0.05)
   const parseNumberish = (value: string) => {
     const parsed = Number(value)
     if (!Number.isFinite(parsed)) return 0
@@ -114,11 +113,12 @@ export const OgTechLeftColumn = () => {
   return (
     <>
       <InfoCard>
-        <div class="grid gap-2">
+        <div class="grid gap-1">
           <NumberField
             label="Juno"
             value={og.gainValue()}
             onInput={og.setGainValue}
+            placeholder="0.00e0"
             inlineAccessory={
               <div class="flex items-center gap-1">
                 <span class="text-xs font-semibold uppercase tracking-[0.1em] text-ink/70 dark:text-white/70">/</span>
@@ -126,14 +126,14 @@ export const OgTechLeftColumn = () => {
                   value={og.gainUnit()}
                   onChange={(event) => og.setGainUnit(event.currentTarget.value as GainUnit)}
                   onKeyDown={blurOnEnterOrEscape}
-                  class="w-[5.5rem] rounded-xl border border-ink/20 bg-white px-2 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+                  class="w-[3rem] rounded-xl border border-ink/20 bg-white px-2 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
                 >
                   <For each={gainUnits}>{(option) => <option value={option.value}>{option.label}</option>}</For>
                 </select>
               </div>
             }
           />
-          <NumberField label="Current" value={og.junoAmount()} onInput={og.setJunoAmount} />
+          <NumberField label="Current" placeholder="0.00e0" value={og.junoAmount()} onInput={og.setJunoAmount} />
           <SelectField
             label="Mode"
             value={og.mode()}
@@ -144,9 +144,9 @@ export const OgTechLeftColumn = () => {
         </div>
       </InfoCard>
 
-      <InfoCard title="Zagreus">
+      <InfoCard title="Advanced" closable>
         <div class="grid gap-2">
-          <NumberField
+          <IntegerField
             label="Cycles"
             value={og.cycles()}
             onInput={og.setCycles}
@@ -155,19 +155,15 @@ export const OgTechLeftColumn = () => {
             step={1}
             tooltip="og.zagreusCycles"
           />
-          <NumberField
+          <DecimalField
             label="Shares %"
             value={og.sharesPercent()}
             onInput={og.setSharesPercent}
             min={0}
             max={100}
-            step={0.01}
-            tooltip="og.sharesPercent"
+            step={0.05}
           />
         </div>
-      </InfoCard>
-
-      <InfoCard title="Juno Value" contentClass="">
         <SummaryInputModal label="Shop" value={formatCompactMultiplier(og.premiumMultiplier())} tooltip="og.premium">
           <div class="space-y-2">
             <NumberField

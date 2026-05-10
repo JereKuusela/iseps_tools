@@ -52,6 +52,14 @@ describe("calculateNextThreeTechCosts", () => {
     compareLarge(result[2].cost, new LargeNumber(1, 211))
   })
 
+  it("returns next three purchasable levels and increasing costs", () => {
+    const result = calculateNextThreeTechCosts(5, 228)
+
+    expect(result).toHaveLength(3)
+    expect(result[0].level).toBe(229)
+    compareLarge(result[0].cost, new LargeNumber(4.12, 172))
+  })
+
   it("applies a one-time fixed bump at level 40 for LT16", () => {
     const result = calculateNextThreeTechCosts(16, 39)
 

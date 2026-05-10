@@ -19,13 +19,13 @@ type SeEffectRule = {
 
 type TechCurveRule = {
   level: number
-  mult: string
-  single?: string
+  mult: number
+  single?: number
 }
 
 type TechData = {
   id: number
-  initCost: string
+  initCost: number
   costCurve: TechCurveRule[]
   dcBoost?: number
   junoBase?: number
@@ -172,15 +172,7 @@ export const calculateSeEffect = (seAmount: number) => {
   return multiplier / divider
 }
 
-const techCostCurve = techs.map((tech) =>
-  tech.costCurve
-    .map((entry) => ({
-      level: entry.level,
-      mult: LargeNumber.parse(entry.mult),
-      single: entry.single ? LargeNumber.parse(entry.single) : undefined,
-    }))
-    .sort((a, b) => a.level - b.level),
-)
+const techCostCurve = techs.map((tech) => tech.costCurve.sort((a, b) => a.level - b.level))
 const techCostCache = techs.map(() => [] as LargeNumber[])
 
 export const calculateNextThreeTechCosts = (id: number, currentLevel: number): TechCostEntry[] => {
@@ -199,7 +191,7 @@ export const calculateNextThreeTechCosts = (id: number, currentLevel: number): T
 
   const targetLevel = currentLevel + 3
 
-  let cost = LargeNumber.parse(tech.initCost)
+  let cost = LargeNumber.from(tech.initCost)
   let growth = new LargeNumber(1, 0)
   let curveIndex = 0
 
@@ -221,7 +213,7 @@ export const calculateNextThreeTechCosts = (id: number, currentLevel: number): T
 
     cost = cost.multiply(growth)
   }
-
+  console.log(cache.map((c, i) => `${i}: ${c.mantissa}e${c.exponent}`).join("\n"))
   return nextCosts
 }
 
