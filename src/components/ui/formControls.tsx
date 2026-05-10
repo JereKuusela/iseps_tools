@@ -508,11 +508,14 @@ type ToggleFieldProps = {
   onChange: (checked: boolean) => void
   hint?: string
   tooltip?: TooltipKey
+  disabled?: boolean
 }
 
 export const ToggleField = (props: ToggleFieldProps) => {
   return (
-    <label class="flex cursor-pointer items-start justify-between gap-3 rounded-xl border border-ink/15 bg-white/70 px-3 py-2.5 transition hover:border-ink/30 dark:border-white/15 dark:bg-[#182336]/75 dark:hover:border-white/30">
+    <label
+      class={`flex items-start justify-between gap-3 rounded-xl border border-ink/15 bg-white/70 px-3 py-2.5 transition dark:border-white/15 dark:bg-[#182336]/75 ${props.disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer hover:border-ink/30 dark:hover:border-white/30"}`}
+    >
       <div>
         <div class="flex items-center gap-2">
           <span class="text-sm font-semibold text-ink/90 dark:text-white/90">{props.label}</span>
@@ -523,6 +526,7 @@ export const ToggleField = (props: ToggleFieldProps) => {
       <input
         type="checkbox"
         checked={props.checked}
+        disabled={props.disabled}
         onChange={(event) => props.onChange(event.currentTarget.checked)}
         onKeyDown={blurOnEnterOrEscape}
         class="mt-1 h-4 w-4 rounded border border-ink/40 accent-accent dark:border-white/40"

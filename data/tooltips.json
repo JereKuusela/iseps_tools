@@ -39,7 +39,5 @@
   "premium.unlockedLayers": "Highest unlocked layer in the hauler mine route.",
   "premium.haulerTokenBooster": "Shared with Crystal and Token tab. Applies to all hauler token rewards.",
   "zatGuide.panel": "ZAT node recommendations for various runs.<br>Shows total boosts.",
-  "credits.panel": "Contributors, references, and acknowledgements from data/credits.json.",
-  "settings.panel": "Application-level options and sync settings.",
-  "settings.syncHash": "Sync hash is your shared identifier for cloud-synced values.<br>Use the same hash on different devices to keep data in sync."
+  "credits.panel": "Contributors, references, and acknowledgements from data/credits.json."
 }

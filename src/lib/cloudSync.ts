@@ -5,13 +5,14 @@ import { firebaseSyncConfig } from "./firebaseConfig"
 import { STORAGE_UPDATED_EVENT, writeStoredRawValue, type StorageUpdatedDetail } from "./persistedSignal"
 
 export const SYNC_HASH_KEY = "sync.hash"
+export const SYNC_ENABLED_KEY = "sync.enabled"
 export const SYNC_TIMESTAMP_KEY = "sync.timestamp"
 
 const PUSH_DEBOUNCE_MS = 5_000
 const PULL_DEBOUNCE_MS = 1_500
 const REMOTE_SYNC_VERSION = 1
 const HASH_LENGTH = 16
-const SYNC_KEY_PREFIXES = ["sc.", "zat.", "premium.", "ui.", "penrose.", "info-card:", "sync."]
+const SYNC_KEY_PREFIXES = ["sc.", "zat.", "premium.", "ui.", "penrose.", "info-card:", "app.", "sync."]
 
 type SyncRecord = {
   version: number
@@ -44,6 +45,15 @@ const readStoredHash = () => {
   return typeof parsed === "string" ? parsed.trim() : ""
 }
 
+const readStoredEnabled = () => {
+  const parsed = readJsonStoredValue(SYNC_ENABLED_KEY)
+  return parsed === true
+}
+
+const isSyncEnabled = () => {
+  return readStoredEnabled() && readStoredHash().length > 0
+}
+
 const randomHashChunk = () => {
   const randomBytes = new Uint8Array(HASH_LENGTH)
   globalThis.crypto.getRandomValues(randomBytes)
@@ -65,6 +75,10 @@ export const getOrCreateSyncHash = () => {
   const generatedHash = createRandomSyncHash()
   writeStoredRawValue(SYNC_HASH_KEY, JSON.stringify(generatedHash))
   return generatedHash
+}
+
+export const getSyncHash = () => {
+  return readStoredHash()
 }
 
 const shouldSyncKey = (key: string) => {
@@ -136,11 +150,12 @@ const applyRemoteData = (data: Record<string, string>) => {
 
 const uploadNow = async () => {
   if (!hasLocalStorage() || applyingRemote) return
+  if (!isSyncEnabled()) return
 
   const database = getSyncDatabase()
   if (!database) return
 
-  const hash = getOrCreateSyncHash()
+  const hash = getSyncHash()
   if (!hash) return
 
   const timestamp = Date.now()
@@ -169,11 +184,13 @@ const getRemoteTimestamp = (record: Partial<SyncRecord>) => {
 
 const pullNow = async () => {
   if (!hasLocalStorage()) return
+  if (!isSyncEnabled()) return
 
   const database = getSyncDatabase()
   if (!database) return
 
-  const hash = getOrCreateSyncHash()
+  const hash = getSyncHash()
+  if (!hash) return
   const path = `${getSyncPath()}/${hash}`
   const snapshot = await get(ref(database, path))
   if (!snapshot.exists()) return
@@ -196,6 +213,7 @@ const pullNow = async () => {
 
   if (remoteTimestamp <= localTimestamp) return
   applyRemoteData(remoteData)
+  setLocalTimestamp(remoteTimestamp)
 }
 
 const schedulePush = () => {
@@ -219,6 +237,16 @@ const schedulePull = () => {
 const handleStorageChange = (key: string | null) => {
   if (!key || applyingRemote) return
 
+  if (key === SYNC_ENABLED_KEY) {
+    if (!isSyncEnabled()) return
+    void pullNow().catch(() => {
+      // Ignore sync failures to keep local UX unaffected.
+    })
+    return
+  }
+
+  if (!isSyncEnabled()) return
+
   if (key === SYNC_HASH_KEY) {
     schedulePull()
     return
@@ -232,8 +260,6 @@ export const initCloudSync = () => {
   if (hasInitialized || !("window" in globalThis) || !hasLocalStorage()) return
   hasInitialized = true
 
-  getOrCreateSyncHash()
-
   window.addEventListener(STORAGE_UPDATED_EVENT, (event) => {
     const detail = (event as CustomEvent<StorageUpdatedDetail>).detail
     if (!detail) return
@@ -243,6 +269,8 @@ export const initCloudSync = () => {
   window.addEventListener("storage", (event) => {
     handleStorageChange(event.key)
   })
+}
 
-  schedulePull()
+export const pullFromCloudNow = () => {
+  return pullNow()
 }
