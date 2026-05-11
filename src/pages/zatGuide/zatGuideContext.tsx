@@ -1,5 +1,5 @@
 import { createContext, createMemo, createSignal, type ParentProps, useContext } from "solid-js"
-import { createPersistedSignal } from "../../lib/persistedSignal"
+import { createSyncedSignal } from "../../lib/persistedSignal"
 import { LargeNumber } from "../../lib/largeNumber"
 import { useZatData } from "../../lib/zatContext"
 import type { GuideEntry, GuideNodeView, GuideRunType } from "./zatGuideTypes"
@@ -40,10 +40,10 @@ const ZatGuideContext = createContext<ZatGuideContextValue>()
 export const ZatGuideProvider = (props: ParentProps) => {
   const data = useZatData()
 
-  const [cycles, setCycles] = createPersistedSignal("zat.og.cycles", "0")
-  const [runType, setRunType] = createPersistedSignal<GuideRunType>("zat.guide.runType", "se_push")
-  const [sharesPercent, setSharesPercent] = createPersistedSignal("zat.guide.shares", "0")
-  const [ogTechLevels] = createPersistedSignal<number[]>("zat.og.techLevels", [])
+  const [cycles, setCycles] = createSyncedSignal("zat.og.cycles", "0")
+  const [runType, setRunType] = createSyncedSignal<GuideRunType>("zat.guide.runType", "se_push")
+  const [sharesPercent, setSharesPercent] = createSyncedSignal("zat.guide.shares", "0")
+  const [ogTechLevels] = createSyncedSignal<number[]>("zat.og.techLevels", [])
   const [selectedNodeId, setSelectedNodeId] = createSignal(0)
 
   const normalizedCycles = createMemo(() => Math.max(1, Math.floor(parseNumberish(cycles()))))

@@ -1,6 +1,6 @@
 import { Show, createSignal } from "solid-js"
 import type { JSX, ParentProps } from "solid-js"
-import { createPersistedSignal } from "../../lib/persistedSignal"
+import { createSyncedSignal } from "../../lib/persistedSignal"
 import type { TooltipKey } from "../../lib/tooltips"
 import { Tooltip } from "../ui/Tooltip"
 
@@ -20,7 +20,7 @@ export const InfoCard = (props: InfoCardProps) => {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
   const [isClosed, setIsClosed] = persistKey
-    ? createPersistedSignal(`info-card:${persistKey}:closed`, false)
+    ? createSyncedSignal(`info-card:${persistKey}:closed`, false)
     : createSignal(false)
   const cardClass = `rounded-2xl border border-ink/15 bg-white/70 p-3 dark:border-white/15 dark:bg-[#182538]/75 ${props.class ?? ""}`
   const headingClass = `text-sm font-bold uppercase tracking-[0.12em] text-ink/80 dark:text-white/80 ${props.titleClass ?? ""}`

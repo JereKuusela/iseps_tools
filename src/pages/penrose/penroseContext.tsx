@@ -1,7 +1,7 @@
 import { createContext, createMemo, type ParentProps, useContext } from "solid-js"
 import { LargeNumber } from "../../lib/largeNumber"
 import { formatPercentFromRatio } from "../../lib/numberFormat"
-import { createPersistedSignal } from "../../lib/persistedSignal"
+import { createSyncedSignal } from "../../lib/persistedSignal"
 import { calculateNextZatCost } from "../../lib/zatCalculator"
 import type { GainUnit } from "../og/ogTypes"
 
@@ -52,9 +52,9 @@ type PenroseContextValue = {
 const PenroseContext = createContext<PenroseContextValue>()
 
 export const PenroseProvider = (props: ParentProps) => {
-  const [statusAmount, setStatusAmount] = createPersistedSignal("penrose.statusAmount", "0")
-  const [junoGainValue, setJunoGainValue] = createPersistedSignal("zat.og.gain", "1e12")
-  const [junoGainUnit, setJunoGainUnit] = createPersistedSignal<GainUnit>("zat.og.gainUnit", "sec")
+  const [statusAmount, setStatusAmount] = createSyncedSignal("penrose.statusAmount", "0")
+  const [junoGainValue, setJunoGainValue] = createSyncedSignal("zat.og.gain", "1e12")
+  const [junoGainUnit, setJunoGainUnit] = createSyncedSignal<GainUnit>("zat.og.gainUnit", "sec")
 
   const normalizedStatusAmount = createMemo(() => parseLargeNumberSafe(statusAmount()))
   const normalizedJunoGain = createMemo(() => parseLargeNumberSafe(junoGainValue()))

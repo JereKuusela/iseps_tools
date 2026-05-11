@@ -1,8 +1,8 @@
 import { createEffect, createRoot, type Signal } from "solid-js"
-import { createPersistedSignal } from "./persistedSignal"
+import { createSyncedSignal } from "./persistedSignal"
 
 const darkModeSignal = createRoot<Signal<boolean>>(() => {
-  const [darkMode, setDarkMode] = createPersistedSignal("ui.darkMode", false)
+  const [darkMode, setDarkMode] = createSyncedSignal("ui.darkMode", false)
 
   createEffect(() => {
     document.documentElement.classList.toggle("dark", darkMode())

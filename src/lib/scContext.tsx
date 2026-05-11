@@ -1,5 +1,5 @@
 import { createContext, type ParentProps, useContext } from "solid-js"
-import { createPersistedSignal } from "./persistedSignal"
+import { createSyncedSignal } from "./persistedSignal"
 import type { ScGoalType } from "./scCalculator"
 
 export type ScGainUnit = "min" | "hour" | "day"
@@ -69,25 +69,25 @@ const normalizePanels = (panels: ScGoalPanel[]): ScGoalPanel[] => {
 }
 
 export const ScProvider = (props: ParentProps) => {
-  const [currentSe, setCurrentSe] = createPersistedSignal("sc.currentSe", "102")
-  const [battery1DcCost, setBattery1DcCost] = createPersistedSignal("sc.battery1DcCost", "2.7e204")
-  const [currentDc, setCurrentDc] = createPersistedSignal("sc.currentDc", "1e204")
-  const [dcGainValue, setDcGainValue] = createPersistedSignal("sc.dcGainValue", "1e203")
-  const [dcGainUnit, setDcGainUnit] = createPersistedSignal<ScGainUnit>("sc.dcGainUnit", "day")
-  const [replicatorDays, setReplicatorDays] = createPersistedSignal("sc.replicatorDays", "0")
-  const [replicatorHours, setReplicatorHours] = createPersistedSignal("sc.replicatorHours", "0")
-  const [replicatorMinutes, setReplicatorMinutes] = createPersistedSignal("sc.replicatorMinutes", "0")
-  const [replicatorTimeEditedAtMs, setReplicatorTimeEditedAtMs] = createPersistedSignal("sc.replicatorTimeEditedAtMs", "")
-  const [retainedDcReplicator, setRetainedDcReplicator] = createPersistedSignal("sc.retainedDcReplicator", "1")
-  const [retainedSeReplicator, setRetainedSeReplicator] = createPersistedSignal("sc.retainedSeReplicator", "1")
-  const [timeSkipSmall, setTimeSkipSmall] = createPersistedSignal("sc.timeSkipSmall", "0")
-  const [timeSkipMedium, setTimeSkipMedium] = createPersistedSignal("sc.timeSkipMedium", "0")
-  const [timeSkipLarge, setTimeSkipLarge] = createPersistedSignal("sc.timeSkipLarge", "0")
-  const [onlineHoursPerDay, setOnlineHoursPerDay] = createPersistedSignal("sc.onlineHoursPerDay", "0")
-  const [alphaSuppliesLevel, setAlphaSuppliesLevel] = createPersistedSignal("sc.alphaSuppliesLevel", "0")
-  const [futureDcBoostPct, setFutureDcBoostPct] = createPersistedSignal("sc.futureDcBoostPct", "0")
-  const [futureScBoostPct, setFutureScBoostPct] = createPersistedSignal("sc.futureScBoostPct", "0")
-  const [panels, setPanels] = createPersistedSignal<ScGoalPanel[]>("sc.panels", [
+  const [currentSe, setCurrentSe] = createSyncedSignal("sc.currentSe", "102")
+  const [battery1DcCost, setBattery1DcCost] = createSyncedSignal("sc.battery1DcCost", "2.7e204")
+  const [currentDc, setCurrentDc] = createSyncedSignal("sc.currentDc", "1e204")
+  const [dcGainValue, setDcGainValue] = createSyncedSignal("sc.dcGainValue", "1e203")
+  const [dcGainUnit, setDcGainUnit] = createSyncedSignal<ScGainUnit>("sc.dcGainUnit", "day")
+  const [replicatorDays, setReplicatorDays] = createSyncedSignal("sc.replicatorDays", "0")
+  const [replicatorHours, setReplicatorHours] = createSyncedSignal("sc.replicatorHours", "0")
+  const [replicatorMinutes, setReplicatorMinutes] = createSyncedSignal("sc.replicatorMinutes", "0")
+  const [replicatorTimeEditedAtMs, setReplicatorTimeEditedAtMs] = createSyncedSignal("sc.replicatorTimeEditedAtMs", "")
+  const [retainedDcReplicator, setRetainedDcReplicator] = createSyncedSignal("sc.retainedDcReplicator", "1")
+  const [retainedSeReplicator, setRetainedSeReplicator] = createSyncedSignal("sc.retainedSeReplicator", "1")
+  const [timeSkipSmall, setTimeSkipSmall] = createSyncedSignal("sc.timeSkipSmall", "0")
+  const [timeSkipMedium, setTimeSkipMedium] = createSyncedSignal("sc.timeSkipMedium", "0")
+  const [timeSkipLarge, setTimeSkipLarge] = createSyncedSignal("sc.timeSkipLarge", "0")
+  const [onlineHoursPerDay, setOnlineHoursPerDay] = createSyncedSignal("sc.onlineHoursPerDay", "0")
+  const [alphaSuppliesLevel, setAlphaSuppliesLevel] = createSyncedSignal("sc.alphaSuppliesLevel", "0")
+  const [futureDcBoostPct, setFutureDcBoostPct] = createSyncedSignal("sc.futureDcBoostPct", "0")
+  const [futureScBoostPct, setFutureScBoostPct] = createSyncedSignal("sc.futureScBoostPct", "0")
+  const [panels, setPanels] = createSyncedSignal<ScGoalPanel[]>("sc.panels", [
     { id: 1, goalType: "battery1", customGoal: "1e120" },
     { id: 2, goalType: "battery2", customGoal: "1e120" },
   ])

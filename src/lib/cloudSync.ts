@@ -1,15 +1,15 @@
 import { getApps, initializeApp } from "firebase/app"
-import { get, getDatabase, ref, set, type Database } from "firebase/database"
+import { get, getDatabase, ref, set } from "firebase/database"
 import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from "lz-string"
 import { firebaseSyncConfig } from "./firebaseConfig"
-import { STORAGE_UPDATED_EVENT, writeStoredRawValue, type StorageUpdatedDetail } from "./persistedSignal"
+import { readFromStorage, writeToStorage } from "./storage"
+import { updateSignal } from "./persistedSignal"
 
 export const SYNC_HASH_KEY = "sync.hash"
 export const SYNC_ENABLED_KEY = "sync.enabled"
 export const SYNC_TIMESTAMP_KEY = "sync.timestamp"
 
 const PUSH_DEBOUNCE_MS = 5_000
-const PULL_DEBOUNCE_MS = 1_500
 const REMOTE_SYNC_VERSION = 1
 const HASH_LENGTH = 16
 const SYNC_KEY_PREFIXES = ["sc.", "zat.", "premium.", "ui.", "penrose.", "info-card:", "app.", "sync."]
@@ -21,75 +21,22 @@ type SyncRecord = {
 }
 
 let pushTimer: ReturnType<typeof setTimeout> | undefined
-let pullTimer: ReturnType<typeof setTimeout> | undefined
-let hasInitialized = false
 let applyingRemote = false
 
-const hasLocalStorage = () => "localStorage" in globalThis
-
-const readJsonStoredValue = (key: string): unknown => {
-  if (!hasLocalStorage()) return undefined
-
-  const rawValue = globalThis.localStorage.getItem(key)
-  if (rawValue == null) return undefined
-
-  try {
-    return JSON.parse(rawValue)
-  } catch {
-    return undefined
-  }
-}
-
-const readStoredHash = () => {
-  const parsed = readJsonStoredValue(SYNC_HASH_KEY)
-  return typeof parsed === "string" ? parsed.trim() : ""
-}
-
-const readStoredEnabled = () => {
-  const parsed = readJsonStoredValue(SYNC_ENABLED_KEY)
-  return parsed === true
-}
-
-const isSyncEnabled = () => {
-  return readStoredEnabled() && readStoredHash().length > 0
-}
-
-const randomHashChunk = () => {
-  const randomBytes = new Uint8Array(HASH_LENGTH)
-  globalThis.crypto.getRandomValues(randomBytes)
-  return Array.from(randomBytes, (value) => (value % 36).toString(36)).join("")
-}
-
 export const createRandomSyncHash = () => {
-  if (!("crypto" in globalThis) || !("getRandomValues" in globalThis.crypto)) {
-    return `${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`.slice(0, HASH_LENGTH)
-  }
-
-  return randomHashChunk()
-}
-
-export const getOrCreateSyncHash = () => {
-  const existingHash = readStoredHash()
-  if (existingHash) return existingHash
-
-  const generatedHash = createRandomSyncHash()
-  writeStoredRawValue(SYNC_HASH_KEY, JSON.stringify(generatedHash))
-  return generatedHash
-}
-
-export const getSyncHash = () => {
-  return readStoredHash()
+  return `${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`.slice(0, HASH_LENGTH)
 }
 
 const shouldSyncKey = (key: string) => {
   if (key === SYNC_HASH_KEY) return false
   if (key === SYNC_TIMESTAMP_KEY) return false
+  if (key === SYNC_ENABLED_KEY) return false
   return SYNC_KEY_PREFIXES.some((prefix) => key.startsWith(prefix))
 }
 
 const getSyncPath = () => firebaseSyncConfig.syncPath.replace(/^\/+|\/+$/g, "")
 
-const getSyncDatabase = (): Database | null => {
+const getSyncDatabase = () => {
   const app = getApps()[0]
     ? getApps()[0]
     : initializeApp({
@@ -102,32 +49,19 @@ const getSyncDatabase = (): Database | null => {
         appId: firebaseSyncConfig.appId,
       })
 
-  return getDatabase(app)
-}
-
-const getLocalTimestamp = () => {
-  const parsed = readJsonStoredValue(SYNC_TIMESTAMP_KEY)
-  if (typeof parsed === "number" && Number.isFinite(parsed)) return parsed
-  if (typeof parsed === "string") {
-    const next = Number(parsed)
-    return Number.isFinite(next) ? next : 0
-  }
-  return 0
-}
-
-const setLocalTimestamp = (timestamp: number) => {
-  writeStoredRawValue(SYNC_TIMESTAMP_KEY, JSON.stringify(timestamp))
+  const db = getDatabase(app)
+  if (!db) throw new Error("Failed to initialize sync database")
+  return db
 }
 
 const collectSyncData = () => {
   const data: Record<string, string> = {}
-  if (!hasLocalStorage()) return data
 
-  for (let index = 0; index < globalThis.localStorage.length; index += 1) {
-    const key = globalThis.localStorage.key(index)
+  for (let index = 0; index < localStorage.length; index += 1) {
+    const key = localStorage.key(index)
     if (!key || !shouldSyncKey(key)) continue
 
-    const rawValue = globalThis.localStorage.getItem(key)
+    const rawValue = localStorage.getItem(key)
     if (rawValue == null) continue
     data[key] = rawValue
   }
@@ -140,36 +74,38 @@ const applyRemoteData = (data: Record<string, string>) => {
 
   try {
     for (const [key, rawValue] of Object.entries(data)) {
-      if (key === SYNC_HASH_KEY || !shouldSyncKey(key)) continue
-      writeStoredRawValue(key, rawValue)
+      if (!shouldSyncKey(key)) continue
+      updateSignal(key, rawValue)
     }
   } finally {
     applyingRemote = false
   }
 }
 
-const uploadNow = async () => {
-  if (!hasLocalStorage() || applyingRemote) return
-  if (!isSyncEnabled()) return
+const pushData = async () => {
+  try {
+    cancelPush()
+    if (applyingRemote) return
 
-  const database = getSyncDatabase()
-  if (!database) return
+    const database = getSyncDatabase()
 
-  const hash = getSyncHash()
-  if (!hash) return
+    const hash = readFromStorage(SYNC_HASH_KEY, "")
+    if (!hash) return
 
-  const timestamp = Date.now()
-  setLocalTimestamp(timestamp)
+    const timestamp = Date.now()
+    updateSignal(SYNC_TIMESTAMP_KEY, timestamp)
 
-  const data = collectSyncData()
-  const payload = compressToEncodedURIComponent(JSON.stringify(data))
-  const path = `${getSyncPath()}/${hash}`
-
-  await set(ref(database, path), {
-    version: REMOTE_SYNC_VERSION,
-    timestamp,
-    payload,
-  } satisfies SyncRecord)
+    const data = collectSyncData()
+    const payload = compressToEncodedURIComponent(JSON.stringify(data))
+    const path = `${getSyncPath()}/${hash}`
+    await set(ref(database, path), {
+      version: REMOTE_SYNC_VERSION,
+      timestamp,
+      payload,
+    } satisfies SyncRecord)
+  } catch (error) {
+    console.error("Error during pushData:", error)
+  }
 }
 
 const getRemoteTimestamp = (record: Partial<SyncRecord>) => {
@@ -182,95 +118,65 @@ const getRemoteTimestamp = (record: Partial<SyncRecord>) => {
   return 0
 }
 
-const pullNow = async () => {
-  if (!hasLocalStorage()) return
-  if (!isSyncEnabled()) return
-
-  const database = getSyncDatabase()
-  if (!database) return
-
-  const hash = getSyncHash()
-  if (!hash) return
-  const path = `${getSyncPath()}/${hash}`
-  const snapshot = await get(ref(database, path))
-  if (!snapshot.exists()) return
-
-  const record = snapshot.val() as Partial<SyncRecord>
-  if (!record || typeof record.payload !== "string") return
-
-  const decodedPayload = decompressFromEncodedURIComponent(record.payload)
-  if (!decodedPayload) return
-
-  let remoteData: Record<string, string>
+export const pullData = async () => {
   try {
-    remoteData = JSON.parse(decodedPayload) as Record<string, string>
-  } catch {
-    return
+    const database = getSyncDatabase()
+
+    const hash = readFromStorage(SYNC_HASH_KEY, "")
+    if (!hash) return
+    const path = `${getSyncPath()}/${hash}`
+    const snapshot = await get(ref(database, path))
+    if (!snapshot.exists()) return
+
+    const record = snapshot.val() as Partial<SyncRecord>
+    if (!record || typeof record.payload !== "string") return
+
+    const decodedPayload = decompressFromEncodedURIComponent(record.payload)
+    if (!decodedPayload) return
+
+    const remoteData = JSON.parse(decodedPayload) as Record<string, string>
+
+    const localTimestamp = readFromStorage(SYNC_TIMESTAMP_KEY, 0)
+    const remoteTimestamp = getRemoteTimestamp(record)
+
+    if (remoteTimestamp <= localTimestamp) return
+    applyRemoteData(remoteData)
+    updateSignal(SYNC_TIMESTAMP_KEY, remoteTimestamp)
+  } catch (error) {
+    console.error("Error during pullData:", error)
   }
-
-  const localTimestamp = getLocalTimestamp()
-  const remoteTimestamp = getRemoteTimestamp(record)
-
-  if (remoteTimestamp <= localTimestamp) return
-  applyRemoteData(remoteData)
-  setLocalTimestamp(remoteTimestamp)
 }
 
 const schedulePush = () => {
   if (pushTimer) clearTimeout(pushTimer)
-  pushTimer = setTimeout(() => {
-    void uploadNow().catch(() => {
-      // Ignore sync failures to keep local UX unaffected.
-    })
-  }, PUSH_DEBOUNCE_MS)
+  pushTimer = setTimeout(pushData, PUSH_DEBOUNCE_MS)
 }
 
-const schedulePull = () => {
-  if (pullTimer) clearTimeout(pullTimer)
-  pullTimer = setTimeout(() => {
-    void pullNow().catch(() => {
-      // Ignore sync failures to keep local UX unaffected.
-    })
-  }, PULL_DEBOUNCE_MS)
+export const cancelPush = () => {
+  if (pushTimer) {
+    clearTimeout(pushTimer)
+    pushTimer = undefined
+  }
 }
 
-const handleStorageChange = (key: string | null) => {
-  if (!key || applyingRemote) return
+const pushImmediately = () => {
+  if (!pushTimer) return
+  pushData()
+}
 
-  if (key === SYNC_ENABLED_KEY) {
-    if (!isSyncEnabled()) return
-    void pullNow().catch(() => {
-      // Ignore sync failures to keep local UX unaffected.
-    })
-    return
-  }
-
-  if (!isSyncEnabled()) return
-
-  if (key === SYNC_HASH_KEY) {
-    schedulePull()
-    return
-  }
-
-  if (key === SYNC_TIMESTAMP_KEY) return
-  if (shouldSyncKey(key)) schedulePush()
+export const handleStorageChange = (key: string) => {
+  if (applyingRemote) return
+  if (!readFromStorage(SYNC_ENABLED_KEY, false)) return
+  if (!shouldSyncKey(key)) return
+  schedulePush()
 }
 
 export const initCloudSync = () => {
-  if (hasInitialized || !("window" in globalThis) || !hasLocalStorage()) return
-  hasInitialized = true
-
-  window.addEventListener(STORAGE_UPDATED_EVENT, (event) => {
-    const detail = (event as CustomEvent<StorageUpdatedDetail>).detail
-    if (!detail) return
-    handleStorageChange(detail.key)
+  window.addEventListener("visibilitychange", (e) => {
+    if (document.visibilityState === "visible") pullData()
+    else pushImmediately()
   })
+  window.addEventListener("beforeunload", pushImmediately)
 
-  window.addEventListener("storage", (event) => {
-    handleStorageChange(event.key)
-  })
-}
-
-export const pullFromCloudNow = () => {
-  return pullNow()
+  pullData()
 }

@@ -6,7 +6,7 @@ import { isValidNumberishInput } from "../components/ui/formControls"
 import { sanitizeNumberishInput } from "../components/ui/formControls"
 import { Tooltip } from "../components/ui/Tooltip"
 import { formatFixed } from "../lib/numberFormat"
-import { createPersistedSignal } from "../lib/persistedSignal"
+import { createSyncedSignal } from "../lib/persistedSignal"
 import type { TooltipKey } from "../lib/tooltips"
 import { useZatData, type PremiumCrystalTokenMethod, type PremiumHaulerLayer } from "../lib/zatContext"
 
@@ -104,20 +104,20 @@ const NumberSelectField = (props: {
 const CrystalAndTokenTab = () => {
   const data = useZatData()
   const premium = data().premium.crystalToken
-  const [tokenBooster, setTokenBooster] = createPersistedSignal("premium.tokenBooster", "0")
+  const [tokenBooster, setTokenBooster] = createSyncedSignal("premium.tokenBooster", "0")
 
-  const [supplyBotTokenUpgrade, setSupplyBotTokenUpgrade] = createPersistedSignal("premium.supplyBotTokenUpgrade", "0")
-  const [supplyBotCrystalUpgrade, setSupplyBotCrystalUpgrade] = createPersistedSignal(
+  const [supplyBotTokenUpgrade, setSupplyBotTokenUpgrade] = createSyncedSignal("premium.supplyBotTokenUpgrade", "0")
+  const [supplyBotCrystalUpgrade, setSupplyBotCrystalUpgrade] = createSyncedSignal(
     "premium.supplyBotCrystalUpgrade",
     "0",
   )
-  const [bbDurationUpgrade, setBbDurationUpgrade] = createPersistedSignal("premium.bbDurationUpgrade", "0")
-  const [bbTokenUpgrade, setBbTokenUpgrade] = createPersistedSignal("premium.bbTokenUpgrade", "0")
-  const [chestEnhancer, setChestEnhancer] = createPersistedSignal("premium.chestEnhancer", "0")
-  const [averageHoursPerDay, setAverageHoursPerDay] = createPersistedSignal("premium.averageHoursPerDay", "24")
-  const [includeDailyRewards, setIncludeDailyRewards] = createPersistedSignal("premium.includeDailyRewards", false)
-  const [seItem, setSeItem] = createPersistedSignal("premium.seItem", "11")
-  const [luckyLeafClover, setLuckyLeafClover] = createPersistedSignal("premium.luckyLeafClover", false)
+  const [bbDurationUpgrade, setBbDurationUpgrade] = createSyncedSignal("premium.bbDurationUpgrade", "0")
+  const [bbTokenUpgrade, setBbTokenUpgrade] = createSyncedSignal("premium.bbTokenUpgrade", "0")
+  const [chestEnhancer, setChestEnhancer] = createSyncedSignal("premium.chestEnhancer", "0")
+  const [averageHoursPerDay, setAverageHoursPerDay] = createSyncedSignal("premium.averageHoursPerDay", "24")
+  const [includeDailyRewards, setIncludeDailyRewards] = createSyncedSignal("premium.includeDailyRewards", false)
+  const [seItem, setSeItem] = createSyncedSignal("premium.seItem", "11")
+  const [luckyLeafClover, setLuckyLeafClover] = createSyncedSignal("premium.luckyLeafClover", false)
 
   const normalizedTokenBooster = createMemo(() => clamp(parseNumberish(tokenBooster()), 0, 100))
   const normalizedSupplyBotToken = createMemo(() => clamp(parseNumberish(supplyBotTokenUpgrade()), 0, 25))
@@ -411,29 +411,23 @@ const CrystalAndTokenTab = () => {
 const HaulerMineTab = () => {
   const data = useZatData()
   const premium = data().premium.haulerMine
-  const [tokenBooster, setTokenBooster] = createPersistedSignal("premium.tokenBooster", "0")
+  const [tokenBooster, setTokenBooster] = createSyncedSignal("premium.tokenBooster", "0")
 
-  const [unlockedLayers, setUnlockedLayers] = createPersistedSignal("premium.hauler.unlockedLayers", "11")
-  const [layer1TokenIncome, setLayer1TokenIncome] = createPersistedSignal("premium.hauler.layer1TokenIncome", false)
-  const [layer1CrystalIncome, setLayer1CrystalIncome] = createPersistedSignal(
-    "premium.hauler.layer1CrystalIncome",
-    false,
-  )
-  const [layer3CrystalIncome, setLayer3CrystalIncome] = createPersistedSignal(
-    "premium.hauler.layer3CrystalIncome",
-    false,
-  )
-  const [layer4RareDirtIncome, setLayer4RareDirtIncome] = createPersistedSignal(
+  const [unlockedLayers, setUnlockedLayers] = createSyncedSignal("premium.hauler.unlockedLayers", "11")
+  const [layer1TokenIncome, setLayer1TokenIncome] = createSyncedSignal("premium.hauler.layer1TokenIncome", false)
+  const [layer1CrystalIncome, setLayer1CrystalIncome] = createSyncedSignal("premium.hauler.layer1CrystalIncome", false)
+  const [layer3CrystalIncome, setLayer3CrystalIncome] = createSyncedSignal("premium.hauler.layer3CrystalIncome", false)
+  const [layer4RareDirtIncome, setLayer4RareDirtIncome] = createSyncedSignal(
     "premium.hauler.layer4RareDirtIncome",
     false,
   )
-  const [layer7RareDirtIncome, setLayer7RareDirtIncome] = createPersistedSignal(
+  const [layer7RareDirtIncome, setLayer7RareDirtIncome] = createSyncedSignal(
     "premium.hauler.layer7RareDirtIncome",
     false,
   )
-  const [layer2ExoticIncome, setLayer2ExoticIncome] = createPersistedSignal("premium.hauler.layer2ExoticIncome", false)
-  const [layer6ExoticIncome, setLayer6ExoticIncome] = createPersistedSignal("premium.hauler.layer6ExoticIncome", false)
-  const [layer9ExoticIncome, setLayer9ExoticIncome] = createPersistedSignal("premium.hauler.layer9ExoticIncome", false)
+  const [layer2ExoticIncome, setLayer2ExoticIncome] = createSyncedSignal("premium.hauler.layer2ExoticIncome", false)
+  const [layer6ExoticIncome, setLayer6ExoticIncome] = createSyncedSignal("premium.hauler.layer6ExoticIncome", false)
+  const [layer9ExoticIncome, setLayer9ExoticIncome] = createSyncedSignal("premium.hauler.layer9ExoticIncome", false)
 
   const toggleMap = createMemo<Record<HaulerToggleKey, boolean>>(() => ({
     layer1TokenIncome: layer1TokenIncome(),

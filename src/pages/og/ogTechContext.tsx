@@ -1,6 +1,6 @@
 import { createContext, createMemo, type ParentProps, useContext } from "solid-js"
 import { LargeNumber } from "../../lib/largeNumber"
-import { createPersistedSignal } from "../../lib/persistedSignal"
+import { createSyncedSignal } from "../../lib/persistedSignal"
 import { useZatData, type JunoExponentType } from "../../lib/zatContext"
 import {
   calculateExponentIncreaseMultipliers,
@@ -112,29 +112,29 @@ const OgTechContext = createContext<OgTechContextValue>()
 export const OgTechProvider = (props: ParentProps) => {
   const data = useZatData()
 
-  const [cycles, setCycles] = createPersistedSignal("zat.og.cycles", "0")
-  const [gainValue, setGainValue] = createPersistedSignal("zat.og.gain", "1.00e1")
-  const [gainUnit, setGainUnit] = createPersistedSignal<GainUnit>("zat.og.gainUnit", "hour")
-  const [junoAmount, setJunoAmount] = createPersistedSignal("zat.og.junoAmount", "")
-  const [mode, setMode] = createPersistedSignal<ZatMode>("zat.og.mode", "juno")
+  const [cycles, setCycles] = createSyncedSignal("zat.og.cycles", "0")
+  const [gainValue, setGainValue] = createSyncedSignal("zat.og.gain", "1.00e1")
+  const [gainUnit, setGainUnit] = createSyncedSignal<GainUnit>("zat.og.gainUnit", "hour")
+  const [junoAmount, setJunoAmount] = createSyncedSignal("zat.og.junoAmount", "")
+  const [mode, setMode] = createSyncedSignal<ZatMode>("zat.og.mode", "juno")
 
-  const [junoOutput, setJunoOutput] = createPersistedSignal("zat.og.junoOutput", "0")
-  const [junoBundle, setJunoBundle] = createPersistedSignal("zat.og.bundle.juno", false)
-  const [ixionJunoBundle, setIxionJunoBundle] = createPersistedSignal("zat.og.bundle.ixion", false)
-  const [junoKappaBundle, setJunoKappaBundle] = createPersistedSignal("zat.og.bundle.kappa", false)
-  const [tokens, setTokens] = createPersistedSignal("zat.og.tokens", "0")
+  const [junoOutput, setJunoOutput] = createSyncedSignal("zat.og.junoOutput", "0")
+  const [junoBundle, setJunoBundle] = createSyncedSignal("zat.og.bundle.juno", false)
+  const [ixionJunoBundle, setIxionJunoBundle] = createSyncedSignal("zat.og.bundle.ixion", false)
+  const [junoKappaBundle, setJunoKappaBundle] = createSyncedSignal("zat.og.bundle.kappa", false)
+  const [tokens, setTokens] = createSyncedSignal("zat.og.tokens", "0")
 
-  const [sharesPercent, setSharesPercent] = createPersistedSignal("zat.guide.shares", "0")
+  const [sharesPercent, setSharesPercent] = createSyncedSignal("zat.guide.shares", "0")
 
-  const [extraExponent, setExtraExponent] = createPersistedSignal("zat.og.extraExponent", "0.001")
-  const [seLevel, setSeLevel] = createPersistedSignal("zat.og.seLevel", "0")
-  const [playerLevel, setPlayerLevel] = createPersistedSignal("zat.og.playerLevel", "0")
-  const [dcmLevel, setDcmLevel] = createPersistedSignal("zat.og.dcmLevel", "0")
-  const [researchLevel, setResearchLevel] = createPersistedSignal("zat.og.researchLevel", "0")
-  const [meltdownBundle, setMeltdownBundle] = createPersistedSignal("zat.og.meltdown", false)
-  const [quantumAddon0, setQuantumAddon0] = createPersistedSignal("zat.og.qa0", false)
+  const [extraExponent, setExtraExponent] = createSyncedSignal("zat.og.extraExponent", "0.001")
+  const [seLevel, setSeLevel] = createSyncedSignal("zat.og.seLevel", "0")
+  const [playerLevel, setPlayerLevel] = createSyncedSignal("zat.og.playerLevel", "0")
+  const [dcmLevel, setDcmLevel] = createSyncedSignal("zat.og.dcmLevel", "0")
+  const [researchLevel, setResearchLevel] = createSyncedSignal("zat.og.researchLevel", "0")
+  const [meltdownBundle, setMeltdownBundle] = createSyncedSignal("zat.og.meltdown", false)
+  const [quantumAddon0, setQuantumAddon0] = createSyncedSignal("zat.og.qa0", false)
 
-  const [techLevels, setTechLevels] = createPersistedSignal<number[]>(
+  const [techLevels, setTechLevels] = createSyncedSignal<number[]>(
     "zat.og.techLevels",
     Array.from({ length: data().techs.length }, () => 0),
   )

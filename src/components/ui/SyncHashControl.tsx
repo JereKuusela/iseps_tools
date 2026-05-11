@@ -1,12 +1,13 @@
 import { createPersistedSignal } from "../../lib/persistedSignal"
 import {
+  cancelPush,
   createRandomSyncHash,
-  pullFromCloudNow,
+  pullData,
   SYNC_ENABLED_KEY,
   SYNC_HASH_KEY as SYNC_KEY,
   SYNC_TIMESTAMP_KEY,
 } from "../../lib/cloudSync"
-import { Show } from "solid-js"
+import { createEffect, Show } from "solid-js"
 
 const sanitizeKey = (value: string) =>
   value
@@ -25,39 +26,46 @@ export const SyncControl = () => {
 
   const handleInput = (rawValue: string) => {
     const nextKey = sanitizeKey(rawValue)
-    setSyncKey(nextKey)
     // Key edits should always require explicit re-enable.
     setSyncEnabled(false)
+    setSyncKey(nextKey)
   }
 
   const randomizeKey = () => {
-    setSyncKey(createRandomSyncHash())
     setSyncEnabled(false)
+    setSyncKey(createRandomSyncHash())
   }
 
-  const handleEnabledChange = (nextEnabled: boolean) => {
-    if (!nextEnabled) {
-      setSyncEnabled(false)
-      return
-    }
+  const clearData = () => {
+    const shouldClear = window.confirm("Clear all saved app data on this device? This cannot be undone.")
+    if (!shouldClear) return
 
-    if (isHashEmpty()) {
-      setSyncEnabled(false)
-      return
-    }
+    cancelPush()
 
-    setSyncEnabled(true)
-    void pullFromCloudNow().catch(() => {
-      // Keep settings UX responsive if remote fetch fails.
+    localStorage.clear()
+
+    setSyncEnabled(false)
+    setSyncKey("")
+    window.location.reload()
+  }
+
+  const toggleSync = () => {
+    setSyncEnabled((prev) => {
+      if (isHashEmpty()) return false
+      return !prev
     })
   }
+  createEffect(() => {
+    if (syncEnabled()) pullData()
+    else cancelPush()
+  })
 
   const formattedTimestamp = () => {
     const timestamp = lastSyncTimestamp()
     if (!Number.isFinite(timestamp) || timestamp <= 0) return "Never"
     return new Intl.DateTimeFormat(undefined, {
       dateStyle: "medium",
-      timeStyle: "short",
+      timeStyle: "medium",
     }).format(new Date(timestamp))
   }
 
@@ -96,7 +104,7 @@ export const SyncControl = () => {
 
         <button
           type="button"
-          onClick={() => handleEnabledChange(!isSyncActive())}
+          onClick={toggleSync}
           disabled={isHashEmpty()}
           class="rounded-xl border border-ink/20 bg-white px-3 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-ink/80 transition hover:border-ink/35 hover:text-ink disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/20 dark:bg-[#1a2638] dark:text-white/80 dark:hover:border-white/40 dark:hover:text-white"
         >
@@ -108,6 +116,13 @@ export const SyncControl = () => {
         <Show when={!isSyncActive()}>
           <p class="mt-2 text-xs text-ink/65 dark:text-white/65">Last sync: Not synced.</p>
         </Show>
+        <button
+          type="button"
+          onClick={clearData}
+          class="mt-2 rounded-xl border border-red-600/45 bg-red-50 px-3 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-red-700 transition hover:border-red-700/60 hover:bg-red-100 dark:border-red-400/40 dark:bg-red-950/35 dark:text-red-200 dark:hover:border-red-300/60 dark:hover:bg-red-900/40"
+        >
+          Clear data
+        </button>
       </div>
     </div>
   )
