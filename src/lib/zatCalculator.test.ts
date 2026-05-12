@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest"
 import {
+  calculateOg0TotalBoostFromGuide,
   calculateExponentIncreaseMultipliers,
   calculateNextThreeTechCosts,
+  calculateTechValues,
   calculateNextZatCost,
   calculateSeEffect,
   calculateTechBoost,
@@ -17,14 +19,34 @@ const compareLarge = (a: LargeNumber, b: LargeNumber) => {
 
 describe("calculateZatBoostPerTech", () => {
   it("returns a positive boost for juno mode", () => {
-    const boost = calculateZatBoostPerTech(10, "juno")
+    const boost = calculateZatBoostPerTech(10, "juno", 1, 1)
     expect(boost).toBeGreaterThan(1)
   })
 
   it("returns a larger boost for dc mode", () => {
-    const juno = calculateZatBoostPerTech(10, "juno")
-    const dc = calculateZatBoostPerTech(10, "dc")
+    const juno = calculateZatBoostPerTech(10, "juno", 1, 1)
+    const dc = calculateZatBoostPerTech(10, "dc", 1, 1)
     expect(dc).toBeGreaterThan(juno)
+  })
+
+  it("increases with exponent input", () => {
+    const base = calculateZatBoostPerTech(14, "juno", 1, 1)
+    const boosted = calculateZatBoostPerTech(14, "juno", 2, 1)
+
+    expect(boosted).toBeGreaterThan(base)
+  })
+
+  it("applies OG0 recursive factor when OG0 context is provided", () => {
+    const withoutOg0 = calculateZatBoostPerTech(16, "juno", 1.2, 1)
+    const junoRecursive = calculateOg0TotalBoostFromGuide(16, {
+      techLevels: [40, 100, 85, 20, 10],
+      junoExponent: 1.2,
+      gains: LargeNumber.from(1e6),
+      exponentDeltaMultiplier: 1.8,
+    })
+    const withOg0 = calculateZatBoostPerTech(16, "juno", 1.2, junoRecursive)
+
+    expect(withOg0).toBeGreaterThan(withoutOg0)
   })
 })
 
@@ -99,14 +121,71 @@ describe("calculateNextThreeTechCosts", () => {
 
 describe("calculateTechBoost", () => {
   it("calculates juno boost", () => {
-    const result = calculateTechBoost(1.5, 0.02, 2, "juno")
+    const result = calculateTechBoost(1.5, 0.02, 2, "juno", {
+      cycles: 16,
+      techLevels: [35, 150, 120, 60, 40],
+      junoExponent: 1.4,
+      gains: LargeNumber.from(1e6),
+      exponentDeltaMultiplier: 1.7,
+    })
     expect(result.rawTechBoost).toBeGreaterThan(1)
     expect(result.finalBoost).toBeGreaterThan(0)
   })
 
   it("calculates dc boost", () => {
-    const result = calculateTechBoost(1.5, 0.02, 2, "dc")
+    const result = calculateTechBoost(1.5, 0.02, 2, "dc", {
+      cycles: 16,
+      techLevels: [35, 150, 120, 60, 40],
+      junoExponent: 1.4,
+      gains: LargeNumber.from(1e6),
+      exponentDeltaMultiplier: 1.7,
+    })
     expect(result.rawTechBoost).toBeCloseTo(2.47, 2)
+  })
+
+  it("calculates OG0 contribution for non-OG0 tech when OG0 context is provided", () => {
+    const result = calculateTechBoost(1.5, 0.02, 2, "juno", {
+      cycles: 16,
+      techLevels: [35, 150, 120, 60, 40],
+      junoExponent: 1.4,
+      gains: LargeNumber.from(1e6),
+      exponentDeltaMultiplier: 1.7,
+    })
+
+    expect(result.rawTechBoost).toBeGreaterThan(1)
+    expect(result.finalBoost).toBeGreaterThan(0)
+    expect(result.og0Boost).toBeGreaterThan(0)
+  })
+
+  it("throws for OG0 direct boost calculation", () => {
+    expect(() =>
+      calculateTechBoost(1.5, 0.02, 0, "juno", {
+        cycles: 16,
+        techLevels: [35, 150, 120, 60, 40],
+        junoExponent: 1.4,
+        gains: LargeNumber.from(1e6),
+        exponentDeltaMultiplier: 1.7,
+      }),
+    ).toThrow("calculateTechBoost does not support id 0")
+  })
+})
+
+describe("calculateRankedTechSnapshot", () => {
+  it("keeps extremely large gain rates valid via LargeNumber input", () => {
+    const snapshot = calculateTechValues({
+      cycles: 50,
+      mode: "juno",
+      junoExponent: 1.2,
+      seAmount: 100,
+      currentJuno: LargeNumber.from("1e500"),
+      gainPerSecond: LargeNumber.from("1e400"),
+      techLevels: Array.from({ length: 25 }, () => 10),
+      exponentDeltaMultiplier: 1.5,
+    })
+
+    expect(snapshot.rows.length).toBeGreaterThan(0)
+    expect(snapshot.rows.some((row) => Number.isFinite(row.relative))).toBe(true)
+    expect(snapshot.rows.some((row) => row.etaSeconds === 0)).toBe(true)
   })
 })
 
@@ -127,7 +206,18 @@ describe("calculateTotalPremiumMultiplier", () => {
       tokens: 1100,
     })
 
-    expect(result).toBeCloseTo((1 + 100 * 0.02) * (1 + 0.5) * (1 + 1000 * 0.01) * 1.01 ** 100, 8)
+    expect(result).toBeCloseTo((1 + 100 * 0.02) * (1 + 0.5) * (1 + 1000 * 0.01 * 1.01 ** 100), 8)
+  })
+  it("handles token split rules", () => {
+    const result = calculateTotalPremiumMultiplier({
+      tokens: 1300,
+    })
+
+    const linearTokens = 1000
+    const postTokens = 300
+    const expected = 1 + linearTokens * 0.01 * 1.01 ** postTokens
+
+    expect(result).toBeCloseTo(expected, 8)
   })
 })
 

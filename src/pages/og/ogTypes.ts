@@ -1,18 +1,11 @@
-import { LargeNumber } from "../../lib/largeNumber"
-
 export type GainUnit = "sec" | "min" | "hour"
 
-export type RankedTech = {
+export type TopTechEntry = {
   id: number
   level: number
   score: number
-  rawValue: number
-  cost: LargeNumber
-  etaSeconds: number
-}
-
-export type TopTechEntry = RankedTech & {
   relative: number
+  etaSeconds: number
 }
 
 export type TechCardRow = {

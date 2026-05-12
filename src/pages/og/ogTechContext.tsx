@@ -3,15 +3,13 @@ import { LargeNumber } from "../../lib/largeNumber"
 import { createSyncedSignal } from "../../lib/persistedSignal"
 import { useZatData, type JunoExponentType } from "../../lib/zatContext"
 import {
+  calculateTechValues,
   calculateExponentIncreaseMultipliers,
   calculateNextThreeTechCosts,
-  calculateSeEffect,
-  calculateTechBoost,
   calculateTotalPremiumMultiplier,
-  calculateZatBoostPerTech,
   type ZatMode,
 } from "../../lib/zatCalculator"
-import type { ExponentGainEntry, GainUnit, RankedTech, TechCardRow, TopTechEntry } from "./ogTypes"
+import type { ExponentGainEntry, GainUnit, TechCardRow, TopTechEntry } from "./ogTypes"
 
 const parseNumberish = (value: string) => {
   const parsed = Number(value)
@@ -19,9 +17,9 @@ const parseNumberish = (value: string) => {
   return parsed
 }
 
-const toRatePerSecond = (value: number, unit: GainUnit) => {
-  if (unit === "min") return value / 60
-  if (unit === "hour") return value / 3600
+const toRatePerSecond = (value: LargeNumber, unit: GainUnit) => {
+  if (unit === "min") return value.divide(60)
+  if (unit === "hour") return value.divide(3600)
   return value
 }
 
@@ -33,18 +31,13 @@ const parseLargeNumberSafe = (value: string): LargeNumber => {
   }
 }
 
-const estimateSeconds = (cost: LargeNumber, current: LargeNumber, gainPerSecond: number) => {
-  if (gainPerSecond <= 0) return Number.POSITIVE_INFINITY
+const estimateSeconds = (cost: LargeNumber, current: LargeNumber, gainPerSecond: LargeNumber) => {
+  if (gainPerSecond.compare(0) <= 0) return Number.POSITIVE_INFINITY
   if (cost.compare(current) <= 0) return 0
 
   const remaining = cost.subtract(current).divide(gainPerSecond)
   if (remaining.exponent > 12) return Number.POSITIVE_INFINITY
   return remaining.mantissa * 10 ** remaining.exponent
-}
-
-const logScore = (value: number, cost: LargeNumber) => {
-  const safeValue = Math.max(value, Number.EPSILON)
-  return Math.log(safeValue) - (Math.log(Math.max(cost.mantissa, Number.EPSILON)) + cost.exponent * Math.log(10))
 }
 
 type BestTech = {
@@ -140,12 +133,12 @@ export const OgTechProvider = (props: ParentProps) => {
   )
 
   const gainPerSecond = createMemo(() => {
-    return Math.max(0, toRatePerSecond(parseNumberish(gainValue()), gainUnit()))
+    const parsed = parseLargeNumberSafe(gainValue())
+    if (parsed.compare(0) <= 0) return LargeNumber.zero()
+    return toRatePerSecond(parsed, gainUnit())
   })
 
   const currentJuno = createMemo(() => parseLargeNumberSafe(junoAmount()))
-  const seEffect = createMemo(() => calculateSeEffect(parseNumberish(seLevel())))
-  const zatBoost = createMemo(() => calculateZatBoostPerTech(parseNumberish(cycles()), mode()))
 
   const premiumMultiplier = createMemo(() => {
     return calculateTotalPremiumMultiplier({
@@ -183,6 +176,32 @@ export const OgTechProvider = (props: ParentProps) => {
     return 0.01 + totalExtraExponent() + og0Level() * 0.01
   })
 
+  const totalTechLevels = createMemo(() => techLevels().reduce((sum, value) => sum + value, 0))
+
+  const og0ExponentDeltaMultiplier = createMemo(() => {
+    const [entry] = calculateExponentIncreaseMultipliers(
+      gainPerSecond(),
+      Math.max(totalExponent(), 0.001),
+      premiumMultiplier(),
+      [0.01],
+    )
+
+    return entry?.multiplier ?? 1
+  })
+
+  const techValues = createMemo(() =>
+    calculateTechValues({
+      cycles: parseNumberish(cycles()),
+      mode: mode(),
+      junoExponent: totalExponent(),
+      seAmount: parseNumberish(seLevel()),
+      currentJuno: currentJuno(),
+      gainPerSecond: gainPerSecond(),
+      techLevels: techLevels(),
+      exponentDeltaMultiplier: og0ExponentDeltaMultiplier(),
+    }),
+  )
+
   const exponentGainEntries = createMemo(() => {
     return calculateExponentIncreaseMultipliers(
       gainPerSecond(),
@@ -192,72 +211,55 @@ export const OgTechProvider = (props: ParentProps) => {
     )
   })
 
-  const rankedTechs = createMemo<RankedTech[]>(() => {
-    const current = currentJuno()
-    const gain = gainPerSecond()
-    const levels = techLevels()
-
-    const ranked: RankedTech[] = []
-
-    for (const tech of data().techs) {
-      const currentLevel = levels[tech.id] ?? 0
-      const nextThree = calculateNextThreeTechCosts(tech.id, currentLevel)
-      const techBoost = calculateTechBoost(zatBoost(), seEffect(), tech.id, mode())
-
-      for (const option of nextThree) {
-        const score = logScore(techBoost.finalBoost, option.cost)
-        ranked.push({
-          id: tech.id,
-          level: option.level,
-          score,
-          rawValue: techBoost.finalBoost,
-          cost: option.cost,
-          etaSeconds: estimateSeconds(option.cost, current, gain),
-        })
-      }
-    }
-
-    return ranked.sort((a, b) => b.score - a.score)
+  const rankedRows = createMemo(() => {
+    return techValues()
+      .rows.filter((row) => row.nextLevel !== null && Number.isFinite(row.score))
+      .slice()
+      .sort((a, b) => b.score - a.score)
   })
 
-  const bestTech = createMemo<BestTech>(() => rankedTechs()[0] ?? null)
+  const bestTech = createMemo<BestTech>(() => {
+    const best = rankedRows()[0]
+    if (!best || best.nextLevel === null) return null
+    return {
+      id: best.id,
+      level: best.nextLevel,
+      etaSeconds: best.etaSeconds,
+    }
+  })
 
   const topFive = createMemo<TopTechEntry[]>(() => {
-    const all = rankedTechs()
+    const all = rankedRows()
     if (all.length === 0) return []
-    const best = all[0].score
 
-    return all.slice(1, 6).map((entry) => ({
-      ...entry,
-      relative: Math.max(0, Math.min(100, Math.exp(entry.score - best) * 100)),
+    return all.slice(1, 6).map((row) => ({
+      id: row.id,
+      level: row.nextLevel ?? row.currentLevel,
+      score: row.score,
+      relative: row.relative,
+      etaSeconds: row.etaSeconds,
     }))
   })
 
   const techCardRows = createMemo<TechCardRow[]>(() => {
-    const levels = techLevels()
-    const ranked = rankedTechs()
-    const bestScore = ranked[0]?.score ?? 0
+    const snapshot = techValues()
+    const rowsById = new Map(snapshot.rows.map((row) => [row.id, row]))
 
     return data().techs.map((tech) => {
-      const currentLevel = levels[tech.id] ?? 0
-      const next = calculateNextThreeTechCosts(tech.id, currentLevel)[0]
-      const boost = calculateTechBoost(zatBoost(), seEffect(), tech.id, mode())
-      const score = next ? logScore(boost.finalBoost, next.cost) : Number.NEGATIVE_INFINITY
+      const row = rowsById.get(tech.id)
 
       return {
         id: tech.id,
         label: `OG${tech.id}`,
         maxLevel: tech.maxLevel,
-        level: currentLevel,
-        nextLevel: next ? next.level : null,
-        relative: ranked.length > 0 ? Math.max(0, Math.min(100, Math.exp(score - bestScore) * 100)) : 0,
-        etaSeconds: next ? estimateSeconds(next.cost, currentJuno(), gainPerSecond()) : Number.POSITIVE_INFINITY,
-        nextCost: next ? next.cost.toString(2) : "-",
+        level: row?.currentLevel ?? 0,
+        nextLevel: row?.nextLevel ?? null,
+        relative: row?.relative ?? 0,
+        etaSeconds: row?.etaSeconds ?? Number.POSITIVE_INFINITY,
+        nextCost: row?.nextCost ? row.nextCost.toString(2) : "-",
       }
     })
   })
-
-  const totalTechLevels = createMemo(() => techLevels().reduce((sum, value) => sum + value, 0))
 
   const setTechLevel = (id: number, next: number) => {
     setTechLevels((current) => {
@@ -286,7 +288,7 @@ export const OgTechProvider = (props: ParentProps) => {
     const current = currentJuno()
     const gain = gainPerSecond()
 
-    if (gain <= 0) return
+    if (gain.compare(0) <= 0) return
 
     let foundInPass = false
     let iterations = 0
