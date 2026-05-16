@@ -25,7 +25,7 @@
     "id": 3,
     "name": "Gamma",
     "maxLv": 3,
-    "techMul": 0.03,
+    "techMul": 0.08,
     "x": 3,
     "y": 0,
     "req": 1,
@@ -35,7 +35,7 @@
     "id": 4,
     "name": "Delta",
     "maxLv": 3,
-    "techMul": 0.03,
+    "techMul": 0.04,
     "x": 0,
     "y": -3,
     "req": 1,
@@ -100,7 +100,7 @@
     "x": 5,
     "y": 5,
     "req": 6,
-    "info": "Juno multiplied by x1.0012 per tech."
+    "info": "Juno multiplied by x1.012 per tech."
   },
   {
     "id": 11,
