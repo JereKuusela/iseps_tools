@@ -182,11 +182,11 @@ export const ScRightColumn = () => {
   })
 
   return (
-    <section class="w-max min-w-[560px]">
-      <div class="flex w-max min-w-[560px] items-start gap-2.5">
+    <section class="w-full min-w-0 sm:w-max sm:min-w-[560px]">
+      <div class="flex w-full min-w-0 flex-col items-stretch gap-2.5 sm:w-max sm:min-w-[560px] sm:flex-row sm:items-start">
         <Index each={outputs()}>
           {(panel, index) => (
-            <article class="w-[260px] shrink-0 rounded-xl border border-ink/15 bg-white/85 p-2 dark:border-white/15 dark:bg-[#1c2c43]">
+            <article class="w-full rounded-xl border border-ink/15 bg-white/85 p-2 sm:w-[260px] sm:shrink-0 dark:border-white/15 dark:bg-[#1c2c43]">
               <div class="grid grid-cols-[1fr_auto] gap-2">
                 <select
                   value={panel().goalType}
