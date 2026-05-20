@@ -1,6 +1,7 @@
 import { createMemo } from "solid-js"
 import {
   blurOnEnterOrEscape,
+  NumberFieldWithUnit,
   IntegerField,
   isValidNumberishInput,
   LabelField,
@@ -18,11 +19,7 @@ import { useScContext } from "../../lib/scContext"
 import { formatTimeDurationFromMinutes } from "../../lib/timeFormat"
 import type { TooltipKey } from "../../lib/tooltips"
 
-const gainUnitOptions: { value: ScGainUnit; label: string }[] = [
-  { value: "min", label: "min" },
-  { value: "hour", label: "hour" },
-  { value: "day", label: "day" },
-]
+const units = ["day", "hour", "min"] as const
 
 type SectionHeadingProps = {
   title: string
@@ -224,26 +221,14 @@ export const ScLeftColumn = () => {
             tooltip="sc.battery1"
           />
           <NumberField label="Current DC" value={sc.currentDc()} onInput={sc.setCurrentDc} tooltip="sc.current" />
-          <NumberField
+          <NumberFieldWithUnit
             label="Output"
             value={sc.dcGainValue()}
             onInput={sc.setDcGainValue}
             tooltip="sc.gain"
-            inlineAccessory={
-              <div class="flex items-center gap-1">
-                <span class="text-xs font-semibold uppercase tracking-[0.1em] text-ink/70 dark:text-white/70">/</span>
-                <select
-                  value={sc.dcGainUnit()}
-                  onChange={(event) => sc.setDcGainUnit(event.currentTarget.value as ScGainUnit)}
-                  onKeyDown={blurOnEnterOrEscape}
-                  class="w-[5.5rem] rounded-xl border border-ink/20 bg-white px-2 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
-                >
-                  {gainUnitOptions.map((option) => (
-                    <option value={option.value}>{option.label}</option>
-                  ))}
-                </select>
-              </div>
-            }
+            unit={sc.dcGainUnit()}
+            onUnitChange={(next) => sc.setDcGainUnit(next as ScGainUnit)}
+            units={units}
           />
         </div>
       </div>

@@ -8,7 +8,7 @@ import { ZatGuideProvider } from "./zatGuideContext"
 const ZatGuideContent = () => {
   return (
     <Panel title="ZAT Guide" tooltip="zatGuide.panel">
-      <SplitColumns layoutClass="xl:grid-cols-[0.92fr_1fr]" right={<ZatGuideRightColumn />}>
+      <SplitColumns layoutClass="xl:grid-cols-[1.00fr_2fr]" right={<ZatGuideRightColumn />}>
         <ZatGuideLeftColumn />
       </SplitColumns>
     </Panel>

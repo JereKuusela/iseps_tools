@@ -7,6 +7,7 @@ import techsJson from "../../data/techs.json"
 import techsSeEffectJson from "../../data/techs_se_effect.json"
 import zatGuidesJson from "../../data/zat_guides.json"
 import zatNodesJson from "../../data/zat_nodes.json"
+import { buildGuideNodeAmountMap, parseGuideNodes } from "./zatGuideNodes"
 
 export type CycleRule = {
   cycle: number
@@ -70,11 +71,21 @@ export type ZatNodeRule = {
   req?: number
 }
 
+type ZatGuideJson = {
+  cycle: number
+  run: string
+  nodes: Array<{
+    id: number
+    amount?: number
+  }>
+  note?: string
+}
+
 export type ZatGuideEntry = {
   cycle: number
   run: string
-  nodes: number[]
-  note?: string
+  nodes: Map<number, number>
+  note: string
 }
 
 export type PremiumCrystalTokenMethod = {
@@ -140,40 +151,39 @@ export type ZatDataBundle = {
   zatNodes: ZatNodeRule[]
 }
 
-const parseJunoExponent = (raw: unknown[]) => {
-  return raw
-    .map((entry) => {
-      const candidate = entry as {
-        type?: JunoExponentType
-        level?: number
-        "level:"?: number
-        exp?: number
-      }
+const junoExponent = (
+  junoExponentJson as Array<{
+    type?: JunoExponentType
+    level?: number
+    "level:"?: number
+    exp?: number
+  }>
+)
+  .map((entry) => ({
+    type: entry.type ?? "se",
+    level: typeof entry.level === "number" ? entry.level : (entry["level:"] ?? 0),
+    exp: entry.exp ?? 0,
+  }))
+  .sort((a, b) => a.level - b.level)
 
-      const level =
-        typeof candidate.level === "number"
-          ? candidate.level
-          : typeof candidate["level:"] === "number"
-            ? candidate["level:"]
-            : 0
-
-      return {
-        type: candidate.type ?? "se",
-        level,
-        exp: candidate.exp ?? 0,
-      }
-    })
-    .sort((a, b) => a.level - b.level)
-}
+const zatGuides = (zatGuidesJson as ZatGuideJson[]).map((entry) => {
+  const nodes = new Map<number, number>(entry.nodes.map((node) => [node.id, node.amount ?? 1]))
+  return {
+    cycle: entry.cycle,
+    run: entry.run,
+    nodes,
+    note: entry.note ?? "",
+  }
+})
 
 const dataBundle: ZatDataBundle = {
   cycles: (cyclesJson as CycleRule[]).slice(),
-  junoExponent: parseJunoExponent(junoExponentJson as unknown[]),
+  junoExponent,
   junoPremium: (junoPremiumJson as JunoPremiumRule[]).slice(),
   premium: premiumJson as PremiumDataBundle,
   techs: (techsJson as TechRule[]).slice().sort((a, b) => a.id - b.id),
   techsSeEffect: (techsSeEffectJson as TechSeEffectRule[]).slice(),
-  zatGuides: (zatGuidesJson as ZatGuideEntry[]).slice(),
+  zatGuides,
   zatNodes: (zatNodesJson as ZatNodeRule[]).slice(),
 }
 

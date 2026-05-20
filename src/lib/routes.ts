@@ -24,11 +24,11 @@ export const tabs: TabItem[] = [
 ]
 
 export const toolCards: ToolCardItem[] = [
-  /* {
+  {
     href: ROUTES.ogTech,
     label: "OG Tech",
     description: "Plan OG tech upgrades by comparing gains, costs, and ETA based on your current output.",
-  },*/
+  },
   {
     href: ROUTES.zatGuide,
     label: "ZAT Guide",

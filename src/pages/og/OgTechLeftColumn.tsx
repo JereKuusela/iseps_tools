@@ -4,9 +4,9 @@ import {
   DecimalField,
   IntegerField,
   NumberField,
+  NumberFieldWithUnit,
   SelectField,
   ToggleField,
-  blurOnEnterOrEscape,
 } from "../../components/ui/formControls"
 import { SummaryInputModal } from "../../components/ui/SummaryInputModal"
 import { formatCompactMultiplier, formatFixed, formatMultiplier } from "../../lib/numberFormat"
@@ -15,11 +15,7 @@ import { useZatData, type JunoExponentType } from "../../lib/zatContext"
 import type { GainUnit } from "./ogTypes"
 import { useOgTechContext } from "./ogTechContext"
 
-const gainUnits: Array<{ value: GainUnit; label: string }> = [
-  { value: "hour", label: "h" },
-  { value: "min", label: "m" },
-  { value: "sec", label: "s" },
-]
+const units = ["hour", "min", "sec"] as const
 
 const modeOptions: Array<{ value: ZatMode; label: string }> = [
   { value: "juno", label: "Juno" },
@@ -114,24 +110,14 @@ export const OgTechLeftColumn = () => {
     <>
       <InfoCard>
         <div class="grid gap-1">
-          <NumberField
+          <NumberFieldWithUnit
             label="Juno"
             value={og.gainValue()}
             onInput={og.setGainValue}
             placeholder="0.00e0"
-            inlineAccessory={
-              <div class="flex items-center gap-1">
-                <span class="text-xs font-semibold uppercase tracking-[0.1em] text-ink/70 dark:text-white/70">/</span>
-                <select
-                  value={og.gainUnit()}
-                  onChange={(event) => og.setGainUnit(event.currentTarget.value as GainUnit)}
-                  onKeyDown={blurOnEnterOrEscape}
-                  class="w-[3rem] rounded-xl border border-ink/20 bg-white px-2 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
-                >
-                  <For each={gainUnits}>{(option) => <option value={option.value}>{option.label}</option>}</For>
-                </select>
-              </div>
-            }
+            unit={og.gainUnit()}
+            onUnitChange={(next) => og.setGainUnit(next as GainUnit)}
+            units={units}
           />
           <NumberField label="Current" placeholder="0.00e0" value={og.junoAmount()} onInput={og.setJunoAmount} />
           <SelectField

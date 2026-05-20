@@ -2,10 +2,16 @@ import type { LargeNumber } from "../../lib/largeNumber"
 
 export type GuideRunType = "se_push" | "g_points" | "juno" | "cash"
 
+export type GuideNodeAmount = {
+  id: number
+  amount?: number
+}
+
 export type GuideEntry = {
   cycle: number
   run: string
-  nodes: number[]
+  nodes: GuideNodeAmount[]
+  nodeAmounts: Map<number, number>
   note?: string
 }
 

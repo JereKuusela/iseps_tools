@@ -1,5 +1,5 @@
 import * as TextField from "@kobalte/core/text-field"
-import { createMemo, createSignal, type JSX } from "solid-js"
+import { createEffect, createMemo, createSignal, For, type JSX } from "solid-js"
 import { formatFixed, formatMultiplier, formatPercentFromRatio } from "../../lib/numberFormat"
 import type { TooltipKey } from "../../lib/tooltips"
 import { Tooltip } from "./Tooltip"
@@ -14,6 +14,12 @@ type NumberFieldProps = {
   step?: number
   tooltip?: TooltipKey
   inlineAccessory?: JSX.Element
+}
+
+type NumberFieldWithUnitProps<T extends string = string> = Omit<NumberFieldProps, "inlineAccessory"> & {
+  unit: T
+  onUnitChange: (next: T) => void
+  units: readonly T[]
 }
 
 type DecimalFieldProps = NumberFieldProps & {
@@ -140,6 +146,41 @@ export const NumberField = (props: NumberFieldProps) => {
     </TextField.Root>
   )
 }
+
+export const NumberFieldWithUnit = <T extends string = string>(props: NumberFieldWithUnitProps<T>) => (
+  <NumberField
+    label={props.label}
+    value={props.value}
+    onInput={props.onInput}
+    placeholder={props.placeholder}
+    min={props.min}
+    max={props.max}
+    step={props.step}
+    tooltip={props.tooltip}
+    inlineAccessory={
+      <div class="flex items-center gap-1">
+        <span class="text-xs font-semibold uppercase tracking-[0.1em] text-ink/70 dark:text-white/70">/</span>
+        <select
+          value={props.unit}
+          onChange={(event) => props.onUnitChange(event.currentTarget.value as T)}
+          onKeyDown={blurOnEnterOrEscape}
+          class={`w-[3.5rem] rounded-xl border border-ink/20 bg-white px-2 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white`}
+        >
+          <For each={props.units}>
+            {(opt) => (
+              <>
+                <option hidden value={opt}>
+                  {opt.substring(0, 1)}
+                </option>
+                <option value={opt}>{opt}</option>
+              </>
+            )}
+          </For>
+        </select>
+      </div>
+    }
+  />
+)
 
 export const MetricField = (props: MetricFieldProps) => {
   const onChange = (next: string) => {
