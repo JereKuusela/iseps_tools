@@ -283,8 +283,12 @@ export const OgTechProvider = (props: ParentProps) => {
     setTechLevel(best.id, best.level)
   }
 
-  const autoBuyUnderLimit = (thresholdSeconds: number) => {
-    const updatedLevels = techLevels().slice()
+  const autoBuyUnderLimit = (limit: number) => {
+    const techList = data().techs
+    const updatedLevels = techLevels().map((level, id) => {
+      const maxLevel = techList[id]?.maxLevel ?? Number.POSITIVE_INFINITY
+      return Math.min(maxLevel, Math.max(0, Math.floor(level)))
+    })
     const current = currentJuno()
     const gain = gainPerSecond()
 
@@ -297,14 +301,20 @@ export const OgTechProvider = (props: ParentProps) => {
     do {
       foundInPass = false
 
-      for (const tech of data().techs) {
+      for (const tech of techList) {
+        const maxLevel = tech.maxLevel
         const currentLevel = updatedLevels[tech.id] ?? 0
+        if (currentLevel >= maxLevel) continue
+
         const next = calculateNextThreeTechCosts(tech.id, currentLevel)[0]
         if (!next) continue
 
         const etaSeconds = estimateSeconds(next.cost, current, gain)
-        if (etaSeconds <= thresholdSeconds) {
-          updatedLevels[tech.id] = next.level
+        if (etaSeconds <= limit) {
+          const nextLevel = Math.min(maxLevel, next.level)
+          if (nextLevel <= currentLevel) continue
+
+          updatedLevels[tech.id] = nextLevel
           foundInPass = true
         }
       }

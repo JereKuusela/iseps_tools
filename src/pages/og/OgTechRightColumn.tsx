@@ -1,5 +1,5 @@
 import { For, Index, Show, createSignal, onCleanup, onMount } from "solid-js"
-import { InfoCard } from "../../components/layout/contentBlocks"
+import { InfoCard, MetricRow } from "../../components/layout/contentBlocks"
 import { IntegerField } from "../../components/ui/formControls"
 import { formatPercentFromRatio } from "../../lib/numberFormat"
 import { formatTimeDurationFromSeconds } from "../../lib/timeFormat"
@@ -51,8 +51,8 @@ export const OgTechRightColumn = () => {
   return (
     <>
       <InfoCard contentClass="">
-        <div class="grid gap-3 lg:grid-cols-[420px_minmax(0,1fr)] lg:items-start">
-          <div class="grid grid-cols-[minmax(0,1fr)_auto_auto] items-stretch gap-2">
+        <div class="grid gap-3 lg:grid-cols-[420px_minmax(0,1fr)] lg:grid-rows-[auto_1fr] lg:items-start">
+          <div class="grid grid-cols-[minmax(0,1fr)_auto_auto] items-stretch gap-2 lg:col-start-1 lg:row-start-1">
             <div class="rounded-xl border border-ink/10 bg-gradient-to-br from-mist via-white to-mist/70 p-3 dark:border-white/15 dark:from-[#263954] dark:via-[#22344d] dark:to-[#1c2c41]">
               <p class="text-xs uppercase tracking-[0.12em] text-ink/65 dark:text-white/65">Best next</p>
               <p class="mt-1 text-lg font-black text-ink dark:text-white">
@@ -110,8 +110,10 @@ export const OgTechRightColumn = () => {
               </Show>
             </div>
           </div>
-
-          <div class="overflow-hidden rounded-xl border border-ink/10 bg-white dark:border-white/15 dark:bg-[#22344d]">
+          <div class="overflow-hidden rounded-xl border border-ink/10 bg-white dark:border-white/15 dark:bg-[#22344d] lg:col-start-1 lg:row-start-2">
+            <MetricRow label="Total techs" value={og.totalTechLevels()} withBorder={false} />
+          </div>
+          <div class="overflow-hidden rounded-xl border border-ink/10 bg-white dark:border-white/15 dark:bg-[#22344d] lg:col-start-2 lg:row-span-2">
             <table class="w-full table-fixed border-collapse text-left text-xs sm:text-sm">
               <thead class="bg-mist/80 text-[11px] uppercase tracking-[0.08em] text-ink/70 dark:bg-[#1a2a3f] dark:text-white/70 sm:text-xs">
                 <tr>

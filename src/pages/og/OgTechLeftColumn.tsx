@@ -130,8 +130,8 @@ export const OgTechLeftColumn = () => {
         </div>
       </InfoCard>
 
-      <InfoCard title="Advanced" closable>
-        <div class="grid gap-2">
+      <InfoCard title="Tech valuation" closable>
+        <div class="grid gap-1">
           <IntegerField
             label="Cycles"
             value={og.cycles()}
@@ -141,94 +141,89 @@ export const OgTechLeftColumn = () => {
             step={1}
             tooltip="og.zagreusCycles"
           />
-          <DecimalField
-            label="Shares %"
-            value={og.sharesPercent()}
-            onInput={og.setSharesPercent}
-            min={0}
-            max={100}
-            step={0.05}
-          />
-        </div>
-        <SummaryInputModal label="Shop" value={formatCompactMultiplier(og.premiumMultiplier())} tooltip="og.premium">
-          <div class="space-y-2">
-            <NumberField
-              label="Juno output level"
-              value={og.junoOutput()}
-              onInput={og.setJunoOutput}
-              min={0}
-              max={750}
-              step={1}
-            />
-            <ToggleField label="Juno bundle" checked={og.junoBundle()} onChange={og.setJunoBundle} />
-            <ToggleField label="Ixion-Juno bundle" checked={og.ixionJunoBundle()} onChange={og.setIxionJunoBundle} />
-            <ToggleField label="Juno-Kappa bundle" checked={og.junoKappaBundle()} onChange={og.setJunoKappaBundle} />
-            <NumberField label="Juno tokens" value={og.tokens()} onInput={og.setTokens} min={0} max={1800} step={1} />
-          </div>
-        </SummaryInputModal>
-
-        <SummaryInputModal
-          label="Extra"
-          value={formatFixed(og.totalExtraExponent(), 3, "0.000")}
-          onInput={handleTotalExtraInput}
-          tooltip="og.extraExponent"
-        >
-          <div class="space-y-2">
-            <DecimalField
-              label="Manual extra"
-              value={og.extraExponent()}
-              onInput={og.setExtraExponent}
-              digits={3}
-              min={0.001}
-              max={1}
-              step={0.001}
-              tooltip="og.extraExponent"
-            />
-            <SelectField
-              label="SE level"
-              value={resolvedSeLevel()}
-              onChange={og.setSeLevel}
-              options={seLevelOptions()}
-            />
-            <SelectField
-              label="Player level"
-              value={resolvedPlayerLevel()}
-              onChange={og.setPlayerLevel}
-              options={playerLevelOptions()}
-            />
-            <SelectField
-              label="DCM level"
-              value={resolvedDcmLevel()}
-              onChange={og.setDcmLevel}
-              options={dcmLevelOptions()}
-            />
-            <SelectField
-              label="Research level"
-              value={resolvedResearchLevel()}
-              onChange={og.setResearchLevel}
-              options={researchLevelOptions()}
-            />
-            <ToggleField
-              label="Meltdown bundle (+0.005)"
-              checked={og.meltdownBundle()}
-              onChange={og.setMeltdownBundle}
-            />
-            <ToggleField label="Quantum Addon 0 (+0.01)" checked={og.quantumAddon0()} onChange={og.setQuantumAddon0} />
-          </div>
-        </SummaryInputModal>
-
-        <div class="rounded border border-ink/20 bg-white dark:border-white/15 dark:bg-[#253a56]">
-          <MetricRow label="Total techs" value={og.totalTechLevels()} />
-          <MetricRow label="Total exponent" value={formatFixed(og.totalExponent(), 3, "0.000")} />
-          <For each={og.exponentGainEntries()}>
-            {(entry, index) => (
-              <MetricRow
-                label={`Exponent +${entry.delta}`}
-                value={formatMultiplier(entry.multiplier, 2, "x0.00")}
-                withBorder={index() !== og.exponentGainEntries().length - 1}
+          <SummaryInputModal label="Shop" value={formatCompactMultiplier(og.premiumMultiplier())} tooltip="og.premium">
+            <div class="space-y-2">
+              <NumberField
+                label="Juno output level"
+                value={og.junoOutput()}
+                onInput={og.setJunoOutput}
+                min={0}
+                max={750}
+                step={1}
               />
-            )}
-          </For>
+              <ToggleField label="Juno bundle" checked={og.junoBundle()} onChange={og.setJunoBundle} />
+              <ToggleField label="Ixion-Juno bundle" checked={og.ixionJunoBundle()} onChange={og.setIxionJunoBundle} />
+              <ToggleField label="Juno-Kappa bundle" checked={og.junoKappaBundle()} onChange={og.setJunoKappaBundle} />
+              <NumberField label="Juno tokens" value={og.tokens()} onInput={og.setTokens} min={0} max={1800} step={1} />
+            </div>
+          </SummaryInputModal>
+
+          <SummaryInputModal
+            label="Exponent"
+            value={formatFixed(og.totalExtraExponent(), 3, "0.000")}
+            onInput={handleTotalExtraInput}
+            tooltip="og.exponent"
+          >
+            <div class="space-y-2">
+              <DecimalField
+                label="Manual"
+                value={og.extraExponent()}
+                onInput={og.setExtraExponent}
+                digits={3}
+                min={0.001}
+                max={1}
+                step={0.001}
+                tooltip="og.extraExponent"
+              />
+              <SelectField
+                label="SE level"
+                value={resolvedSeLevel()}
+                onChange={og.setSeLevel}
+                options={seLevelOptions()}
+              />
+              <SelectField
+                label="Player level"
+                value={resolvedPlayerLevel()}
+                onChange={og.setPlayerLevel}
+                options={playerLevelOptions()}
+              />
+              <SelectField
+                label="DCM level"
+                value={resolvedDcmLevel()}
+                onChange={og.setDcmLevel}
+                options={dcmLevelOptions()}
+              />
+              <SelectField
+                label="Research level"
+                value={resolvedResearchLevel()}
+                onChange={og.setResearchLevel}
+                options={researchLevelOptions()}
+              />
+              <ToggleField
+                label="Meltdown bundle (+0.005)"
+                checked={og.meltdownBundle()}
+                onChange={og.setMeltdownBundle}
+              />
+              <ToggleField
+                label="Quantum Addon 0 (+0.01)"
+                checked={og.quantumAddon0()}
+                onChange={og.setQuantumAddon0}
+              />
+            </div>
+          </SummaryInputModal>
+
+          <div class="rounded border border-ink/20 bg-white dark:border-white/15 dark:bg-[#253a56] mt-1">
+            <MetricRow label="Total exponent" value={formatFixed(og.totalExponent(), 3, "0.000")} />
+            <For each={og.exponentGainEntries()}>
+              {(entry, index) => (
+                <MetricRow
+                  label={`Exponent +${entry.delta}`}
+                  value={formatMultiplier(entry.multiplier, 2, "x0.00")}
+                  withBorder={index() !== og.exponentGainEntries().length - 1}
+                />
+              )}
+            </For>
+          </div>
         </div>
       </InfoCard>
     </>

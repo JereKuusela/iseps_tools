@@ -24,7 +24,7 @@ export const InfoCard = (props: InfoCardProps) => {
     : createSignal(false)
   const cardClass = `rounded-2xl border border-ink/15 bg-white/70 p-3 dark:border-white/15 dark:bg-[#182538]/75 ${props.class ?? ""}`
   const headingClass = `text-sm font-bold uppercase tracking-[0.12em] text-ink/80 dark:text-white/80 ${props.titleClass ?? ""}`
-  const closeClass = `rounded border border-ink/20 bg-white px-2 py-1 text-xs font-bold text-ink transition hover:bg-ink/5 dark:border-white/20 dark:bg-[#233752] dark:text-white dark:hover:bg-[#2f496b] ${isClosed() ? "" : "md:hidden"}`
+  const closeClass = `rounded border border-ink/20 bg-white px-2 py-1 text-xs font-bold text-ink transition hover:bg-ink/5 dark:border-white/20 dark:bg-[#233752] dark:text-white dark:hover:bg-[#2f496b] ${isClosed() ? "" : "xl:hidden"}`
 
   const handleToggleClosed = () => {
     setIsClosed((current) => !current)
