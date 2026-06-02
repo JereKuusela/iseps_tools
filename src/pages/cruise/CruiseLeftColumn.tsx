@@ -1,6 +1,12 @@
 import { createEffect, createMemo, createSignal } from "solid-js"
 import { InfoCard } from "../../components/layout/contentBlocks"
-import { IntegerField, NumberField, blurOnEnterOrEscape } from "../../components/ui/formControls"
+import {
+  IntegerField,
+  NumberField,
+  blurOnEnterOrEscape,
+  sanitizeNumberishInput,
+  isValidNumberishInput,
+} from "../../components/ui/formControls"
 import { CRUISE_NODE_DEFINITIONS, emptyCruiseNodeLevels, type CruiseNodeId, type CruiseNodeLevels } from "./cruiseTypes"
 import { useCruiseContext } from "./cruiseContext"
 
