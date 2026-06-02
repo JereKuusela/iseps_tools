@@ -4,6 +4,7 @@ export type ToolCardItem = { href: string; label: string; description: string }
 export const ROUTES = {
   home: "/",
   ogTech: "/tech",
+  cruise: "/cruise",
   zatGuide: "/zat",
   penrose: "/penrose",
   sc: "/sc",
@@ -15,6 +16,7 @@ export const ROUTES = {
 
 export const tabs: TabItem[] = [
   { href: ROUTES.ogTech, label: "OG Tech" },
+  { href: ROUTES.cruise, label: "Cruise" },
   { href: ROUTES.zatGuide, label: "ZAT Guide" },
   { href: ROUTES.penrose, label: "Penrose" },
   { href: ROUTES.sc, label: "SC" },
@@ -28,6 +30,11 @@ export const toolCards: ToolCardItem[] = [
     href: ROUTES.ogTech,
     label: "OG Tech",
     description: "Plan OG tech upgrades by comparing gains, costs, and ETA based on your current output.",
+  },
+  {
+    href: ROUTES.cruise,
+    label: "Cruise",
+    description: "Compare cruise prestige upgrades, spend points optimally, and export notation for sharing.",
   },
   {
     href: ROUTES.zatGuide,

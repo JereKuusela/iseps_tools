@@ -1,0 +1,55 @@
+[
+  {
+    "id": "prestigeMultiplier",
+    "label": "Prestige Multiplier",
+    "maxLevel": 99
+  },
+  {
+    "id": "ticketPrice",
+    "label": "Ticket Price",
+    "maxLevel": 25,
+    "minFillsDone": 2
+  },
+  {
+    "id": "guestSpending",
+    "label": "Guest Spending",
+    "maxLevel": 25,
+    "minFillsDone": 2
+  },
+  {
+    "id": "particleOutput",
+    "label": "Particle Output",
+    "maxLevel": 20,
+    "minFillsDone": 2
+  },
+  {
+    "id": "maxOfflineTimeCap",
+    "label": "Max Offline Time Cap",
+    "maxLevel": 16,
+    "minFillsDone": 2
+  },
+  {
+    "id": "betterReviews",
+    "label": "Better Reviews",
+    "maxLevel": 10,
+    "minFillsDone": 2
+  },
+  {
+    "id": "moreSpace",
+    "label": "More Space",
+    "maxLevel": 10,
+    "minFillsDone": 2,
+    "minCruiseLevel": 7
+  },
+  {
+    "id": "echoTriggerCount",
+    "label": "Echo Trigger Count",
+    "maxLevel": 5,
+    "minFillsDone": 25
+  },
+  {
+    "id": "echoMultiplier",
+    "label": "Echo Multiplier",
+    "maxLevel": 50
+  }
+]

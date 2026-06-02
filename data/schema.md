@@ -18,6 +18,24 @@ Entries for the Credits tab.
 - `name`: Credit group or person name.
 - `credits`: List of credit lines to display under the name.
 
+## cruise.json
+
+Cruise node definitions used by the Cruise optimizer.
+
+- `id`: Stable node identifier.
+- `label`: Display name for the node.
+- `maxLevel`: Maximum level the node can reach.
+- `minFillsDone`: Optional minimum fills/prestiges completed before the node unlocks.
+- `minCruiseLevel`: Optional minimum cruise level required before the node unlocks.
+
+## cruise_levels.json
+
+Cruise level bonuses used by Cruise prestige echo calculations.
+
+- `level`: Cruise level where this bonus becomes active.
+- `echoTriggerCount`: Optional additive base echo trigger count at and above this level.
+- `echoMultiplier`: Optional additive base echo multiplier at and above this level.
+
 ## juno_exponent.json
 
 Rules for calculating Juno exponent.

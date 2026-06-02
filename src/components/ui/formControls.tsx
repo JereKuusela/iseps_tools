@@ -134,7 +134,6 @@ export const NumberField = (props: NumberFieldProps) => {
               autocomplete="off"
               autocorrect="off"
               spellcheck={false}
-              value={props.value}
               placeholder={props.placeholder}
               onKeyDown={blurOnEnterOrEscape}
               class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
@@ -347,7 +346,6 @@ export const IntegerField = (props: IntegerFieldProps) => {
             min={props.min}
             max={props.max}
             step={props.step}
-            value={props.value || "0"}
             placeholder={props.placeholder}
             onKeyDown={blurOnEnterOrEscape}
             onBlur={(event) => onBlur(event.currentTarget.value)}
