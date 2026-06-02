@@ -69,7 +69,7 @@ type MetricFieldProps = {
 }
 
 export const sanitizeNumberishInput = (value: string) => {
-  const trimmed = value.trim()
+  let trimmed = value.trim()
 
   if (trimmed.length >= 2) {
     const first = trimmed[0]
@@ -78,10 +78,12 @@ export const sanitizeNumberishInput = (value: string) => {
     const wrappedInSingleQuotes = first === "'" && last === "'"
 
     if (wrappedInDoubleQuotes || wrappedInSingleQuotes) {
-      return trimmed.slice(1, -1).trim()
+      trimmed = trimmed.slice(1, -1).trim()
     }
   }
-  return trimmed
+
+  // Replace comma with dot for decimal separator
+  return trimmed.replace(/,/g, ".")
 }
 
 export const isValidNumberishInput = (value: string) => {
@@ -143,6 +145,61 @@ export const NumberField = (props: NumberFieldProps) => {
         </div>
       </div>
     </TextField.Root>
+  )
+}
+
+type NumberRangeFieldProps = {
+  label: string
+  minValue: string
+  maxValue: string
+  onMinInput: (next: string) => void
+  onMaxInput: (next: string) => void
+  tooltip?: TooltipKey
+}
+
+export const NumberRangeField = (props: NumberRangeFieldProps) => {
+  const handleInput = (setter: (value: string) => void) => (value: string) => {
+    const normalized = sanitizeNumberishInput(value)
+    if (!isValidNumberishInput(normalized)) return
+    setter(normalized)
+  }
+
+  return (
+    <div class="grid gap-1.5">
+      <div class={"grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2"}>
+        <div class={"min-w-0 flex items-center gap-2"}>
+          <label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
+            {props.label}
+          </label>
+          {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
+        </div>
+        <div class={"min-w-0 flex items-center gap-2"}>
+          <input
+            type="text"
+            value={props.minValue}
+            onInput={(event) => handleInput(props.onMinInput)(event.currentTarget.value)}
+            onKeyDown={blurOnEnterOrEscape}
+            autocapitalize="off"
+            autocomplete="off"
+            autocorrect="off"
+            spellcheck={false}
+            class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+          />
+          <span class="text-ink/50 dark:text-white/50">-</span>
+          <input
+            type="text"
+            value={props.maxValue}
+            onInput={(event) => handleInput(props.onMaxInput)(event.currentTarget.value)}
+            onKeyDown={blurOnEnterOrEscape}
+            autocapitalize="off"
+            autocomplete="off"
+            autocorrect="off"
+            spellcheck={false}
+            class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+          />
+        </div>
+      </div>
+    </div>
   )
 }
 

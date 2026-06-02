@@ -1,12 +1,6 @@
 import { createEffect, createMemo, createSignal } from "solid-js"
 import { InfoCard } from "../../components/layout/contentBlocks"
-import {
-  IntegerField,
-  NumberField,
-  blurOnEnterOrEscape,
-  sanitizeNumberishInput,
-  isValidNumberishInput,
-} from "../../components/ui/formControls"
+import { IntegerField, NumberField, NumberRangeField, blurOnEnterOrEscape } from "../../components/ui/formControls"
 import { CRUISE_NODE_DEFINITIONS, emptyCruiseNodeLevels, type CruiseNodeId, type CruiseNodeLevels } from "./cruiseTypes"
 import { useCruiseContext } from "./cruiseContext"
 
@@ -105,68 +99,20 @@ export const CruiseLeftColumn = () => {
       <InfoCard title="Base values">
         <div class="grid gap-1">
           <NumberField label="Ticket Price" value={cruise.baseTicketPrice()} onInput={cruise.setBaseTicketPrice} />
-
-          <div class="grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2">
-            <label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
-              Guest Spending
-            </label>
-            <div class="flex items-center gap-2">
-              <input
-                type="text"
-                value={cruise.baseGuestMin()}
-                onInput={(event) => cruise.setBaseGuestMin(event.currentTarget.value)}
-                onKeyDown={blurOnEnterOrEscape}
-                autocapitalize="off"
-                autocomplete="off"
-                autocorrect="off"
-                spellcheck={false}
-                class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
-              />
-              <span class="text-ink/50 dark:text-white/50">-</span>
-              <input
-                type="text"
-                value={cruise.baseGuestMax()}
-                onInput={(event) => cruise.setBaseGuestMax(event.currentTarget.value)}
-                onKeyDown={blurOnEnterOrEscape}
-                autocapitalize="off"
-                autocomplete="off"
-                autocorrect="off"
-                spellcheck={false}
-                class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
-              />
-            </div>
-          </div>
-
-          <div class="grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2">
-            <label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
-              Room Capacity
-            </label>
-            <div class="flex items-center gap-2">
-              <input
-                type="text"
-                value={cruise.baseRoomMin()}
-                onInput={(event) => cruise.setBaseRoomMin(event.currentTarget.value)}
-                onKeyDown={blurOnEnterOrEscape}
-                autocapitalize="off"
-                autocomplete="off"
-                autocorrect="off"
-                spellcheck={false}
-                class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
-              />
-              <span class="text-ink/50 dark:text-white/50">-</span>
-              <input
-                type="text"
-                value={cruise.baseRoomMax()}
-                onInput={(event) => cruise.setBaseRoomMax(event.currentTarget.value)}
-                onKeyDown={blurOnEnterOrEscape}
-                autocapitalize="off"
-                autocomplete="off"
-                autocorrect="off"
-                spellcheck={false}
-                class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
-              />
-            </div>
-          </div>
+          <NumberRangeField
+            label="Guest Spending"
+            minValue={cruise.baseGuestMin()}
+            maxValue={cruise.baseGuestMax()}
+            onMinInput={cruise.setBaseGuestMin}
+            onMaxInput={cruise.setBaseGuestMax}
+          />
+          <NumberRangeField
+            label="Room Capacity"
+            minValue={cruise.baseRoomMin()}
+            maxValue={cruise.baseRoomMax()}
+            onMinInput={cruise.setBaseRoomMin}
+            onMaxInput={cruise.setBaseRoomMax}
+          />
         </div>
       </InfoCard>
 
