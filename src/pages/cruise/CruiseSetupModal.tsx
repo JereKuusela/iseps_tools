@@ -60,7 +60,8 @@ export const CruiseSetupModal = (props: CruiseSetupModalProps) => {
       roomMax: Math.max(1, parseNumberish(cruise.baseRoomMax())),
     }
 
-    // Calculate displayed effective values using centralized function
+    // Game shows base values for ticket price and guest spending
+    // Only room capacity needs conversion for display
     const mockInput = {
       prestigesDone: 0,
       cruiseLevel: 1,
@@ -74,28 +75,29 @@ export const CruiseSetupModal = (props: CruiseSetupModalProps) => {
     }
     const effectiveValues = calculateEffectiveValuesDetailed(mockInput, baseValues, currentLevels)
 
-    setSetupTicketPrice(toInputString(effectiveValues.ticketPrice))
-    setSetupGuestMin(toInputString(effectiveValues.guestMin))
-    setSetupGuestMax(toInputString(effectiveValues.guestMax))
+    setSetupTicketPrice(toInputString(baseValues.ticket))
+    setSetupGuestMin(toInputString(baseValues.guestMin))
+    setSetupGuestMax(toInputString(baseValues.guestMax))
     setSetupRoomMin(toInputString(effectiveValues.roomMin))
     setSetupRoomMax(toInputString(effectiveValues.roomMax))
   }
 
   const closeSetup = () => {
-    // Get displayed (effective) values
-    const effectiveTicketPrice = parseNumberish(setupTicketPrice())
-    const effectiveGuestMin = parseNumberish(setupGuestMin())
-    const effectiveGuestMax = parseNumberish(setupGuestMax())
+    // Game shows base values for ticket and guest spending (no conversion needed)
+    // Only room capacity values need conversion from effective to base
+    const baseTicketPrice = parseNumberish(setupTicketPrice())
+    const baseGuestMin = parseNumberish(setupGuestMin())
+    const baseGuestMax = parseNumberish(setupGuestMax())
     const effectiveRoomMin = parseNumberish(setupRoomMin())
     const effectiveRoomMax = parseNumberish(setupRoomMax())
 
-    // Calculate base values using centralized function
+    // Calculate base room values using centralized function
     const mockInput = {
       prestigesDone: 0,
       cruiseLevel: 1,
-      ticketPrice: effectiveTicketPrice,
-      guestSpendingMin: effectiveGuestMin,
-      guestSpendingMax: effectiveGuestMax,
+      ticketPrice: 1,
+      guestSpendingMin: 1,
+      guestSpendingMax: 1,
       roomCapacityMin: effectiveRoomMin,
       roomCapacityMax: effectiveRoomMax,
       groupsDiscountLevel: parseNumberish(setupGroupsDiscountLevel()),
@@ -103,10 +105,10 @@ export const CruiseSetupModal = (props: CruiseSetupModalProps) => {
     }
     const baseValues = calculateBaseValuesFromInput(mockInput, setupNodeLevels())
 
-    // Update context with new base values and node levels
-    cruise.setBaseTicketPrice(Math.max(1, baseValues.ticket).toString())
-    cruise.setBaseGuestMin(Math.max(0, baseValues.guestMin).toString())
-    cruise.setBaseGuestMax(Math.max(0, baseValues.guestMax).toString())
+    // Update context with new values and node levels
+    cruise.setBaseTicketPrice(Math.max(1, baseTicketPrice).toString())
+    cruise.setBaseGuestMin(Math.max(0, baseGuestMin).toString())
+    cruise.setBaseGuestMax(Math.max(0, baseGuestMax).toString())
     cruise.setBaseRoomMin(Math.max(1, baseValues.roomMin).toString())
     cruise.setBaseRoomMax(Math.max(1, baseValues.roomMax).toString())
     cruise.setGroupsDiscountLevel(Math.max(0, Math.floor(parseNumberish(setupGroupsDiscountLevel()))).toString())

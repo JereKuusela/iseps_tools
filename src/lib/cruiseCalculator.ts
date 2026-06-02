@@ -418,9 +418,10 @@ export const getCruiseSnapshot = (input: CruiseInputState, levels: CruiseNodeLev
   const multipliers = prestigeMultiplier * particleMultiplier * reviewsMultiplier
 
   const effectiveEarningsPerGuest = effectiveValues.ticketPrice + effectiveValues.guestSpending
-  const base = (baseValues.ticket + baseGuestAvg) * baseRoomAvg
-  const objectiveMultiplier =
-    (effectiveEarningsPerGuest * multipliers * effectiveValues.roomCapacity * echoFactor) / base
+  const baseRoomMultiplier = 1 + (baseRoomAvg - 1) * 0.09
+  const roomCapacityMultiplier = 1 + (effectiveValues.roomCapacity - 1) * 0.09
+  const base = (baseValues.ticket + baseGuestAvg) * baseRoomMultiplier
+  const objectiveMultiplier = (effectiveEarningsPerGuest * multipliers * roomCapacityMultiplier * echoFactor) / base
 
   return {
     baseTicketPrice: baseValues.ticket,
@@ -467,6 +468,7 @@ const evaluateImmediateStep = (input: CruiseInputState, levels: CruiseNodeLevels
       nextBonusMultiplier = 1
     } else {
       // Adding +1 to min, +2 to max: average increases by +1.5
+      // Each capacity past 1 gives +0.09x multiplier
       const groupMultiplier = safePow(1.08, input.groupsDiscountLevel)
       const bunkMultiplier = safePow(1.05, input.bunkBedsLevel)
       const sunMultiplier = Math.max(groupMultiplier * bunkMultiplier, 1)
@@ -477,7 +479,10 @@ const evaluateImmediateStep = (input: CruiseInputState, levels: CruiseNodeLevels
 
       const currentRoomCapacity = baseRoomAvg + (levels.moreSpace + levels.moreSpace * 2) / 2
       const nextRoomCapacity = currentRoomCapacity + 1.5
-      nextBonusMultiplier = nextRoomCapacity / Math.max(1, currentRoomCapacity)
+
+      const currentMultiplier = 1 + (currentRoomCapacity - 1) * 0.09
+      const nextMultiplier = 1 + (nextRoomCapacity - 1) * 0.09
+      nextBonusMultiplier = nextMultiplier / Math.max(currentMultiplier, Number.EPSILON)
     }
   } else if (id === "echoTriggerCount" || id === "echoMultiplier") {
     // Echo nodes need full calculation due to power function
