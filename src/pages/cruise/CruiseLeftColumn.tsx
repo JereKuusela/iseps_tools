@@ -1,22 +1,13 @@
 import { createEffect, createMemo, createSignal } from "solid-js"
-import { InfoCard, MetricRow } from "../../components/layout/contentBlocks"
-import { IntegerField, blurOnEnterOrEscape } from "../../components/ui/formControls"
-import { getTotalPointsFromPrestiges } from "../../lib/cruiseCalculator"
+import { InfoCard } from "../../components/layout/contentBlocks"
+import { IntegerField, NumberField, blurOnEnterOrEscape } from "../../components/ui/formControls"
 import { CRUISE_NODE_DEFINITIONS, emptyCruiseNodeLevels, type CruiseNodeId, type CruiseNodeLevels } from "./cruiseTypes"
 import { useCruiseContext } from "./cruiseContext"
-import { CruiseSetupModal } from "./CruiseSetupModal"
 
 const parseNumberish = (value: string) => {
   const parsed = Number(value)
   if (!Number.isFinite(parsed)) return 0
   return parsed
-}
-
-const formatValue = (value: number, digits = 2) => {
-  if (!Number.isFinite(value)) return "0"
-  if (Math.abs(value) >= 1_000_000) return value.toExponential(2).replace("+", "")
-  if (Math.abs(value) >= 1_000) return value.toLocaleString(undefined, { maximumFractionDigits: digits })
-  return value.toFixed(digits)
 }
 
 const notationOrder = CRUISE_NODE_DEFINITIONS.map((node) => node.id)
@@ -59,46 +50,14 @@ export const CruiseLeftColumn = () => {
   const cruise = useCruiseContext()
   const [notationInput, setNotationInput] = createSignal("")
   const [isNotationEditing, setIsNotationEditing] = createSignal(false)
-  const [isSetupOpen, setIsSetupOpen] = createSignal(false)
 
   const fullNotation = createMemo(() => notationOrder.map((id) => cruise.nodeLevels()[id]).join("/"))
   const shortNotation = createMemo(() => toShortNotation(cruise.nodeLevels()))
-
-  const baseGuestMin = createMemo(() => cruise.baseSnapshot().baseGuestMin)
-  const baseGuestMax = createMemo(() => cruise.baseSnapshot().baseGuestMax)
-  const baseRoomMin = createMemo(() => cruise.baseSnapshot().baseRoomMin)
-  const baseRoomMax = createMemo(() => cruise.baseSnapshot().baseRoomMax)
 
   const applyNotation = (raw: string) => {
     const parsedLevels = parseNotation(raw)
     cruise.setNodeLevels(parsedLevels)
     setNotationInput(toShortNotation(parsedLevels))
-  }
-
-  const getMinimumPrestigesForPoints = (requiredPoints: number) => {
-    const safeRequired = Math.max(0, Math.floor(requiredPoints))
-    if (safeRequired <= 0) return 0
-
-    const estimate = Math.ceil((Math.sqrt(1 + 8 * safeRequired) - 1) / 2)
-    let candidate = Math.max(0, estimate)
-
-    while (getTotalPointsFromPrestiges(candidate) < safeRequired) {
-      candidate += 1
-    }
-
-    return candidate
-  }
-
-  const closeSetupModal = () => {
-    setIsSetupOpen(false)
-
-    const requiredPoints = cruise.spentPoints()
-    const currentPrestiges = Math.max(0, Math.floor(parseNumberish(cruise.prestigesDone())))
-    const minimumPrestiges = getMinimumPrestigesForPoints(requiredPoints)
-
-    if (minimumPrestiges > currentPrestiges) {
-      cruise.setPrestigesDone(minimumPrestiges.toString())
-    }
   }
 
   createEffect(() => {
@@ -137,35 +96,73 @@ export const CruiseLeftColumn = () => {
         </div>
       </InfoCard>
 
-      <InfoCard>
-        <div class="grid gap-2">
-          <div class="flex items-center justify-between gap-2">
-            <h3 class="text-sm font-bold uppercase tracking-[0.12em] text-ink/80 dark:text-white/80">Base values</h3>
-            <button
-              type="button"
-              class="rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-semibold text-ink outline-none ring-brand/40 transition hover:bg-ink/5 focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white dark:hover:bg-white/10"
-              onClick={() => setIsSetupOpen(true)}
-            >
-              Open setup
-            </button>
+      <InfoCard title="Base values">
+        <div class="grid gap-1">
+          <NumberField label="Ticket Price" value={cruise.baseTicketPrice()} onInput={cruise.setBaseTicketPrice} />
+
+          <div class="grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2">
+            <label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
+              Guest Spending
+            </label>
+            <div class="flex items-center gap-2">
+              <input
+                type="text"
+                value={cruise.baseGuestMin()}
+                onInput={(event) => cruise.setBaseGuestMin(event.currentTarget.value)}
+                onKeyDown={blurOnEnterOrEscape}
+                autocapitalize="off"
+                autocomplete="off"
+                autocorrect="off"
+                spellcheck={false}
+                class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+              />
+              <span class="text-ink/50 dark:text-white/50">-</span>
+              <input
+                type="text"
+                value={cruise.baseGuestMax()}
+                onInput={(event) => cruise.setBaseGuestMax(event.currentTarget.value)}
+                onKeyDown={blurOnEnterOrEscape}
+                autocapitalize="off"
+                autocomplete="off"
+                autocorrect="off"
+                spellcheck={false}
+                class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+              />
+            </div>
           </div>
 
-          <div class="rounded border border-ink/15 bg-white dark:border-white/15 dark:bg-[#22344d]">
-            <MetricRow label="Ticket Price" value={formatValue(cruise.baseSnapshot().baseTicketPrice, 2)} />
-            <MetricRow
-              label="Guest Spending"
-              value={`${formatValue(baseGuestMin(), 2)} - ${formatValue(baseGuestMax(), 2)}`}
-            />
-            <MetricRow
-              label="Room Capacity"
-              value={`${formatValue(baseRoomMin(), 2)} - ${formatValue(baseRoomMax(), 2)}`}
-              withBorder={false}
-            />
+          <div class="grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2">
+            <label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
+              Room Capacity
+            </label>
+            <div class="flex items-center gap-2">
+              <input
+                type="text"
+                value={cruise.baseRoomMin()}
+                onInput={(event) => cruise.setBaseRoomMin(event.currentTarget.value)}
+                onKeyDown={blurOnEnterOrEscape}
+                autocapitalize="off"
+                autocomplete="off"
+                autocorrect="off"
+                spellcheck={false}
+                class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+              />
+              <span class="text-ink/50 dark:text-white/50">-</span>
+              <input
+                type="text"
+                value={cruise.baseRoomMax()}
+                onInput={(event) => cruise.setBaseRoomMax(event.currentTarget.value)}
+                onKeyDown={blurOnEnterOrEscape}
+                autocapitalize="off"
+                autocomplete="off"
+                autocorrect="off"
+                spellcheck={false}
+                class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+              />
+            </div>
           </div>
         </div>
       </InfoCard>
-
-      <CruiseSetupModal open={isSetupOpen()} onClose={closeSetupModal} />
 
       <InfoCard title="Prestige notation" tooltip="cruise.notation">
         <div class="grid gap-1.5">

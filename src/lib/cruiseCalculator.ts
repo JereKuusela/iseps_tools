@@ -463,27 +463,22 @@ const evaluateImmediateStep = (input: CruiseInputState, levels: CruiseNodeLevels
   } else if (id === "betterReviews") {
     nextBonusMultiplier = 1.03
   } else if (id === "moreSpace") {
-    // If room capacity is 1, user hasn't set it yet - no value
-    if (input.roomCapacityMin === 1) {
-      nextBonusMultiplier = 1
-    } else {
-      // Adding +1 to min, +2 to max: average increases by +1.5
-      // Each capacity past 1 gives +0.09x multiplier
-      const groupMultiplier = safePow(1.08, input.groupsDiscountLevel)
-      const bunkMultiplier = safePow(1.05, input.bunkBedsLevel)
-      const sunMultiplier = Math.max(groupMultiplier * bunkMultiplier, 1)
+    // Adding +1 to min, +2 to max: average increases by +1.5
+    // Each capacity past 1 gives +0.09x multiplier
+    const groupMultiplier = safePow(1.08, input.groupsDiscountLevel)
+    const bunkMultiplier = safePow(1.05, input.bunkBedsLevel)
+    const sunMultiplier = Math.max(groupMultiplier * bunkMultiplier, 1)
 
-      const baseRoomMin = Math.max(1, input.roomCapacityMin / sunMultiplier - levels.moreSpace)
-      const baseRoomMax = Math.max(1, input.roomCapacityMax / sunMultiplier - levels.moreSpace * 2)
-      const baseRoomAvg = (baseRoomMin + baseRoomMax) / 2
+    const baseRoomMin = Math.max(1, input.roomCapacityMin / sunMultiplier - levels.moreSpace)
+    const baseRoomMax = Math.max(1, input.roomCapacityMax / sunMultiplier - levels.moreSpace * 2)
+    const baseRoomAvg = (baseRoomMin + baseRoomMax) / 2
 
-      const currentRoomCapacity = baseRoomAvg + (levels.moreSpace + levels.moreSpace * 2) / 2
-      const nextRoomCapacity = currentRoomCapacity + 1.5
+    const currentRoomCapacity = baseRoomAvg + (levels.moreSpace + levels.moreSpace * 2) / 2
+    const nextRoomCapacity = currentRoomCapacity + 1.5
 
-      const currentMultiplier = 1 + (currentRoomCapacity - 1) * 0.09
-      const nextMultiplier = 1 + (nextRoomCapacity - 1) * 0.09
-      nextBonusMultiplier = nextMultiplier / Math.max(currentMultiplier, Number.EPSILON)
-    }
+    const currentMultiplier = 1 + (currentRoomCapacity - 1) * 0.09
+    const nextMultiplier = 1 + (nextRoomCapacity - 1) * 0.09
+    nextBonusMultiplier = nextMultiplier / Math.max(currentMultiplier, Number.EPSILON)
   } else if (id === "echoTriggerCount" || id === "echoMultiplier") {
     // Echo nodes need full calculation due to power function
     const currentEchoTrigger = getEchoTriggerCount(input, levels)
