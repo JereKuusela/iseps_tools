@@ -165,8 +165,8 @@ export const CruiseSetupModal = (props: CruiseSetupModalProps) => {
                 <NumberField label="Ticket price" value={setupTicketPrice()} onInput={setSetupTicketPrice} min={0} />
                 <NumberField label="Min guest" value={setupGuestMin()} onInput={setSetupGuestMin} min={0} />
                 <NumberField label="Max guest" value={setupGuestMax()} onInput={setSetupGuestMax} min={0} />
-                <NumberField label="Min room" value={setupRoomMin()} onInput={setSetupRoomMin} min={0} />
-                <NumberField label="Max room" value={setupRoomMax()} onInput={setSetupRoomMax} min={0} />
+                <NumberField label="Min capacity" value={setupRoomMin()} onInput={setSetupRoomMin} min={0} />
+                <NumberField label="Max capacity" value={setupRoomMax()} onInput={setSetupRoomMax} min={0} />
                 <IntegerField
                   label="Groups discount"
                   value={setupGroupsDiscountLevel()}
