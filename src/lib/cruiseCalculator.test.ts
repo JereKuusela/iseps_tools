@@ -20,8 +20,6 @@ const defaultInput = (): CruiseInputState => ({
   guestSpendingMax: 40,
   roomCapacityMin: 10,
   roomCapacityMax: 14,
-  groupsDiscountLevel: 0,
-  bunkBedsLevel: 0,
 })
 
 describe("getTotalPointsFromPrestiges", () => {
@@ -108,7 +106,7 @@ describe("echo gating", () => {
 })
 
 describe("snapshot ticket price handling", () => {
-  it("derives base values from effective inputs", () => {
+  it("applies level multipliers to base input values", () => {
     const levels = emptyCruiseNodeLevels()
     levels.ticketPrice = 1
     levels.guestSpending = 2
@@ -122,22 +120,23 @@ describe("snapshot ticket price handling", () => {
         guestSpendingMax: 40,
         roomCapacityMin: 50,
         roomCapacityMax: 70,
-        groupsDiscountLevel: 1,
-        bunkBedsLevel: 2,
       },
       levels,
     )
 
-    expect(snapshot.effectiveTicketPrice).toBeCloseTo(10, 10)
-    expect(snapshot.baseTicketPrice).toBeCloseTo(10 / 1.4, 10)
-    expect(snapshot.effectiveGuestSpending).toBeCloseTo(30, 10)
-    expect(snapshot.baseGuestMin).toBeCloseTo(20 / 1.35 ** 2, 10)
-    expect(snapshot.baseGuestMax).toBeCloseTo(40 / 1.35 ** 2, 10)
+    // Input values are treated as base values (level 0)
+    // Base values equal input when no prior levels are applied
+    expect(snapshot.baseTicketPrice).toBeCloseTo(10, 10)
+    expect(snapshot.baseGuestMin).toBeCloseTo(20, 10)
+    expect(snapshot.baseGuestMax).toBeCloseTo(40, 10)
+    expect(snapshot.baseRoomMin).toBeCloseTo(50, 10)
+    expect(snapshot.baseRoomMax).toBeCloseTo(70, 10)
 
-    const sunMultiplier = 1.08 * 1.05 ** 2
-    expect(snapshot.effectiveRoomCapacity).toBeCloseTo(60, 10)
-    expect(snapshot.baseRoomMin).toBeCloseTo(50 / sunMultiplier - 3, 10)
-    expect(snapshot.baseRoomMax).toBeCloseTo(70 / sunMultiplier - 3, 10)
+    // Effective values are base * level multipliers
+    expect(snapshot.effectiveTicketPrice).toBeCloseTo(10 * 1.4, 10)
+    expect(snapshot.effectiveGuestSpending).toBeCloseTo(30 * 1.35 ** 2, 10)
+    // Room capacity adds moreSpace levels: min +1 per level, max +2 per level (average +1.5)
+    expect(snapshot.effectiveRoomCapacity).toBeCloseTo((50 + 3 + 70 + 6) / 2, 10)
   })
 })
 
@@ -273,5 +272,36 @@ describe("optimize", () => {
     const spent = getSpentPoints(optimized.nextLevels)
 
     expect(spent).toBeLessThanOrEqual(getTotalPointsFromPrestiges(16))
+  })
+
+  it("finds optimal build for 10 ticket, 5 guest, 1 room scenario", () => {
+    // This scenario found that manual build (20 prestige, 8 ticket, 4 particle)
+    // was better than calculator suggestion (16 prestige, 9 ticket, 3 particle)
+    const input = {
+      ...defaultInput(),
+      prestigesDone: 16,
+      cruiseLevel: 10,
+      ticketPrice: 10,
+      guestSpendingMin: 5,
+      guestSpendingMax: 5,
+      roomCapacityMin: 1,
+      roomCapacityMax: 1,
+    }
+
+    // Get calculator's optimal build
+    const optimized = applyActionOptimize(input)
+    const optimizedObjective = getCruiseSnapshot(input, optimized.nextLevels).objectiveMultiplier
+
+    // Manual build that was found to be better
+    const manualLevels = emptyCruiseNodeLevels()
+    manualLevels.prestigeMultiplier = 20
+    manualLevels.ticketPrice = 8
+    manualLevels.particleOutput = 4
+    const manualObjective = getCruiseSnapshot(input, manualLevels).objectiveMultiplier
+
+    console.log("Manual build:", manualLevels, "Objective multiplier:", manualObjective)
+    console.log("Optimized build:", optimized.nextLevels, "Objective multiplier:", optimizedObjective)
+    // Calculator should find a build at least as good as the manual one
+    expect(optimizedObjective).toBeGreaterThanOrEqual(manualObjective * 0.999)
   })
 })

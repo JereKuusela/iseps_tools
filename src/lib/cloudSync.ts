@@ -12,7 +12,6 @@ export const SYNC_TIMESTAMP_KEY = "sync.timestamp"
 const PUSH_DEBOUNCE_MS = 5_000
 const REMOTE_SYNC_VERSION = 1
 const HASH_LENGTH = 16
-const SYNC_KEY_PREFIXES = ["sc.", "zat.", "premium.", "ui.", "penrose.", "info-card:", "app.", "sync."]
 
 type SyncRecord = {
   version: number
@@ -28,10 +27,12 @@ export const createRandomSyncHash = () => {
 }
 
 const shouldSyncKey = (key: string) => {
+  // Exclude sync-related metadata keys from being synced themselves
   if (key === SYNC_HASH_KEY) return false
   if (key === SYNC_TIMESTAMP_KEY) return false
   if (key === SYNC_ENABLED_KEY) return false
-  return SYNC_KEY_PREFIXES.some((prefix) => key.startsWith(prefix))
+  // Sync everything else by default
+  return true
 }
 
 const getSyncPath = () => firebaseSyncConfig.syncPath.replace(/^\/+|\/+$/g, "")

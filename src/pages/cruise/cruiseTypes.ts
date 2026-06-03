@@ -21,8 +21,6 @@ export type CruiseInputState = {
   guestSpendingMax: number
   roomCapacityMin: number
   roomCapacityMax: number
-  groupsDiscountLevel: number
-  bunkBedsLevel: number
 }
 
 export type CruiseNodeDefinition = {

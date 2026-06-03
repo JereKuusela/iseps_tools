@@ -1,4 +1,4 @@
-import { createContext, createEffect, createMemo, type ParentProps, useContext } from "solid-js"
+import { createContext, createMemo, type ParentProps, useContext } from "solid-js"
 import {
   applyActionBuyNext,
   applyActionOptimize,
@@ -33,10 +33,6 @@ type CruiseContextValue = {
   setBaseRoomMin: (next: string) => string
   baseRoomMax: () => string
   setBaseRoomMax: (next: string) => string
-  groupsDiscountLevel: () => string
-  setGroupsDiscountLevel: (next: string) => string
-  bunkBedsLevel: () => string
-  setBunkBedsLevel: (next: string) => string
   nodeLevels: () => CruiseNodeLevels
   setNodeLevels: (next: CruiseNodeLevels) => void
   setNodeLevel: (id: keyof CruiseNodeLevels, next: number) => void
@@ -76,8 +72,6 @@ const toCruiseInput = (raw: {
   guestSpendingMax: string
   roomCapacityMin: string
   roomCapacityMax: string
-  groupsDiscountLevel: string
-  bunkBedsLevel: string
 }): CruiseInputState => {
   return normalizeCruiseInputState({
     prestigesDone: parseNumberish(raw.prestigesDone),
@@ -87,8 +81,6 @@ const toCruiseInput = (raw: {
     guestSpendingMax: parseNumberish(raw.guestSpendingMax),
     roomCapacityMin: parseNumberish(raw.roomCapacityMin),
     roomCapacityMax: parseNumberish(raw.roomCapacityMax),
-    groupsDiscountLevel: parseNumberish(raw.groupsDiscountLevel),
-    bunkBedsLevel: parseNumberish(raw.bunkBedsLevel),
   })
 }
 
@@ -110,60 +102,12 @@ export const CruiseProvider = (props: ParentProps) => {
   const [baseRoomMin, setBaseRoomMin] = createSyncedSignal("cruise.baseRoomMin", "1")
   const [baseRoomMax, setBaseRoomMax] = createSyncedSignal("cruise.baseRoomMax", "1")
 
-  const [legacyTicketPrice, setLegacyTicketPrice] = createSyncedSignal("cruise.ticketPrice", "1")
-  const [legacyGuestSpendingMin, setLegacyGuestSpendingMin] = createSyncedSignal("cruise.guestSpendingMin", "0")
-  const [legacyGuestSpendingMax, setLegacyGuestSpendingMax] = createSyncedSignal("cruise.guestSpendingMax", "0")
-  const [legacyRoomCapacityMin, setLegacyRoomCapacityMin] = createSyncedSignal("cruise.roomCapacityMin", "0")
-  const [legacyRoomCapacityMax, setLegacyRoomCapacityMax] = createSyncedSignal("cruise.roomCapacityMax", "0")
-  const [baseValuesMigrated, setBaseValuesMigrated] = createSyncedSignal("cruise.baseValuesMigrated", false)
-  const [groupsDiscountLevel, setGroupsDiscountLevel] = createSyncedSignal("cruise.groupsDiscountLevel", "0")
-  const [bunkBedsLevel, setBunkBedsLevel] = createSyncedSignal("cruise.bunkBedsLevel", "0")
-
   const [nodeLevels, setNodeLevels] = createSyncedSignal<CruiseNodeLevels>("cruise.nodeLevels", emptyCruiseNodeLevels())
 
   const normalizedLevels = createMemo(() => normalizeCruiseNodeLevels(nodeLevels()))
 
   const ticketMultiplier = createMemo(() => safePow(1.4, normalizedLevels().ticketPrice))
   const guestMultiplier = createMemo(() => safePow(1.35, normalizedLevels().guestSpending))
-  const sunMultiplier = createMemo(
-    () => safePow(1.08, parseNumberish(groupsDiscountLevel())) * safePow(1.05, parseNumberish(bunkBedsLevel())),
-  )
-
-  createEffect(() => {
-    if (baseValuesMigrated()) return
-
-    const legacyTicket = Math.max(1, parseNumberish(legacyTicketPrice()))
-    const legacyGuestMin = Math.max(0, parseNumberish(legacyGuestSpendingMin()))
-    const legacyGuestMax = Math.max(legacyGuestMin, parseNumberish(legacyGuestSpendingMax()))
-    const legacyRoomMin = Math.max(1, parseNumberish(legacyRoomCapacityMin()))
-    const legacyRoomMax = Math.max(legacyRoomMin, parseNumberish(legacyRoomCapacityMax()))
-
-    const baseTicket = legacyTicket / Math.max(ticketMultiplier(), Number.EPSILON)
-    const baseGuestMinVal = legacyGuestMin / Math.max(guestMultiplier(), Number.EPSILON)
-    const baseGuestMaxVal = legacyGuestMax / Math.max(guestMultiplier(), Number.EPSILON)
-    const baseRoomMinVal = Math.max(
-      1,
-      legacyRoomMin / Math.max(sunMultiplier(), Number.EPSILON) - normalizedLevels().moreSpace,
-    )
-    const baseRoomMaxVal = Math.max(
-      1,
-      legacyRoomMax / Math.max(sunMultiplier(), Number.EPSILON) - normalizedLevels().moreSpace,
-    )
-
-    setBaseTicketPrice(baseTicket.toString())
-    setBaseGuestMin(baseGuestMinVal.toString())
-    setBaseGuestMax(baseGuestMaxVal.toString())
-    setBaseRoomMin(baseRoomMinVal.toString())
-    setBaseRoomMax(baseRoomMaxVal.toString())
-
-    setLegacyTicketPrice(legacyTicket.toString())
-    setLegacyGuestSpendingMin(legacyGuestMin.toString())
-    setLegacyGuestSpendingMax(legacyGuestMax.toString())
-    setLegacyRoomCapacityMin(legacyRoomMin.toString())
-    setLegacyRoomCapacityMax(legacyRoomMax.toString())
-
-    setBaseValuesMigrated(true)
-  })
 
   const normalizedInput = createMemo(() =>
     toCruiseInput({
@@ -174,14 +118,12 @@ export const CruiseProvider = (props: ParentProps) => {
       guestSpendingMax: (Math.max(0, parseNumberish(baseGuestMax())) * guestMultiplier()).toString(),
       roomCapacityMin: Math.max(
         1,
-        (Math.max(1, parseNumberish(baseRoomMin())) + normalizedLevels().moreSpace) * sunMultiplier(),
+        Math.max(1, parseNumberish(baseRoomMin())) + normalizedLevels().moreSpace,
       ).toString(),
       roomCapacityMax: Math.max(
         1,
-        (Math.max(1, parseNumberish(baseRoomMax())) + normalizedLevels().moreSpace) * sunMultiplier(),
+        Math.max(1, parseNumberish(baseRoomMax())) + normalizedLevels().moreSpace,
       ).toString(),
-      groupsDiscountLevel: groupsDiscountLevel(),
-      bunkBedsLevel: bunkBedsLevel(),
     }),
   )
 
@@ -193,10 +135,8 @@ export const CruiseProvider = (props: ParentProps) => {
       ticketPrice: Math.max(1, parseNumberish(baseTicketPrice())).toString(),
       guestSpendingMin: Math.max(0, parseNumberish(baseGuestMin())).toString(),
       guestSpendingMax: Math.max(0, parseNumberish(baseGuestMax())).toString(),
-      roomCapacityMin: Math.max(1, Math.max(1, parseNumberish(baseRoomMin())) * sunMultiplier()).toString(),
-      roomCapacityMax: Math.max(1, Math.max(1, parseNumberish(baseRoomMax())) * sunMultiplier()).toString(),
-      groupsDiscountLevel: groupsDiscountLevel(),
-      bunkBedsLevel: bunkBedsLevel(),
+      roomCapacityMin: Math.max(1, Math.max(1, parseNumberish(baseRoomMin()))).toString(),
+      roomCapacityMax: Math.max(1, Math.max(1, parseNumberish(baseRoomMax()))).toString(),
     }),
   )
 
@@ -276,10 +216,6 @@ export const CruiseProvider = (props: ParentProps) => {
         setBaseRoomMin,
         baseRoomMax,
         setBaseRoomMax,
-        groupsDiscountLevel,
-        setGroupsDiscountLevel,
-        bunkBedsLevel,
-        setBunkBedsLevel,
         nodeLevels,
         setNodeLevels: replaceNodeLevels,
         setNodeLevel,

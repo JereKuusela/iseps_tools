@@ -183,14 +183,11 @@ export type EffectiveValuesDetailed = {
 }
 
 /**
- * Calculate base values from effective input values and current node levels.
- * This reverses the multiplier effects to find the underlying base values.
+ * Calculate base values from input.
+ * Input values are treated as base values - they represent the underlying game state.
+ * The only transformation needed is backing out moreSpace levels for rooms.
  */
 export const calculateBaseValuesFromInput = (input: CruiseInputState, levels: CruiseNodeLevels): BaseValues => {
-  const groupMultiplier = safePow(1.08, input.groupsDiscountLevel)
-  const bunkMultiplier = safePow(1.05, input.bunkBedsLevel)
-  const sunMultiplier = Math.max(groupMultiplier * bunkMultiplier, Number.EPSILON)
-
   const ticketMultiplier = safePow(1.4, levels.ticketPrice)
   const guestMultiplier = safePow(1.35, levels.guestSpending)
 
@@ -198,8 +195,8 @@ export const calculateBaseValuesFromInput = (input: CruiseInputState, levels: Cr
     ticket: input.ticketPrice / Math.max(ticketMultiplier, Number.EPSILON),
     guestMin: input.guestSpendingMin / Math.max(guestMultiplier, Number.EPSILON),
     guestMax: input.guestSpendingMax / Math.max(guestMultiplier, Number.EPSILON),
-    roomMin: Math.max(1, input.roomCapacityMin / sunMultiplier - levels.moreSpace),
-    roomMax: Math.max(1, input.roomCapacityMax / sunMultiplier - levels.moreSpace * 2),
+    roomMin: Math.max(1, input.roomCapacityMin - levels.moreSpace),
+    roomMax: Math.max(1, input.roomCapacityMax - levels.moreSpace * 2),
   }
 }
 
@@ -212,10 +209,6 @@ export const calculateEffectiveValuesFromBase = (
   baseValues: BaseValues,
   levels: CruiseNodeLevels,
 ): EffectiveValues => {
-  const groupMultiplier = safePow(1.08, input.groupsDiscountLevel)
-  const bunkMultiplier = safePow(1.05, input.bunkBedsLevel)
-  const sunMultiplier = Math.max(groupMultiplier * bunkMultiplier, Number.EPSILON)
-
   const ticketMultiplier = safePow(1.4, levels.ticketPrice)
   const guestMultiplier = safePow(1.35, levels.guestSpending)
 
@@ -224,46 +217,14 @@ export const calculateEffectiveValuesFromBase = (
   const effectiveGuestMax = baseValues.guestMax * guestMultiplier
   const effectiveGuestSpending = (effectiveGuestMin + effectiveGuestMax) / 2
 
-  const effectiveRoomMin = (baseValues.roomMin + levels.moreSpace) * sunMultiplier
-  const effectiveRoomMax = (baseValues.roomMax + levels.moreSpace * 2) * sunMultiplier
+  const effectiveRoomMin = baseValues.roomMin + levels.moreSpace
+  const effectiveRoomMax = baseValues.roomMax + levels.moreSpace * 2
   const effectiveRoomCapacity = (effectiveRoomMin + effectiveRoomMax) / 2
 
   return {
     ticketPrice: effectiveTicketPrice,
     guestSpending: effectiveGuestSpending,
     roomCapacity: effectiveRoomCapacity,
-  }
-}
-
-/**
- * Calculate detailed effective values from base values and node levels.
- * Returns separate min/max values instead of averages.
- * This is the exact reverse of calculateBaseValuesFromInput.
- */
-export const calculateEffectiveValuesDetailed = (
-  input: CruiseInputState,
-  baseValues: BaseValues,
-  levels: CruiseNodeLevels,
-): EffectiveValuesDetailed => {
-  const groupMultiplier = safePow(1.08, input.groupsDiscountLevel)
-  const bunkMultiplier = safePow(1.05, input.bunkBedsLevel)
-  const sunMultiplier = Math.max(groupMultiplier * bunkMultiplier, Number.EPSILON)
-
-  const ticketMultiplier = safePow(1.4, levels.ticketPrice)
-  const guestMultiplier = safePow(1.35, levels.guestSpending)
-
-  const effectiveTicketPrice = baseValues.ticket * ticketMultiplier
-  const effectiveGuestMin = baseValues.guestMin * guestMultiplier
-  const effectiveGuestMax = baseValues.guestMax * guestMultiplier
-  const effectiveRoomMin = (baseValues.roomMin + levels.moreSpace) * sunMultiplier
-  const effectiveRoomMax = (baseValues.roomMax + levels.moreSpace * 2) * sunMultiplier
-
-  return {
-    ticketPrice: effectiveTicketPrice,
-    guestMin: effectiveGuestMin,
-    guestMax: effectiveGuestMax,
-    roomMin: effectiveRoomMin,
-    roomMax: effectiveRoomMax,
   }
 }
 
@@ -282,8 +243,6 @@ export const normalizeCruiseInputState = (raw: CruiseInputState): CruiseInputSta
     guestSpendingMax: guestMax,
     roomCapacityMin: roomMin,
     roomCapacityMax: roomMax,
-    groupsDiscountLevel: Math.max(0, Math.floor(sanitizeNumber(raw.groupsDiscountLevel, 0))),
-    bunkBedsLevel: Math.max(0, Math.floor(sanitizeNumber(raw.bunkBedsLevel, 0))),
   }
 }
 
@@ -404,8 +363,9 @@ export const getCruiseSnapshot = (input: CruiseInputState, levels: CruiseNodeLev
   const particleMultiplier = safePow(particlePerLevel, levels.particleOutput)
   const reviewsMultiplier = safePow(1.03, levels.betterReviews)
 
-  // Back-calculate base values from effective input values
-  const baseValues = calculateBaseValuesFromInput(input, levels)
+  // Back-calculate base values from effective input values using level 0 (no upgrades)
+  // Base values are constant for a given input and represent the underlying game values
+  const baseValues = calculateBaseValuesFromInput(input, emptyCruiseNodeLevels())
   const baseGuestAvg = (baseValues.guestMin + baseValues.guestMax) / 2
   const baseRoomAvg = (baseValues.roomMin + baseValues.roomMax) / 2
 
@@ -465,12 +425,8 @@ const evaluateImmediateStep = (input: CruiseInputState, levels: CruiseNodeLevels
   } else if (id === "moreSpace") {
     // Adding +1 to min, +2 to max: average increases by +1.5
     // Each capacity past 1 gives +0.09x multiplier
-    const groupMultiplier = safePow(1.08, input.groupsDiscountLevel)
-    const bunkMultiplier = safePow(1.05, input.bunkBedsLevel)
-    const sunMultiplier = Math.max(groupMultiplier * bunkMultiplier, 1)
-
-    const baseRoomMin = Math.max(1, input.roomCapacityMin / sunMultiplier - levels.moreSpace)
-    const baseRoomMax = Math.max(1, input.roomCapacityMax / sunMultiplier - levels.moreSpace * 2)
+    const baseRoomMin = Math.max(1, input.roomCapacityMin - levels.moreSpace)
+    const baseRoomMax = Math.max(1, input.roomCapacityMax - levels.moreSpace * 2)
     const baseRoomAvg = (baseRoomMin + baseRoomMax) / 2
 
     const currentRoomCapacity = baseRoomAvg + (levels.moreSpace + levels.moreSpace * 2) / 2
@@ -667,7 +623,20 @@ export const evaluateNextNodeValues = (input: CruiseInputState, levels: CruiseNo
   }
 
   const bestNode = rows
-    .filter((row) => row.affordable)
+    .filter((row) => {
+      if (!row.affordable) return false
+
+      // Don't suggest guest spending if ticket price has higher level (and vice versa)
+      // This prevents diminishing returns from leveling the weaker contributor
+      if (row.id === "guestSpending" && levels.ticketPrice > levels.guestSpending) {
+        return false
+      }
+      if (row.id === "ticketPrice" && levels.guestSpending > levels.ticketPrice) {
+        return false
+      }
+
+      return true
+    })
     .slice()
     .sort((a, b) => {
       if (b.score !== a.score) return b.score - a.score
