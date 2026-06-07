@@ -31,8 +31,6 @@ export type CruiseEvaluationRow = {
   nextBonusMultiplier: number
   nextBonusPerPoint: number
   relativeBonusPerPoint: number
-  score: number
-  plannedSpend: number
 }
 
 export type CruiseEvaluationResult = {
@@ -50,11 +48,6 @@ export type CruiseActionResult = {
   purchasedCost: number
 }
 
-type DeepPlanResult = {
-  objective: number
-  spent: number
-}
-
 type CruiseLevelBonusRule = {
   level: number
   echoTriggerCount: number
@@ -68,10 +61,6 @@ const NODE_MAP = CRUISE_NODE_DEFINITIONS.reduce((accumulator, definition) => {
   return accumulator
 }, {} as NodeDefinitionMap)
 const NODE_IDS: CruiseNodeId[] = CRUISE_NODE_DEFINITIONS.map((definition) => definition.id)
-
-const ECHO_NODE_IDS: CruiseNodeId[] = ["echoTriggerCount", "echoMultiplier"]
-
-const OFFLINE_BASELINE_SCORE = 0
 
 const parseCruiseLevelBonusRules = (raw: unknown): CruiseLevelBonusRule[] => {
   if (!Array.isArray(raw)) return []
@@ -131,19 +120,10 @@ const sanitizeNumber = (value: number, fallback = 0) => {
   return value
 }
 
-const sanitizeScore = (value: number, fallback = 0) => {
-  if (!Number.isFinite(value)) return fallback
-  return value
-}
-
 const safePow = (base: number, exponent: number) => {
   const sanitizedBase = Math.max(Number.EPSILON, sanitizeNumber(base, 1))
   const sanitizedExp = Math.max(0, Math.floor(sanitizeNumber(exponent, 0)))
   return sanitizedBase ** sanitizedExp
-}
-
-const serializeLevels = (levels: CruiseNodeLevels) => {
-  return NODE_IDS.map((id) => levels[id]).join("|")
 }
 
 const cloneLevels = (levels: CruiseNodeLevels): CruiseNodeLevels => {
@@ -183,42 +163,23 @@ export type EffectiveValuesDetailed = {
 }
 
 /**
- * Calculate base values from input.
- * Input values are treated as base values - they represent the underlying game state.
- * The only transformation needed is backing out moreSpace levels for rooms.
- */
-export const calculateBaseValuesFromInput = (input: CruiseInputState, levels: CruiseNodeLevels): BaseValues => {
-  const ticketMultiplier = safePow(1.4, levels.ticketPrice)
-  const guestMultiplier = safePow(1.35, levels.guestSpending)
-
-  return {
-    ticket: input.ticketPrice / Math.max(ticketMultiplier, Number.EPSILON),
-    guestMin: input.guestSpendingMin / Math.max(guestMultiplier, Number.EPSILON),
-    guestMax: input.guestSpendingMax / Math.max(guestMultiplier, Number.EPSILON),
-    roomMin: Math.max(1, input.roomCapacityMin - levels.moreSpace),
-    roomMax: Math.max(1, input.roomCapacityMax - levels.moreSpace * 2),
-  }
-}
-
-/**
  * Calculate effective values from base values and node levels.
  * Applies all multipliers to compute the actual effective values.
  */
 export const calculateEffectiveValuesFromBase = (
-  input: CruiseInputState,
-  baseValues: BaseValues,
+  baseValues: CruiseInputState,
   levels: CruiseNodeLevels,
 ): EffectiveValues => {
   const ticketMultiplier = safePow(1.4, levels.ticketPrice)
   const guestMultiplier = safePow(1.35, levels.guestSpending)
 
-  const effectiveTicketPrice = baseValues.ticket * ticketMultiplier
-  const effectiveGuestMin = baseValues.guestMin * guestMultiplier
-  const effectiveGuestMax = baseValues.guestMax * guestMultiplier
+  const effectiveTicketPrice = baseValues.ticketPrice * ticketMultiplier
+  const effectiveGuestMin = baseValues.guestSpendingMin * guestMultiplier
+  const effectiveGuestMax = baseValues.guestSpendingMax * guestMultiplier
   const effectiveGuestSpending = (effectiveGuestMin + effectiveGuestMax) / 2
 
-  const effectiveRoomMin = baseValues.roomMin + levels.moreSpace
-  const effectiveRoomMax = baseValues.roomMax + levels.moreSpace * 2
+  const effectiveRoomMin = baseValues.roomCapacityMin + levels.moreSpace
+  const effectiveRoomMax = baseValues.roomCapacityMax + levels.moreSpace * 2
   const effectiveRoomCapacity = (effectiveRoomMin + effectiveRoomMax) / 2
 
   return {
@@ -321,21 +282,15 @@ export const getAvailablePoints = (input: CruiseInputState, levels: CruiseNodeLe
 }
 
 const getNodeUnlockState = (id: CruiseNodeId, input: CruiseInputState, levels: CruiseNodeLevels) => {
-  if (id === "echoTriggerCount") {
+  if (id === "echoTriggerCount")
     return input.prestigesDone >= 25 || input.cruiseLevel >= FIRST_ECHO_TRIGGER_CRUISE_LEVEL
-  }
 
-  if (id === "echoMultiplier") {
+  if (id === "echoMultiplier")
     return input.cruiseLevel >= FIRST_ECHO_TRIGGER_CRUISE_LEVEL || levels.echoTriggerCount > 0
-  }
 
-  if (input.prestigesDone < NODE_MAP[id].minFillsDone) {
-    return false
-  }
+  if (input.prestigesDone < NODE_MAP[id].minFillsDone) return false
 
-  if (input.cruiseLevel < NODE_MAP[id].minCruiseLevel) {
-    return false
-  }
+  if (input.cruiseLevel < NODE_MAP[id].minCruiseLevel) return false
 
   return true
 }
@@ -343,13 +298,7 @@ const getNodeUnlockState = (id: CruiseNodeId, input: CruiseInputState, levels: C
 const getEchoTriggerCount = (input: CruiseInputState, levels: CruiseNodeLevels) => {
   const baseTriggerCount = getCruiseLevelEchoTriggerBonus(input.cruiseLevel)
   const triggerLevel = levels.echoTriggerCount
-  const rawCount = baseTriggerCount + triggerLevel
-
-  if (triggerLevel > 0 && rawCount < 2) {
-    return 2
-  }
-
-  return rawCount
+  return baseTriggerCount + triggerLevel
 }
 
 const getEchoMultiplierValue = (input: CruiseInputState, levels: CruiseNodeLevels) => {
@@ -357,29 +306,39 @@ const getEchoMultiplierValue = (input: CruiseInputState, levels: CruiseNodeLevel
   return 1.1 + cruiseBonus + levels.echoMultiplier * 0.1
 }
 
+// Quite poor heuristic but More Space is so weak that it's never used.
+const getRoomBonus = (cruiseLevel: number) => cruiseLevel * 0.02
+
 export const getCruiseSnapshot = (input: CruiseInputState, levels: CruiseNodeLevels): CruiseSnapshot => {
   const prestigeMultiplier = 1 + levels.prestigeMultiplier
   const particlePerLevel = Math.max(1, 1 + input.cruiseLevel * 0.01)
   const particleMultiplier = safePow(particlePerLevel, levels.particleOutput)
-  const reviewsMultiplier = safePow(1.03, levels.betterReviews)
+  const reviewsMultiplier = safePow(1.01, levels.betterReviews)
 
   // Back-calculate base values from effective input values using level 0 (no upgrades)
   // Base values are constant for a given input and represent the underlying game values
-  const baseValues = calculateBaseValuesFromInput(input, emptyCruiseNodeLevels())
+  const baseValues = {
+    ticket: input.ticketPrice,
+    guestMin: input.guestSpendingMin,
+    guestMax: input.guestSpendingMax,
+    roomMin: input.roomCapacityMin,
+    roomMax: input.roomCapacityMax,
+  }
   const baseGuestAvg = (baseValues.guestMin + baseValues.guestMax) / 2
   const baseRoomAvg = (baseValues.roomMin + baseValues.roomMax) / 2
 
   // Calculate effective values from base + node levels being evaluated
-  const effectiveValues = calculateEffectiveValuesFromBase(input, baseValues, levels)
+  const effectiveValues = calculateEffectiveValuesFromBase(input, levels)
 
   const echoTriggerCount = getEchoTriggerCount(input, levels)
   const echoMultiplier = getEchoMultiplierValue(input, levels)
-  const echoFactor = echoTriggerCount > 0 ? safePow(echoMultiplier, echoTriggerCount) : 1
+  const echoFactor = calculateEchoFactor(echoTriggerCount, echoMultiplier)
   const multipliers = prestigeMultiplier * particleMultiplier * reviewsMultiplier
 
   const effectiveEarningsPerGuest = effectiveValues.ticketPrice + effectiveValues.guestSpending
-  const baseRoomMultiplier = 1 + (baseRoomAvg - 1) * 0.09
-  const roomCapacityMultiplier = 1 + (effectiveValues.roomCapacity - 1) * 0.09
+  const roomBonus = getRoomBonus(input.cruiseLevel)
+  const baseRoomMultiplier = 1 + (baseRoomAvg - 1) * roomBonus
+  const roomCapacityMultiplier = 1 + (effectiveValues.roomCapacity - 1) * roomBonus
   const base = (baseValues.ticket + baseGuestAvg) * baseRoomMultiplier
   const objectiveMultiplier = (effectiveEarningsPerGuest * multipliers * roomCapacityMultiplier * echoFactor) / base
 
@@ -396,7 +355,56 @@ export const getCruiseSnapshot = (input: CruiseInputState, levels: CruiseNodeLev
   }
 }
 
-const evaluateImmediateStep = (input: CruiseInputState, levels: CruiseNodeLevels, id: CruiseNodeId) => {
+const deepEvaluateEchoScore = (input: CruiseInputState, levels: CruiseNodeLevels, availablePoints: number) => {
+  const availableEchoCounts = NODE_MAP["echoTriggerCount"].maxLevel - levels.echoTriggerCount
+  const availableEchoMult = NODE_MAP["echoMultiplier"].maxLevel - levels.echoMultiplier
+  const baseEchoTrigger = getEchoTriggerCount(input, levels)
+  const baseEchoMult = getEchoMultiplierValue(input, levels)
+  const baseEchoFactor = calculateEchoFactor(baseEchoTrigger, baseEchoMult)
+  let bestBonusPerPoint = 0
+  let totalCountCost = 0
+  for (let echoCount = 0; echoCount <= availableEchoCounts; echoCount += 1) {
+    let totalMultCost = 0
+    for (let echoMult = 0; echoMult <= availableEchoMult; echoMult += 1) {
+      const totalCost = totalCountCost + totalMultCost
+      if (totalCost > availablePoints) break
+      if (totalCost > 0) {
+        const nextEchoTrigger = baseEchoTrigger + echoCount
+        const nextEchoMult = baseEchoMult + echoMult * 0.1
+        const nextEchoFactor = calculateEchoFactor(nextEchoTrigger, nextEchoMult)
+        const nextBonusMultiplier = nextEchoFactor / baseEchoFactor
+        const bonusPerPoint = calculateLongTermScore(nextBonusMultiplier, totalCost)
+        if (bonusPerPoint > bestBonusPerPoint) {
+          bestBonusPerPoint = bonusPerPoint
+        }
+      }
+
+      totalMultCost += getNodeCostAtLevel("echoMultiplier", levels.echoMultiplier + 1 + echoMult)
+    }
+    totalCountCost += getNodeCostAtLevel("echoTriggerCount", levels.echoTriggerCount + 1 + echoCount)
+  }
+  return bestBonusPerPoint
+}
+
+const calculateEchoFactor = (count: number, multiplier: number) => {
+  if (count == 0) return 1
+  return Math.pow(multiplier, count + 1)
+}
+
+// Some upgrades are additive and some are multiplicate, so no easy way to calculate the combined effect.
+// Deep echo evaluation uses lots of points so logairthmic scoring ensures it's not overvalued compared to smaller, possibly multiplicative upgrades.
+const calculateLongTermScore = (bonusMultiplier: number, cost: number) => {
+  if (!Number.isFinite(bonusMultiplier) || bonusMultiplier <= 0) return 0
+  if (!Number.isFinite(cost) || cost <= 0) return 0
+  return Math.log(bonusMultiplier) / cost
+}
+
+const evaluateNodeScore = (
+  input: CruiseInputState,
+  levels: CruiseNodeLevels,
+  id: CruiseNodeId,
+  values: EffectiveValues,
+) => {
   const nextLevel = levels[id] + 1
   const nextCost = getNodeCostAtLevel(id, nextLevel)
 
@@ -408,205 +416,96 @@ const evaluateImmediateStep = (input: CruiseInputState, levels: CruiseNodeLevels
     nextBonusMultiplier = (1 + nextLevel) / (1 + levels[id])
   } else if (id === "ticketPrice") {
     // Ticket price only affects part of earnings: bonus = 1 + 0.4 * (ticket / total)
-    const ticketRatio =
-      input.ticketPrice / Math.max(1, input.ticketPrice + (input.guestSpendingMin + input.guestSpendingMax) / 2)
+    const ticketRatio = values.ticketPrice / Math.max(1, values.ticketPrice + values.guestSpending)
     nextBonusMultiplier = 1 + 0.4 * ticketRatio
   } else if (id === "guestSpending") {
     // Guest spending only affects part of earnings: bonus = 1 + 0.35 * (guest / total)
-    const guestAvg = (input.guestSpendingMin + input.guestSpendingMax) / 2
-    const guestRatio = guestAvg / Math.max(1, input.ticketPrice + guestAvg)
+    const guestRatio = values.guestSpending / Math.max(1, values.ticketPrice + values.guestSpending)
     nextBonusMultiplier = 1 + 0.35 * guestRatio
   } else if (id === "particleOutput") {
     // Multiply by particlePerLevel
     const particlePerLevel = Math.max(1, 1 + input.cruiseLevel * 0.01)
     nextBonusMultiplier = particlePerLevel
   } else if (id === "betterReviews") {
-    nextBonusMultiplier = 1.03
+    nextBonusMultiplier = 1.01
   } else if (id === "moreSpace") {
     // Adding +1 to min, +2 to max: average increases by +1.5
-    // Each capacity past 1 gives +0.09x multiplier
     const baseRoomMin = Math.max(1, input.roomCapacityMin - levels.moreSpace)
     const baseRoomMax = Math.max(1, input.roomCapacityMax - levels.moreSpace * 2)
     const baseRoomAvg = (baseRoomMin + baseRoomMax) / 2
 
-    const currentRoomCapacity = baseRoomAvg + (levels.moreSpace + levels.moreSpace * 2) / 2
+    const currentRoomCapacity = baseRoomAvg + (3 * levels.moreSpace) / 2
     const nextRoomCapacity = currentRoomCapacity + 1.5
 
-    const currentMultiplier = 1 + (currentRoomCapacity - 1) * 0.09
-    const nextMultiplier = 1 + (nextRoomCapacity - 1) * 0.09
+    const roomBonus = getRoomBonus(input.cruiseLevel)
+    const currentMultiplier = 1 + (currentRoomCapacity - 1) * roomBonus
+    const nextMultiplier = 1 + (nextRoomCapacity - 1) * roomBonus
     nextBonusMultiplier = nextMultiplier / Math.max(currentMultiplier, Number.EPSILON)
-  } else if (id === "echoTriggerCount" || id === "echoMultiplier") {
-    // Echo nodes need full calculation due to power function
+  } else if (id === "echoTriggerCount") {
     const currentEchoTrigger = getEchoTriggerCount(input, levels)
     const currentEchoMult = getEchoMultiplierValue(input, levels)
-    const currentEchoFactor = currentEchoTrigger > 0 ? safePow(currentEchoMult, currentEchoTrigger) : 1
+    const currentEchoFactor = calculateEchoFactor(currentEchoTrigger, currentEchoMult)
 
-    const nextLevels = cloneLevels(levels)
-    nextLevels[id] = nextLevel
-    const nextEchoTrigger = getEchoTriggerCount(input, nextLevels)
-    const nextEchoMult = getEchoMultiplierValue(input, nextLevels)
-    const nextEchoFactor = nextEchoTrigger > 0 ? safePow(nextEchoMult, nextEchoTrigger) : 1
+    const nextEchoFactor = calculateEchoFactor(currentEchoTrigger + 1, currentEchoMult)
 
-    nextBonusMultiplier = nextEchoFactor / Math.max(currentEchoFactor, Number.EPSILON)
+    nextBonusMultiplier = nextEchoFactor / currentEchoFactor
+  } else if (id === "echoMultiplier") {
+    const currentEchoTrigger = getEchoTriggerCount(input, levels)
+    const currentEchoMult = getEchoMultiplierValue(input, levels)
+    const currentEchoFactor = calculateEchoFactor(currentEchoTrigger, currentEchoMult)
+
+    const nextEchoFactor = calculateEchoFactor(currentEchoTrigger, currentEchoMult + 0.1)
+
+    nextBonusMultiplier = nextEchoFactor / currentEchoFactor
   }
 
-  const nextBonusPerPoint = sanitizeScore((nextBonusMultiplier - 1) / Math.max(1, nextCost), 0)
+  const nextBonusPerPoint = (nextBonusMultiplier - 1) / nextCost
 
-  return {
-    nextCost,
-    nextBonusMultiplier: sanitizeScore(nextBonusMultiplier, 1),
-    nextBonusPerPoint,
-  }
-}
-
-const deepPlanBestObjective = (
-  input: CruiseInputState,
-  levels: CruiseNodeLevels,
-  budget: number,
-  allowedNodes: CruiseNodeId[],
-  maxDepth: number,
-  memo: Map<string, DeepPlanResult>,
-): DeepPlanResult => {
-  const currentObjective = getCruiseSnapshot(input, levels).objectiveMultiplier
-
-  if (budget <= 0 || maxDepth <= 0) {
-    return { objective: currentObjective, spent: 0 }
-  }
-
-  const key = `${serializeLevels(levels)}|${budget}|${maxDepth}|${allowedNodes.join(",")}`
-  const cached = memo.get(key)
-  if (cached) return cached
-
-  let best: DeepPlanResult = {
-    objective: currentObjective,
-    spent: 0,
-  }
-
-  for (const id of allowedNodes) {
-    if (!getNodeUnlockState(id, input, levels)) continue
-    const currentLevel = levels[id]
-    const maxLevel = NODE_MAP[id].maxLevel
-    if (currentLevel >= maxLevel) continue
-
-    const nextLevel = currentLevel + 1
-    const cost = getNodeCostAtLevel(id, nextLevel)
-    if (cost > budget) continue
-
-    const nextLevels = cloneLevels(levels)
-    nextLevels[id] = nextLevel
-
-    const child = deepPlanBestObjective(input, nextLevels, budget - cost, allowedNodes, maxDepth - 1, memo)
-    const candidate: DeepPlanResult = {
-      objective: child.objective,
-      spent: cost + child.spent,
-    }
-
-    if (candidate.objective > best.objective + Number.EPSILON) {
-      best = candidate
-      continue
-    }
-
-    if (Math.abs(candidate.objective - best.objective) <= Number.EPSILON && candidate.spent < best.spent) {
-      best = candidate
-    }
-  }
-
-  memo.set(key, best)
-  return best
-}
-
-const evaluateNodeScore = (
-  input: CruiseInputState,
-  levels: CruiseNodeLevels,
-  id: CruiseNodeId,
-  availablePoints: number,
-  currentObjective: number,
-) => {
-  const immediate = evaluateImmediateStep(input, levels, id)
-
-  const nextLevels = cloneLevels(levels)
-  nextLevels[id] += 1
-
-  const remainingBudget = Math.max(0, availablePoints - immediate.nextCost)
-  const allowedNodes = ECHO_NODE_IDS.includes(id) ? ECHO_NODE_IDS : []
-
-  if (allowedNodes.length === 0) {
-    const immediateScore = sanitizeScore((immediate.nextBonusMultiplier - 1) / Math.max(1, immediate.nextCost), 0)
-    return {
-      score: id === "maxOfflineTimeCap" ? OFFLINE_BASELINE_SCORE : immediateScore,
-      plannedSpend: immediate.nextCost,
-      immediate,
-    }
-  }
-
-  const deepBudget = Math.max(0, remainingBudget)
-  const maxDepth = Math.min(8, Math.max(1, deepBudget))
-  const memo = new Map<string, DeepPlanResult>()
-  const continuation = deepPlanBestObjective(input, nextLevels, deepBudget, allowedNodes, maxDepth, memo)
-
-  const fullObjective = continuation.objective
-  const fullSpent = immediate.nextCost + continuation.spent
-  const fullScore = sanitizeScore(
-    (fullObjective / Math.max(currentObjective, Number.EPSILON) - 1) / Math.max(1, fullSpent),
-    0,
-  )
-
-  return {
-    score: id === "maxOfflineTimeCap" ? OFFLINE_BASELINE_SCORE : fullScore,
-    plannedSpend: fullSpent,
-    immediate,
-  }
+  return { nextCost, nextBonusMultiplier, nextBonusPerPoint }
 }
 
 export const evaluateNextNodeValues = (input: CruiseInputState, levels: CruiseNodeLevels): CruiseEvaluationResult => {
+  const values = calculateEffectiveValuesFromBase(input, levels)
+  // Currently makes only sense to either invest in ticket price or guest spending, because relative bonus increases faster than the cost.
+  // As ticket price has a higher multiplier, it is always better when base ticket price is higher.
+  const ticketEval = evaluateNextNodeValuesSub(input, levels, CalculationMode.TicketPrice, values)
+  if (input.ticketPrice > (input.guestSpendingMin + input.guestSpendingMax) / 2) return ticketEval
+  // Otherwise have to evaluate both cases.
+  const guestEval = evaluateNextNodeValuesSub(input, levels, CalculationMode.GuestSpending, values)
+  return ticketEval.snapshot.objectiveMultiplier >= guestEval.snapshot.objectiveMultiplier ? ticketEval : guestEval
+}
+
+enum CalculationMode {
+  TicketPrice,
+  GuestSpending,
+}
+export const evaluateNextNodeValuesSub = (
+  input: CruiseInputState,
+  levels: CruiseNodeLevels,
+  mode: CalculationMode,
+  values: EffectiveValues,
+): CruiseEvaluationResult => {
   const totalPoints = getTotalPointsFromPrestiges(input.prestigesDone)
   const spentPoints = getSpentPoints(levels)
   const availablePoints = Math.max(0, totalPoints - spentPoints)
   const snapshot = getCruiseSnapshot(input, levels)
-  const currentObjective = snapshot.objectiveMultiplier
 
-  const rows: CruiseEvaluationRow[] = NODE_IDS.map((id) => {
-    const definition = NODE_MAP[id]
-    const level = levels[id]
-    const unlocked = getNodeUnlockState(id, input, levels)
-    const canLevel = level < definition.maxLevel
-    const nextCost = canLevel ? getNodeCostAtLevel(id, level + 1) : null
-    const affordable = Boolean(unlocked && nextCost !== null && nextCost <= availablePoints)
-
-    if (!unlocked || !canLevel || nextCost === null) {
-      return {
-        id,
-        label: definition.label,
-        level,
-        maxLevel: definition.maxLevel,
-        unlocked,
-        affordable,
-        nextCost,
-        nextBonusMultiplier: 1,
-        nextBonusPerPoint: 0,
-        relativeBonusPerPoint: 0,
-        score: 0,
-        plannedSpend: 0,
-      }
+  const evaluated = {} as Record<CruiseNodeId, CruiseEvaluationRow>
+  for (const id of NODE_IDS) {
+    const row = evaluateNode(id, input, levels, mode, availablePoints, values)
+    evaluated[id] = row
+  }
+  if (evaluated["echoTriggerCount"].affordable || evaluated["echoMultiplier"].affordable) {
+    const echoScore = deepEvaluateEchoScore(input, levels, availablePoints)
+    const countScore = evaluated["echoTriggerCount"].nextBonusPerPoint
+    const multScore = evaluated["echoMultiplier"].nextBonusPerPoint
+    if (countScore > multScore) {
+      evaluated["echoTriggerCount"].nextBonusPerPoint = Math.max(countScore, echoScore)
+    } else {
+      evaluated["echoMultiplier"].nextBonusPerPoint = Math.max(multScore, echoScore)
     }
-
-    const scoreResult = evaluateNodeScore(input, levels, id, availablePoints, currentObjective)
-
-    return {
-      id,
-      label: definition.label,
-      level,
-      maxLevel: definition.maxLevel,
-      unlocked,
-      affordable,
-      nextCost,
-      nextBonusMultiplier: scoreResult.immediate.nextBonusMultiplier,
-      nextBonusPerPoint: scoreResult.immediate.nextBonusPerPoint,
-      relativeBonusPerPoint: 0,
-      score: scoreResult.score,
-      plannedSpend: scoreResult.plannedSpend,
-    }
-  })
+  }
+  const rows = Object.values(evaluated)
 
   // Calculate relative bonus per point (normalized against best option)
   const maxBonusPerPoint = Math.max(
@@ -625,6 +524,7 @@ export const evaluateNextNodeValues = (input: CruiseInputState, levels: CruiseNo
   const bestNode = rows
     .filter((row) => {
       if (!row.affordable) return false
+      if (row.nextBonusPerPoint <= 0) return false
 
       // Don't suggest guest spending if ticket price has higher level (and vice versa)
       // This prevents diminishing returns from leveling the weaker contributor
@@ -639,7 +539,7 @@ export const evaluateNextNodeValues = (input: CruiseInputState, levels: CruiseNo
     })
     .slice()
     .sort((a, b) => {
-      if (b.score !== a.score) return b.score - a.score
+      if (b.nextBonusPerPoint !== a.nextBonusPerPoint) return b.nextBonusPerPoint - a.nextBonusPerPoint
       if ((a.nextCost ?? Number.POSITIVE_INFINITY) !== (b.nextCost ?? Number.POSITIVE_INFINITY)) {
         return (a.nextCost ?? Number.POSITIVE_INFINITY) - (b.nextCost ?? Number.POSITIVE_INFINITY)
       }
@@ -653,6 +553,56 @@ export const evaluateNextNodeValues = (input: CruiseInputState, levels: CruiseNo
     snapshot,
     rows,
     bestNodeId: bestNode?.id ?? null,
+  }
+}
+
+const evaluateNode = (
+  id: CruiseNodeId,
+  input: CruiseInputState,
+  levels: CruiseNodeLevels,
+  mode: CalculationMode,
+  availablePoints: number,
+  values: EffectiveValues,
+) => {
+  const definition = NODE_MAP[id]
+  const level = levels[id]
+  const unlocked = getNodeUnlockState(id, input, levels)
+  const canLevel = level < definition.maxLevel
+
+  const nextCost = canLevel ? getNodeCostAtLevel(id, level + 1) : null
+  const affordable = Boolean(unlocked && nextCost !== null && nextCost <= availablePoints)
+
+  if (!unlocked || !canLevel || nextCost === null) {
+    return {
+      id,
+      label: definition.label,
+      level,
+      maxLevel: definition.maxLevel,
+      unlocked,
+      affordable,
+      nextCost,
+      nextBonusMultiplier: 1,
+      nextBonusPerPoint: 0,
+      relativeBonusPerPoint: 0,
+    }
+  }
+
+  const score = evaluateNodeScore(input, levels, id, values)
+
+  if (id == "guestSpending" && mode != CalculationMode.GuestSpending) score.nextBonusPerPoint = 0
+  if (id == "ticketPrice" && mode != CalculationMode.TicketPrice) score.nextBonusPerPoint = 0
+
+  return {
+    id,
+    label: definition.label,
+    level,
+    maxLevel: definition.maxLevel,
+    unlocked,
+    affordable,
+    nextCost,
+    nextBonusMultiplier: score.nextBonusMultiplier,
+    nextBonusPerPoint: score.nextBonusPerPoint,
+    relativeBonusPerPoint: 0,
   }
 }
 
@@ -677,7 +627,7 @@ export const applyActionBuyNext = (input: CruiseInputState, levels: CruiseNodeLe
     }
   }
 
-  if (row.score <= 0 && bestNodeId !== "maxOfflineTimeCap") {
+  if (row.nextBonusPerPoint <= 0) {
     return {
       nextLevels: cloneLevels(levels),
       purchasedNodeId: null,
@@ -702,9 +652,6 @@ export const applyActionSpendAll = (input: CruiseInputState, levels: CruiseNodeL
   let lastPurchased: CruiseNodeId | null = null
   let iterations = 0
 
-  // Calculate initial base values from input with starting levels
-  const baseValues = calculateBaseValuesFromInput(input, levels)
-
   while (iterations < 5000) {
     iterations += 1
 
@@ -714,17 +661,6 @@ export const applyActionSpendAll = (input: CruiseInputState, levels: CruiseNodeL
     currentLevels = action.nextLevels
     totalCost += action.purchasedCost
     lastPurchased = action.purchasedNodeId
-
-    // Update effective input values based on level changes
-    const effectiveValues = calculateEffectiveValuesFromBase(input, baseValues, currentLevels)
-    currentInput = {
-      ...currentInput,
-      ticketPrice: effectiveValues.ticketPrice,
-      guestSpendingMin: effectiveValues.guestSpending,
-      guestSpendingMax: effectiveValues.guestSpending,
-      roomCapacityMin: effectiveValues.roomCapacity,
-      roomCapacityMax: effectiveValues.roomCapacity,
-    }
   }
 
   return {

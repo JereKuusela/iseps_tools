@@ -10,7 +10,7 @@ import {
   getTotalPointsFromPrestiges,
   isEchoUnlocked,
 } from "./cruiseCalculator"
-import { emptyCruiseNodeLevels, type CruiseInputState } from "../pages/cruise/cruiseTypes"
+import { CRUISE_NODE_DEFINITIONS, emptyCruiseNodeLevels, type CruiseInputState } from "../pages/cruise/cruiseTypes"
 
 const defaultInput = (): CruiseInputState => ({
   prestigesDone: 25,
@@ -99,9 +99,9 @@ describe("echo gating", () => {
     }
 
     expect(echoFactorAt(23)).toBeCloseTo(1, 10)
-    expect(echoFactorAt(24)).toBeCloseTo(1.14, 10)
-    expect(echoFactorAt(39)).toBeCloseTo(1.34 ** 2, 10)
-    expect(echoFactorAt(49)).toBeCloseTo(1.45 ** 2, 10)
+    expect(echoFactorAt(24)).toBeCloseTo(1.14 ** 2, 10)
+    expect(echoFactorAt(39)).toBeCloseTo(1.34 ** 3, 10)
+    expect(echoFactorAt(49)).toBeCloseTo(1.45 ** 3, 10)
   })
 })
 
@@ -240,6 +240,21 @@ describe("evaluation", () => {
     expect(evaluation.rows.length).toBe(9)
 
     expect(evaluation.bestNodeId).not.toBeNull()
+  })
+
+  it("does not recommend maxOfflineTimeCap when it has no score", () => {
+    const levels = emptyCruiseNodeLevels()
+    for (const definition of CRUISE_NODE_DEFINITIONS) {
+      levels[definition.id] = definition.maxLevel
+    }
+    levels.maxOfflineTimeCap = Math.max(0, levels.maxOfflineTimeCap - 1)
+
+    const evaluation = evaluateNextNodeValues(defaultInput(), levels)
+    const offlineRow = evaluation.rows.find((row) => row.id === "maxOfflineTimeCap")
+
+    expect(offlineRow?.nextCost).toBe(1)
+    expect(offlineRow?.nextBonusPerPoint).toBe(0)
+    expect(evaluation.bestNodeId).toBeNull()
   })
 
   it("spend-all improves objective multiplier", () => {
