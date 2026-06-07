@@ -6,8 +6,19 @@ import { useZatGuideContext } from "./zatGuideContext"
 import { formatLargeNumberMultiplier } from "../../lib/numberFormat"
 
 export const ZatGuideLeftColumn = () => {
-  const { cycles, setCycles, runType, setRunType, runOptions, techCount, sharesPercent, setSharesPercent } =
-    useZatGuideContext()
+  const {
+    cycles,
+    setCycles,
+    runType,
+    setRunType,
+    runOptions,
+    guideOptions,
+    selectedGuideTitle,
+    setSelectedGuideTitle,
+    techCount,
+    sharesPercent,
+    setSharesPercent,
+  } = useZatGuideContext()
   const { selectedGuide, selectedNode, getNode } = useZatGuideContext()
 
   const items = createMemo(() => {
@@ -45,6 +56,31 @@ export const ZatGuideLeftColumn = () => {
             onChange={(next) => setRunType(next as GuideRunType)}
             options={runOptions()}
           />
+          <Show when={guideOptions().length > 1}>
+            <div class="grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2">
+              <p class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">Guide</p>
+              <div class="min-w-0 rounded-xl border border-ink/20 bg-white/70 p-1 dark:border-white/15 dark:bg-[#1a2638]">
+                <div class="grid grid-flow-col auto-cols-fr gap-1">
+                  <For each={guideOptions()}>
+                    {(option) => (
+                      <button
+                        type="button"
+                        onClick={() => setSelectedGuideTitle(option.value)}
+                        class="rounded-lg px-2 py-1.5 text-sm font-semibold transition"
+                        classList={{
+                          "bg-brand text-white shadow-sm": selectedGuideTitle() === option.value,
+                          "text-ink/80 hover:bg-ink/5 dark:text-white/80 dark:hover:bg-white/10":
+                            selectedGuideTitle() !== option.value,
+                        }}
+                      >
+                        {option.label}
+                      </button>
+                    )}
+                  </For>
+                </div>
+              </div>
+            </div>
+          </Show>
         </div>
       </InfoCard>
 
@@ -75,7 +111,7 @@ export const ZatGuideLeftColumn = () => {
 
       <Show when={selectedGuide()?.note}>
         <InfoCard title="Notes">
-          <p class="text-sm leading-6 text-ink/80 dark:text-white/80">{selectedGuide()?.note}</p>
+          <p class="text-sm leading-6 text-ink/80 dark:text-white/80 whitespace-pre-wrap">{selectedGuide()?.note}</p>
         </InfoCard>
       </Show>
 

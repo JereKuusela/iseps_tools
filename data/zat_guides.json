@@ -1694,6 +1694,7 @@
   {
     "cycle": 19,
     "run": "juno",
+    "title": "Start",
     "nodes": [
       {
         "id": 1
@@ -1734,7 +1735,56 @@
         "amount": 2
       }
     ],
-    "note": "Going to Ceti here is to unlock Kaiper Genesis and Data Center upgrades for the rest of the particles, but you also need enough Epsilon to unlock those upgrades."
+    "note": "Ceti is used to unlock Kaiper upgrades.\nUse this build until about e1220 DC."
+  },
+  {
+    "cycle": 19,
+    "run": "juno",
+    "title": "Late",
+    "nodes": [
+      {
+        "id": 1
+      },
+      {
+        "id": 2,
+        "amount": 2
+      },
+      {
+        "id": 6
+      },
+      {
+        "id": 10,
+        "amount": 3
+      },
+      {
+        "id": 14,
+        "amount": 2
+      },
+      {
+        "id": 3
+      },
+      {
+        "id": 7
+      },
+      {
+        "id": 11
+      },
+      {
+        "id": 15,
+        "amount": 2
+      },
+      {
+        "id": 4
+      },
+      {
+        "id": 8
+      },
+      {
+        "id": 12,
+        "amount": 3
+      }
+    ],
+    "note": "With enough DC, Solutions node ends up being better.\nIf you can't reach e1995 DC, use the previous build."
   },
   {
     "cycle": 20,

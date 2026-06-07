@@ -1,4 +1,4 @@
-import { createContext, createMemo, createSignal, type ParentProps, useContext } from "solid-js"
+import { createContext, createEffect, createMemo, createSignal, type ParentProps, useContext } from "solid-js"
 import { createSyncedSignal } from "../../lib/persistedSignal"
 import { LargeNumber } from "../../lib/largeNumber"
 import { useZatData, ZatGuideEntry } from "../../lib/zatContext"
@@ -23,6 +23,9 @@ type ZatGuideContextValue = {
   runType: () => GuideRunType
   setRunType: (next: GuideRunType) => GuideRunType
   runOptions: () => { value: GuideRunType; label: string }[]
+  guideOptions: () => { value: string; label: string }[]
+  selectedGuideTitle: () => string
+  setSelectedGuideTitle: (next: string) => string
   techCount: () => string
   sharesPercent: () => string
   setSharesPercent: (next: string) => string
@@ -40,6 +43,7 @@ export const ZatGuideProvider = (props: ParentProps) => {
 
   const [cycles, setCycles] = createSyncedSignal("zat.og.cycles", "0")
   const [runType, setRunType] = createSyncedSignal<GuideRunType>("zat.guide.runType", "se_push")
+  const [selectedGuideTitle, setSelectedGuideTitle] = createSyncedSignal("zat.guide.title", "")
   const [sharesPercent, setSharesPercent] = createSyncedSignal("zat.guide.shares", "0")
   const [ogTechLevels] = createSyncedSignal<number[]>("zat.og.techLevels", [])
   const [selectedNodeId, setSelectedNodeId] = createSignal(0)
@@ -59,9 +63,35 @@ export const ZatGuideProvider = (props: ParentProps) => {
   const normalizedTechCount = createMemo(() => totalTechLevels())
   const techCount = createMemo(() => String(totalTechLevels()))
 
-  const selectedGuide = createMemo(() =>
-    data().zatGuides.find((entry) => entry.run == runType() && entry.cycle == normalizedCycles()),
+  const availableGuides = createMemo(() =>
+    data().zatGuides.filter((entry) => entry.run == runType() && entry.cycle == normalizedCycles()),
   )
+
+  const selectedGuide = createMemo(() => {
+    const persistedTitle = selectedGuideTitle()
+    const guides = availableGuides()
+    return guides.find((entry) => entry.title === persistedTitle) ?? guides[0]
+  })
+
+  const guideOptions = createMemo(() => {
+    const guides = availableGuides()
+    return guides.map((entry, index) => {
+      const hasTitle = entry.title.trim().length > 0
+      return {
+        value: entry.title,
+        label: hasTitle ? entry.title : `Guide ${index + 1}`,
+      }
+    })
+  })
+
+  createEffect(() => {
+    const selected = selectedGuide()
+    if (!selected) return
+
+    if (selectedGuideTitle() !== selected.title) {
+      setSelectedGuideTitle(selected.title)
+    }
+  })
 
   const nodes = createMemo<GuideNodeView[]>(() => {
     const nodeAmounts = selectedGuide()?.nodes
@@ -122,6 +152,9 @@ export const ZatGuideProvider = (props: ParentProps) => {
         runType,
         setRunType,
         runOptions: () => runOptions,
+        guideOptions,
+        selectedGuideTitle,
+        setSelectedGuideTitle,
         techCount,
         sharesPercent,
         setSharesPercent,

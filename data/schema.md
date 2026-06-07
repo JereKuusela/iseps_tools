@@ -178,5 +178,6 @@ Entries for the ZAT guide.
 
 - `cycle`: Amount of cycles.
 - `run`: The type of run.
+- `title`: Optional guide title shown when there are multiple guides for the same cycle and run.
 - `nodes`: Array of nodes.
 - `note`: Optional note.

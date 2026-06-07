@@ -74,6 +74,7 @@ export type ZatNodeRule = {
 type ZatGuideJson = {
   cycle: number
   run: string
+  title?: string
   nodes: Array<{
     id: number
     amount?: number
@@ -84,6 +85,7 @@ type ZatGuideJson = {
 export type ZatGuideEntry = {
   cycle: number
   run: string
+  title: string
   nodes: Map<number, number>
   note: string
 }
@@ -171,6 +173,7 @@ const zatGuides = (zatGuidesJson as ZatGuideJson[]).map((entry) => {
   return {
     cycle: entry.cycle,
     run: entry.run,
+    title: entry.title?.trim() ?? "",
     nodes,
     note: entry.note ?? "",
   }
