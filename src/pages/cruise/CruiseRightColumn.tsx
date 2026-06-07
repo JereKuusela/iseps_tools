@@ -91,7 +91,7 @@ export const CruiseRightColumn = () => {
                       onInput={(event) =>
                         cruise.setNodeLevel(row().id, Math.floor(parseNumberish(event.currentTarget.value)))
                       }
-                      class="w-8 rounded border border-ink/20 bg-white px-1.5 py-0.5 text-right text-xs font-medium text-ink outline-none ring-brand/40 transition focus:ring disabled:cursor-not-allowed disabled:bg-ink/5 dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+                      class="w-12 rounded border border-ink/20 bg-white px-1.5 py-0.5 text-right text-xs font-medium text-ink outline-none ring-brand/40 transition focus:ring disabled:cursor-not-allowed disabled:bg-ink/5 dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
                     />
                   </td>
                   <Show when={showOptimalColumn()}>
