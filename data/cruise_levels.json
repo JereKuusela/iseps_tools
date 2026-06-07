@@ -1,7 +1,10 @@
 [
   {
     "level": 24,
-    "echoTriggerCount": 1,
+    "echoTriggerCount": 1
+  },
+  {
+    "level": 25,
     "echoMultiplier": 0.04
   },
   {

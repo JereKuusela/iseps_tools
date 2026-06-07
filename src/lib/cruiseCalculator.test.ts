@@ -99,7 +99,8 @@ describe("echo gating", () => {
     }
 
     expect(echoFactorAt(23)).toBeCloseTo(1, 10)
-    expect(echoFactorAt(24)).toBeCloseTo(1.14 ** 2, 10)
+    expect(echoFactorAt(24)).toBeCloseTo(1.1 ** 2, 10)
+    expect(echoFactorAt(25)).toBeCloseTo(1.14 ** 2, 10)
     expect(echoFactorAt(39)).toBeCloseTo(1.34 ** 3, 10)
     expect(echoFactorAt(49)).toBeCloseTo(1.45 ** 3, 10)
   })
