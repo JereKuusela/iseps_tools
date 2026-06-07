@@ -120,12 +120,6 @@ const sanitizeNumber = (value: number, fallback = 0) => {
   return value
 }
 
-const safePow = (base: number, exponent: number) => {
-  const sanitizedBase = Math.max(Number.EPSILON, sanitizeNumber(base, 1))
-  const sanitizedExp = Math.max(0, Math.floor(sanitizeNumber(exponent, 0)))
-  return sanitizedBase ** sanitizedExp
-}
-
 const cloneLevels = (levels: CruiseNodeLevels): CruiseNodeLevels => {
   return {
     prestigeMultiplier: levels.prestigeMultiplier,
@@ -170,8 +164,8 @@ export const calculateEffectiveValuesFromBase = (
   baseValues: CruiseInputState,
   levels: CruiseNodeLevels,
 ): EffectiveValues => {
-  const ticketMultiplier = safePow(1.4, levels.ticketPrice)
-  const guestMultiplier = safePow(1.35, levels.guestSpending)
+  const ticketMultiplier = Math.pow(1.4, levels.ticketPrice)
+  const guestMultiplier = Math.pow(1.35, levels.guestSpending)
 
   const effectiveTicketPrice = baseValues.ticketPrice * ticketMultiplier
   const effectiveGuestMin = baseValues.guestSpendingMin * guestMultiplier
@@ -309,12 +303,13 @@ const getEchoMultiplierValue = (input: CruiseInputState, levels: CruiseNodeLevel
 // Quite poor heuristic but More Space is so weak that it's never used.
 const getRoomBonus = (cruiseLevel: number) => cruiseLevel * 0.02
 
+const REVIEW_MULTIPLIER = 1.03
+
 export const getCruiseSnapshot = (input: CruiseInputState, levels: CruiseNodeLevels): CruiseSnapshot => {
   const prestigeMultiplier = 1 + levels.prestigeMultiplier
   const particlePerLevel = Math.max(1, 1 + input.cruiseLevel * 0.01)
-  const particleMultiplier = safePow(particlePerLevel, levels.particleOutput)
-  const reviewsMultiplier = safePow(1.01, levels.betterReviews)
-
+  const particleMultiplier = Math.pow(particlePerLevel, levels.particleOutput)
+  const reviewsMultiplier = Math.pow(REVIEW_MULTIPLIER, levels.betterReviews)
   // Back-calculate base values from effective input values using level 0 (no upgrades)
   // Base values are constant for a given input and represent the underlying game values
   const baseValues = {
@@ -427,7 +422,7 @@ const evaluateNodeScore = (
     const particlePerLevel = Math.max(1, 1 + input.cruiseLevel * 0.01)
     nextBonusMultiplier = particlePerLevel
   } else if (id === "betterReviews") {
-    nextBonusMultiplier = 1.01
+    nextBonusMultiplier = 1.03
   } else if (id === "moreSpace") {
     // Adding +1 to min, +2 to max: average increases by +1.5
     const baseRoomMin = Math.max(1, input.roomCapacityMin - levels.moreSpace)
@@ -670,10 +665,6 @@ export const applyActionSpendAll = (input: CruiseInputState, levels: CruiseNodeL
   }
 }
 
-export const applyActionResetAll = (): CruiseNodeLevels => {
-  return emptyCruiseNodeLevels()
-}
+export const applyActionResetAll = emptyCruiseNodeLevels
 
-export const applyActionOptimize = (input: CruiseInputState): CruiseActionResult => {
-  return applyActionSpendAll(input, emptyCruiseNodeLevels())
-}
+export const applyActionOptimize = (input: CruiseInputState) => applyActionSpendAll(input, emptyCruiseNodeLevels())
