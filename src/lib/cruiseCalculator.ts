@@ -8,18 +8,6 @@ import {
 } from "../pages/cruise/cruiseTypes"
 import cruiseLevelJson from "../../data/cruise_levels.json"
 
-export type CruiseSnapshot = {
-  baseTicketPrice: number
-  baseGuestMin: number
-  baseGuestMax: number
-  baseRoomMin: number
-  baseRoomMax: number
-  effectiveTicketPrice: number
-  effectiveGuestSpending: number
-  effectiveRoomCapacity: number
-  objectiveMultiplier: number
-}
-
 export type CruiseEvaluationRow = {
   id: CruiseNodeId
   label: string
@@ -37,7 +25,6 @@ export type CruiseEvaluationResult = {
   totalPoints: number
   spentPoints: number
   availablePoints: number
-  snapshot: CruiseSnapshot
   rows: CruiseEvaluationRow[]
   bestNodeId: CruiseNodeId | null
 }
@@ -305,7 +292,7 @@ const getRoomBonus = (cruiseLevel: number) => cruiseLevel * 0.02
 
 const REVIEW_MULTIPLIER = 1.03
 
-export const getCruiseSnapshot = (input: CruiseInputState, levels: CruiseNodeLevels): CruiseSnapshot => {
+export const getBuildScore = (input: CruiseInputState, levels: CruiseNodeLevels): number => {
   const prestigeMultiplier = 1 + levels.prestigeMultiplier
   const particlePerLevel = Math.max(1, 1 + input.cruiseLevel * 0.01)
   const particleMultiplier = Math.pow(particlePerLevel, levels.particleOutput)
@@ -335,19 +322,9 @@ export const getCruiseSnapshot = (input: CruiseInputState, levels: CruiseNodeLev
   const baseRoomMultiplier = 1 + (baseRoomAvg - 1) * roomBonus
   const roomCapacityMultiplier = 1 + (effectiveValues.roomCapacity - 1) * roomBonus
   const base = (baseValues.ticket + baseGuestAvg) * baseRoomMultiplier
-  const objectiveMultiplier = (effectiveEarningsPerGuest * multipliers * roomCapacityMultiplier * echoFactor) / base
+  const score = (effectiveEarningsPerGuest * multipliers * roomCapacityMultiplier * echoFactor) / base
 
-  return {
-    baseTicketPrice: baseValues.ticket,
-    baseGuestMin: baseValues.guestMin,
-    baseGuestMax: baseValues.guestMax,
-    baseRoomMin: baseValues.roomMin,
-    baseRoomMax: baseValues.roomMax,
-    effectiveTicketPrice: effectiveValues.ticketPrice,
-    effectiveGuestSpending: effectiveValues.guestSpending,
-    effectiveRoomCapacity: effectiveValues.roomCapacity,
-    objectiveMultiplier,
-  }
+  return score - 1
 }
 
 const deepEvaluateEchoScore = (input: CruiseInputState, levels: CruiseNodeLevels, availablePoints: number) => {
@@ -411,15 +388,15 @@ const evaluateNodeScore = (
     nextBonusMultiplier = (1 + nextLevel) / (1 + levels[id])
   } else if (id === "ticketPrice") {
     // Ticket price only affects part of earnings: bonus = 1 + 0.4 * (ticket / total)
-    const ticketRatio = values.ticketPrice / Math.max(1, values.ticketPrice + values.guestSpending)
+    const ticketRatio = values.ticketPrice / (values.ticketPrice + values.guestSpending)
     nextBonusMultiplier = 1 + 0.4 * ticketRatio
   } else if (id === "guestSpending") {
     // Guest spending only affects part of earnings: bonus = 1 + 0.35 * (guest / total)
-    const guestRatio = values.guestSpending / Math.max(1, values.ticketPrice + values.guestSpending)
+    const guestRatio = values.guestSpending / (values.ticketPrice + values.guestSpending)
     nextBonusMultiplier = 1 + 0.35 * guestRatio
   } else if (id === "particleOutput") {
     // Multiply by particlePerLevel
-    const particlePerLevel = Math.max(1, 1 + input.cruiseLevel * 0.01)
+    const particlePerLevel = 1 + input.cruiseLevel * 0.01
     nextBonusMultiplier = particlePerLevel
   } else if (id === "betterReviews") {
     nextBonusMultiplier = 1.03
@@ -459,31 +436,19 @@ const evaluateNodeScore = (
   return { nextCost, nextBonusMultiplier, nextBonusPerPoint }
 }
 
-export const evaluateNextNodeValues = (input: CruiseInputState, levels: CruiseNodeLevels): CruiseEvaluationResult => {
-  const values = calculateEffectiveValuesFromBase(input, levels)
-  // Currently makes only sense to either invest in ticket price or guest spending, because relative bonus increases faster than the cost.
-  // As ticket price has a higher multiplier, it is always better when base ticket price is higher.
-  const ticketEval = evaluateNextNodeValuesSub(input, levels, CalculationMode.TicketPrice, values)
-  if (input.ticketPrice > (input.guestSpendingMin + input.guestSpendingMax) / 2) return ticketEval
-  // Otherwise have to evaluate both cases.
-  const guestEval = evaluateNextNodeValuesSub(input, levels, CalculationMode.GuestSpending, values)
-  return ticketEval.snapshot.objectiveMultiplier >= guestEval.snapshot.objectiveMultiplier ? ticketEval : guestEval
-}
-
-enum CalculationMode {
+export enum CalculationMode {
   TicketPrice,
   GuestSpending,
 }
-export const evaluateNextNodeValuesSub = (
+export const evaluateNextNodeValues = (
   input: CruiseInputState,
   levels: CruiseNodeLevels,
   mode: CalculationMode,
-  values: EffectiveValues,
 ): CruiseEvaluationResult => {
+  const values = calculateEffectiveValuesFromBase(input, levels)
   const totalPoints = getTotalPointsFromPrestiges(input.prestigesDone)
   const spentPoints = getSpentPoints(levels)
   const availablePoints = Math.max(0, totalPoints - spentPoints)
-  const snapshot = getCruiseSnapshot(input, levels)
 
   const evaluated = {} as Record<CruiseNodeId, CruiseEvaluationRow>
   for (const id of NODE_IDS) {
@@ -545,7 +510,6 @@ export const evaluateNextNodeValuesSub = (
     totalPoints,
     spentPoints,
     availablePoints,
-    snapshot,
     rows,
     bestNodeId: bestNode?.id ?? null,
   }
@@ -601,70 +565,47 @@ const evaluateNode = (
   }
 }
 
-export const applyActionBuyNext = (input: CruiseInputState, levels: CruiseNodeLevels): CruiseActionResult => {
-  const evaluation = evaluateNextNodeValues(input, levels)
+export const calculateNext = (input: CruiseInputState, levels: CruiseNodeLevels, mode: CalculationMode) => {
+  const evaluation = evaluateNextNodeValues(input, levels, mode)
   const bestNodeId = evaluation.bestNodeId
 
-  if (!bestNodeId) {
-    return {
-      nextLevels: cloneLevels(levels),
-      purchasedNodeId: null,
-      purchasedCost: 0,
-    }
-  }
+  if (!bestNodeId) return undefined
 
   const row = evaluation.rows.find((entry) => entry.id === bestNodeId)
-  if (!row?.nextCost) {
-    return {
-      nextLevels: cloneLevels(levels),
-      purchasedNodeId: null,
-      purchasedCost: 0,
-    }
-  }
-
-  if (row.nextBonusPerPoint <= 0) {
-    return {
-      nextLevels: cloneLevels(levels),
-      purchasedNodeId: null,
-      purchasedCost: 0,
-    }
-  }
+  if (!row?.nextCost) return undefined
+  if (row.nextBonusPerPoint <= 0) return undefined
 
   const nextLevels = cloneLevels(levels)
   nextLevels[bestNodeId] = Math.min(NODE_MAP[bestNodeId].maxLevel, nextLevels[bestNodeId] + 1)
-
-  return {
-    nextLevels,
-    purchasedNodeId: bestNodeId,
-    purchasedCost: row.nextCost,
-  }
+  return nextLevels
 }
 
-export const applyActionSpendAll = (input: CruiseInputState, levels: CruiseNodeLevels): CruiseActionResult => {
+export const calculateBuild = (input: CruiseInputState, levels: CruiseNodeLevels) => {
+  // Currently makes only sense to either invest in ticket price or guest spending, because relative bonus increases faster than the cost.
+  // As ticket price has a higher multiplier, it is always better when base ticket price is higher.
+  const ticketLevels = calculateBuildSub(input, levels, CalculationMode.TicketPrice)
+  const ticketScore = getBuildScore(input, ticketLevels)
+  if (input.ticketPrice > (input.guestSpendingMin + input.guestSpendingMax) / 2)
+    return { levels: ticketLevels, mode: CalculationMode.TicketPrice, score: ticketScore }
+  // Otherwise have to evaluate both cases.
+  const guestLevels = calculateBuildSub(input, levels, CalculationMode.GuestSpending)
+  const guestScore = getBuildScore(input, guestLevels)
+  return ticketScore >= guestScore
+    ? { levels: ticketLevels, mode: CalculationMode.TicketPrice, score: ticketScore }
+    : { levels: guestLevels, mode: CalculationMode.GuestSpending, score: guestScore }
+}
+
+const calculateBuildSub = (input: CruiseInputState, levels: CruiseNodeLevels, mode: CalculationMode) => {
   let currentLevels = cloneLevels(levels)
-  let currentInput = { ...input }
-  let totalCost = 0
-  let lastPurchased: CruiseNodeId | null = null
   let iterations = 0
 
   while (iterations < 5000) {
     iterations += 1
 
-    const action = applyActionBuyNext(currentInput, currentLevels)
-    if (!action.purchasedNodeId) break
-
-    currentLevels = action.nextLevels
-    totalCost += action.purchasedCost
-    lastPurchased = action.purchasedNodeId
+    const nextLevels = calculateNext(input, currentLevels, mode)
+    if (!nextLevels) break
+    currentLevels = nextLevels
   }
 
-  return {
-    nextLevels: currentLevels,
-    purchasedNodeId: lastPurchased,
-    purchasedCost: totalCost,
-  }
+  return currentLevels
 }
-
-export const applyActionResetAll = emptyCruiseNodeLevels
-
-export const applyActionOptimize = (input: CruiseInputState) => applyActionSpendAll(input, emptyCruiseNodeLevels())

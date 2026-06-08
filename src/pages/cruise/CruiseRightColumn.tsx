@@ -18,8 +18,8 @@ export const CruiseRightColumn = () => {
     return cruise.evaluationRows().find((row) => row.id === winner) ?? null
   })
 
-  const optimalLevels = createMemo(() => cruise.optimalNodeLevels())
-  const showOptimalColumn = createMemo(() => cruise.optimalDiffersFromCurrent())
+  const optimalLevels = createMemo(() => cruise.optimalLevels())
+  const showOptimalColumn = () => !cruise.isOptimal()
   const optimalityPercentLabel = createMemo(() => `${cruise.currentOptimalityPercent().toFixed(0)}% optimal.`)
   return (
     <div class="grid gap-3">
@@ -30,7 +30,7 @@ export const CruiseRightColumn = () => {
             <button
               type="button"
               class="rounded-lg border border-ink/25 bg-white/90 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-ink/85 transition hover:bg-ink hover:text-white disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/30 dark:bg-[#1f3047] dark:text-white/85 dark:hover:bg-white dark:hover:text-ink"
-              onClick={cruise.buyNextBest}
+              onClick={cruise.applyNext}
               disabled={!bestRow() || !bestRow()!.affordable}
               title="Buy next best"
             >

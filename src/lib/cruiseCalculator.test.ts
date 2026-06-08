@@ -1,14 +1,14 @@
 import { describe, expect, it } from "vitest"
 import {
-  applyActionOptimize,
-  applyActionSpendAll,
   evaluateNextNodeValues,
   getAvailablePoints,
   getNodeCostAtLevel,
-  getCruiseSnapshot,
+  getBuildScore,
   getSpentPoints,
   getTotalPointsFromPrestiges,
   isEchoUnlocked,
+  CalculationMode,
+  calculateBuild,
 } from "./cruiseCalculator"
 import { CRUISE_NODE_DEFINITIONS, emptyCruiseNodeLevels, type CruiseInputState } from "../pages/cruise/cruiseTypes"
 
@@ -94,50 +94,15 @@ describe("echo gating", () => {
     }
 
     const echoFactorAt = (cruiseLevel: number) => {
-      const snapshot = getCruiseSnapshot({ ...baseInput, cruiseLevel }, noNodes)
-      return snapshot.objectiveMultiplier
+      const snapshot = getBuildScore({ ...baseInput, cruiseLevel }, noNodes)
+      return snapshot
     }
 
-    expect(echoFactorAt(23)).toBeCloseTo(1, 10)
-    expect(echoFactorAt(24)).toBeCloseTo(1.1 ** 2, 10)
-    expect(echoFactorAt(25)).toBeCloseTo(1.14 ** 2, 10)
-    expect(echoFactorAt(39)).toBeCloseTo(1.34 ** 3, 10)
-    expect(echoFactorAt(49)).toBeCloseTo(1.45 ** 3, 10)
-  })
-})
-
-describe("snapshot ticket price handling", () => {
-  it("applies level multipliers to base input values", () => {
-    const levels = emptyCruiseNodeLevels()
-    levels.ticketPrice = 1
-    levels.guestSpending = 2
-    levels.moreSpace = 3
-
-    const snapshot = getCruiseSnapshot(
-      {
-        ...defaultInput(),
-        ticketPrice: 10,
-        guestSpendingMin: 20,
-        guestSpendingMax: 40,
-        roomCapacityMin: 50,
-        roomCapacityMax: 70,
-      },
-      levels,
-    )
-
-    // Input values are treated as base values (level 0)
-    // Base values equal input when no prior levels are applied
-    expect(snapshot.baseTicketPrice).toBeCloseTo(10, 10)
-    expect(snapshot.baseGuestMin).toBeCloseTo(20, 10)
-    expect(snapshot.baseGuestMax).toBeCloseTo(40, 10)
-    expect(snapshot.baseRoomMin).toBeCloseTo(50, 10)
-    expect(snapshot.baseRoomMax).toBeCloseTo(70, 10)
-
-    // Effective values are base * level multipliers
-    expect(snapshot.effectiveTicketPrice).toBeCloseTo(10 * 1.4, 10)
-    expect(snapshot.effectiveGuestSpending).toBeCloseTo(30 * 1.35 ** 2, 10)
-    // Room capacity adds moreSpace levels: min +1 per level, max +2 per level (average +1.5)
-    expect(snapshot.effectiveRoomCapacity).toBeCloseTo((50 + 3 + 70 + 6) / 2, 10)
+    expect(echoFactorAt(23)).toBeCloseTo(0, 10)
+    expect(echoFactorAt(24)).toBeCloseTo(1.1 ** 2 - 1, 10)
+    expect(echoFactorAt(25)).toBeCloseTo(1.14 ** 2 - 1, 10)
+    expect(echoFactorAt(39)).toBeCloseTo(1.34 ** 3 - 1, 10)
+    expect(echoFactorAt(49)).toBeCloseTo(1.45 ** 3 - 1, 10)
   })
 })
 
@@ -150,7 +115,7 @@ describe("evaluation", () => {
       cruiseLevel: 1,
     }
 
-    const evaluation = evaluateNextNodeValues(input, levels)
+    const evaluation = evaluateNextNodeValues(input, levels, CalculationMode.TicketPrice)
     const unlockedRows = evaluation.rows.filter((row) => row.unlocked)
 
     expect(unlockedRows).toHaveLength(1)
@@ -165,7 +130,7 @@ describe("evaluation", () => {
       cruiseLevel: 6,
     }
 
-    const evaluation = evaluateNextNodeValues(input, levels)
+    const evaluation = evaluateNextNodeValues(input, levels, CalculationMode.TicketPrice)
     const moreSpace = evaluation.rows.find((row) => row.id === "moreSpace")
 
     expect(moreSpace?.unlocked).toBe(false)
@@ -179,7 +144,7 @@ describe("evaluation", () => {
       cruiseLevel: 24,
     }
 
-    const evaluation = evaluateNextNodeValues(input, levels)
+    const evaluation = evaluateNextNodeValues(input, levels, CalculationMode.TicketPrice)
     const echoTrigger = evaluation.rows.find((row) => row.id === "echoTriggerCount")
     expect(echoTrigger?.unlocked).toBe(true)
   })
@@ -192,7 +157,7 @@ describe("evaluation", () => {
       cruiseLevel: 24,
     }
 
-    const evaluation = evaluateNextNodeValues(input, levels)
+    const evaluation = evaluateNextNodeValues(input, levels, CalculationMode.TicketPrice)
     const echoMultiplier = evaluation.rows.find((row) => row.id === "echoMultiplier")
 
     expect(echoMultiplier?.unlocked).toBe(true)
@@ -206,7 +171,7 @@ describe("evaluation", () => {
       cruiseLevel: 23,
     }
 
-    const evaluation = evaluateNextNodeValues(input, levels)
+    const evaluation = evaluateNextNodeValues(input, levels, CalculationMode.TicketPrice)
     const echoTrigger = evaluation.rows.find((row) => row.id === "echoTriggerCount")
 
     expect(echoTrigger?.unlocked).toBe(false)
@@ -222,7 +187,7 @@ describe("evaluation", () => {
       cruiseLevel: 1,
     }
 
-    const evaluation = evaluateNextNodeValues(input, levels)
+    const evaluation = evaluateNextNodeValues(input, levels, CalculationMode.TicketPrice)
     const echoMultiplier = evaluation.rows.find((row) => row.id === "echoMultiplier")
 
     expect(echoMultiplier?.unlocked).toBe(true)
@@ -236,7 +201,7 @@ describe("evaluation", () => {
       cruiseLevel: 24,
     }
 
-    const evaluation = evaluateNextNodeValues(input, levels)
+    const evaluation = evaluateNextNodeValues(input, levels, CalculationMode.TicketPrice)
 
     expect(evaluation.rows.length).toBe(9)
 
@@ -250,29 +215,12 @@ describe("evaluation", () => {
     }
     levels.maxOfflineTimeCap = Math.max(0, levels.maxOfflineTimeCap - 1)
 
-    const evaluation = evaluateNextNodeValues(defaultInput(), levels)
+    const evaluation = evaluateNextNodeValues(defaultInput(), levels, CalculationMode.TicketPrice)
     const offlineRow = evaluation.rows.find((row) => row.id === "maxOfflineTimeCap")
 
     expect(offlineRow?.nextCost).toBe(1)
     expect(offlineRow?.nextBonusPerPoint).toBe(0)
     expect(evaluation.bestNodeId).toBeNull()
-  })
-
-  it("spend-all improves objective multiplier", () => {
-    const input = {
-      ...defaultInput(),
-      prestigesDone: 50,
-      cruiseLevel: 24,
-      ticketPrice: 220,
-      guestSpendingMin: 70,
-      guestSpendingMax: 90,
-    }
-
-    const baseline = evaluateNextNodeValues(input, emptyCruiseNodeLevels()).snapshot.objectiveMultiplier
-    const spentAll = applyActionSpendAll(input, emptyCruiseNodeLevels())
-    const improved = evaluateNextNodeValues(input, spentAll.nextLevels).snapshot.objectiveMultiplier
-
-    expect(improved).toBeGreaterThanOrEqual(baseline)
   })
 })
 
@@ -284,8 +232,8 @@ describe("optimize", () => {
       cruiseLevel: 25,
     }
 
-    const optimized = applyActionOptimize(input)
-    const spent = getSpentPoints(optimized.nextLevels)
+    const optimized = calculateBuild(input, emptyCruiseNodeLevels())
+    const spent = getSpentPoints(optimized.levels)
 
     expect(spent).toBeLessThanOrEqual(getTotalPointsFromPrestiges(16))
   })
@@ -305,19 +253,17 @@ describe("optimize", () => {
     }
 
     // Get calculator's optimal build
-    const optimized = applyActionOptimize(input)
-    const optimizedObjective = getCruiseSnapshot(input, optimized.nextLevels).objectiveMultiplier
-
+    const optimized = calculateBuild(input, emptyCruiseNodeLevels())
     // Manual build that was found to be better
     const manualLevels = emptyCruiseNodeLevels()
     manualLevels.prestigeMultiplier = 20
     manualLevels.ticketPrice = 8
     manualLevels.particleOutput = 4
-    const manualObjective = getCruiseSnapshot(input, manualLevels).objectiveMultiplier
+    const manualObjective = getBuildScore(input, manualLevels)
 
-    console.log("Manual build:", manualLevels, "Objective multiplier:", manualObjective)
-    console.log("Optimized build:", optimized.nextLevels, "Objective multiplier:", optimizedObjective)
+    console.log("Manual build:", manualLevels, "Score:", manualObjective)
+    console.log("Optimized build:", optimized.levels, "Score:", optimized.score)
     // Calculator should find a build at least as good as the manual one
-    expect(optimizedObjective).toBeGreaterThanOrEqual(manualObjective * 0.999)
+    expect(optimized.score).toBeGreaterThanOrEqual(manualObjective * 0.999)
   })
 })

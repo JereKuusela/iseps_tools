@@ -1,13 +1,11 @@
 import { createContext, createMemo, type ParentProps, useContext } from "solid-js"
 import {
-  applyActionBuyNext,
-  applyActionOptimize,
-  applyActionSpendAll,
-  applyActionResetAll,
+  calculateNext,
   evaluateNextNodeValues,
-  getCruiseSnapshot,
+  getBuildScore,
   normalizeCruiseInputState,
   normalizeCruiseNodeLevels,
+  calculateBuild,
 } from "../../lib/cruiseCalculator"
 import { createSyncedSignal } from "../../lib/persistedSignal"
 import { emptyCruiseNodeLevels, type CruiseInputState, type CruiseNodeLevels } from "./cruiseTypes"
@@ -39,20 +37,13 @@ type CruiseContextValue = {
   totalPoints: () => number
   spentPoints: () => number
   availablePoints: () => number
-  baseSnapshot: () => ReturnType<typeof getCruiseSnapshot>
   evaluationRows: () => ReturnType<typeof evaluateNextNodeValues>["rows"]
   bestNodeId: () => ReturnType<typeof evaluateNextNodeValues>["bestNodeId"]
-  recommendedNodeLevels: () => CruiseNodeLevels
-  optimalNodeLevels: () => CruiseNodeLevels
-  recommendedDiffersFromCurrent: () => boolean
-  optimalDiffersFromCurrent: () => boolean
-  optimalDiffersFromRecommended: () => boolean
+  optimalLevels: () => CruiseNodeLevels
+  isOptimal: () => boolean
   currentOptimalityPercent: () => number
-  buyNextBest: () => void
-  spendAll: () => void
+  applyNext: () => void
   resetAll: () => void
-  optimize: () => void
-  applyRecommended: () => void
   applyOptimal: () => void
 }
 
@@ -127,31 +118,17 @@ export const CruiseProvider = (props: ParentProps) => {
     }),
   )
 
-  // Base input without any node effects - used for optimal calculation
-  const baseInputWithoutNodes = createMemo(() =>
-    toCruiseInput({
-      prestigesDone: prestigesDone(),
-      cruiseLevel: cruiseLevel(),
-      ticketPrice: Math.max(1, parseNumberish(baseTicketPrice())).toString(),
-      guestSpendingMin: Math.max(0, parseNumberish(baseGuestMin())).toString(),
-      guestSpendingMax: Math.max(0, parseNumberish(baseGuestMax())).toString(),
-      roomCapacityMin: Math.max(1, Math.max(1, parseNumberish(baseRoomMin()))).toString(),
-      roomCapacityMax: Math.max(1, Math.max(1, parseNumberish(baseRoomMax()))).toString(),
-    }),
-  )
+  const score = createMemo(() => getBuildScore(normalizedInput(), normalizedLevels()))
+  const recommendedMode = createMemo(() => calculateBuild(normalizedInput(), normalizedLevels()).mode)
+  const evaluation = createMemo(() => evaluateNextNodeValues(normalizedInput(), normalizedLevels(), recommendedMode()))
+  const optimal = createMemo(() => calculateBuild(normalizedInput(), emptyCruiseNodeLevels()))
+  const optimalBuild = createMemo(() => optimal().levels)
 
-  const evaluation = createMemo(() => evaluateNextNodeValues(normalizedInput(), normalizedLevels()))
-  const baseSnapshot = createMemo(() => getCruiseSnapshot(normalizedInput(), normalizedLevels()))
-  const recommendedNodeLevels = createMemo(() => applyActionSpendAll(normalizedInput(), normalizedLevels()).nextLevels)
-  const optimalNodeLevels = createMemo(() => applyActionOptimize(baseInputWithoutNodes()).nextLevels)
-
-  const recommendedDiffersFromCurrent = createMemo(() => !areLevelsEqual(normalizedLevels(), recommendedNodeLevels()))
-  const optimalDiffersFromCurrent = createMemo(() => !areLevelsEqual(normalizedLevels(), optimalNodeLevels()))
-  const optimalDiffersFromRecommended = createMemo(() => !areLevelsEqual(recommendedNodeLevels(), optimalNodeLevels()))
+  const isOptimal = createMemo(() => areLevelsEqual(normalizedLevels(), optimalBuild()))
 
   const currentOptimalityPercent = createMemo(() => {
-    const currentObjective = getCruiseSnapshot(normalizedInput(), normalizedLevels()).objectiveMultiplier - 1
-    const optimalObjective = getCruiseSnapshot(normalizedInput(), optimalNodeLevels()).objectiveMultiplier - 1
+    const currentObjective = score()
+    const optimalObjective = optimal().score
 
     if (optimalObjective <= Number.EPSILON) return 100
 
@@ -172,32 +149,13 @@ export const CruiseProvider = (props: ParentProps) => {
     setNodeLevels(normalizeCruiseNodeLevels(next))
   }
 
-  const buyNextBest = () => {
-    const result = applyActionBuyNext(normalizedInput(), normalizedLevels())
-    replaceNodeLevels(result.nextLevels)
+  const applyNext = () => {
+    const next = evaluation().bestNodeId
+    if (next) setNodeLevel(next, (normalizedLevels()[next] || 0) + 1)
   }
 
-  const spendAll = () => {
-    const result = applyActionSpendAll(normalizedInput(), normalizedLevels())
-    replaceNodeLevels(result.nextLevels)
-  }
-
-  const resetAll = () => {
-    replaceNodeLevels(applyActionResetAll())
-  }
-
-  const optimize = () => {
-    const result = applyActionOptimize(normalizedInput())
-    replaceNodeLevels(result.nextLevels)
-  }
-
-  const applyRecommended = () => {
-    replaceNodeLevels(recommendedNodeLevels())
-  }
-
-  const applyOptimal = () => {
-    replaceNodeLevels(optimalNodeLevels())
-  }
+  const resetAll = () => replaceNodeLevels(emptyCruiseNodeLevels())
+  const applyOptimal = () => replaceNodeLevels(optimalBuild())
 
   return (
     <CruiseContext.Provider
@@ -222,20 +180,13 @@ export const CruiseProvider = (props: ParentProps) => {
         totalPoints: () => evaluation().totalPoints,
         spentPoints: () => evaluation().spentPoints,
         availablePoints: () => evaluation().availablePoints,
-        baseSnapshot,
         evaluationRows: () => evaluation().rows,
         bestNodeId: () => evaluation().bestNodeId,
-        recommendedNodeLevels,
-        optimalNodeLevels,
-        recommendedDiffersFromCurrent,
-        optimalDiffersFromCurrent,
-        optimalDiffersFromRecommended,
+        optimalLevels: optimalBuild,
+        isOptimal,
         currentOptimalityPercent,
-        buyNextBest,
-        spendAll,
+        applyNext,
         resetAll,
-        optimize,
-        applyRecommended,
         applyOptimal,
       }}
     >
