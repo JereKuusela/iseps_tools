@@ -3,14 +3,14 @@ import {
   evaluateNextNodeValues,
   getAvailablePoints,
   getNodeCostAtLevel,
-  getBuildScore,
   getSpentPoints,
   getTotalPointsFromPrestiges,
-  isEchoUnlocked,
   CalculationMode,
   calculateBuild,
 } from "./cruiseCalculator"
-import { CRUISE_NODE_DEFINITIONS, emptyCruiseNodeLevels, type CruiseInputState } from "../pages/cruise/cruiseTypes"
+import { CRUISE_NODE_DEFINITIONS, emptyCruiseNodeLevels, type CruiseInputState } from "./cruiseTypes"
+import { isEchoUnlocked } from "./cruiseUtils"
+import { getBuildScore } from "./cruiseScore"
 
 const defaultInput = (): CruiseInputState => ({
   prestigesDone: 25,

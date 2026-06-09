@@ -38,6 +38,16 @@ type IntegerFieldProps = {
   tooltip?: TooltipKey
 }
 
+type TextInputFieldProps = {
+  label: string
+  value: string
+  onInput: (next: string) => void
+  placeholder?: string
+  tooltip?: TooltipKey
+  onFocus?: () => void
+  onBlur?: (next: string) => void
+}
+
 type PercentFieldProps = {
   label: string
   value: string
@@ -55,6 +65,12 @@ type MultiplierFieldProps = {
 }
 
 type LabelFieldProps = {
+  label: string
+  value: string
+  tooltip?: TooltipKey
+}
+
+type DisplayFieldProps = {
   label: string
   value: string
   tooltip?: TooltipKey
@@ -414,6 +430,35 @@ export const IntegerField = (props: IntegerFieldProps) => {
   )
 }
 
+export const TextInputField = (props: TextInputFieldProps) => {
+  return (
+    <TextField.Root value={props.value} onChange={props.onInput} class="grid gap-1.5">
+      <div class={"grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2"}>
+        <div class={"min-w-0 flex items-center gap-2"}>
+          <TextField.Label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
+            {props.label}
+          </TextField.Label>
+          {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
+        </div>
+        <div class={"min-w-0"}>
+          <TextField.Input
+            type="text"
+            autocapitalize="off"
+            autocomplete="off"
+            autocorrect="off"
+            spellcheck={false}
+            placeholder={props.placeholder}
+            onKeyDown={blurOnEnterOrEscape}
+            onFocus={props.onFocus}
+            onBlur={(event) => props.onBlur?.(event.currentTarget.value)}
+            class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+          />
+        </div>
+      </div>
+    </TextField.Root>
+  )
+}
+
 const normalizePercentInput = (value: string) => {
   return sanitizeNumberishInput(value.replace(/%/g, ""))
 }
@@ -590,6 +635,26 @@ export const LabelField = (props: LabelFieldProps) => {
         </div>
         <div class={"min-w-0"}>
           <p class="w-full bg-white px-2.5 py-1.5 text-sm font-medium text-ink dark:bg-[#1a2638] dark:text-white">
+            {props.value}
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export const DisplayField = (props: DisplayFieldProps) => {
+  return (
+    <div class="grid gap-1.5">
+      <div class={"grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2"}>
+        <div class={"min-w-0 flex items-center gap-2"}>
+          <label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
+            {props.label}
+          </label>
+          {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
+        </div>
+        <div class={"min-w-0"}>
+          <p class="rounded-xl bg-white px-2.5 py-1.5 text-sm font-medium text-ink dark:bg-[#1a2638] dark:text-white">
             {props.value}
           </p>
         </div>

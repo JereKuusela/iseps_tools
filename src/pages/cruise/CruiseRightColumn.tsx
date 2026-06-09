@@ -20,7 +20,7 @@ export const CruiseRightColumn = () => {
 
   const optimalLevels = createMemo(() => cruise.optimalLevels())
   const showOptimalColumn = () => !cruise.isOptimal()
-  const optimalityPercentLabel = createMemo(() => `${cruise.currentOptimalityPercent().toFixed(0)}% optimal.`)
+  const optimalityPercentLabel = createMemo(() => `${cruise.optimality()} optimal.`)
   return (
     <div class="grid gap-3">
       <div class="overflow-hidden rounded-xl border border-ink/10 bg-white dark:border-white/15 dark:bg-[#22344d]">

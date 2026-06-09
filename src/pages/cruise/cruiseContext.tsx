@@ -1,14 +1,13 @@
 import { createContext, createMemo, type ParentProps, useContext } from "solid-js"
 import {
-  calculateNext,
   evaluateNextNodeValues,
-  getBuildScore,
   normalizeCruiseInputState,
   normalizeCruiseNodeLevels,
   calculateBuild,
-} from "../../lib/cruiseCalculator"
+} from "./cruiseCalculator"
 import { createSyncedSignal } from "../../lib/persistedSignal"
 import { emptyCruiseNodeLevels, type CruiseInputState, type CruiseNodeLevels } from "./cruiseTypes"
+import { getBuildScore } from "./cruiseScore"
 
 const parseNumberish = (value: string) => {
   const parsed = Number(value)
@@ -41,7 +40,7 @@ type CruiseContextValue = {
   bestNodeId: () => ReturnType<typeof evaluateNextNodeValues>["bestNodeId"]
   optimalLevels: () => CruiseNodeLevels
   isOptimal: () => boolean
-  currentOptimalityPercent: () => number
+  optimality: () => string
   applyNext: () => void
   resetAll: () => void
   applyOptimal: () => void
@@ -126,15 +125,17 @@ export const CruiseProvider = (props: ParentProps) => {
 
   const isOptimal = createMemo(() => areLevelsEqual(normalizedLevels(), optimalBuild()))
 
-  const currentOptimalityPercent = createMemo(() => {
+  const optimality = createMemo(() => {
     const currentObjective = score()
     const optimalObjective = optimal().score
 
-    if (optimalObjective <= Number.EPSILON) return 100
+    if (optimalObjective <= Number.EPSILON) return "100%"
 
     const rawPercent = (currentObjective / optimalObjective) * 100
-    if (!Number.isFinite(rawPercent)) return 0
-    return rawPercent
+    if (!Number.isFinite(rawPercent) || rawPercent < 0.01) return "0%"
+    if (rawPercent < 1) return rawPercent.toFixed(2)
+    if (rawPercent > 999.99) return `${(rawPercent / 100).toFixed(0)}x`
+    return `${rawPercent.toFixed(0)}%`
   })
 
   const setNodeLevel = (id: keyof CruiseNodeLevels, next: number) => {
@@ -184,7 +185,7 @@ export const CruiseProvider = (props: ParentProps) => {
         bestNodeId: () => evaluation().bestNodeId,
         optimalLevels: optimalBuild,
         isOptimal,
-        currentOptimalityPercent,
+        optimality,
         applyNext,
         resetAll,
         applyOptimal,

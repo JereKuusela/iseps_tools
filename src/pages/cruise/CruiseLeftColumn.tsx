@@ -1,6 +1,12 @@
 import { createEffect, createMemo, createSignal } from "solid-js"
 import { InfoCard } from "../../components/layout/contentBlocks"
-import { IntegerField, NumberField, NumberRangeField, blurOnEnterOrEscape } from "../../components/ui/formControls"
+import {
+  DisplayField,
+  IntegerField,
+  NumberField,
+  NumberRangeField,
+  TextInputField,
+} from "../../components/ui/formControls"
 import { CRUISE_NODE_DEFINITIONS, emptyCruiseNodeLevels, type CruiseNodeId, type CruiseNodeLevels } from "./cruiseTypes"
 import { useCruiseContext } from "./cruiseContext"
 
@@ -51,7 +57,6 @@ export const CruiseLeftColumn = () => {
   const [notationInput, setNotationInput] = createSignal("")
   const [isNotationEditing, setIsNotationEditing] = createSignal(false)
 
-  const fullNotation = createMemo(() => notationOrder.map((id) => cruise.nodeLevels()[id]).join("/"))
   const shortNotation = createMemo(() => toShortNotation(cruise.nodeLevels()))
 
   const applyNotation = (raw: string) => {
@@ -87,12 +92,22 @@ export const CruiseLeftColumn = () => {
             step={1}
             tooltip="cruise.prestiges"
           />
-          <div class="grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2">
-            <span class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">Points</span>
-            <p class="rounded-xl bg-white px-2.5 py-1.5 text-sm font-medium text-ink dark:bg-[#1a2638] dark:text-white">
-              {cruise.availablePoints()} / {cruise.totalPoints()}
-            </p>
-          </div>
+          <DisplayField
+            label="Points"
+            tooltip="cruise.points"
+            value={`${cruise.availablePoints()} / ${cruise.totalPoints()}`}
+          />
+          <TextInputField
+            tooltip="cruise.notation"
+            label="Build"
+            value={notationInput()}
+            onInput={setNotationInput}
+            onFocus={() => setIsNotationEditing(true)}
+            onBlur={(next) => {
+              applyNotation(next)
+              setIsNotationEditing(false)
+            }}
+          />
         </div>
       </InfoCard>
 
@@ -113,34 +128,6 @@ export const CruiseLeftColumn = () => {
             onMinInput={cruise.setBaseRoomMin}
             onMaxInput={cruise.setBaseRoomMax}
           />
-        </div>
-      </InfoCard>
-
-      <InfoCard title="Prestige notation" tooltip="cruise.notation">
-        <div class="grid gap-1.5">
-          <div class="grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2">
-            <label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
-              Notation
-            </label>
-            <input
-              type="text"
-              value={notationInput()}
-              onInput={(event) => setNotationInput(event.currentTarget.value)}
-              onKeyDown={blurOnEnterOrEscape}
-              onFocus={() => setIsNotationEditing(true)}
-              onBlur={(event) => {
-                applyNotation(event.currentTarget.value)
-                setIsNotationEditing(false)
-              }}
-              class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
-            />
-          </div>
-          <div class="grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2">
-            <span class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">Full</span>
-            <p class="rounded-xl bg-white px-2.5 py-1.5 text-sm font-medium text-ink dark:bg-[#1a2638] dark:text-white">
-              {fullNotation()}
-            </p>
-          </div>
         </div>
       </InfoCard>
     </>
