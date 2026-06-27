@@ -328,7 +328,7 @@ const evaluateNodeScore = (
     nextBonusMultiplier = nextEchoFactor / currentEchoFactor
   }
 
-  const nextBonusPerPoint = (nextBonusMultiplier - 1) / nextCost
+  const nextBonusPerPoint = calculateLongTermScore(nextBonusMultiplier, nextCost)
 
   return { nextCost, nextBonusMultiplier, nextBonusPerPoint }
 }
