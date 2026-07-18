@@ -262,6 +262,39 @@
   {
     "cycle": 14,
     "run": "se_push",
+    "title": "Recommended",
+    "nodes": [
+      {
+        "id": 1
+      },
+      {
+        "id": 2,
+        "amount": 3
+      },
+      {
+        "id": 3,
+        "amount": 3
+      },
+      {
+        "id": 7
+      },
+      {
+        "id": 11
+      },
+      {
+        "id": 15
+      },
+      {
+        "id": 5,
+        "amount": 3
+      }
+    ],
+    "note": "Gamma nodes are the best option because of G-Corp overclock modules."
+  },
+  {
+    "cycle": 14,
+    "run": "se_push",
+    "title": "Alternative",
     "nodes": [
       {
         "id": 1
@@ -293,7 +326,7 @@
         "id": 13
       }
     ],
-    "note": "New info finds that Beta-Fenix nodes are better than Delta-Ixion option because of Fenix node's large boost (x1.15) compared to Ixion which helps emblems via the more emblems upgrade."
+    "note": "Alternative older build. Fenix is better than Ixion node because of the larger multiplier."
   },
   {
     "cycle": 15,
@@ -351,8 +384,7 @@
         "id": 10
       },
       {
-        "id": 14,
-        "amount": 2
+        "id": 14
       },
       {
         "id": 3
@@ -415,7 +447,7 @@
     "cycle": 18,
     "run": "se_push",
     "title": "Gamma",
-    "note": "Should be slightly better if you can afford the last G-Point overclock module.",
+    "note": "Should be slightly better if you can afford the last G-Corp overclock module.",
     "nodes": [
       {
         "id": 1
@@ -457,7 +489,7 @@
     "cycle": 18,
     "run": "se_push",
     "title": "Ixion",
-    "note": "Probably slightly worse. unless you can't afford the last G-Point overclock module yet.",
+    "note": "Probably slightly worse. unless you can't afford the last G-Corp overclock module yet.",
     "nodes": [
       {
         "id": 1
@@ -513,8 +545,7 @@
         "id": 10
       },
       {
-        "id": 14,
-        "amount": 2
+        "id": 14
       },
       {
         "id": 3
@@ -561,8 +592,7 @@
         "id": 10
       },
       {
-        "id": 14,
-        "amount": 2
+        "id": 14
       },
       {
         "id": 3
@@ -610,8 +640,7 @@
         "id": 10
       },
       {
-        "id": 14,
-        "amount": 2
+        "id": 14
       },
       {
         "id": 3
@@ -661,8 +690,7 @@
         "amount": 3
       },
       {
-        "id": 14,
-        "amount": 2
+        "id": 14
       },
       {
         "id": 3,
@@ -692,8 +720,7 @@
         "amount": 3
       },
       {
-        "id": 16,
-        "amount": 2
+        "id": 16
       },
       {
         "id": 5,
@@ -708,8 +735,7 @@
         "amount": 3
       },
       {
-        "id": 17,
-        "amount": 2
+        "id": 17
       }
     ]
   },
@@ -1118,8 +1144,7 @@
         "id": 13
       },
       {
-        "id": 17,
-        "amount": 2
+        "id": 17
       }
     ]
   },
@@ -1158,8 +1183,7 @@
         "id": 13
       },
       {
-        "id": 17,
-        "amount": 2
+        "id": 17
       }
     ]
   },
@@ -1199,8 +1223,7 @@
         "amount": 2
       },
       {
-        "id": 17,
-        "amount": 2
+        "id": 17
       }
     ]
   },
@@ -1240,8 +1263,7 @@
         "amount": 3
       },
       {
-        "id": 17,
-        "amount": 2
+        "id": 17
       }
     ]
   },
@@ -1407,8 +1429,7 @@
         "amount": 2
       },
       {
-        "id": 14,
-        "amount": 2
+        "id": 14
       }
     ],
     "note": "Artifacts node + 2 Juno is generally better, but around SE 119-122, 2 Alpha + 3 Juno may be better if it gets Research 122 when Artifacts node wouldn't. If you complete the 8th cycle in your run, put it in Juno and continue for a bit."
@@ -1431,8 +1452,7 @@
         "amount": 3
       },
       {
-        "id": 14,
-        "amount": 2
+        "id": 14
       }
     ],
     "note": "If you complete the 9th cycle in your run, put it in Alpha and continue for a bit."
@@ -1456,8 +1476,7 @@
         "amount": 3
       },
       {
-        "id": 14,
-        "amount": 2
+        "id": 14
       }
     ],
     "note": "If you complete the 10th cycle in your run, put it in Alpha and continue for a bit."
@@ -1481,8 +1500,7 @@
         "amount": 3
       },
       {
-        "id": 14,
-        "amount": 2
+        "id": 14
       }
     ],
     "note": "With ZAT 10, when you can get to e800 DC (or are very close), it can be better to use 2 Alpha and 1 DC for ~x12 DC boost and e18 cash loss.  This works as long as you can still reach Research 126 at e970 Cash with the cash loss."
@@ -1506,8 +1524,7 @@
         "amount": 3
       },
       {
-        "id": 14,
-        "amount": 2
+        "id": 14
       },
       {
         "id": 5
@@ -1534,8 +1551,7 @@
         "amount": 3
       },
       {
-        "id": 14,
-        "amount": 2
+        "id": 14
       },
       {
         "id": 5,
@@ -1563,8 +1579,7 @@
         "amount": 3
       },
       {
-        "id": 14,
-        "amount": 2
+        "id": 14
       },
       {
         "id": 5,
@@ -1592,8 +1607,7 @@
         "amount": 3
       },
       {
-        "id": 14,
-        "amount": 2
+        "id": 14
       },
       {
         "id": 5,
@@ -1624,8 +1638,7 @@
         "amount": 3
       },
       {
-        "id": 14,
-        "amount": 2
+        "id": 14
       },
       {
         "id": 4
@@ -1659,8 +1672,7 @@
         "amount": 3
       },
       {
-        "id": 14,
-        "amount": 2
+        "id": 14
       },
       {
         "id": 4
@@ -1697,8 +1709,7 @@
         "amount": 3
       },
       {
-        "id": 14,
-        "amount": 2
+        "id": 14
       },
       {
         "id": 4
@@ -1736,8 +1747,7 @@
         "amount": 3
       },
       {
-        "id": 14,
-        "amount": 2
+        "id": 14
       },
       {
         "id": 4
@@ -1776,8 +1786,7 @@
         "amount": 3
       },
       {
-        "id": 14,
-        "amount": 2
+        "id": 14
       },
       {
         "id": 3
@@ -1822,8 +1831,7 @@
         "amount": 3
       },
       {
-        "id": 14,
-        "amount": 2
+        "id": 14
       },
       {
         "id": 3
@@ -1869,8 +1877,7 @@
         "amount": 3
       },
       {
-        "id": 14,
-        "amount": 2
+        "id": 14
       },
       {
         "id": 3
@@ -1916,8 +1923,7 @@
         "amount": 3
       },
       {
-        "id": 14,
-        "amount": 2
+        "id": 14
       },
       {
         "id": 3
