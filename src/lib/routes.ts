@@ -5,6 +5,7 @@ export const ROUTES = {
   home: "/",
   ogTech: "/tech",
   cruise: "/cruise",
+  factory: "/factory",
   zatGuide: "/zat",
   penrose: "/penrose",
   sc: "/sc",
@@ -16,10 +17,11 @@ export const ROUTES = {
 
 export const tabs: TabItem[] = [
   { href: ROUTES.ogTech, label: "OG Tech" },
-  { href: ROUTES.cruise, label: "Cruise" },
   { href: ROUTES.zatGuide, label: "ZAT Guide" },
   { href: ROUTES.penrose, label: "Penrose" },
   { href: ROUTES.sc, label: "SC" },
+  { href: ROUTES.cruise, label: "Cruise" },
+  { href: ROUTES.factory, label: "Factory" },
   //  { href: ROUTES.premiumCrystal, label: "Premium Crystal" },
   // { href: ROUTES.premiumHauler, label: "Premium Hauler" },
   { href: ROUTES.credits, label: "Credits" },
@@ -30,11 +32,6 @@ export const toolCards: ToolCardItem[] = [
     href: ROUTES.ogTech,
     label: "OG Tech",
     description: "Plan OG tech upgrades by comparing gains, costs, and ETA based on your current output.",
-  },
-  {
-    href: ROUTES.cruise,
-    label: "Cruise",
-    description: "Compare cruise prestige upgrades, spend points optimally, and export notation for sharing.",
   },
   {
     href: ROUTES.zatGuide,
@@ -50,6 +47,16 @@ export const toolCards: ToolCardItem[] = [
     href: ROUTES.sc,
     label: "SC",
     description: "Calculate Super Cluster scenarios and compare setup tradeoffs before committing resources.",
+  },
+  {
+    href: ROUTES.cruise,
+    label: "Cruise",
+    description: "Compare cruise prestige upgrades, spend points optimally, and export notation for sharing.",
+  },
+  {
+    href: ROUTES.factory,
+    label: "Factory",
+    description: "Plan factory prestige upgrades, compare weighted node value, and apply optimal builds.",
   },
   /* {
     href: ROUTES.premiumCrystal,
