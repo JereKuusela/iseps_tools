@@ -60,7 +60,7 @@ Then additional inputs are needed for evaluation:
   - First level gives x1.011 particle output for each particle level (multiplicative).
   - Next levels increase the multiplier by 0.002. So next level gives x1.013, then x1.015, etc.
   - Costs:
-    - 5, 17, 41, 88, 174
+    - 5, 12, 24, 47, 86
 - Fabricator Speed
   - Max 19 levels.
   - Each level reduces fabricator cooldown by additive 5%.
