@@ -1,7 +1,7 @@
 import { A, useLocation } from "@solidjs/router"
-import { For, type ParentComponent } from "solid-js"
+import { For, Show, createEffect, createSignal, onCleanup, onMount, type ParentComponent } from "solid-js"
 import { useDarkModeSignal } from "./lib/darkMode"
-import { ROUTES, tabs } from "./lib/routes"
+import { ROUTES, eventTabs, primaryTabs } from "./lib/routes"
 
 const normalizePath = (path: string) => {
   if (!path || path === "/") {
@@ -13,13 +13,50 @@ const normalizePath = (path: string) => {
 
 const TopNav = (props: { darkMode: boolean; onToggleDarkMode: () => void }) => {
   const location = useLocation()
+  const [isEventsMenuOpen, setIsEventsMenuOpen] = createSignal(false)
+  let eventsMenuRef: HTMLDivElement | undefined
   const isActivePath = (href: string) => normalizePath(location.pathname) === href
+  const isEventsRouteActive = () => eventTabs.some((tab) => isActivePath(tab.href))
+  const activeEventLabel = () => eventTabs.find((tab) => isActivePath(tab.href))?.label ?? "Events"
+
+  const closeEventsMenu = () => setIsEventsMenuOpen(false)
+  const openEventsMenu = () => setIsEventsMenuOpen(true)
+
+  onMount(() => {
+    const onDocumentPointerDown = (event: PointerEvent) => {
+      if (!eventsMenuRef) return
+      const target = event.target
+      if (!(target instanceof Node)) return
+      if (!eventsMenuRef.contains(target)) {
+        closeEventsMenu()
+      }
+    }
+
+    const onDocumentKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeEventsMenu()
+      }
+    }
+
+    document.addEventListener("pointerdown", onDocumentPointerDown)
+    document.addEventListener("keydown", onDocumentKeyDown)
+
+    onCleanup(() => {
+      document.removeEventListener("pointerdown", onDocumentPointerDown)
+      document.removeEventListener("keydown", onDocumentKeyDown)
+    })
+  })
+
+  createEffect(() => {
+    location.pathname
+    closeEventsMenu()
+  })
 
   return (
     <header class="relative z-10 hidden px-4 pt-5 sm:block sm:px-8 sm:pt-8 lg:px-10">
       <div class="mx-auto flex w-full max-w-6xl items-center gap-2.5 rounded-2xl border border-white/60 bg-white/70 p-2.5 shadow-glow backdrop-blur dark:border-white/10 dark:bg-[#111a28]/75 sm:gap-3 sm:p-3">
         <div class="min-w-[240px] flex-1 gap-2.5 sm:grid sm:grid-cols-2 lg:grid-cols-6">
-          <For each={tabs}>
+          <For each={primaryTabs}>
             {(tab) => (
               <A
                 href={tab.href}
@@ -33,6 +70,59 @@ const TopNav = (props: { darkMode: boolean; onToggleDarkMode: () => void }) => {
               </A>
             )}
           </For>
+
+          <div ref={eventsMenuRef} class="relative" onMouseEnter={openEventsMenu} onMouseLeave={closeEventsMenu}>
+            <button
+              type="button"
+              class="flex w-full items-center justify-between gap-2 rounded-xl px-4 py-2.5 text-left transition hover:-translate-y-0.5 hover:bg-ink hover:text-white dark:hover:bg-white/15"
+              classList={{
+                "bg-ink text-white": isEventsRouteActive(),
+                "dark:bg-white/15": isEventsRouteActive(),
+              }}
+              aria-haspopup="menu"
+              aria-expanded={isEventsMenuOpen()}
+              aria-controls="top-events-menu"
+              onClick={() => setIsEventsMenuOpen((current) => !current)}
+            >
+              <span class="text-sm font-semibold tracking-wide">{activeEventLabel()}</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                class="h-4 w-4 transition-transform"
+                classList={{ "rotate-180": isEventsMenuOpen() }}
+                aria-hidden="true"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </button>
+
+            <Show when={isEventsMenuOpen()}>
+              <div
+                id="top-events-menu"
+                class="absolute left-0 top-full z-30 mt-1.5 w-44 overflow-hidden rounded-xl border border-ink/15 bg-white shadow-lg dark:border-white/20 dark:bg-[#22344d]"
+              >
+                <div class="grid gap-1 p-1.5">
+                  <For each={eventTabs}>
+                    {(tab) => (
+                      <A
+                        href={tab.href}
+                        class="rounded-xl px-3.5 py-2 text-left text-sm font-semibold transition hover:-translate-y-0.5 hover:bg-ink hover:text-white dark:hover:bg-white/15"
+                        classList={{
+                          "bg-ink text-white": isActivePath(tab.href),
+                          "dark:bg-white/15": isActivePath(tab.href),
+                        }}
+                      >
+                        {tab.label}
+                      </A>
+                    )}
+                  </For>
+                </div>
+              </div>
+            </Show>
+          </div>
         </div>
 
         <A

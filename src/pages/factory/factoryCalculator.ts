@@ -175,11 +175,8 @@ export const getAvailablePoints = (input: FactoryInputState, levels: FactoryNode
   return Math.max(0, total - getSpentPoints(levels))
 }
 
-const getNodeUnlockState = (id: FactoryNodeId, levels: FactoryNodeLevels) => {
-  if (id === "fabricatorOutput") return true
-
-  const required = NODE_MAP[id].unlockRequiresFabricatorLevel ?? 0
-  return levels.fabricatorOutput >= required
+const getNodeUnlockState = (_id: FactoryNodeId, _levels: FactoryNodeLevels) => {
+  return true
 }
 
 const calculateLongTermScore = (bonusMultiplier: number, cost: number) => {

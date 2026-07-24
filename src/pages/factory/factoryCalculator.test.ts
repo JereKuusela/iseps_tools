@@ -45,17 +45,11 @@ describe("getNodeCostAtLevel", () => {
 })
 
 describe("unlock gating", () => {
-  it("requires first fabricator output level before other nodes", () => {
+  it("keeps all nodes unlocked", () => {
     const levels = emptyFactoryNodeLevels()
     const evaluation = evaluateNextNodeValues(defaultInput(), levels)
 
-    const locked = evaluation.rows.filter((row) => row.id !== "fabricatorOutput")
-    expect(locked.every((row) => row.unlocked === false)).toBe(true)
-
-    levels.fabricatorOutput = 1
-    const unlockedEvaluation = evaluateNextNodeValues(defaultInput(), levels)
-    const nowUnlocked = unlockedEvaluation.rows.filter((row) => row.id !== "fabricatorOutput")
-    expect(nowUnlocked.every((row) => row.unlocked)).toBe(true)
+    expect(evaluation.rows.every((row) => row.unlocked)).toBe(true)
   })
 })
 

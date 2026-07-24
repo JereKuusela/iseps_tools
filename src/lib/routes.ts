@@ -15,17 +15,20 @@ export const ROUTES = {
   settings: "/settings",
 } as const
 
-export const tabs: TabItem[] = [
+export const primaryTabs: TabItem[] = [
   { href: ROUTES.ogTech, label: "OG Tech" },
   { href: ROUTES.zatGuide, label: "ZAT Guide" },
   { href: ROUTES.penrose, label: "Penrose" },
   { href: ROUTES.sc, label: "SC" },
-  { href: ROUTES.cruise, label: "Cruise" },
-  { href: ROUTES.factory, label: "Factory" },
-  //  { href: ROUTES.premiumCrystal, label: "Premium Crystal" },
-  // { href: ROUTES.premiumHauler, label: "Premium Hauler" },
   { href: ROUTES.credits, label: "Credits" },
 ]
+
+export const eventTabs: TabItem[] = [
+  { href: ROUTES.cruise, label: "Cruise" },
+  { href: ROUTES.factory, label: "Factory" },
+]
+
+export const tabs: TabItem[] = [...primaryTabs.slice(0, 4), ...eventTabs, ...primaryTabs.slice(4)]
 
 export const toolCards: ToolCardItem[] = [
   {

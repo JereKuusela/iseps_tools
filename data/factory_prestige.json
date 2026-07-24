@@ -110,7 +110,6 @@
     "id": "sellValue",
     "label": "Sell Value",
     "maxLevel": 50,
-    "unlockRequiresFabricatorLevel": 1,
     "costs": [
       2,
       2,
@@ -168,20 +167,18 @@
     "id": "particleOutput",
     "label": "Particle Output",
     "maxLevel": 5,
-    "unlockRequiresFabricatorLevel": 1,
     "costs": [
       5,
-      17,
-      41,
-      88,
-      174
+      12,
+      24,
+      47,
+      86
     ]
   },
   {
     "id": "fabricatorSpeed",
     "label": "Fabricator Speed",
     "maxLevel": 19,
-    "unlockRequiresFabricatorLevel": 1,
     "costs": [
       2,
       2,
@@ -208,7 +205,6 @@
     "id": "maxOfflineTimeCap",
     "label": "Max Offline Time Cap",
     "maxLevel": 16,
-    "unlockRequiresFabricatorLevel": 1,
     "costs": [
       1,
       1,

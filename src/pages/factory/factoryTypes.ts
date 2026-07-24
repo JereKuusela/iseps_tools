@@ -20,7 +20,6 @@ export type FactoryNodeDefinition = {
   id: FactoryNodeId
   label: string
   maxLevel: number
-  unlockRequiresFabricatorLevel?: number
   costs: number[]
 }
 
