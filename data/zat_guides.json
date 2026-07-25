@@ -1856,7 +1856,7 @@
         "amount": 3
       }
     ],
-    "note": "With enough DC, Solutions node ends up being better.\nIf you can't reach e1995 DC, use the previous build."
+    "note": "With enough DC, Solutions node ends up being better.\nIf you can't reach e1195 DC, use the previous build."
   },
   {
     "cycle": 20,
