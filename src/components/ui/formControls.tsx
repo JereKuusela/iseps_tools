@@ -1,6 +1,12 @@
 import * as TextField from "@kobalte/core/text-field"
 import { createEffect, createMemo, createSignal, For, type JSX } from "solid-js"
-import { formatFixed, formatMultiplier, formatPercentFromRatio } from "../../lib/numberFormat"
+import {
+  formatFixed,
+  formatLargeNumberMultiplier,
+  formatMultiplier,
+  formatPercentFromRatio,
+} from "../../lib/numberFormat"
+import { LargeNumber } from "../../lib/largeNumber"
 import type { TooltipKey } from "../../lib/tooltips"
 import { Tooltip } from "./Tooltip"
 
@@ -550,6 +556,12 @@ const formatMultiplierValue = (value: string) => {
   if (normalized === "") return "x0.00"
   if (!isValidNumberishInput(normalized)) return normalized
 
+  try {
+    return formatLargeNumberMultiplier(LargeNumber.parse(normalized))
+  } catch {
+    // Fall through to numeric formatter for transient inputs.
+  }
+
   const parsed = Number(normalized)
   return formatMultiplier(parsed, 2, "x0.00")
 }
@@ -558,10 +570,7 @@ const toEditableMultiplierValue = (value: string) => {
   const normalized = sanitizeNumberishInput(value)
   if (normalized === "") return ""
   if (!isValidNumberishInput(normalized)) return ""
-
-  const parsed = Number(normalized)
-  if (!Number.isFinite(parsed)) return ""
-  return parsed.toString()
+  return normalized
 }
 
 export const MultiplierField = (props: MultiplierFieldProps) => {
@@ -584,10 +593,7 @@ export const MultiplierField = (props: MultiplierFieldProps) => {
     if (!isValidNumberishInput(normalized)) return
 
     setEditingValue(normalized)
-
-    const parsed = Number(normalized)
-    if (!Number.isFinite(parsed)) return
-    props.onInput(parsed.toString())
+    props.onInput(normalized)
   }
 
   return (

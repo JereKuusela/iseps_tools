@@ -1,0 +1,330 @@
+[
+  {
+    "id": "rubber_duck",
+    "name": "Rubber Duck",
+    "category": "household",
+    "baseSellPrice": 1,
+    "costs": {
+      "orange": 2.5
+    }
+  },
+  {
+    "id": "battery",
+    "name": "Battery",
+    "category": "electronics",
+    "baseSellPrice": 5,
+    "costs": {
+      "blue": 3
+    }
+  },
+  {
+    "id": "bucket",
+    "name": "Bucket",
+    "category": "household",
+    "baseSellPrice": 50,
+    "costs": {
+      "orange": 8,
+      "blue": 5
+    }
+  },
+  {
+    "id": "gear",
+    "name": "Gear",
+    "category": "industrial",
+    "baseSellPrice": 100,
+    "costs": {
+      "green": 10
+    }
+  },
+  {
+    "id": "usb_z_cable",
+    "name": "USB_Z Cable",
+    "category": "electronics",
+    "baseSellPrice": 1000,
+    "costs": {
+      "orange": 200,
+      "green": 300
+    }
+  },
+  {
+    "id": "bolt",
+    "name": "Bolt",
+    "category": "industrial",
+    "baseSellPrice": 5000,
+    "costs": {
+      "green": 200,
+      "blue": 300
+    }
+  },
+  {
+    "id": "jelly_powder",
+    "name": "Jelly Powder",
+    "category": "consumables",
+    "baseSellPrice": 22500,
+    "costs": {
+      "gray": 10000
+    }
+  },
+  {
+    "id": "instant_noodles",
+    "name": "Instant Noodles",
+    "category": "consumables",
+    "baseSellPrice": 25000,
+    "costs": {
+      "purple": 20000
+    }
+  },
+  {
+    "id": "shocklate_bar",
+    "name": "Shocklate Bar",
+    "category": "consumables",
+    "baseSellPrice": 50000,
+    "costs": {
+      "green": 200,
+      "orange": 800,
+      "blue": 400
+    }
+  },
+  {
+    "id": "lava_lamp",
+    "name": "Lava Lamp",
+    "category": "household",
+    "baseSellPrice": 225000,
+    "costs": {
+      "gray": 10,
+      "orange": 1000000
+    }
+  },
+  {
+    "id": "energy_drink",
+    "name": "Energy Drink",
+    "category": "consumables",
+    "baseSellPrice": 250000,
+    "costs": {
+      "purple": 2000,
+      "orange": 50000
+    }
+  },
+  {
+    "id": "camera_lens",
+    "name": "Camera Lens",
+    "category": "electronics",
+    "baseSellPrice": 1130000,
+    "costs": {
+      "gray": 10,
+      "blue": 1000000
+    }
+  },
+  {
+    "id": "hanger",
+    "name": "Hanger",
+    "category": "household",
+    "baseSellPrice": 1250000,
+    "costs": {
+      "purple": 3000,
+      "blue": 20000
+    }
+  },
+  {
+    "id": "alien_gum",
+    "name": "Alien Gum",
+    "category": "consumables",
+    "baseSellPrice": 11300000,
+    "costs": {
+      "gray": 10000,
+      "blue": 100000,
+      "orange": 1000000
+    }
+  },
+  {
+    "id": "plunger",
+    "name": "Plunger",
+    "category": "household",
+    "baseSellPrice": 12500000,
+    "costs": {
+      "purple": 2000,
+      "blue": 5000,
+      "orange": 5000
+    }
+  },
+  {
+    "id": "hydraulic_piston",
+    "name": "Hydraulic Piston",
+    "category": "industrial",
+    "baseSellPrice": 22500000,
+    "costs": {
+      "gray": 10,
+      "green": 1000000
+    }
+  },
+  {
+    "id": "cooling_fan",
+    "name": "Cooling Fan",
+    "category": "electronics",
+    "baseSellPrice": 25000000,
+    "costs": {
+      "purple": 2000,
+      "green": 4000
+    }
+  },
+  {
+    "id": "drone",
+    "name": "Drone",
+    "category": "electronics",
+    "baseSellPrice": 225000000,
+    "costs": {
+      "orange": 10000,
+      "gray": 1000,
+      "green": 15000
+    }
+  },
+  {
+    "id": "yee_force_s_t_x4190",
+    "name": "Yee Force S T X4190",
+    "category": "electronics",
+    "baseSellPrice": 250000000,
+    "costs": {
+      "purple": 3000,
+      "green": 5000,
+      "orange": 5000
+    }
+  },
+  {
+    "id": "bean_bag_chair",
+    "name": "Bean Bag Chair",
+    "category": "household",
+    "baseSellPrice": 1130000000,
+    "costs": {
+      "gray": 10000,
+      "green": 100000,
+      "blue": 1000000
+    }
+  },
+  {
+    "id": "quantum_server_core",
+    "name": "Quantum Server Core",
+    "category": "electronics",
+    "baseSellPrice": 1250000000,
+    "costs": {
+      "green": 10000,
+      "purple": 1000,
+      "blue": 150000
+    }
+  },
+  {
+    "id": "burger",
+    "name": "Burger",
+    "category": "consumables",
+    "baseSellPrice": 5630000000,
+    "costs": {
+      "gray": 10,
+      "purple": 1000000
+    }
+  },
+  {
+    "id": "conveyor_belt",
+    "name": "Conveyor Belt",
+    "category": "industrial",
+    "baseSellPrice": 11300000000,
+    "costs": {
+      "gray": 10000,
+      "blue": 1000,
+      "orange": 1000000,
+      "green": 40000
+    }
+  },
+  {
+    "id": "metal_pipe",
+    "name": "Metal Pipe",
+    "category": "industrial",
+    "baseSellPrice": 12500000000,
+    "costs": {
+      "purple": 2000,
+      "blue": 5000,
+      "orange": 5000,
+      "green": 3000
+    }
+  },
+  {
+    "id": "cosmic_shake",
+    "name": "Cosmic Shake",
+    "category": "consumables",
+    "baseSellPrice": 56300000000,
+    "costs": {
+      "orange": 10000,
+      "gray": 1000,
+      "purple": 15000
+    }
+  },
+  {
+    "id": "massage_recliner",
+    "name": "Massage Recliner",
+    "category": "household",
+    "baseSellPrice": 281000000000,
+    "costs": {
+      "blue": 10000,
+      "gray": 1000,
+      "purple": 15000
+    }
+  },
+  {
+    "id": "cat_tree",
+    "name": "Cat Tree",
+    "category": "household",
+    "baseSellPrice": 2810000000000,
+    "costs": {
+      "orange": 100000,
+      "purple": 1000,
+      "blue": 1000000,
+      "gray": 1000000
+    }
+  },
+  {
+    "id": "flex_box360",
+    "name": "Flex Box360",
+    "category": "electronics",
+    "baseSellPrice": 5630000000000,
+    "costs": {
+      "gray": 10000,
+      "purple": 1000,
+      "green": 1000000
+    }
+  },
+  {
+    "id": "shipping_container",
+    "name": "Shipping Container",
+    "category": "industrial",
+    "baseSellPrice": 56300000000000,
+    "costs": {
+      "orange": 100000,
+      "purple": 1000,
+      "green": 1000000,
+      "gray": 1000000
+    }
+  },
+  {
+    "id": "glow_soup",
+    "name": "Glow Soup",
+    "category": "consumables",
+    "baseSellPrice": 281000000000000,
+    "costs": {
+      "gray": 100000,
+      "green": 1000,
+      "blue": 1000000,
+      "purple": 1000000
+    }
+  },
+  {
+    "id": "smart_toilet",
+    "name": "Smart Toilet",
+    "category": "household",
+    "baseSellPrice": 2810000000000000,
+    "costs": {
+      "orange": 1000000,
+      "blue": 1000000,
+      "green": 1000000,
+      "purple": 1000000,
+      "gray": 1000000
+    }
+  }
+]

@@ -8,6 +8,7 @@ type InfoCardProps = ParentProps<{
   title?: string
   tooltip?: TooltipKey
   closable?: boolean
+  headerActions?: JSX.Element
   class?: string
   titleClass?: string
   contentClass?: string
@@ -38,16 +39,19 @@ export const InfoCard = (props: InfoCardProps) => {
             {props.title ? <h3 class={headingClass.trim()}>{props.title}</h3> : null}
             {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
           </div>
-          {props.closable ? (
-            <button
-              type="button"
-              class={closeClass.trim()}
-              onClick={handleToggleClosed}
-              aria-label={isClosed() ? "Expand section" : "Collapse section"}
-            >
-              <span aria-hidden="true">{isClosed() ? "▼" : "▲"}</span>
-            </button>
-          ) : null}
+          <div class="flex items-center gap-2">
+            {props.headerActions}
+            {props.closable ? (
+              <button
+                type="button"
+                class={closeClass.trim()}
+                onClick={handleToggleClosed}
+                aria-label={isClosed() ? "Expand section" : "Collapse section"}
+              >
+                <span aria-hidden="true">{isClosed() ? "▼" : "▲"}</span>
+              </button>
+            ) : null}
+          </div>
         </div>
       ) : null}
       <Show when={!isClosed()}>

@@ -3,7 +3,7 @@ import type { LargeNumber } from "../../lib/largeNumber"
 export type GuideRunType = "se_push" | "g_points" | "juno" | "cash"
 
 export type GuideNodeAmount = {
-  id: number
+  id: string
   amount?: number
 }
 
@@ -11,17 +11,17 @@ export type GuideEntry = {
   cycle: number
   run: string
   nodes: GuideNodeAmount[]
-  nodeAmounts: Map<number, number>
+  nodeAmounts: Map<string, number>
   note?: string
 }
 
 export type GuideNodeView = {
-  id: number
+  id: string
   name: string
   info: string
   x: number
   y: number
-  req?: number
+  req?: string
   maxLv: number
   activeLevel: number
   boost: LargeNumber

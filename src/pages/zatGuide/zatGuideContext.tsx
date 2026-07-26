@@ -30,9 +30,9 @@ type ZatGuideContextValue = {
   sharesPercent: () => string
   setSharesPercent: (next: string) => string
   nodes: () => GuideNodeView[]
-  getNode: (nodeId: number) => GuideNodeView | undefined
+  getNode: (nodeId: string) => GuideNodeView | undefined
   selectedNode: () => GuideNodeView | undefined
-  selectNode: (nodeId: number) => void
+  selectNode: (nodeId: string) => void
   selectedGuide: () => ZatGuideEntry | undefined
 }
 
@@ -46,7 +46,7 @@ export const ZatGuideProvider = (props: ParentProps) => {
   const [selectedGuideTitle, setSelectedGuideTitle] = createSyncedSignal("zat.guide.title", "")
   const [sharesPercent, setSharesPercent] = createSyncedSignal("zat.guide.shares", "0")
   const [ogTechLevels] = createSyncedSignal<number[]>("zat.og.techLevels", [])
-  const [selectedNodeId, setSelectedNodeId] = createSignal(0)
+  const [selectedNodeId, setSelectedNodeId] = createSignal("")
 
   const normalizedCycles = createMemo(() => Math.max(1, Math.floor(parseNumberish(cycles()))))
   const shareAmount = createMemo(() => Math.max(0, parseNumberish(sharesPercent()) / 0.05))
@@ -101,7 +101,6 @@ export const ZatGuideProvider = (props: ParentProps) => {
 
     return data()
       .zatNodes.slice()
-      .sort((a, b) => a.id - b.id)
       .map((node) => {
         const maxLv = node.maxLv ?? 1
         const rawCount = nodeAmounts?.get(node.id) ?? 0
@@ -131,7 +130,7 @@ export const ZatGuideProvider = (props: ParentProps) => {
   })
 
   const nodeMap = createMemo(() => new Map(nodes().map((node) => [node.id, node])))
-  const getNode = (nodeId: number) => nodeMap().get(nodeId)
+  const getNode = (nodeId: string) => nodeMap().get(nodeId)
 
   const selectedNode = createMemo<GuideNodeView | undefined>(() => {
     const nodeId = selectedNodeId()
@@ -139,8 +138,8 @@ export const ZatGuideProvider = (props: ParentProps) => {
     return getNode(nodeId)
   })
 
-  const selectNode = (nodeId: number) => {
-    if (selectedNodeId() === nodeId) setSelectedNodeId(0)
+  const selectNode = (nodeId: string) => {
+    if (selectedNodeId() === nodeId) setSelectedNodeId("")
     else setSelectedNodeId(nodeId)
   }
 

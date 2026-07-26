@@ -1,0 +1,27 @@
+[
+  {
+    "id": "orange",
+    "name": "SynthRubber",
+    "color": "#f59e0b"
+  },
+  {
+    "id": "blue",
+    "name": "Gravium",
+    "color": "#3b82f6"
+  },
+  {
+    "id": "green",
+    "name": "Fluxstone",
+    "color": "#22c55e"
+  },
+  {
+    "id": "purple",
+    "name": "Nanofoam",
+    "color": "#a855f7"
+  },
+  {
+    "id": "gray",
+    "name": "Netherstar",
+    "color": "#94a3b8"
+  }
+]

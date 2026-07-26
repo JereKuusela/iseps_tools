@@ -6,6 +6,7 @@ import { ScProvider } from "./lib/scContext"
 import { CreditsPage } from "./pages/CreditsPage"
 import { CruisePage } from "./pages/cruise/CruisePage"
 import { FactoryPage } from "./pages/factory/FactoryPage"
+import { FactoryProductionPage } from "./pages/factoryProduction/FactoryProductionPage"
 import { HomePage } from "./pages/HomePage"
 import { OgTechPage } from "./pages/og/OgTechPage"
 import { PenrosePage } from "./pages/penrose/PenrosePage"
@@ -60,6 +61,12 @@ const FactoryRoute = () => (
   </App>
 )
 
+const FactoryProductionRoute = () => (
+  <App>
+    <FactoryProductionPage />
+  </App>
+)
+
 const CreditsRoute = () => (
   <App>
     <CreditsPage />
@@ -92,6 +99,7 @@ render(
         <Route path={ROUTES.ogTech} component={OgTechRoute} />
         <Route path={ROUTES.cruise} component={CruiseRoute} />
         <Route path={ROUTES.factory} component={FactoryRoute} />
+        <Route path={ROUTES.factoryProduction} component={FactoryProductionRoute} />
         <Route path={ROUTES.zatGuide} component={ZatGuideRoute} />
         <Route path={ROUTES.penrose} component={PenroseRoute} />
         <Route path={ROUTES.sc} component={ScRoute} />

@@ -80,7 +80,7 @@ export const ZatGuideRightColumn = () => {
           >
             <For each={guide.nodes().filter((node) => node.req != undefined)}>
               {(node) => {
-                const fromNode = guide.getNode(node.req ?? 9)
+                const fromNode = guide.getNode(node.req ?? "")
                 if (!fromNode) return null
 
                 const from = nodePosition(fromNode)

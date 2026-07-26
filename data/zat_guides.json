@@ -4,7 +4,7 @@
     "run": "se_push",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       }
     ]
   },
@@ -13,10 +13,10 @@
     "run": "se_push",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2
+        "id": "alpha"
       }
     ]
   },
@@ -25,10 +25,10 @@
     "run": "se_push",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 2
       }
     ],
@@ -39,10 +39,10 @@
     "run": "se_push",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       }
     ],
@@ -53,14 +53,14 @@
     "run": "se_push",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 5
+        "id": "dc"
       }
     ],
     "note": "2 Alpha + 2 DC gives ~x2.2 more DC, but ~x1e11 less cash.  The 3 Alpha + 1 DC option is generally better here."
@@ -70,14 +70,14 @@
     "run": "se_push",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 2
       }
     ]
@@ -87,14 +87,14 @@
     "run": "se_push",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       }
     ]
@@ -104,17 +104,17 @@
     "run": "se_push",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 4
+        "id": "delta"
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       }
     ]
@@ -124,20 +124,20 @@
     "run": "se_push",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 4
+        "id": "delta"
       },
       {
-        "id": 8
+        "id": "ixion"
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       }
     ]
@@ -147,23 +147,23 @@
     "run": "se_push",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 4
+        "id": "delta"
       },
       {
-        "id": 8
+        "id": "ixion"
       },
       {
-        "id": 12
+        "id": "ap"
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       }
     ]
@@ -173,26 +173,26 @@
     "run": "se_push",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3
+        "id": "gamma"
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 2
       }
     ],
@@ -203,26 +203,26 @@
     "run": "se_push",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3
+        "id": "gamma"
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       }
     ]
@@ -232,29 +232,29 @@
     "run": "se_push",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3
+        "id": "gamma"
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 4
+        "id": "delta"
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       }
     ]
@@ -265,27 +265,27 @@
     "title": "Main",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3,
+        "id": "gamma",
         "amount": 3
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       }
     ],
@@ -297,33 +297,33 @@
     "title": "Alternative",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3
+        "id": "gamma"
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       },
       {
-        "id": 9
+        "id": "beta"
       },
       {
-        "id": 13
+        "id": "fenix"
       }
     ],
     "note": "Alternative older build. Fenix is better than Ixion node because of the larger multiplier."
@@ -333,35 +333,35 @@
     "run": "se_push",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3
+        "id": "gamma"
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 4
+        "id": "delta"
       },
       {
-        "id": 8
+        "id": "ixion"
       },
       {
-        "id": 12
+        "id": "ap"
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       }
     ]
@@ -371,35 +371,35 @@
     "run": "se_push",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 6
+        "id": "helion"
       },
       {
-        "id": 10
+        "id": "juno"
       },
       {
-        "id": 14
+        "id": "artifacts"
       },
       {
-        "id": 3
+        "id": "gamma"
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       }
     ]
@@ -409,36 +409,36 @@
     "run": "se_push",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3
+        "id": "gamma"
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 4
+        "id": "delta"
       },
       {
-        "id": 8
+        "id": "ixion"
       },
       {
-        "id": 12,
+        "id": "ap",
         "amount": 3
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       }
     ]
@@ -450,37 +450,37 @@
     "note": "Should be slightly better if you can afford the last G-Corp overclock module.",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3,
+        "id": "gamma",
         "amount": 2
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 4
+        "id": "delta"
       },
       {
-        "id": 8
+        "id": "ixion"
       },
       {
-        "id": 12,
+        "id": "ap",
         "amount": 3
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       }
     ]
@@ -492,37 +492,37 @@
     "note": "Probably slightly worse. unless you can't afford the last G-Corp overclock module yet.",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3
+        "id": "gamma"
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 4
+        "id": "delta"
       },
       {
-        "id": 8,
+        "id": "ixion",
         "amount": 2
       },
       {
-        "id": 12,
+        "id": "ap",
         "amount": 3
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       }
     ]
@@ -532,44 +532,44 @@
     "run": "se_push",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 6
+        "id": "helion"
       },
       {
-        "id": 10
+        "id": "juno"
       },
       {
-        "id": 14
+        "id": "artifacts"
       },
       {
-        "id": 3
+        "id": "gamma"
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 4
+        "id": "delta"
       },
       {
-        "id": 8
+        "id": "ixion"
       },
       {
-        "id": 12
+        "id": "ap"
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       }
     ]
@@ -579,45 +579,45 @@
     "run": "se_push",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 6
+        "id": "helion"
       },
       {
-        "id": 10
+        "id": "juno"
       },
       {
-        "id": 14
+        "id": "artifacts"
       },
       {
-        "id": 3
+        "id": "gamma"
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 4
+        "id": "delta"
       },
       {
-        "id": 8
+        "id": "ixion"
       },
       {
-        "id": 12,
+        "id": "ap",
         "amount": 2
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       }
     ]
@@ -627,45 +627,45 @@
     "run": "se_push",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 6
+        "id": "helion"
       },
       {
-        "id": 10
+        "id": "juno"
       },
       {
-        "id": 14
+        "id": "artifacts"
       },
       {
-        "id": 3
+        "id": "gamma"
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 4
+        "id": "delta"
       },
       {
-        "id": 8
+        "id": "ixion"
       },
       {
-        "id": 12,
+        "id": "ap",
         "amount": 3
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       }
     ]
@@ -675,67 +675,67 @@
     "run": "se_push",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 6,
+        "id": "helion",
         "amount": 3
       },
       {
-        "id": 10,
+        "id": "juno",
         "amount": 3
       },
       {
-        "id": 14
+        "id": "artifacts"
       },
       {
-        "id": 3,
+        "id": "gamma",
         "amount": 3
       },
       {
-        "id": 7,
+        "id": "ceti",
         "amount": 3
       },
       {
-        "id": 11,
+        "id": "epsilon",
         "amount": 3
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 4,
+        "id": "delta",
         "amount": 3
       },
       {
-        "id": 8,
+        "id": "ixion",
         "amount": 3
       },
       {
-        "id": 12,
+        "id": "ap",
         "amount": 3
       },
       {
-        "id": 16
+        "id": "emblems"
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       },
       {
-        "id": 9,
+        "id": "beta",
         "amount": 3
       },
       {
-        "id": 13,
+        "id": "fenix",
         "amount": 3
       },
       {
-        "id": 17
+        "id": "g_points"
       }
     ]
   },
@@ -744,7 +744,7 @@
     "run": "g_points",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       }
     ]
   },
@@ -753,10 +753,10 @@
     "run": "g_points",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 3
+        "id": "gamma"
       }
     ]
   },
@@ -765,10 +765,10 @@
     "run": "g_points",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 3,
+        "id": "gamma",
         "amount": 2
       }
     ]
@@ -778,10 +778,10 @@
     "run": "g_points",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 3,
+        "id": "gamma",
         "amount": 3
       }
     ]
@@ -791,13 +791,13 @@
     "run": "g_points",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2
+        "id": "alpha"
       },
       {
-        "id": 3,
+        "id": "gamma",
         "amount": 3
       }
     ],
@@ -808,19 +808,19 @@
     "run": "g_points",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 3
+        "id": "gamma"
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       }
     ]
   },
@@ -829,20 +829,20 @@
     "run": "g_points",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 3,
+        "id": "gamma",
         "amount": 2
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       }
     ]
   },
@@ -851,20 +851,20 @@
     "run": "g_points",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 3,
+        "id": "gamma",
         "amount": 3
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       }
     ]
   },
@@ -873,23 +873,23 @@
     "run": "g_points",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2
+        "id": "alpha"
       },
       {
-        "id": 3,
+        "id": "gamma",
         "amount": 3
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       }
     ]
   },
@@ -898,24 +898,24 @@
     "run": "g_points",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 2
       },
       {
-        "id": 3,
+        "id": "gamma",
         "amount": 3
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       }
     ]
   },
@@ -924,24 +924,24 @@
     "run": "g_points",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3,
+        "id": "gamma",
         "amount": 3
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       }
     ],
     "note": "GP end node is not worthwhile here as the losses from dropping Gamma and Alpha nodes are too much"
@@ -951,27 +951,27 @@
     "run": "g_points",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3,
+        "id": "gamma",
         "amount": 3
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 5
+        "id": "dc"
       }
     ],
     "note": "GP end node is not worthwhile here as the losses from dropping Gamma and Alpha nodes are too much"
@@ -981,27 +981,27 @@
     "run": "g_points",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3,
+        "id": "gamma",
         "amount": 3
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 2
       }
     ],
@@ -1012,27 +1012,27 @@
     "run": "g_points",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3,
+        "id": "gamma",
         "amount": 3
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       }
     ],
@@ -1043,31 +1043,31 @@
     "run": "g_points",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3,
+        "id": "gamma",
         "amount": 3
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       },
       {
-        "id": 9
+        "id": "beta"
       }
     ],
     "note": "GP end node appears still not worthwhile over dropping from DC and Alpha nodes"
@@ -1077,34 +1077,34 @@
     "run": "g_points",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3,
+        "id": "gamma",
         "amount": 3
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       },
       {
-        "id": 9
+        "id": "beta"
       },
       {
-        "id": 13
+        "id": "fenix"
       }
     ],
     "note": "In testing, this beat 1xDC + GP by xe4 GP at SE152. Results may vary at earlier SEs"
@@ -1114,37 +1114,37 @@
     "run": "g_points",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3,
+        "id": "gamma",
         "amount": 3
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 2
       },
       {
-        "id": 9
+        "id": "beta"
       },
       {
-        "id": 13
+        "id": "fenix"
       },
       {
-        "id": 17
+        "id": "g_points"
       }
     ]
   },
@@ -1153,37 +1153,37 @@
     "run": "g_points",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3,
+        "id": "gamma",
         "amount": 3
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       },
       {
-        "id": 9
+        "id": "beta"
       },
       {
-        "id": 13
+        "id": "fenix"
       },
       {
-        "id": 17
+        "id": "g_points"
       }
     ]
   },
@@ -1192,38 +1192,38 @@
     "run": "g_points",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3,
+        "id": "gamma",
         "amount": 3
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       },
       {
-        "id": 9
+        "id": "beta"
       },
       {
-        "id": 13,
+        "id": "fenix",
         "amount": 2
       },
       {
-        "id": 17
+        "id": "g_points"
       }
     ]
   },
@@ -1232,38 +1232,38 @@
     "run": "g_points",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3,
+        "id": "gamma",
         "amount": 3
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       },
       {
-        "id": 9
+        "id": "beta"
       },
       {
-        "id": 13,
+        "id": "fenix",
         "amount": 3
       },
       {
-        "id": 17
+        "id": "g_points"
       }
     ]
   },
@@ -1272,45 +1272,45 @@
     "run": "g_points",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3,
+        "id": "gamma",
         "amount": 3
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 5
+        "id": "dc"
       },
       {
-        "id": 9
+        "id": "beta"
       },
       {
-        "id": 13
+        "id": "fenix"
       },
       {
-        "id": 17
+        "id": "g_points"
       },
       {
-        "id": 4
+        "id": "delta"
       },
       {
-        "id": 8
+        "id": "ixion"
       },
       {
-        "id": 12,
+        "id": "ap",
         "amount": 3
       }
     ]
@@ -1320,7 +1320,7 @@
     "run": "juno",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       }
     ],
     "note": "Juno run not feasible until 4 cycles"
@@ -1330,10 +1330,10 @@
     "run": "juno",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2
+        "id": "alpha"
       }
     ],
     "note": "Juno run not feasible until 4 cycles"
@@ -1343,10 +1343,10 @@
     "run": "juno",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 2
       }
     ],
@@ -1357,16 +1357,16 @@
     "run": "juno",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2
+        "id": "alpha"
       },
       {
-        "id": 6
+        "id": "helion"
       },
       {
-        "id": 10
+        "id": "juno"
       }
     ],
     "note": "If you complete the 5th cycle in your run, put it in Juno and continue for a bit."
@@ -1376,16 +1376,16 @@
     "run": "juno",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2
+        "id": "alpha"
       },
       {
-        "id": 6
+        "id": "helion"
       },
       {
-        "id": 10,
+        "id": "juno",
         "amount": 2
       }
     ],
@@ -1396,16 +1396,16 @@
     "run": "juno",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2
+        "id": "alpha"
       },
       {
-        "id": 6
+        "id": "helion"
       },
       {
-        "id": 10,
+        "id": "juno",
         "amount": 3
       }
     ],
@@ -1416,20 +1416,20 @@
     "run": "juno",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2
+        "id": "alpha"
       },
       {
-        "id": 6
+        "id": "helion"
       },
       {
-        "id": 10,
+        "id": "juno",
         "amount": 2
       },
       {
-        "id": 14
+        "id": "artifacts"
       }
     ],
     "note": "Artifacts node + 2 Juno is generally better, but around SE 119-122, 2 Alpha + 3 Juno may be better if it gets Research 122 when Artifacts node wouldn't. If you complete the 8th cycle in your run, put it in Juno and continue for a bit."
@@ -1439,20 +1439,20 @@
     "run": "juno",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2
+        "id": "alpha"
       },
       {
-        "id": 6
+        "id": "helion"
       },
       {
-        "id": 10,
+        "id": "juno",
         "amount": 3
       },
       {
-        "id": 14
+        "id": "artifacts"
       }
     ],
     "note": "If you complete the 9th cycle in your run, put it in Alpha and continue for a bit."
@@ -1462,21 +1462,21 @@
     "run": "juno",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 2
       },
       {
-        "id": 6
+        "id": "helion"
       },
       {
-        "id": 10,
+        "id": "juno",
         "amount": 3
       },
       {
-        "id": 14
+        "id": "artifacts"
       }
     ],
     "note": "If you complete the 10th cycle in your run, put it in Alpha and continue for a bit."
@@ -1486,21 +1486,21 @@
     "run": "juno",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 6
+        "id": "helion"
       },
       {
-        "id": 10,
+        "id": "juno",
         "amount": 3
       },
       {
-        "id": 14
+        "id": "artifacts"
       }
     ],
     "note": "With ZAT 10, when you can get to e800 DC (or are very close), it can be better to use 2 Alpha and 1 DC for ~x12 DC boost and e18 cash loss.  This works as long as you can still reach Research 126 at e970 Cash with the cash loss."
@@ -1510,24 +1510,24 @@
     "run": "juno",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 6
+        "id": "helion"
       },
       {
-        "id": 10,
+        "id": "juno",
         "amount": 3
       },
       {
-        "id": 14
+        "id": "artifacts"
       },
       {
-        "id": 5
+        "id": "dc"
       }
     ],
     "note": "If you complete the 12th cycle in your run, put it in DC and continue for a bit."
@@ -1537,24 +1537,24 @@
     "run": "juno",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 6
+        "id": "helion"
       },
       {
-        "id": 10,
+        "id": "juno",
         "amount": 3
       },
       {
-        "id": 14
+        "id": "artifacts"
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 2
       }
     ],
@@ -1565,24 +1565,24 @@
     "run": "juno",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 6
+        "id": "helion"
       },
       {
-        "id": 10,
+        "id": "juno",
         "amount": 3
       },
       {
-        "id": 14
+        "id": "artifacts"
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       }
     ],
@@ -1593,28 +1593,28 @@
     "run": "juno",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 6
+        "id": "helion"
       },
       {
-        "id": 10,
+        "id": "juno",
         "amount": 3
       },
       {
-        "id": 14
+        "id": "artifacts"
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       },
       {
-        "id": 9
+        "id": "beta"
       }
     ],
     "note": "A bit unsure here.  Dropping DC is not worth it for AP node.  Beta (boosting Scientist rounds for talent IC6-1) seems mathematically better than Gamma (boosting C41 levels) for Juno boost."
@@ -1624,30 +1624,30 @@
     "run": "juno",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 6
+        "id": "helion"
       },
       {
-        "id": 10,
+        "id": "juno",
         "amount": 3
       },
       {
-        "id": 14
+        "id": "artifacts"
       },
       {
-        "id": 4
+        "id": "delta"
       },
       {
-        "id": 8
+        "id": "ixion"
       },
       {
-        "id": 12,
+        "id": "ap",
         "amount": 3
       }
     ],
@@ -1658,34 +1658,34 @@
     "run": "juno",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 6
+        "id": "helion"
       },
       {
-        "id": 10,
+        "id": "juno",
         "amount": 3
       },
       {
-        "id": 14
+        "id": "artifacts"
       },
       {
-        "id": 4
+        "id": "delta"
       },
       {
-        "id": 8
+        "id": "ixion"
       },
       {
-        "id": 12,
+        "id": "ap",
         "amount": 3
       },
       {
-        "id": 5
+        "id": "dc"
       }
     ],
     "note": "If you complete the 17th cycle in your run, put it in DC and continue for a bit."
@@ -1695,34 +1695,34 @@
     "run": "juno",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 6
+        "id": "helion"
       },
       {
-        "id": 10,
+        "id": "juno",
         "amount": 3
       },
       {
-        "id": 14
+        "id": "artifacts"
       },
       {
-        "id": 4
+        "id": "delta"
       },
       {
-        "id": 8
+        "id": "ixion"
       },
       {
-        "id": 12,
+        "id": "ap",
         "amount": 3
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 2
       }
     ],
@@ -1733,34 +1733,34 @@
     "run": "juno",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 6
+        "id": "helion"
       },
       {
-        "id": 10,
+        "id": "juno",
         "amount": 3
       },
       {
-        "id": 14
+        "id": "artifacts"
       },
       {
-        "id": 4
+        "id": "delta"
       },
       {
-        "id": 8
+        "id": "ixion"
       },
       {
-        "id": 12,
+        "id": "ap",
         "amount": 3
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       }
     ],
@@ -1772,40 +1772,40 @@
     "title": "Start",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 6
+        "id": "helion"
       },
       {
-        "id": 10,
+        "id": "juno",
         "amount": 3
       },
       {
-        "id": 14
+        "id": "artifacts"
       },
       {
-        "id": 3
+        "id": "gamma"
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 4
+        "id": "delta"
       },
       {
-        "id": 8
+        "id": "ixion"
       },
       {
-        "id": 12,
+        "id": "ap",
         "amount": 3
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 2
       }
     ],
@@ -1817,42 +1817,42 @@
     "title": "Late",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 2
       },
       {
-        "id": 6
+        "id": "helion"
       },
       {
-        "id": 10,
+        "id": "juno",
         "amount": 3
       },
       {
-        "id": 14
+        "id": "artifacts"
       },
       {
-        "id": 3
+        "id": "gamma"
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 4
+        "id": "delta"
       },
       {
-        "id": 8
+        "id": "ixion"
       },
       {
-        "id": 12,
+        "id": "ap",
         "amount": 3
       }
     ],
@@ -1863,42 +1863,42 @@
     "run": "juno",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 6
+        "id": "helion"
       },
       {
-        "id": 10,
+        "id": "juno",
         "amount": 3
       },
       {
-        "id": 14
+        "id": "artifacts"
       },
       {
-        "id": 3
+        "id": "gamma"
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 4
+        "id": "delta"
       },
       {
-        "id": 8
+        "id": "ixion"
       },
       {
-        "id": 12,
+        "id": "ap",
         "amount": 3
       }
     ],
@@ -1909,46 +1909,46 @@
     "run": "juno",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 6
+        "id": "helion"
       },
       {
-        "id": 10,
+        "id": "juno",
         "amount": 3
       },
       {
-        "id": 14
+        "id": "artifacts"
       },
       {
-        "id": 3
+        "id": "gamma"
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 4
+        "id": "delta"
       },
       {
-        "id": 8
+        "id": "ixion"
       },
       {
-        "id": 12,
+        "id": "ap",
         "amount": 3
       },
       {
-        "id": 5
+        "id": "dc"
       }
     ],
     "note": "End of guide. Good luck."
@@ -1958,7 +1958,7 @@
     "run": "cash",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       }
     ],
     "note": "These runs are minimally useful at this stage in part because companion 34 isn't level 50 yet, so sacrificing GP can hurt your cash some."
@@ -1968,10 +1968,10 @@
     "run": "cash",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2
+        "id": "alpha"
       }
     ],
     "note": "These runs are minimally useful at this stage in part because companion 34 isn't level 50 yet, so sacrificing GP can hurt your cash some."
@@ -1981,10 +1981,10 @@
     "run": "cash",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 2
       }
     ],
@@ -1995,10 +1995,10 @@
     "run": "cash",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       }
     ],
@@ -2009,14 +2009,14 @@
     "run": "cash",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 5
+        "id": "dc"
       }
     ],
     "note": "These runs are not generally recommended and are minimally useful, but are good for reaching level 630 reward before ZAT 6 push."
@@ -2026,14 +2026,14 @@
     "run": "cash",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 2
       }
     ],
@@ -2044,14 +2044,14 @@
     "run": "cash",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       }
     ],
@@ -2062,18 +2062,18 @@
     "run": "cash",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       },
       {
-        "id": 9
+        "id": "beta"
       }
     ],
     "note": "Sticking with DC over 2 AP was found to be better.  Beta is best use of last point."
@@ -2083,23 +2083,23 @@
     "run": "cash",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3
+        "id": "gamma"
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       }
     ]
   },
@@ -2108,26 +2108,26 @@
     "run": "cash",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3
+        "id": "gamma"
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 5
+        "id": "dc"
       }
     ]
   },
@@ -2136,26 +2136,26 @@
     "run": "cash",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3
+        "id": "gamma"
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 2
       }
     ]
@@ -2165,26 +2165,26 @@
     "run": "cash",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3
+        "id": "gamma"
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       }
     ]
@@ -2194,30 +2194,30 @@
     "run": "cash",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3
+        "id": "gamma"
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       },
       {
-        "id": 9
+        "id": "beta"
       }
     ]
   },
@@ -2226,33 +2226,33 @@
     "run": "cash",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3
+        "id": "gamma"
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       },
       {
-        "id": 9
+        "id": "beta"
       },
       {
-        "id": 13
+        "id": "fenix"
       }
     ]
   },
@@ -2261,36 +2261,36 @@
     "run": "cash",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3
+        "id": "gamma"
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 4
+        "id": "delta"
       },
       {
-        "id": 8
+        "id": "ixion"
       },
       {
-        "id": 12,
+        "id": "ap",
         "amount": 3
       },
       {
-        "id": 5
+        "id": "dc"
       }
     ]
   },
@@ -2299,36 +2299,36 @@
     "run": "cash",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3
+        "id": "gamma"
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 4
+        "id": "delta"
       },
       {
-        "id": 8
+        "id": "ixion"
       },
       {
-        "id": 12,
+        "id": "ap",
         "amount": 3
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 2
       }
     ]
@@ -2338,36 +2338,36 @@
     "run": "cash",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3
+        "id": "gamma"
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 4
+        "id": "delta"
       },
       {
-        "id": 8
+        "id": "ixion"
       },
       {
-        "id": 12,
+        "id": "ap",
         "amount": 3
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       }
     ]
@@ -2377,37 +2377,37 @@
     "run": "cash",
     "nodes": [
       {
-        "id": 1
+        "id": "centre"
       },
       {
-        "id": 2,
+        "id": "alpha",
         "amount": 3
       },
       {
-        "id": 3
+        "id": "gamma"
       },
       {
-        "id": 7
+        "id": "ceti"
       },
       {
-        "id": 11
+        "id": "epsilon"
       },
       {
-        "id": 15
+        "id": "solutions"
       },
       {
-        "id": 4
+        "id": "delta"
       },
       {
-        "id": 8,
+        "id": "ixion",
         "amount": 2
       },
       {
-        "id": 12,
+        "id": "ap",
         "amount": 3
       },
       {
-        "id": 5,
+        "id": "dc",
         "amount": 3
       }
     ],

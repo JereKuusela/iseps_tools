@@ -39,7 +39,7 @@ type TechData = {
 }
 
 type ZatNodeData = {
-  id: number
+  id: string
   maxLv?: number
   techMul: number
   shareMul?: number
@@ -52,27 +52,17 @@ type ZatGuideData = {
   cycle: number
   run: string
   nodes: Array<{
-    id: number
+    id: string
     amount?: number
   }>
 }
 
-const parseZatGuides = (raw: unknown) => {
-  if (!Array.isArray(raw)) return []
-
-  return raw.map((entry) => {
-    const candidate = entry as {
-      cycle?: number
-      run?: string
-      nodes?: unknown
-    }
-
-    return {
-      cycle: Number(candidate.cycle) || 0,
-      run: String(candidate.run ?? ""),
-      nodes: parseGuideNodes(candidate.nodes, { omitAmountWhenOne: true }),
-    }
-  })
+const parseZatGuides = (raw: ZatGuideData[]) => {
+  return raw.map((entry) => ({
+    cycle: entry.cycle,
+    run: entry.run,
+    nodes: parseGuideNodes(entry.nodes),
+  }))
 }
 
 type PremiumMode = "add" | "mul" | "expAdd"
@@ -98,8 +88,8 @@ const seRules: SeEffectRule[] = (techsSeEffectJson as SeEffectRule[]).slice().so
 const techs: TechData[] = (techsJson as TechData[]).slice().sort((a, b) => a.id - b.id)
 
 const premiumRules: PremiumRule[] = premiumJson as PremiumRule[]
-const zatNodes: ZatNodeData[] = (zatNodesJson as ZatNodeData[]).slice().sort((a, b) => a.id - b.id)
-const junoGuides: ZatGuideData[] = parseZatGuides(zatGuidesJson)
+const zatNodes: ZatNodeData[] = (zatNodesJson as ZatNodeData[]).slice()
+const junoGuides: ZatGuideData[] = parseZatGuides(zatGuidesJson as ZatGuideData[])
   .filter((entry) => entry.run === "juno")
   .slice()
   .sort((a, b) => a.cycle - b.cycle)
@@ -259,7 +249,7 @@ const buildNodeLevelMap = (guide: ZatGuideData) => {
   return buildGuideNodeAmountMap(guide.nodes)
 }
 
-const calculateNodeJunoBaseBoost = (nodeLevelById: Map<number, number>) => {
+const calculateNodeJunoBaseBoost = (nodeLevelById: Map<string, number>) => {
   let total = 1
 
   for (const node of zatNodes) {

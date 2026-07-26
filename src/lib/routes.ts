@@ -6,6 +6,7 @@ export const ROUTES = {
   ogTech: "/tech",
   cruise: "/cruise",
   factory: "/factory",
+  factoryProduction: "/factory-production",
   zatGuide: "/zat",
   penrose: "/penrose",
   sc: "/sc",
@@ -26,6 +27,7 @@ export const primaryTabs: TabItem[] = [
 export const eventTabs: TabItem[] = [
   { href: ROUTES.cruise, label: "Cruise" },
   { href: ROUTES.factory, label: "Factory" },
+  { href: ROUTES.factoryProduction, label: "Factory Production" },
 ]
 
 export const tabs: TabItem[] = [...primaryTabs.slice(0, 4), ...eventTabs, ...primaryTabs.slice(4)]
@@ -60,6 +62,11 @@ export const toolCards: ToolCardItem[] = [
     href: ROUTES.factory,
     label: "Factory",
     description: "Plan factory prestige upgrades, compare weighted node value, and apply optimal builds.",
+  },
+  {
+    href: ROUTES.factoryProduction,
+    label: "Factory Production",
+    description: "Manually configure product mix, compare resource balance, and track production profit per second.",
   },
   /* {
     href: ROUTES.premiumCrystal,

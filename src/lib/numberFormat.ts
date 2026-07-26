@@ -42,12 +42,13 @@ export const formatLargeNumber = (value: LargeNumber, decimals = 2) => {
 export const formatLargeNumberMultiplier = (value: LargeNumber) => {
   if (value.compare(0) <= 0) return "x0"
 
-  if (value.exponent <= 2) {
+  if (value.exponent <= 4) {
     const asNumber = value.mantissa * 10 ** value.exponent
     if (Number.isFinite(asNumber)) {
       if (asNumber < 10) return formatMultiplier(asNumber, 2, "x0")
       if (asNumber < 100) return formatMultiplier(asNumber, 1, "x0")
       if (asNumber < 1000) return formatMultiplier(asNumber, 0, "x0")
+      if (asNumber < 10000) return formatMultiplier(asNumber, 0, "x0")
     }
   }
 

@@ -56,7 +56,7 @@ export type TechSeEffectRule = {
 }
 
 export type ZatNodeRule = {
-  id: number
+  id: string
   name: string
   info: string
   maxLv?: number
@@ -68,7 +68,7 @@ export type ZatNodeRule = {
   sqrt?: boolean
   x: number
   y: number
-  req?: number
+  req?: string
 }
 
 type ZatGuideJson = {
@@ -76,7 +76,7 @@ type ZatGuideJson = {
   run: string
   title?: string
   nodes: Array<{
-    id: number
+    id: string
     amount?: number
   }>
   note?: string
@@ -86,7 +86,7 @@ export type ZatGuideEntry = {
   cycle: number
   run: string
   title: string
-  nodes: Map<number, number>
+  nodes: Map<string, number>
   note: string
 }
 
@@ -169,7 +169,7 @@ const junoExponent = (
   .sort((a, b) => a.level - b.level)
 
 const zatGuides = (zatGuidesJson as ZatGuideJson[]).map((entry) => {
-  const nodes = new Map<number, number>(entry.nodes.map((node) => [node.id, node.amount ?? 1]))
+  const nodes = buildGuideNodeAmountMap(parseGuideNodes(entry.nodes))
   return {
     cycle: entry.cycle,
     run: entry.run,

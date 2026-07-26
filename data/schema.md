@@ -18,6 +18,21 @@ Entries for the Credits tab.
 - `name`: Credit group or person name.
 - `credits`: List of credit lines to display under the name.
 
+## factory_production_items.json
+
+Product catalog used by the Factory Production planner.
+
+- `id`: Stable product identifier.
+- `name`: Product display name.
+- `category`: Product category (`household`, `electronics`, `industrial`, `consumables`).
+- `baseSellPrice`: Base sell price before additive base and multipliers.
+- `costs`: Resource cost map per item.
+  - `orange`: SynthRubber cost per unit.
+  - `blue`: Gravium cost per unit.
+  - `green`: Fluxstone cost per unit.
+  - `purple`: Nanofoam cost per unit.
+  - `gray`: Netherstar cost per unit.
+
 ## cruise.json
 
 Cruise node definitions used by the Cruise optimizer.
