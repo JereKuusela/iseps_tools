@@ -39,6 +39,8 @@ type WeightProfile = {
   particle: number
 }
 
+const PARTICLE_WEIGHT_MULTIPLIERS = [0.125, 0.25, 0.5, 1, 2, 4, 8] as const
+
 type NodeDefinitionMap = Record<FactoryNodeId, FactoryNodeDefinition>
 
 const NODE_MAP = FACTORY_NODE_DEFINITIONS.reduce((accumulator, definition) => {
@@ -61,6 +63,27 @@ const sanitizeNumber = (value: number, fallback = 0) => {
 
 const clamp = (value: number, min: number, max: number) => {
   return Math.min(max, Math.max(min, value))
+}
+
+const snapToParticleWeightMultiplier = (value: number) => {
+  return PARTICLE_WEIGHT_MULTIPLIERS.reduce((nearest, candidate) => {
+    return Math.abs(candidate - value) < Math.abs(nearest - value) ? candidate : nearest
+  }, PARTICLE_WEIGHT_MULTIPLIERS[0])
+}
+
+const normalizeParticleWeightMultiplier = (raw: number) => {
+  const value = sanitizeNumber(raw, 1)
+
+  if (PARTICLE_WEIGHT_MULTIPLIERS.some((candidate) => candidate === value)) {
+    return value
+  }
+
+  // Backward compatibility for saved percent values from older builds.
+  if (value >= -30 && value <= 30) {
+    return snapToParticleWeightMultiplier(1 + value / 100)
+  }
+
+  return snapToParticleWeightMultiplier(value)
 }
 
 const safeLog = (value: number) => {
@@ -91,7 +114,7 @@ const getProductionMultiplier = (levels: FactoryNodeLevels) => {
 
 const getWeightProfile = (input: FactoryInputState): WeightProfile => {
   const production = 1 + clamp(input.productionWeightPercent, 0, 50) / 100
-  const particle = 1 + clamp(input.particleWeightPercent, -30, 30) / 100
+  const particle = normalizeParticleWeightMultiplier(input.particleWeightMultiplier)
 
   return {
     sell: 1,
@@ -118,7 +141,7 @@ export const normalizeFactoryInputState = (raw: FactoryInputState): FactoryInput
     prestigesDone: Math.max(0, Math.floor(sanitizeNumber(raw.prestigesDone, 0))),
     totalParticleLevel: Math.max(0, Math.floor(sanitizeNumber(raw.totalParticleLevel, 0))),
     productionWeightPercent: clamp(Math.floor(sanitizeNumber(raw.productionWeightPercent, 10)), 0, 50),
-    particleWeightPercent: clamp(Math.floor(sanitizeNumber(raw.particleWeightPercent, 0)), -30, 30),
+    particleWeightMultiplier: normalizeParticleWeightMultiplier(raw.particleWeightMultiplier),
   }
 }
 
@@ -175,10 +198,6 @@ export const getAvailablePoints = (input: FactoryInputState, levels: FactoryNode
   return Math.max(0, total - getSpentPoints(levels))
 }
 
-const getNodeUnlockState = (_id: FactoryNodeId, _levels: FactoryNodeLevels) => {
-  return true
-}
-
 const calculateLongTermScore = (bonusMultiplier: number, cost: number) => {
   if (!Number.isFinite(bonusMultiplier) || bonusMultiplier <= 0) return 0
   if (!Number.isFinite(cost) || cost <= 0) return 0
@@ -198,32 +217,89 @@ const getParticleMultiplierRatio = (currentLevel: number, nextLevel: number, tot
   return safePowFromLog(safeLog(ratioPerParticle) * totalParticleLevel)
 }
 
+const getNodeBonusMultiplier = (input: FactoryInputState, levels: FactoryNodeLevels, id: FactoryNodeId) => {
+  const nextLevel = levels[id] + 1
+
+  if (id === "fabricatorOutput") {
+    return (levels.fabricatorOutput + 2) / (levels.fabricatorOutput + 1)
+  }
+  if (id === "sellValue") {
+    return 1.5
+  }
+  if (id === "particleOutput") {
+    return getParticleMultiplierRatio(levels.particleOutput, nextLevel, input.totalParticleLevel)
+  }
+  if (id === "fabricatorSpeed") {
+    const currentCooldownFactor = Math.max(0.05, 1 - levels.fabricatorSpeed * 0.05)
+    const nextCooldownFactor = Math.max(0.05, 1 - nextLevel * 0.05)
+    return currentCooldownFactor / nextCooldownFactor
+  }
+
+  return 1
+}
+
+const getSpendHorizonCost = (levels: FactoryNodeLevels, availablePoints: number) => {
+  const candidateCosts: number[] = []
+
+  for (const id of NODE_IDS) {
+    const definition = NODE_MAP[id]
+    const level = levels[id]
+    if (level >= definition.maxLevel) continue
+    if (id === "maxOfflineTimeCap") continue
+
+    const nextCost = getNodeCostAtLevel(id, level + 1)
+    if (!Number.isFinite(nextCost) || nextCost <= 0 || nextCost > availablePoints) continue
+
+    candidateCosts.push(nextCost)
+  }
+
+  if (candidateCosts.length === 0) return 0
+  candidateCosts.sort((a, b) => a - b)
+
+  // Use the second-cheapest meaningful option when possible to avoid
+  // both extreme short-horizon and extreme long-horizon bias.
+  return candidateCosts[Math.min(1, candidateCosts.length - 1)]
+}
+
 const evaluateNodeScore = (
   input: FactoryInputState,
   levels: FactoryNodeLevels,
   id: FactoryNodeId,
+  spendHorizonCost: number,
 ): { nextBonusMultiplier: number; nextBonusPerPoint: number } => {
   const nextLevel = levels[id] + 1
   const nextCost = getNodeCostAtLevel(id, nextLevel)
   const weights = getWeightProfile(input)
+  const nextBonusMultiplier = getNodeBonusMultiplier(input, levels, id)
+  const nodeWeight = getNodeWeight(id, weights)
+  const horizon = Math.max(nextCost, spendHorizonCost)
 
-  let nextBonusMultiplier = 1
+  let simulatedLevels = cloneLevels(levels)
+  let spent = 0
+  let totalWeightedLogBonus = 0
+  let iterations = 0
 
-  if (id === "fabricatorOutput") {
-    nextBonusMultiplier = (levels.fabricatorOutput + 2) / (levels.fabricatorOutput + 1)
-  } else if (id === "sellValue") {
-    nextBonusMultiplier = 1.5
-  } else if (id === "particleOutput") {
-    nextBonusMultiplier = getParticleMultiplierRatio(levels.particleOutput, nextLevel, input.totalParticleLevel)
-  } else if (id === "fabricatorSpeed") {
-    const currentCooldownFactor = Math.max(0.05, 1 - levels.fabricatorSpeed * 0.05)
-    const nextCooldownFactor = Math.max(0.05, 1 - nextLevel * 0.05)
-    nextBonusMultiplier = currentCooldownFactor / nextCooldownFactor
+  while (spent < horizon && iterations < 1000) {
+    iterations += 1
+    const simulationNextLevel = simulatedLevels[id] + 1
+    const simulationCost = getNodeCostAtLevel(id, simulationNextLevel)
+
+    if (!Number.isFinite(simulationCost) || simulationCost <= 0 || spent + simulationCost > horizon) break
+
+    const simulationMultiplier = getNodeBonusMultiplier(input, simulatedLevels, id)
+    const weightedLogBonus = safeLog(simulationMultiplier) * nodeWeight
+    if (!Number.isFinite(weightedLogBonus) || weightedLogBonus <= 0) break
+
+    spent += simulationCost
+    totalWeightedLogBonus += weightedLogBonus
+    simulatedLevels[id] = simulationNextLevel
   }
 
-  const weight = getNodeWeight(id, weights)
-  const weightedMultiplier = safePowFromLog(safeLog(nextBonusMultiplier) * weight)
-  const nextBonusPerPoint = calculateLongTermScore(weightedMultiplier, nextCost)
+  let nextBonusPerPoint = 0
+  if (horizon > 0) {
+    const sustainedMultiplier = safePowFromLog(totalWeightedLogBonus)
+    nextBonusPerPoint = calculateLongTermScore(sustainedMultiplier, horizon)
+  }
 
   return { nextBonusMultiplier, nextBonusPerPoint }
 }
@@ -233,22 +309,22 @@ const evaluateNode = (
   input: FactoryInputState,
   levels: FactoryNodeLevels,
   availablePoints: number,
+  spendHorizonCost: number,
 ): FactoryEvaluationRow => {
   const definition = NODE_MAP[id]
   const level = levels[id]
-  const unlocked = getNodeUnlockState(id, levels)
   const canLevel = level < definition.maxLevel
 
   const nextCost = canLevel ? getNodeCostAtLevel(id, level + 1) : null
-  const affordable = Boolean(unlocked && nextCost !== null && nextCost <= availablePoints)
+  const affordable = Boolean(nextCost !== null && nextCost <= availablePoints)
 
-  if (!unlocked || !canLevel || nextCost === null) {
+  if (!canLevel || nextCost === null) {
     return {
       id,
       label: definition.label,
       level,
       maxLevel: definition.maxLevel,
-      unlocked,
+      unlocked: true,
       affordable,
       nextCost,
       nextBonusMultiplier: 1,
@@ -257,14 +333,14 @@ const evaluateNode = (
     }
   }
 
-  const score = evaluateNodeScore(input, levels, id)
+  const score = evaluateNodeScore(input, levels, id, spendHorizonCost)
 
   return {
     id,
     label: definition.label,
     level,
     maxLevel: definition.maxLevel,
-    unlocked,
+    unlocked: true,
     affordable,
     nextCost,
     nextBonusMultiplier: score.nextBonusMultiplier,
@@ -284,7 +360,11 @@ export const evaluateNextNodeValues = (
   const spentPoints = getSpentPoints(normalizedLevels)
   const availablePoints = Math.max(0, totalPoints - spentPoints)
 
-  const rows = NODE_IDS.map((id) => evaluateNode(id, normalizedInput, normalizedLevels, availablePoints))
+  const spendHorizonCost = getSpendHorizonCost(normalizedLevels, availablePoints)
+
+  const rows = NODE_IDS.map((id) =>
+    evaluateNode(id, normalizedInput, normalizedLevels, availablePoints, spendHorizonCost),
+  )
 
   const maxBonusPerPoint = Math.max(
     ...rows.filter((row) => row.unlocked && row.nextCost !== null).map((row) => row.nextBonusPerPoint),

@@ -22,8 +22,8 @@ type FactoryContextValue = {
   setTotalParticleLevel: (next: string) => string
   productionWeightPercent: () => string
   setProductionWeightPercent: (next: string) => string
-  particleWeightPercent: () => string
-  setParticleWeightPercent: (next: string) => string
+  particleWeightMultiplier: () => string
+  setParticleWeightMultiplier: (next: string) => string
   nodeLevels: () => FactoryNodeLevels
   setNodeLevels: (next: FactoryNodeLevels) => void
   setNodeLevel: (id: keyof FactoryNodeLevels, next: number) => void
@@ -55,13 +55,13 @@ const toFactoryInput = (raw: {
   prestigesDone: string
   totalParticleLevel: string
   productionWeightPercent: string
-  particleWeightPercent: string
+  particleWeightMultiplier: string
 }): FactoryInputState => {
   return normalizeFactoryInputState({
     prestigesDone: parseNumberish(raw.prestigesDone),
     totalParticleLevel: parseNumberish(raw.totalParticleLevel),
     productionWeightPercent: parseNumberish(raw.productionWeightPercent),
-    particleWeightPercent: parseNumberish(raw.particleWeightPercent),
+    particleWeightMultiplier: parseNumberish(raw.particleWeightMultiplier),
   })
 }
 
@@ -72,7 +72,10 @@ export const FactoryProvider = (props: ParentProps) => {
     "factory.productionWeightPercent",
     "10",
   )
-  const [particleWeightPercent, setParticleWeightPercent] = createSyncedSignal("factory.particleWeightPercent", "0")
+  const [particleWeightMultiplier, setParticleWeightMultiplier] = createSyncedSignal(
+    "factory.particleWeightPercent",
+    "1",
+  )
 
   const [nodeLevels, setNodeLevels] = createSyncedSignal<FactoryNodeLevels>(
     "factory.nodeLevels",
@@ -86,7 +89,7 @@ export const FactoryProvider = (props: ParentProps) => {
       prestigesDone: prestigesDone(),
       totalParticleLevel: totalParticleLevel(),
       productionWeightPercent: productionWeightPercent(),
-      particleWeightPercent: particleWeightPercent(),
+      particleWeightMultiplier: particleWeightMultiplier(),
     }),
   )
 
@@ -139,8 +142,8 @@ export const FactoryProvider = (props: ParentProps) => {
         setTotalParticleLevel,
         productionWeightPercent,
         setProductionWeightPercent,
-        particleWeightPercent,
-        setParticleWeightPercent,
+        particleWeightMultiplier,
+        setParticleWeightMultiplier,
         nodeLevels,
         setNodeLevels: replaceNodeLevels,
         setNodeLevel,

@@ -53,6 +53,33 @@ const parseNotation = (raw: string): FactoryNodeLevels => {
   return next
 }
 
+const particleWeightOptions = [
+  { value: "0.125", label: "1/8x" },
+  { value: "0.25", label: "1/4x" },
+  { value: "0.5", label: "1/2x" },
+  { value: "1", label: "1x" },
+  { value: "2", label: "2x" },
+  { value: "4", label: "4x" },
+  { value: "8", label: "8x" },
+]
+
+const getParticleWeightIndex = (value: string) => {
+  const parsed = parseNumberish(value)
+  let nearestIndex = 0
+  let nearestDistance = Number.POSITIVE_INFINITY
+
+  for (let index = 0; index < particleWeightOptions.length; index += 1) {
+    const candidate = parseNumberish(particleWeightOptions[index].value)
+    const distance = Math.abs(candidate - parsed)
+    if (distance < nearestDistance) {
+      nearestDistance = distance
+      nearestIndex = index
+    }
+  }
+
+  return nearestIndex
+}
+
 type SliderFieldProps = {
   label: string
   tooltip?: TooltipKey
@@ -94,6 +121,53 @@ const SliderField = (props: SliderFieldProps) => {
       <div class="flex justify-between text-[10px] font-semibold uppercase tracking-[0.08em] text-ink/55 dark:text-white/55">
         <span>{props.min}%</span>
         <span>{props.max}%</span>
+      </div>
+    </div>
+  )
+}
+
+type ParticleWeightSliderProps = {
+  label: string
+  value: Accessor<string>
+  onInput: (next: string) => string
+  tooltip?: TooltipKey
+}
+
+const ParticleWeightSlider = (props: ParticleWeightSliderProps) => {
+  const selectedIndex = createMemo(() => getParticleWeightIndex(props.value()))
+  const selectedOption = createMemo(() => particleWeightOptions[selectedIndex()])
+
+  return (
+    <div class="grid gap-1.5">
+      <div class="flex items-center justify-between gap-2">
+        <div class="min-w-0 flex items-center gap-2">
+          <label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
+            {props.label}
+          </label>
+          <Show when={props.tooltip}>
+            <Tooltip content={props.tooltip!} />
+          </Show>
+        </div>
+        <span class="text-xs font-bold text-ink/80 dark:text-white/80">{selectedOption().label}</span>
+      </div>
+      <input
+        type="range"
+        min={0}
+        max={particleWeightOptions.length - 1}
+        step={1}
+        value={String(selectedIndex())}
+        onInput={(event) => {
+          const index = Math.max(
+            0,
+            Math.min(particleWeightOptions.length - 1, Math.floor(parseNumberish(event.currentTarget.value))),
+          )
+          props.onInput(particleWeightOptions[index].value)
+        }}
+        class="h-2 w-full cursor-pointer appearance-none rounded-full bg-ink/15 accent-[#12a89d] dark:bg-white/20"
+      />
+      <div class="flex justify-between text-[10px] font-semibold uppercase tracking-[0.08em] text-ink/55 dark:text-white/55">
+        <span>{particleWeightOptions[0].label}</span>
+        <span>{particleWeightOptions[particleWeightOptions.length - 1].label}</span>
       </div>
     </div>
   )
@@ -168,13 +242,10 @@ export const FactoryLeftColumn = () => {
             max={50}
             step={10}
           />
-          <SliderField
+          <ParticleWeightSlider
             label="Particle output"
-            value={factory.particleWeightPercent}
-            onInput={factory.setParticleWeightPercent}
-            min={-30}
-            max={30}
-            step={10}
+            value={factory.particleWeightMultiplier}
+            onInput={factory.setParticleWeightMultiplier}
           />
         </div>
       </InfoCard>

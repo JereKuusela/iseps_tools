@@ -13,7 +13,7 @@ const defaultInput = (): FactoryInputState => ({
   prestigesDone: 25,
   totalParticleLevel: 500,
   productionWeightPercent: 10,
-  particleWeightPercent: 0,
+  particleWeightMultiplier: 1,
 })
 
 describe("getTotalPointsFromPrestiges", () => {
@@ -61,14 +61,14 @@ describe("weighting", () => {
     const lowWeight = evaluateNextNodeValues(
       {
         ...defaultInput(),
-        particleWeightPercent: -30,
+        particleWeightMultiplier: 0.125,
       },
       levels,
     )
     const highWeight = evaluateNextNodeValues(
       {
         ...defaultInput(),
-        particleWeightPercent: 30,
+        particleWeightMultiplier: 8,
       },
       levels,
     )

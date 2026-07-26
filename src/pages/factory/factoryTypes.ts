@@ -13,7 +13,7 @@ export type FactoryInputState = {
   prestigesDone: number
   totalParticleLevel: number
   productionWeightPercent: number
-  particleWeightPercent: number
+  particleWeightMultiplier: number
 }
 
 export type FactoryNodeDefinition = {
