@@ -4,7 +4,7 @@ export type ToolCardItem = { href: string; label: string; description: string }
 export const ROUTES = {
   home: "/",
   ogTech: "/tech",
-  perkGuide: "/perk-guide",
+  perks: "/perks",
   cruise: "/cruise",
   factory: "/factory",
   factoryProduction: "/factory-production",
@@ -19,7 +19,7 @@ export const ROUTES = {
 
 export const primaryTabs: TabItem[] = [
   { href: ROUTES.ogTech, label: "OG Tech" },
-  { href: ROUTES.perkGuide, label: "Perks" },
+  { href: ROUTES.perks, label: "Perks" },
   { href: ROUTES.zatGuide, label: "ZAT" },
   { href: ROUTES.penrose, label: "Penrose" },
   { href: ROUTES.sc, label: "SC" },
@@ -41,7 +41,7 @@ export const toolCards: ToolCardItem[] = [
     description: "Plan OG tech upgrades by comparing gains, costs, and ETA based on your current output.",
   },
   {
-    href: ROUTES.perkGuide,
+    href: ROUTES.perks,
     label: "Perks",
     description: "Follow SE-based perk recommendations, check change notes, and view mobile-friendly perk layouts.",
   },

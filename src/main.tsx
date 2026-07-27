@@ -104,7 +104,7 @@ render(
       <Router>
         <Route path={ROUTES.home} component={HomeRoute} />
         <Route path={ROUTES.ogTech} component={OgTechRoute} />
-        <Route path={ROUTES.perkGuide} component={PerkGuideRoute} />
+        <Route path={ROUTES.perks} component={PerkGuideRoute} />
         <Route path={ROUTES.cruise} component={CruiseRoute} />
         <Route path={ROUTES.factory} component={FactoryRoute} />
         <Route path={ROUTES.factoryProduction} component={FactoryProductionRoute} />
