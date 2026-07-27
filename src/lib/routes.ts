@@ -4,6 +4,7 @@ export type ToolCardItem = { href: string; label: string; description: string }
 export const ROUTES = {
   home: "/",
   ogTech: "/tech",
+  perkGuide: "/perk-guide",
   cruise: "/cruise",
   factory: "/factory",
   factoryProduction: "/factory-production",
@@ -18,7 +19,8 @@ export const ROUTES = {
 
 export const primaryTabs: TabItem[] = [
   { href: ROUTES.ogTech, label: "OG Tech" },
-  { href: ROUTES.zatGuide, label: "ZAT Guide" },
+  { href: ROUTES.perkGuide, label: "Perks" },
+  { href: ROUTES.zatGuide, label: "ZAT" },
   { href: ROUTES.penrose, label: "Penrose" },
   { href: ROUTES.sc, label: "SC" },
   { href: ROUTES.credits, label: "Credits" },
@@ -30,7 +32,7 @@ export const eventTabs: TabItem[] = [
   { href: ROUTES.factoryProduction, label: "Factory Production" },
 ]
 
-export const tabs: TabItem[] = [...primaryTabs.slice(0, 4), ...eventTabs, ...primaryTabs.slice(4)]
+export const tabs: TabItem[] = [...primaryTabs.slice(0, 5), ...eventTabs, ...primaryTabs.slice(5)]
 
 export const toolCards: ToolCardItem[] = [
   {
@@ -39,8 +41,13 @@ export const toolCards: ToolCardItem[] = [
     description: "Plan OG tech upgrades by comparing gains, costs, and ETA based on your current output.",
   },
   {
+    href: ROUTES.perkGuide,
+    label: "Perks",
+    description: "Follow SE-based perk recommendations, check change notes, and view mobile-friendly perk layouts.",
+  },
+  {
     href: ROUTES.zatGuide,
-    label: "ZAT Guide",
+    label: "ZAT",
     description: "Follow cycle-based node path recommendations with run-type presets and live boost previews.",
   },
   {

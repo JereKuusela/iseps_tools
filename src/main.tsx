@@ -9,6 +9,7 @@ import { FactoryPage } from "./pages/factory/FactoryPage"
 import { FactoryProductionPage } from "./pages/factoryProduction/FactoryProductionPage"
 import { HomePage } from "./pages/HomePage"
 import { OgTechPage } from "./pages/og/OgTechPage"
+import { PerkGuidePage } from "./pages/perkGuide/PerkGuidePage"
 import { PenrosePage } from "./pages/penrose/PenrosePage"
 import { PremiumCrystalTokenPage, PremiumHaulerMinePage } from "./pages/PremiumPage"
 import { ScPage } from "./pages/sc/ScPage"
@@ -28,6 +29,12 @@ const HomeRoute = () => (
 const OgTechRoute = () => (
   <App>
     <OgTechPage />
+  </App>
+)
+
+const PerkGuideRoute = () => (
+  <App>
+    <PerkGuidePage />
   </App>
 )
 
@@ -97,6 +104,7 @@ render(
       <Router>
         <Route path={ROUTES.home} component={HomeRoute} />
         <Route path={ROUTES.ogTech} component={OgTechRoute} />
+        <Route path={ROUTES.perkGuide} component={PerkGuideRoute} />
         <Route path={ROUTES.cruise} component={CruiseRoute} />
         <Route path={ROUTES.factory} component={FactoryRoute} />
         <Route path={ROUTES.factoryProduction} component={FactoryProductionRoute} />

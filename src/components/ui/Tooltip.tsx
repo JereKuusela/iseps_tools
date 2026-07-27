@@ -2,7 +2,7 @@ import * as KTooltip from "@kobalte/core/tooltip"
 import { For, batch, createEffect, createSignal, type ParentProps } from "solid-js"
 import { getTooltip, TooltipKey } from "../../lib/tooltips"
 
-type TooltipProps = ParentProps<{ content: TooltipKey; asChild?: boolean }>
+type TooltipProps = ParentProps<{ content: TooltipKey | string; asChild?: boolean; raw?: boolean }>
 
 // Pinning open can open multiple tooltips, so have track all of them to just keep one open.
 let tooltipInstanceCounter = 0
@@ -10,7 +10,10 @@ const [activeTooltipId, setActiveTooltipId] = createSignal<number | null>(null)
 
 export const Tooltip = (props: TooltipProps) => {
   const tooltipId = ++tooltipInstanceCounter
-  const split = () => getTooltip(props.content).split("<br>")
+  const split = () => {
+    const source = props.raw ? String(props.content ?? "") : String(getTooltip(props.content as TooltipKey) ?? "")
+    return source.replace(/\r\n/g, "\n").split(/<br>|\n/g)
+  }
   const [hoverOpen, setHoverOpen] = createSignal(false)
   const [pinnedOpen, setPinnedOpen] = createSignal(false)
 
