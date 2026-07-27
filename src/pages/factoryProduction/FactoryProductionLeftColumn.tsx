@@ -112,7 +112,7 @@ export const FactoryProductionLeftColumn = () => {
             )}
           </For>
 
-          <div class="flex items-center gap-2">
+          <div class="flex flex-wrap items-center gap-2">
             <button
               type="button"
               class="rounded-lg border border-ink/25 bg-white/90 px-2.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-ink/85 transition hover:bg-ink hover:text-white disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/30 dark:bg-[#1f3047] dark:text-white/85 dark:hover:bg-white dark:hover:text-ink"

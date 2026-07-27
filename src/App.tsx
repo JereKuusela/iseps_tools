@@ -14,6 +14,7 @@ const normalizePath = (path: string) => {
 const TopNav = (props: { darkMode: boolean; onToggleDarkMode: () => void }) => {
   const location = useLocation()
   const [isEventsMenuOpen, setIsEventsMenuOpen] = createSignal(false)
+  const canUseHover = () => window.matchMedia("(hover: hover) and (pointer: fine)").matches
   let eventsMenuRef: HTMLDivElement | undefined
   const isActivePath = (href: string) => normalizePath(location.pathname) === href
   const isEventsRouteActive = () => eventTabs.some((tab) => isActivePath(tab.href))
@@ -71,7 +72,16 @@ const TopNav = (props: { darkMode: boolean; onToggleDarkMode: () => void }) => {
             )}
           </For>
 
-          <div ref={eventsMenuRef} class="relative" onMouseEnter={openEventsMenu} onMouseLeave={closeEventsMenu}>
+          <div
+            ref={eventsMenuRef}
+            class="relative"
+            onMouseEnter={() => {
+              if (canUseHover()) openEventsMenu()
+            }}
+            onMouseLeave={() => {
+              if (canUseHover()) closeEventsMenu()
+            }}
+          >
             <button
               type="button"
               class="flex w-full items-center justify-between gap-2 rounded-xl px-4 py-2.5 text-left transition hover:-translate-y-0.5 hover:bg-ink hover:text-white dark:hover:bg-white/15"
