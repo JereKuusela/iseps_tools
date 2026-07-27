@@ -26,6 +26,7 @@ type PerkGuideContextValue = {
   setSelectedGuideKey: (next: string) => string
   selectedEntry: () => PerkGuideEntry | undefined
   previousEntry: () => PerkGuideEntry | undefined
+  selectedChangesText: () => string[]
   rowViews: () => PerkGuideRowView[]
   rowOrder: () => PerkRowId[]
   hasDataForCurrentSelection: () => boolean
@@ -33,14 +34,73 @@ type PerkGuideContextValue = {
 
 const PerkGuideContext = createContext<PerkGuideContextValue>()
 
-const buildGuideKey = (entry: PerkGuideEntry) => `${entry.run}|${entry.se}`
+const buildGuideKey = (entry: PerkGuideEntry) => `${entry.run}|${entry.se}|${entry.perks.join(",")}`
+
+const formatPerkList = (perkIds: string[]) => perkIds.join(", ")
+
+const pushDeltaToken = (
+  taken: string[],
+  dropped: string[],
+  rowId: PerkRowId,
+  key: "IP",
+  previous: number,
+  current: number,
+) => {
+  const delta = current - previous
+  if (delta === 0) return
+
+  const amount = Math.abs(delta)
+  const token = amount > 1 ? `${amount} ${rowId}${key}` : `${rowId}${key}`
+
+  if (delta > 0) {
+    taken.push(token)
+    return
+  }
+
+  dropped.push(token)
+}
+
+const derivePerkChangesText = (entry: PerkGuideEntry, previousEntry?: PerkGuideEntry) => {
+  if (!previousEntry) {
+    if (entry.perks.length === 0) return ["- No perk delta for this SE."]
+    return [`- Add ${formatPerkList(entry.perks)}`]
+  }
+
+  const previousPerks = new Set(previousEntry.perks)
+  const currentPerks = new Set(entry.perks)
+
+  const added = entry.perks.filter((perkId) => !previousPerks.has(perkId))
+  const removed = previousEntry.perks.filter((perkId) => !currentPerks.has(perkId))
+
+  const taken: string[] = [...added]
+  const dropped: string[] = [...removed]
+
+  const lines: string[] = []
+
+  const ipmRowIds = new Set<PerkRowId>([
+    ...Object.keys(previousEntry.ipByRow ?? {}),
+    ...Object.keys(entry.ipByRow ?? {}),
+  ] as PerkRowId[])
+
+  for (const rowId of ipmRowIds) {
+    const previousIp = previousEntry.ipByRow[rowId] ?? 0
+    const currentIp = entry.ipByRow[rowId] ?? 0
+
+    pushDeltaToken(taken, dropped, rowId, "IP", previousIp, currentIp)
+  }
+
+  if (dropped.length > 0) lines.push(`- Remove ${formatPerkList(dropped)}`)
+  if (taken.length > 0) lines.push(`- Add ${formatPerkList(taken)}`)
+
+  if (lines.length === 0) return ["- No perk delta for this SE."]
+  return lines
+}
 
 const deriveGuideLabel = (entry: PerkGuideEntry, index: number) => {
-  if (entry.path.length > 0) {
-    const firstLine = entry.path.split("\n")[0]?.trim() ?? ""
-    if (firstLine.length > 0) return firstLine
-  }
-  return `Guide ${index + 1}`
+  if (entry.perks.length === 0) return `Guide ${index + 1}`
+  const preview = entry.perks.slice(0, 4)
+  const suffix = entry.perks.length > 4 ? ` +${entry.perks.length - 4}` : ""
+  return `${formatPerkList(preview)}${suffix}`
 }
 
 export const PerkGuideProvider = (props: ParentProps) => {
@@ -124,7 +184,12 @@ export const PerkGuideProvider = (props: ParentProps) => {
       return {
         row,
         activePerks,
-        ipm: entry?.ipm[rowId],
+        ip: entry?.ipByRow[rowId] ?? 0,
+        milestones: {
+          m1: selectedPerks.has(`${rowId}M1`),
+          m2: selectedPerks.has(`${rowId}M2`),
+          m3: selectedPerks.has(`${rowId}M3`),
+        },
       }
     })
   })
@@ -140,6 +205,12 @@ export const PerkGuideProvider = (props: ParentProps) => {
     return candidates[0]
   })
 
+  const selectedChangesText = createMemo(() => {
+    const selected = selectedEntry()
+    if (!selected) return []
+    return derivePerkChangesText(selected, previousEntry())
+  })
+
   return (
     <PerkGuideContext.Provider
       value={{
@@ -153,6 +224,7 @@ export const PerkGuideProvider = (props: ParentProps) => {
         setSelectedGuideKey,
         selectedEntry,
         previousEntry,
+        selectedChangesText,
         rowViews,
         rowOrder: () => data().meta.rowOrder,
         hasDataForCurrentSelection: () => availableGuides().length > 0,

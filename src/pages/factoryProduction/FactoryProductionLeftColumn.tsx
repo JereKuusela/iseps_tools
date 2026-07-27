@@ -40,7 +40,7 @@ export const FactoryProductionLeftColumn = () => {
             tooltip="factoryProduction.qualityControl"
           />
           <MultiplierField
-            label="Global sell"
+            label="Sell value"
             value={factory.globalSellMultiplier()}
             onInput={factory.setGlobalSellMultiplier}
             tooltip="factoryProduction.globalMultiplier"

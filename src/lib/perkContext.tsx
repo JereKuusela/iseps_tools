@@ -25,7 +25,8 @@ export type PerkMetaPerk = {
   tooltip: string
 }
 
-export type PerkExtraKey = "IP" | "M1" | "M2" | "M3"
+const PERK_EXTRA_KEYS = ["IP", "M1", "M2", "M3"] as const
+export type PerkExtraKey = (typeof PERK_EXTRA_KEYS)[number]
 
 export type PerkExtrasTooltips = Partial<Record<PerkRowId, Partial<Record<PerkExtraKey, string>>>>
 
@@ -33,30 +34,26 @@ export type PerkMeta = {
   runTypes: PerkRunOption[]
   rowOrder: PerkRowId[]
   rows: PerkRowMeta[]
-  columns: {
-    levels: number[]
-    extras: PerkExtraKey[]
-  }
   perks: PerkMetaPerk[]
   extrasTooltips?: PerkExtrasTooltips
 }
 
-export type PerkIpmEntry = {
-  ip: number
-  m1: number
-  m2: number
-  m3: number
-}
+export type PerkIpByRow = Partial<Record<PerkRowId, number>>
 
 export type PerkGuideEntry = {
   se: number
   run: PerkRunType
   perks: string[]
-  perkLevels: Record<string, number>
-  ipm: Partial<Record<PerkRowId, PerkIpmEntry>>
-  changes: string
+  ipByRow: PerkIpByRow
   notes: string
-  path: string
+}
+
+type RawPerkGuideEntry = {
+  se: unknown
+  run: unknown
+  add?: unknown
+  remove?: unknown
+  notes?: unknown
 }
 
 export type PerkDataBundle = {
@@ -85,6 +82,108 @@ const asRowId = (value: unknown): PerkRowId | null => {
   return null
 }
 
+const normalizeRowToken = (value: string) => {
+  const upper = value.toUpperCase()
+  if (upper === "BU") return "Bu"
+  return upper
+}
+
+const normalizePerkToken = (value: string) => {
+  const trimmed = asText(value)
+  if (trimmed.length === 0) return ""
+
+  const milestoneMatch = trimmed.match(/^([A-Za-z]+)M([123])$/)
+  if (milestoneMatch) {
+    const row = normalizeRowToken(milestoneMatch[1])
+    return `${row}M${milestoneMatch[2]}`
+  }
+
+  const perkMatch = trimmed.match(/^([A-Za-z]+)(\d+)$/)
+  if (perkMatch) {
+    const row = normalizeRowToken(perkMatch[1])
+    return `${row}${Number(perkMatch[2])}`
+  }
+
+  const ipMatch = trimmed.match(/^([A-Za-z]+)IP$/i)
+  if (ipMatch) {
+    const row = normalizeRowToken(ipMatch[1])
+    return `${row}IP`
+  }
+
+  return trimmed
+}
+
+const asTokenList = (value: unknown) => {
+  if (typeof value === "string") {
+    return value
+      .split(",")
+      .map((entry) => normalizePerkToken(entry))
+      .filter((entry) => entry.length > 0)
+  }
+
+  if (!Array.isArray(value)) return []
+  return value.map((entry) => normalizePerkToken(asText(entry))).filter((entry) => entry.length > 0)
+}
+
+const parseIpTokenDelta = (token: string) => {
+  const withAmountMatch = token.match(/^(\d+)\s*([A-Za-z]+)IP$/i)
+  if (withAmountMatch) {
+    const rowId = asRowId(normalizeRowToken(withAmountMatch[2]))
+    if (!rowId) return null
+    const amount = Math.max(0, Number(withAmountMatch[1]))
+    if (amount === 0) return null
+    return { rowId, amount }
+  }
+
+  const singleMatch = token.match(/^([A-Za-z]+)IP$/i)
+  if (!singleMatch) return null
+
+  const rowId = asRowId(normalizeRowToken(singleMatch[1]))
+  if (!rowId) return null
+  return { rowId, amount: 1 }
+}
+
+const cloneIpByRowState = (ipByRow: PerkIpByRow) => {
+  const cloned: PerkIpByRow = {}
+  for (const [rowId, entry] of Object.entries(ipByRow)) {
+    const normalizedRowId = asRowId(rowId)
+    if (!normalizedRowId) continue
+    const value = toInt(entry)
+    if (value <= 0) continue
+    cloned[normalizedRowId] = value
+  }
+  return cloned
+}
+
+const perkTokenSortWeight = (token: string, rowOrder: PerkRowId[]) => {
+  const milestoneMatch = token.match(/^([A-Za-z]+)M([123])$/)
+  if (milestoneMatch) {
+    const rowId = asRowId(milestoneMatch[1])
+    const rowRank = rowId ? rowOrder.indexOf(rowId) : Number.MAX_SAFE_INTEGER
+    const milestoneTier = Number(milestoneMatch[2])
+    return rowRank * 1000 + 700 + milestoneTier
+  }
+
+  const perkMatch = token.match(/^([A-Za-z]+)(\d+)$/)
+  if (perkMatch) {
+    const rowId = asRowId(perkMatch[1])
+    const rowRank = rowId ? rowOrder.indexOf(rowId) : Number.MAX_SAFE_INTEGER
+    const tier = Number(perkMatch[2])
+    return rowRank * 1000 + tier
+  }
+
+  return Number.MAX_SAFE_INTEGER
+}
+
+const sortPerkTokens = (tokens: string[], rowOrder: PerkRowId[]) => {
+  return tokens.slice().sort((a, b) => {
+    const weightA = perkTokenSortWeight(a, rowOrder)
+    const weightB = perkTokenSortWeight(b, rowOrder)
+    if (weightA !== weightB) return weightA - weightB
+    return a.localeCompare(b)
+  })
+}
+
 const rawMeta = perksMetaJson as PerkMeta
 
 const normalizedMeta: PerkMeta = {
@@ -104,12 +203,6 @@ const normalizedMeta: PerkMeta = {
       }
     })
     .filter((entry): entry is PerkRowMeta => entry != null),
-  columns: {
-    levels: rawMeta.columns.levels.map((value) => toInt(value)).filter((value) => value > 0),
-    extras: rawMeta.columns.extras
-      .map(asText)
-      .filter((value): value is PerkExtraKey => value === "IP" || value === "M1" || value === "M2" || value === "M3"),
-  },
   perks: rawMeta.perks
     .map((perk) => {
       const rowId = asRowId(perk.rowId)
@@ -135,12 +228,12 @@ const normalizedMeta: PerkMeta = {
       const parsed: Partial<Record<PerkExtraKey, string>> = {}
 
       for (const [extraKey, tooltip] of Object.entries(tooltipEntries)) {
-        if (extraKey !== "IP" && extraKey !== "M1" && extraKey !== "M2" && extraKey !== "M3") continue
+        if (!PERK_EXTRA_KEYS.includes(extraKey as PerkExtraKey)) continue
 
         const text = asText(tooltip)
         if (text.length === 0) continue
 
-        parsed[extraKey] = text
+        parsed[extraKey as PerkExtraKey] = text
       }
 
       normalized[normalizedRowId] = parsed
@@ -150,50 +243,92 @@ const normalizedMeta: PerkMeta = {
   })(),
 }
 
-const normalizedRows = (perkGuideRowsJson as unknown[])
+const rawGuideRows = (perkGuideRowsJson as unknown[])
   .map((rawEntry) => {
-    const entry = (rawEntry ?? {}) as Partial<PerkGuideEntry>
-    const perkLevels: Record<string, number> = {}
-    for (const [perkId, level] of Object.entries(entry.perkLevels ?? {})) {
-      const normalizedPerkId = asText(perkId)
-      const normalizedLevel = toInt(level)
-      if (normalizedPerkId.length === 0 || normalizedLevel <= 0) continue
-      perkLevels[normalizedPerkId] = normalizedLevel
-    }
-
-    const perks = Object.keys(perkLevels)
-
-    const ipm: Partial<Record<PerkRowId, PerkIpmEntry>> = {}
-    for (const [rowId, rawIpm] of Object.entries(entry.ipm ?? {})) {
-      const normalizedRowId = asRowId(rowId)
-      if (!normalizedRowId || !rawIpm) continue
-
-      const ipmRaw = rawIpm as Partial<PerkIpmEntry>
-
-      const ipmEntry: PerkIpmEntry = {
-        ip: toInt(ipmRaw.ip),
-        m1: toInt(ipmRaw.m1),
-        m2: toInt(ipmRaw.m2),
-        m3: toInt(ipmRaw.m3),
-      }
-
-      if (ipmEntry.ip === 0 && ipmEntry.m1 === 0 && ipmEntry.m2 === 0 && ipmEntry.m3 === 0) continue
-      ipm[normalizedRowId] = ipmEntry
-    }
-
+    const entry = (rawEntry ?? {}) as RawPerkGuideEntry
     return {
       se: toInt(entry.se),
       run: normalizeRun(String(entry.run ?? "se_push")),
-      perks,
-      perkLevels,
-      ipm,
-      changes: asText(entry.changes),
-      notes: asText(entry.notes),
-      path: asText(entry.path),
+      entry,
     }
   })
   .filter((entry) => entry.se > 0)
-  .sort((a, b) => a.se - b.se)
+
+const rowsByRun = new Map<PerkRunType, { se: number; run: PerkRunType; entry: RawPerkGuideEntry }[]>()
+for (const row of rawGuideRows) {
+  const current = rowsByRun.get(row.run)
+  if (!current) {
+    rowsByRun.set(row.run, [row])
+    continue
+  }
+  current.push(row)
+}
+
+const normalizedRows: PerkGuideEntry[] = []
+
+for (const [run, rows] of rowsByRun.entries()) {
+  rows.sort((a, b) => a.se - b.se)
+
+  let previousPerks = new Set<string>()
+  let previousIpByRow: PerkIpByRow = {}
+
+  for (const row of rows) {
+    const raw = row.entry
+
+    let nextPerks = new Set(previousPerks)
+    let nextIpByRow = cloneIpByRowState(previousIpByRow)
+
+    for (const token of asTokenList(raw.remove)) {
+      const ipToken = parseIpTokenDelta(token)
+      if (ipToken) {
+        const current = toInt(nextIpByRow[ipToken.rowId] ?? 0)
+        const nextValue = Math.max(0, current - ipToken.amount)
+        if (nextValue <= 0) {
+          delete nextIpByRow[ipToken.rowId]
+        } else {
+          nextIpByRow[ipToken.rowId] = nextValue
+        }
+        continue
+      }
+
+      nextPerks.delete(token)
+    }
+
+    for (const token of asTokenList(raw.add)) {
+      const ipToken = parseIpTokenDelta(token)
+      if (ipToken) {
+        const current = toInt(nextIpByRow[ipToken.rowId] ?? 0)
+        const nextValue = Math.max(0, current + ipToken.amount)
+        if (nextValue <= 0) {
+          delete nextIpByRow[ipToken.rowId]
+        } else {
+          nextIpByRow[ipToken.rowId] = nextValue
+        }
+        continue
+      }
+
+      nextPerks.add(token)
+    }
+
+    const perks = sortPerkTokens(Array.from(nextPerks), normalizedMeta.rowOrder)
+
+    normalizedRows.push({
+      se: row.se,
+      run,
+      perks,
+      ipByRow: nextIpByRow,
+      notes: asText(raw.notes),
+    })
+
+    previousPerks = new Set(perks)
+    previousIpByRow = cloneIpByRowState(nextIpByRow)
+  }
+}
+
+normalizedRows.sort((a, b) => {
+  if (a.se !== b.se) return a.se - b.se
+  return a.run.localeCompare(b.run)
+})
 
 const perkDataBundle: PerkDataBundle = {
   meta: normalizedMeta,

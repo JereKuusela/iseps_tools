@@ -17,6 +17,7 @@ export const PerkGuideLeftColumn = () => {
     setSelectedGuideKey,
     selectedEntry,
     previousEntry,
+    selectedChangesText,
   } = usePerkGuideContext()
 
   return (
@@ -67,16 +68,16 @@ export const PerkGuideLeftColumn = () => {
         }
       >
         <InfoCard title={previousEntry() ? `Changes from ${formatSe(previousEntry()!.se)}` : "Changes"}>
-          <p class="text-sm leading-6 text-ink/80 dark:text-white/80 whitespace-pre-wrap">
-            {selectedEntry()!.changes || "No change note available for this SE."}
-          </p>
+          <div class="text-sm leading-6 text-ink/80 dark:text-white/80">
+            <For each={selectedChangesText()}>{(line) => <p>{line}</p>}</For>
+          </div>
         </InfoCard>
 
-        <InfoCard title="Useful notes">
-          <p class="text-sm leading-6 text-ink/80 dark:text-white/80 whitespace-pre-wrap">
-            {selectedEntry()!.notes || "No additional notes for this SE."}
-          </p>
-        </InfoCard>
+        <Show when={selectedEntry()!.notes}>
+          <InfoCard title="Useful notes">
+            <p class="text-sm leading-6 text-ink/80 dark:text-white/80 whitespace-pre-wrap">{selectedEntry()!.notes}</p>
+          </InfoCard>
+        </Show>
       </Show>
     </>
   )

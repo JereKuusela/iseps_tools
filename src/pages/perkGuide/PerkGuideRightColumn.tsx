@@ -109,7 +109,7 @@ export const PerkGuideRightColumn = () => {
   })
 
   const extraByRow = createMemo(() => {
-    const mapping = new Map(rowViews().map((row) => [row.row.id, row.ipm]))
+    const mapping = new Map(rowViews().map((row) => [row.row.id, row]))
     return mapping
   })
 
@@ -197,7 +197,7 @@ export const PerkGuideRightColumn = () => {
                           <span class="font-semibold">M1:</span>
                           <span
                             class="ml-1 inline-grid h-4 w-4 align-middle rounded-full border"
-                            style={extras()?.m1 ? colorDotStyle(rowView.row.color) : inactiveDotStyle}
+                            style={extras()?.milestones.m1 ? colorDotStyle(rowView.row.color) : inactiveDotStyle}
                             aria-hidden="true"
                           />
                         </div>
@@ -216,7 +216,7 @@ export const PerkGuideRightColumn = () => {
                           <span class="font-semibold">M2:</span>
                           <span
                             class="ml-1 inline-grid h-4 w-4 align-middle rounded-full border"
-                            style={extras()?.m2 ? colorDotStyle(rowView.row.color) : inactiveDotStyle}
+                            style={extras()?.milestones.m2 ? colorDotStyle(rowView.row.color) : inactiveDotStyle}
                             aria-hidden="true"
                           />
                         </div>
@@ -235,7 +235,7 @@ export const PerkGuideRightColumn = () => {
                           <span class="font-semibold">M3:</span>
                           <span
                             class="ml-1 inline-grid h-4 w-4 align-middle rounded-full border"
-                            style={extras()?.m3 ? colorDotStyle(rowView.row.color) : inactiveDotStyle}
+                            style={extras()?.milestones.m3 ? colorDotStyle(rowView.row.color) : inactiveDotStyle}
                             aria-hidden="true"
                           />
                         </div>
@@ -302,9 +302,9 @@ export const PerkGuideRightColumn = () => {
                           }}
                         </For>
                         <ExtraValueCell tooltip={ipTooltip} value={extra()?.ip ?? 0} />
-                        <ExtraDotCell tooltip={m1Tooltip} active={extra()?.m1} color={rowView.row.color} />
-                        <ExtraDotCell tooltip={m2Tooltip} active={extra()?.m2} color={rowView.row.color} />
-                        <ExtraDotCell tooltip={m3Tooltip} active={extra()?.m3} color={rowView.row.color} />
+                        <ExtraDotCell tooltip={m1Tooltip} active={extra()?.milestones.m1} color={rowView.row.color} />
+                        <ExtraDotCell tooltip={m2Tooltip} active={extra()?.milestones.m2} color={rowView.row.color} />
+                        <ExtraDotCell tooltip={m3Tooltip} active={extra()?.milestones.m3} color={rowView.row.color} />
                       </tr>
                     )
                   }}
