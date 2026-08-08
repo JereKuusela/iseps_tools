@@ -117,6 +117,9 @@ export class LargeNumber {
     const other = LargeNumber.from(otherInput)
     if (this.mantissa === other.mantissa && this.exponent === other.exponent) return 0
 
+    if (this.isZero()) return other.mantissa > 0 ? -1 : 1
+    if (other.isZero()) return this.mantissa > 0 ? 1 : -1
+
     if (this.mantissa >= 0 && other.mantissa < 0) return 1
     if (this.mantissa < 0 && other.mantissa >= 0) return -1
 

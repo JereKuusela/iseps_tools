@@ -187,6 +187,26 @@ describe("calculateRankedTechSnapshot", () => {
     expect(snapshot.rows.some((row) => Number.isFinite(row.relative))).toBe(true)
     expect(snapshot.rows.some((row) => row.etaSeconds === 0)).toBe(true)
   })
+
+  it("keeps ETA finite for small positive per-second rates derived from hourly input", () => {
+    const gainPerSecond = LargeNumber.from("1e1").divide(3600)
+
+    const snapshot = calculateTechValues({
+      cycles: 10,
+      mode: "juno",
+      junoExponent: 0.5,
+      seAmount: 0,
+      currentJuno: LargeNumber.from(9),
+      gainPerSecond,
+      techLevels: Array.from({ length: 25 }, () => 0),
+      exponentDeltaMultiplier: 1.01,
+    })
+
+    const firstTech = snapshot.rows.find((row) => row.id === 0)
+    expect(firstTech).toBeDefined()
+    expect(firstTech?.etaSeconds).toBeGreaterThan(0)
+    expect(firstTech?.etaSeconds).toBeCloseTo(360, 6)
+  })
 })
 
 describe("calculateExponentIncreaseMultipliers", () => {

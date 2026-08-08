@@ -99,6 +99,11 @@ describe("LargeNumber compare and format", () => {
     expect(b.compare(a)).toBe(-1)
   })
 
+  it("treats positive values below 1 as greater than zero", () => {
+    const hourlyRate = LargeNumber.parse("1e1").divide(3600)
+    expect(hourlyRate.compare(0)).toBe(1)
+  })
+
   it("compares negative values correctly", () => {
     const a = LargeNumber.parse("-2e8")
     const b = LargeNumber.parse("-5e7")
