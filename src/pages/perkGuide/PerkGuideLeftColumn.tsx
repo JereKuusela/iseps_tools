@@ -7,8 +7,18 @@ import { usePerkGuideContext } from "./perkGuideContext"
 const formatSe = (se: number) => `SE${String(se).padStart(2, "0")}`
 
 export const PerkGuideLeftColumn = () => {
-  const { se, setSe, runType, setRunType, runOptions, selectedEntry, previousEntry, selectedChangesText } =
-    usePerkGuideContext()
+  const {
+    se,
+    setSe,
+    runType,
+    setRunType,
+    runOptions,
+    requestedSe,
+    selectedEntry,
+    previousEntry,
+    selectedChangesText,
+    hasDataForCurrentSelection,
+  } = usePerkGuideContext()
 
   return (
     <>
@@ -32,6 +42,14 @@ export const PerkGuideLeftColumn = () => {
           </InfoCard>
         }
       >
+        <Show when={!hasDataForCurrentSelection()}>
+          <InfoCard>
+            <p class="text-sm text-ink/70 dark:text-white/70">
+              No guide for {formatSe(requestedSe())}. Showing guide for {formatSe(selectedEntry()!.se)}.
+            </p>
+          </InfoCard>
+        </Show>
+
         <InfoCard title={previousEntry() ? `Changes from ${formatSe(previousEntry()!.se)}` : "Changes"}>
           <div class="text-sm leading-6 text-ink/80 dark:text-white/80">
             <For each={selectedChangesText()}>{(line) => <p>{line}</p>}</For>

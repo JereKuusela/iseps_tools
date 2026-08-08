@@ -15,6 +15,7 @@ type PerkGuideContextValue = {
   runType: () => PerkRunType
   setRunType: (next: PerkRunType) => PerkRunType
   runOptions: () => PerkRunOption[]
+  requestedSe: () => number
   selectedEntry: () => PerkGuideEntry | undefined
   previousEntry: () => PerkGuideEntry | undefined
   selectedChangesText: () => string[]
@@ -105,7 +106,18 @@ export const PerkGuideProvider = (props: ParentProps) => {
     return data().perks.filter((entry) => entry.se === currentSe && entry.run === currentRun)
   })
 
-  const selectedEntry = createMemo(() => availableGuides()[0])
+  const runGuides = createMemo(() => {
+    const currentRun = runType()
+    return data()
+      .perks.filter((entry) => entry.run === currentRun)
+      .sort((a, b) => a.se - b.se)
+  })
+
+  const selectedEntry = createMemo(() => {
+    const exactMatch = availableGuides()[0]
+    if (exactMatch) return exactMatch
+    return runGuides()[0]
+  })
 
   const rowLookup = createMemo<PerkRowLookup>(() => {
     const lookup: PerkRowLookup = new Map()
@@ -179,6 +191,7 @@ export const PerkGuideProvider = (props: ParentProps) => {
         runType,
         setRunType,
         runOptions,
+        requestedSe: normalizedSe,
         selectedEntry,
         previousEntry,
         selectedChangesText,

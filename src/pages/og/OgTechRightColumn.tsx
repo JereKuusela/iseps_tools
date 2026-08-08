@@ -53,7 +53,7 @@ export const OgTechRightColumn = () => {
     <>
       <InfoCard contentClass="">
         <div class="grid gap-3 lg:grid-cols-[420px_minmax(0,1fr)] lg:grid-rows-[auto_1fr] lg:items-start">
-          <div class="grid grid-cols-[minmax(0,1fr)_auto_auto] items-stretch gap-2 lg:col-start-1 lg:row-start-1">
+          <div class="grid grid-cols-[minmax(0,1fr)_auto] items-stretch gap-2 lg:col-start-1 lg:row-start-1">
             <div class="rounded-xl border border-ink/10 bg-gradient-to-br from-mist via-white to-mist/70 p-3 dark:border-white/15 dark:from-[#263954] dark:via-[#22344d] dark:to-[#1c2c41]">
               <p class="text-xs uppercase tracking-[0.12em] text-ink/65 dark:text-white/65">Best next</p>
               <p class="mt-1 text-lg font-black text-ink dark:text-white">
@@ -63,52 +63,54 @@ export const OgTechRightColumn = () => {
                 {bestTech() ? secondsToLabel(bestTech()!.etaSeconds) : "-"}
               </p>
             </div>
-            <button
-              type="button"
-              class="h-full min-h-[88px] w-14 rounded-xl border border-ink/25 bg-white/90 text-2xl text-ink/85 transition hover:-translate-y-0.5 hover:bg-ink hover:text-white dark:border-white/30 dark:bg-[#1f3047] dark:text-white/85 dark:hover:bg-white dark:hover:text-ink"
-              onClick={og.buyNextBest}
-              title="Buy best next"
-              aria-label="Buy best next"
-            >
-              🛒
-            </button>
-            <div class="relative" ref={actionsMenuRef}>
+            <div class="grid grid-rows-2 gap-2">
               <button
                 type="button"
-                class="h-full min-h-[88px] w-14 rounded-xl border border-ink/25 bg-white/90 text-[11px] font-semibold uppercase tracking-[0.08em] text-ink/85 transition hover:-translate-y-0.5 hover:bg-ink hover:text-white dark:border-white/30 dark:bg-[#1f3047] dark:text-white/85 dark:hover:bg-white dark:hover:text-ink"
-                aria-haspopup="menu"
-                aria-expanded={isActionsOpen()}
-                onClick={() => setIsActionsOpen((current) => !current)}
+                class="h-14 w-14 rounded-xl border border-ink/25 bg-white/90 text-2xl text-ink/85 transition hover:-translate-y-0.5 hover:bg-ink hover:text-white dark:border-white/30 dark:bg-[#1f3047] dark:text-white/85 dark:hover:bg-white dark:hover:text-ink"
+                onClick={og.buyNextBest}
+                title="Buy best next"
+                aria-label="Buy best next"
               >
-                Actions
+                🛒
               </button>
-              <Show when={isActionsOpen()}>
-                <div class="absolute right-0 top-full z-50 pt-1">
-                  <div class="w-40 overflow-hidden rounded-lg border border-ink/15 bg-white shadow-lg dark:border-white/20 dark:bg-[#22344d]">
-                    <button
-                      type="button"
-                      class="block w-full cursor-pointer px-3 py-2 text-left text-xs font-semibold text-ink/85 transition-colors duration-150 hover:bg-ink hover:text-white focus-visible:bg-ink focus-visible:text-white focus-visible:outline-none dark:text-white/85 dark:hover:bg-white dark:hover:text-ink dark:focus-visible:bg-white dark:focus-visible:text-ink"
-                      onClick={() => handleAction(og.autoBuyUnderHour)}
-                    >
-                      Auto buy &lt; 1h
-                    </button>
-                    <button
-                      type="button"
-                      class="block w-full cursor-pointer px-3 py-2 text-left text-xs font-semibold text-ink/85 transition-colors duration-150 hover:bg-ink hover:text-white focus-visible:bg-ink focus-visible:text-white focus-visible:outline-none dark:text-white/85 dark:hover:bg-white dark:hover:text-ink dark:focus-visible:bg-white dark:focus-visible:text-ink"
-                      onClick={() => handleAction(og.autoBuyUnderDay)}
-                    >
-                      Auto buy &lt; 1d
-                    </button>
-                    <button
-                      type="button"
-                      class="block w-full cursor-pointer px-3 py-2 text-left text-xs font-semibold text-ink/85 transition-colors duration-150 hover:bg-ink hover:text-white focus-visible:bg-ink focus-visible:text-white focus-visible:outline-none dark:text-white/85 dark:hover:bg-white dark:hover:text-ink dark:focus-visible:bg-white dark:focus-visible:text-ink"
-                      onClick={() => handleAction(og.clearTechLevels)}
-                    >
-                      Clear tech
-                    </button>
+              <div class="relative" ref={actionsMenuRef}>
+                <button
+                  type="button"
+                  class="h-14 w-14 rounded-xl border border-ink/25 bg-white/90 px-1 text-[10px] font-semibold uppercase leading-tight tracking-[0.08em] text-ink/85 transition hover:-translate-y-0.5 hover:bg-ink hover:text-white dark:border-white/30 dark:bg-[#1f3047] dark:text-white/85 dark:hover:bg-white dark:hover:text-ink"
+                  aria-haspopup="menu"
+                  aria-expanded={isActionsOpen()}
+                  onClick={() => setIsActionsOpen((current) => !current)}
+                >
+                  Bulk buy
+                </button>
+                <Show when={isActionsOpen()}>
+                  <div class="absolute right-0 top-full z-50 pt-1">
+                    <div class="w-40 overflow-hidden rounded-lg border border-ink/15 bg-white shadow-lg dark:border-white/20 dark:bg-[#22344d]">
+                      <button
+                        type="button"
+                        class="block w-full cursor-pointer px-3 py-2 text-left text-xs font-semibold text-ink/85 transition-colors duration-150 hover:bg-ink hover:text-white focus-visible:bg-ink focus-visible:text-white focus-visible:outline-none dark:text-white/85 dark:hover:bg-white dark:hover:text-ink dark:focus-visible:bg-white dark:focus-visible:text-ink"
+                        onClick={() => handleAction(og.autoBuyUnderHour)}
+                      >
+                        Auto buy &lt; 1h
+                      </button>
+                      <button
+                        type="button"
+                        class="block w-full cursor-pointer px-3 py-2 text-left text-xs font-semibold text-ink/85 transition-colors duration-150 hover:bg-ink hover:text-white focus-visible:bg-ink focus-visible:text-white focus-visible:outline-none dark:text-white/85 dark:hover:bg-white dark:hover:text-ink dark:focus-visible:bg-white dark:focus-visible:text-ink"
+                        onClick={() => handleAction(og.autoBuyUnderDay)}
+                      >
+                        Auto buy &lt; 1d
+                      </button>
+                      <button
+                        type="button"
+                        class="block w-full cursor-pointer px-3 py-2 text-left text-xs font-semibold text-ink/85 transition-colors duration-150 hover:bg-ink hover:text-white focus-visible:bg-ink focus-visible:text-white focus-visible:outline-none dark:text-white/85 dark:hover:bg-white dark:hover:text-ink dark:focus-visible:bg-white dark:focus-visible:text-ink"
+                        onClick={() => handleAction(og.clearTechLevels)}
+                      >
+                        Clear tech
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </Show>
+                </Show>
+              </div>
             </div>
           </div>
           <div class="overflow-hidden rounded-xl border border-ink/10 bg-white dark:border-white/15 dark:bg-[#22344d] lg:col-start-1 lg:row-start-2">

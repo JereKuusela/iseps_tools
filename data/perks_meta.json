@@ -103,91 +103,91 @@
       "rowId": "W",
       "tier": 1,
       "label": "W1",
-      "tooltip": "INNER FOCUS\n+50% Energy Price for each White Perk owned.\n+40% DC Milestones owned.\n+100% Buyers for each White Perk owned.\nImproves DC Milestone 1 (+100% -\u003e +200%)"
+      "tooltip": "INNER FOCUS\n+50% Cash for every White perk.\n+40% DCMs.\n+100% Buyers for every White perk.\nDCM 1 bonus from +100% to +200%."
     },
     {
       "id": "W2",
       "rowId": "W",
       "tier": 2,
       "label": "W2",
-      "tooltip": "SINGULARITY PROJECTOR\n+20% All Particle outputs for each Perk owned in any path.\n+10% DC Milestones owned.\n+25% Energy Price for each White Perk owned.\nImproves DC Milestone 2 (+20% -\u003e +100%)"
+      "tooltip": "SINGULARITY PROJECTOR\n+20% AP for every perk.\n+10% DCM.\n+25% Cash for every White perk.\nDCM 2 bonus from +20% to +100%."
     },
     {
       "id": "W3",
       "rowId": "W",
       "tier": 3,
       "label": "W3",
-      "tooltip": "DC-WATCH\n+20% All Particle outputs for each Perk owned in any path.\n+20% DC Milestones owned.\n+50% Data Cubes from Perks (Center Node in Perk Tree).\nImproves DC Milestone 3 (/8 -\u003e /100)."
+      "tooltip": "DC-WATCH\n+20% AP for every perk.\n+20% DCMs.\n+50% DC from center node.\nDCM 3 bonus from /8 to /100."
     },
     {
       "id": "W4",
       "rowId": "W",
       "tier": 4,
       "label": "W4",
-      "tooltip": "SC-WATCH\n+20% All Particle outputs for each Perk owned in any path.\n+25% Energy Price for each White Perk owned.\n+1% Singularity Cubes for each Perk owned in any path.\n+1 maximum level to all Infinity Multipliers."
+      "tooltip": "SC-WATCH\n+20% AP for every perk.\n+25% Cash for every White perk.\n+1% SC for every perk.\n+1 max level to Infinity Multipliers."
     },
     {
       "id": "W5",
       "rowId": "W",
       "tier": 5,
       "label": "W5",
-      "tooltip": "MONETIZATION BOT\n+20% All Particles output for each Perk owned in any path.\n+150% Energy Price and Buyers for each White Perk owned.\nImproves DC Milestone 4 (/10 -\u003e /500)"
+      "tooltip": "MONETIZATION BOT\n+20% AP for every perk.\n+150% Cash and Buyers for every White perk.\nDCM 4 bonus from /10 to /500."
     },
     {
       "id": "W6",
       "rowId": "W",
       "tier": 6,
       "label": "W6",
-      "tooltip": "DC-SCANNER\n+10% All Particle outputs for each Perk owned in any path.\n+20% DC Milestones owned.\n+50% Data Cubes from Perks (Center Node in Perk Tree).\nImproves DC Milestone 5 (+40% -\u003e +100%)"
+      "tooltip": "DC-SCANNER\n+10% AP for every perk.\n+20% DCMs.\n+50% DC from center node.\nDCM 5 bonus from +40% to +100%."
     },
     {
       "id": "W7",
       "rowId": "W",
       "tier": 7,
       "label": "W7",
-      "tooltip": "SC-PRINTER\n+20% All Particle outputs for each Perk owned in any path.\n+10% DC Milestones owned.\n+1.5% Singularity Cubes for each Perk owned in any path.\nImproves DC Milestone 6 (+500% -\u003e +800%)."
+      "tooltip": "SC-PRINTER\n+20% AP for every perk.\n+10% DCMs.\n+1.5% SC for every perk.\nDCM 6 bonus from +50% to +80%."
     },
     {
       "id": "W8",
       "rowId": "W",
       "tier": 8,
       "label": "W8",
-      "tooltip": "DATA DRONE\n+10% All Particle outputs for each Perk owned in any path.\n+20% DC Milestones owned.\n+1% Data Cubes from Perks for each Perk owned in any path (Center Node in Perk Tree)."
+      "tooltip": "DATA DRONE\n+10% AP for every perk.\n+20% DCMs.\n+1% DC from center node for every perk."
     },
     {
       "id": "W9",
       "rowId": "W",
       "tier": 9,
       "label": "W9",
-      "tooltip": "DC-JETPACK\n+5% All Particle outputs for each White Perk owned.\n+20% DC Milestones owned.\n+50% Data Cubes from Perks (Center Node in Perk Tree)."
+      "tooltip": "DC-JETPACK\n+5% AP for every White perk.\n+20% DCMs.\n+50% DC from center node."
     },
     {
       "id": "W10",
       "rowId": "W",
       "tier": 10,
       "label": "W10",
-      "tooltip": "TRINITY BOTS\n+2% Solutions for each Perk owned in any path.\n+2% G-Points for each Perk owned in any path.\n+2% Emblems for each Perk owned in any path.\n+10% DC Milestones owned."
+      "tooltip": "TRINITY BOTS\n+2% Solutions for every perk.\n+2% GP for every perk.\n+2% Emblems for every perk.\n+10% DCMs."
     },
     {
       "id": "R1",
       "rowId": "R",
       "tier": 1,
       "label": "R1",
-      "tooltip": "CYBERNETIC BRAIN MODIFICATIONS\n+50% Alpha output for each Red Perk owned.\n+10% Alpha Lifetime output.\n+20% Researches done.\nImproves Research 1 (+30% -\u003e +200%)."
+      "tooltip": "CYBERNETIC BRAIN MODIFICATIONS\n+50% Alpha output for every Red perk.\n+10% Alpha Lifetime output.\n+20% Researches.\nResearch 1 bonus from +30% to +200%."
     },
     {
       "id": "R2",
       "rowId": "R",
       "tier": 2,
       "label": "R2",
-      "tooltip": "SMART AI ASSISTANCE\n+50% Alpha output for each Red Perk owned.\nDivides Alpha costs by 100 for each Red Perk owned.\n+40% Researches done.\nImproves Research 2 (+50% -\u003e 75%)."
+      "tooltip": "SMART AI ASSISTANCE\n+50% Alpha output for every Red perk.\n/100 Alpha costs for every Red perk.\n+40% Researches.\nResearch 2 bonus from +50% to +75%."
     },
     {
       "id": "R3",
       "rowId": "R",
       "tier": 3,
       "label": "R3",
-      "tooltip": "IMPROVED AUTOMATION TECHNOLOGY\n+120% Alpha output for each Red Perk owned.\n+1 base Egetuarium Alpha Artifacts for each Red and Lime Perk owned.\nDivides Egetuarium Alpha Artifact costs by 500,000 for each Red and Lime Perk owned.\nImproves Research 3 (+15% -\u003e +50%)."
+      "tooltip": "IMPROVED AUTOMATION TECHNOLOGY\n+120% Alpha output for every Red perk.\n+1 base Alpha Artifacts for every Red and Lime perk.\n/500,000 Alpha Artifact costs for every Red and Lime perk.\nResearch 3 bonus from +15% to +50%."
     },
     {
       "id": "R4",
@@ -397,21 +397,21 @@
       "rowId": "P",
       "tier": 5,
       "label": "P5",
-      "tooltip": "Effect text for P5 is not available yet."
+      "tooltip": "LABORATORY SOLUTIONS\n+20,000% Epsilon output for every Purple and Blue perk.\n+1000% Solutions.\nUnlock Beta Solutions.\nx2 CoT Beta bonus."
     },
     {
       "id": "P6",
       "rowId": "P",
       "tier": 6,
       "label": "P6",
-      "tooltip": "Effect text for P6 is not available yet."
+      "tooltip": "ELECTRIC SOLUTIONS\nx3 CoT Ceti bonus.\n+100% Solutions for every 50 Epsilon Attraction level.\n+50% Epsilon Solutions and Epsilon Emblems.\nUnlocks Ceti Solutions."
     },
     {
       "id": "P7",
       "rowId": "P",
       "tier": 7,
       "label": "P7",
-      "tooltip": "Effect text for P7 is not available yet."
+      "tooltip": "DATA SOLUTIONS\n/50,000 Solution cost for every Purple perk.\nUnlocks DC bonus from Solutions.\nUnlocks SC dump for Epsilon.\nx4 CoT Delta bonus."
     },
     {
       "id": "O1",

@@ -24,6 +24,11 @@ const tableUnavailableContentClass =
 
 const tableCellInnerClass = "flex min-h-8 items-center justify-center"
 
+const levelsOneToSeven = [1, 2, 3, 4, 5, 6, 7]
+const levelsEightToTen = [8, 9, 10]
+const levelsOneToTen = [...levelsOneToSeven, ...levelsEightToTen]
+const extrasLabels = ["IP", "M1", "M2", "M3"]
+
 const TableUnavailableContent = () => <span class={tableUnavailableContentClass}>-</span>
 
 const TableEmptyNodeSlot = () => <span class="inline-block h-5 w-5" aria-hidden="true" />
@@ -113,6 +118,17 @@ export const PerkGuideRightColumn = () => {
     return mapping
   })
 
+  const mobileRowViews = createMemo(() => rowViews().filter((row) => row.activePerks.length > 0))
+
+  const hasMobileSecondRow = (rowId: PerkRowId) => {
+    const rowPerks = perksByRow().get(rowId) ?? []
+    const extra = extraByRow().get(rowId)
+    const hasHighTierPerk = rowPerks.some((perk) => perk.tier >= 8 && perk.tier <= 10)
+    const hasIp = (extra?.ip ?? 0) > 0
+    const hasMilestone = Boolean(extra?.milestones.m1 || extra?.milestones.m2 || extra?.milestones.m3)
+    return hasHighTierPerk || hasIp || hasMilestone
+  }
+
   const getExtraTooltip = (rowId: PerkRowId, key: PerkExtraKey) => data().definitions.extrasTooltips?.[rowId]?.[key]
 
   return (
@@ -122,130 +138,116 @@ export const PerkGuideRightColumn = () => {
         fallback={<p class="text-sm text-ink/70 dark:text-white/70">No perk grid available for this selection.</p>}
       >
         <div class="space-y-3 lg:hidden">
-          <For each={rowViews()}>
-            {(rowView) => {
-              const extras = () => extraByRow().get(rowView.row.id)
-              const ipTooltip = getExtraTooltip(rowView.row.id, "IP")
-              const m1Tooltip = getExtraTooltip(rowView.row.id, "M1")
-              const m2Tooltip = getExtraTooltip(rowView.row.id, "M2")
-              const m3Tooltip = getExtraTooltip(rowView.row.id, "M3")
-              return (
-                <article class="rounded-xl border border-ink/15 bg-white/70 p-3 dark:border-white/15 dark:bg-[#172335]/80">
-                  <div class="flex items-center gap-2">
-                    <span
-                      class="h-3.5 w-3.5 rounded-full border"
-                      style={colorDotStyle(rowView.row.color)}
-                      aria-hidden="true"
-                    />
-                    <h4 class="text-sm font-bold uppercase tracking-[0.1em] text-ink/85 dark:text-white/85">
-                      {rowView.row.id} ({rowView.row.label})
-                    </h4>
-                  </div>
-
-                  <div class="mt-2">
-                    <p class="text-[11px] font-semibold uppercase tracking-[0.12em] text-ink/60 dark:text-white/60">
-                      Perks
-                    </p>
-                    <div class="mt-1 flex flex-wrap gap-1.5">
-                      <Show
-                        when={perksByRow().get(rowView.row.id)?.length}
-                        fallback={<span class="text-sm text-ink/70 dark:text-white/70">-</span>}
-                      >
-                        <For each={perksByRow().get(rowView.row.id) ?? []}>
-                          {(perk) => (
-                            <Tooltip content={perk.tooltip} raw asChild>
-                              <span class="inline-flex items-center gap-1 rounded-full border border-ink/15 px-2 py-0.5 text-xs font-semibold text-ink/85 dark:border-white/15 dark:text-white/85">
+          <Show
+            when={mobileRowViews().length > 0}
+            fallback={<p class="text-sm text-ink/70 dark:text-white/70">No active perks selected for mobile rows.</p>}
+          >
+            <div class="overflow-x-auto rounded-xl border border-ink/15 bg-white/70 dark:border-white/15 dark:bg-[#172335]/80">
+              <table class="min-w-full border-separate border-spacing-0 text-xs">
+                <thead>
+                  <tr>
+                    <th class="sticky left-0 z-10 border border-ink/15 bg-[#f3f8ff] px-2 py-1 text-left font-bold uppercase tracking-[0.08em] text-ink/75 dark:border-white/15 dark:bg-[#203048] dark:text-white/80">
+                      <span class="sr-only">Row continuation</span>
+                    </th>
+                    <For each={levelsOneToSeven}>
+                      {(level) => (
+                        <th class="border border-ink/15 bg-[#f3f8ff] px-2 py-1 text-center font-bold text-ink/75 dark:border-white/15 dark:bg-[#203048] dark:text-white/80">
+                          {level}
+                        </th>
+                      )}
+                    </For>
+                  </tr>
+                  <tr>
+                    <th class="sticky left-0 z-10 border border-ink/15 bg-[#f3f8ff] px-2 py-1 text-left font-bold uppercase tracking-[0.08em] text-ink/75 dark:border-white/15 dark:bg-[#203048] dark:text-white/80">
+                      Row
+                    </th>
+                    <For each={levelsEightToTen}>
+                      {(level) => (
+                        <th class="border border-ink/15 bg-[#f3f8ff] px-2 py-1 text-center font-bold text-ink/75 dark:border-white/15 dark:bg-[#203048] dark:text-white/80">
+                          {level}
+                        </th>
+                      )}
+                    </For>
+                    <For each={extrasLabels}>
+                      {(label) => (
+                        <th class="border border-ink/15 bg-[#f3f8ff] px-2 py-1 text-center font-bold text-ink/75 dark:border-white/15 dark:bg-[#203048] dark:text-white/80">
+                          {label}
+                        </th>
+                      )}
+                    </For>
+                  </tr>
+                </thead>
+                <tbody>
+                  <For each={mobileRowViews()}>
+                    {(rowView) => {
+                      const rowPerks = () => perksByRow().get(rowView.row.id) ?? []
+                      const allRowPerks = () => allPerksByRow().get(rowView.row.id) ?? []
+                      const extra = () => extraByRow().get(rowView.row.id)
+                      const ipTooltip = getExtraTooltip(rowView.row.id, "IP")
+                      const m1Tooltip = getExtraTooltip(rowView.row.id, "M1")
+                      const m2Tooltip = getExtraTooltip(rowView.row.id, "M2")
+                      const m3Tooltip = getExtraTooltip(rowView.row.id, "M3")
+                      const showSecondRow = () => hasMobileSecondRow(rowView.row.id)
+                      return (
+                        <>
+                          <tr>
+                            <th class="sticky left-0 z-10 align-middle border border-ink/15 bg-white/90 px-2 py-1 text-left font-bold uppercase tracking-[0.08em] text-ink/85 dark:border-white/15 dark:bg-[#172335] dark:text-white/85">
+                              <span class="inline-flex items-center gap-2">
                                 <span
-                                  class="inline-grid h-5 w-5 place-items-center rounded-full border"
+                                  class="h-3.5 w-3.5 rounded-full border"
                                   style={colorDotStyle(rowView.row.color)}
                                   aria-hidden="true"
                                 />
-                                {perk.id}
+                                {rowView.row.id}
                               </span>
-                            </Tooltip>
-                          )}
-                        </For>
-                      </Show>
-                    </div>
-                  </div>
+                            </th>
+                            <For each={levelsOneToSeven}>
+                              {(level) => {
+                                const perk = allRowPerks().find((entry) => entry.tier === level)
+                                const isTaken = rowPerks().some((entry) => entry.tier === level)
+                                return <PerkTierCell perk={perk} isTaken={isTaken} color={rowView.row.color} />
+                              }}
+                            </For>
+                          </tr>
 
-                  <div class="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4">
-                    <Show
-                      when={ipTooltip}
-                      fallback={
-                        <div class="rounded-lg border border-ink/15 bg-white/70 px-2 py-1 text-xs dark:border-white/15 dark:bg-white/5">
-                          <span class="font-semibold">IP:</span> -
-                        </div>
-                      }
-                    >
-                      <Tooltip content={ipTooltip!} raw asChild>
-                        <div class="rounded-lg border border-ink/15 bg-white/70 px-2 py-1 text-xs dark:border-white/15 dark:bg-white/5">
-                          <span class="font-semibold">IP:</span> {extras()?.ip ?? 0}
-                        </div>
-                      </Tooltip>
-                    </Show>
-                    <Show
-                      when={m1Tooltip}
-                      fallback={
-                        <div class="rounded-lg border border-ink/15 bg-white/70 px-2 py-1 text-xs dark:border-white/15 dark:bg-white/5">
-                          <span class="font-semibold">M1:</span> -
-                        </div>
-                      }
-                    >
-                      <Tooltip content={m1Tooltip!} raw asChild>
-                        <div class="rounded-lg border border-ink/15 bg-white/70 px-2 py-1 text-xs dark:border-white/15 dark:bg-white/5">
-                          <span class="font-semibold">M1:</span>
-                          <span
-                            class="ml-1 inline-grid h-4 w-4 align-middle rounded-full border"
-                            style={extras()?.milestones.m1 ? colorDotStyle(rowView.row.color) : inactiveDotStyle}
-                            aria-hidden="true"
-                          />
-                        </div>
-                      </Tooltip>
-                    </Show>
-                    <Show
-                      when={m2Tooltip}
-                      fallback={
-                        <div class="rounded-lg border border-ink/15 bg-white/70 px-2 py-1 text-xs dark:border-white/15 dark:bg-white/5">
-                          <span class="font-semibold">M2:</span> -
-                        </div>
-                      }
-                    >
-                      <Tooltip content={m2Tooltip!} raw asChild>
-                        <div class="rounded-lg border border-ink/15 bg-white/70 px-2 py-1 text-xs dark:border-white/15 dark:bg-white/5">
-                          <span class="font-semibold">M2:</span>
-                          <span
-                            class="ml-1 inline-grid h-4 w-4 align-middle rounded-full border"
-                            style={extras()?.milestones.m2 ? colorDotStyle(rowView.row.color) : inactiveDotStyle}
-                            aria-hidden="true"
-                          />
-                        </div>
-                      </Tooltip>
-                    </Show>
-                    <Show
-                      when={m3Tooltip}
-                      fallback={
-                        <div class="rounded-lg border border-ink/15 bg-white/70 px-2 py-1 text-xs dark:border-white/15 dark:bg-white/5">
-                          <span class="font-semibold">M3:</span> -
-                        </div>
-                      }
-                    >
-                      <Tooltip content={m3Tooltip!} raw asChild>
-                        <div class="rounded-lg border border-ink/15 bg-white/70 px-2 py-1 text-xs dark:border-white/15 dark:bg-white/5">
-                          <span class="font-semibold">M3:</span>
-                          <span
-                            class="ml-1 inline-grid h-4 w-4 align-middle rounded-full border"
-                            style={extras()?.milestones.m3 ? colorDotStyle(rowView.row.color) : inactiveDotStyle}
-                            aria-hidden="true"
-                          />
-                        </div>
-                      </Tooltip>
-                    </Show>
-                  </div>
-                </article>
-              )
-            }}
-          </For>
+                          <Show when={showSecondRow()}>
+                            <tr>
+                              <td class="sticky left-0 z-10 align-middle border border-ink/15 bg-white/90 px-2 py-1 dark:border-white/15 dark:bg-[#172335]">
+                                <span class="sr-only">{rowView.row.id} continuation</span>
+                              </td>
+                              <For each={levelsEightToTen}>
+                                {(level) => {
+                                  const perk = allRowPerks().find((entry) => entry.tier === level)
+                                  const isTaken = rowPerks().some((entry) => entry.tier === level)
+                                  return <PerkTierCell perk={perk} isTaken={isTaken} color={rowView.row.color} />
+                                }}
+                              </For>
+                              <ExtraValueCell tooltip={ipTooltip} value={extra()?.ip ?? 0} />
+                              <ExtraDotCell
+                                tooltip={m1Tooltip}
+                                active={extra()?.milestones.m1}
+                                color={rowView.row.color}
+                              />
+                              <ExtraDotCell
+                                tooltip={m2Tooltip}
+                                active={extra()?.milestones.m2}
+                                color={rowView.row.color}
+                              />
+                              <ExtraDotCell
+                                tooltip={m3Tooltip}
+                                active={extra()?.milestones.m3}
+                                color={rowView.row.color}
+                              />
+                            </tr>
+                          </Show>
+                        </>
+                      )
+                    }}
+                  </For>
+                </tbody>
+              </table>
+            </div>
+          </Show>
         </div>
 
         <div class="hidden lg:block">
@@ -256,7 +258,7 @@ export const PerkGuideRightColumn = () => {
                   <th class="sticky left-0 z-10 border border-ink/15 bg-[#f3f8ff] px-2 py-1 text-left text-xs font-bold uppercase tracking-[0.08em] text-ink/75 dark:border-white/15 dark:bg-[#203048] dark:text-white/80">
                     Row
                   </th>
-                  <For each={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}>
+                  <For each={levelsOneToTen}>
                     {(level) => (
                       <th class="border border-ink/15 bg-[#f3f8ff] px-2 py-1 text-center text-xs font-bold text-ink/75 dark:border-white/15 dark:bg-[#203048] dark:text-white/80">
                         {level}
@@ -294,7 +296,7 @@ export const PerkGuideRightColumn = () => {
                             {rowView.row.id}
                           </span>
                         </th>
-                        <For each={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}>
+                        <For each={levelsOneToTen}>
                           {(level) => {
                             const perk = allRowPerks().find((entry) => entry.tier === level)
                             const isTaken = rowPerks().some((entry) => entry.tier === level)
