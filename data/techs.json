@@ -1065,7 +1065,7 @@
       }
     ],
     "maxLevel": 100,
-    "dcBoost": 1,
+    "dcBoost": 1.33,
     "junoBase": 1
   },
   {
@@ -1183,8 +1183,10 @@
       }
     ],
     "maxLevel": 100,
-    "dcBoost": 1,
-    "junoBase": 1
+    "dcBoost": 1.05,
+    "junoBase": 1.05,
+    "seMultiplier": 1,
+    "seAdditive": 1
   },
   {
     "id": 18,
@@ -1419,7 +1421,11 @@
       }
     ],
     "maxLevel": 100,
-    "dcBoost": 1,
-    "junoBase": 1
+    "dcBoost": 2.47,
+    "junoBase": 1.05,
+    "seMultiplier": 7,
+    "seAdditive": 0,
+    "extraJunoBase": 1.05,
+    "extraJunoExp": 2
   }
 ]
