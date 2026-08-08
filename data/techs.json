@@ -92,7 +92,8 @@
         "mult": 1e+23
       }
     ],
-    "maxLevel": 65
+    "maxLevel": 65,
+    "tooltip": "JUNO FUNDING #0\n+0.01 Juno exponent"
   },
   {
     "id": 1,
@@ -125,7 +126,8 @@
     ],
     "maxLevel": 999,
     "dcBoost": 1.66,
-    "junoBase": 5
+    "junoBase": 5,
+    "tooltip": "LAB CHIPSET EXTENSION #1\nx5 Beta\nx1.1 Laboraty Scientists\nx1.5 Laboraty Morale"
   },
   {
     "id": 2,
@@ -174,7 +176,8 @@
     "seMultiplier": 7,
     "seAdditive": 0,
     "extraJunoBase": 1.05,
-    "extraJunoExp": 2
+    "extraJunoExp": 2,
+    "tooltip": "RESEARCH GOGGLES #2\nx1.05 Researches\nx1.75 DC"
   },
   {
     "id": 3,
@@ -233,7 +236,8 @@
     ],
     "maxLevel": 999,
     "dcBoost": 1.02,
-    "junoBase": 1
+    "junoBase": 1,
+    "tooltip": "CASH KING ECONOMICS #3\nx1.8 Cash\nx1.2 Buyers"
   },
   {
     "id": 4,
@@ -296,7 +300,8 @@
     ],
     "maxLevel": 999,
     "dcBoost": 1.28,
-    "junoBase": 1
+    "junoBase": 1,
+    "tooltip": "ALPHA TARGETING #4\nx1.25 Alpha"
   },
   {
     "id": 5,
@@ -359,7 +364,8 @@
     ],
     "maxLevel": 999,
     "dcBoost": 1.07,
-    "junoBase": 1
+    "junoBase": 1,
+    "tooltip": "PHOTOSYNTHESIS AMPLIFIER #5\nx1.35 Ceti\nx1.25 Delta\nx1.4 Fenix"
   },
   {
     "id": 6,
@@ -424,7 +430,8 @@
     "dcBoost": 1.13,
     "junoBase": 1.05,
     "seMultiplier": 1,
-    "seAdditive": 0.5
+    "seAdditive": 0.5,
+    "tooltip": "BRAIN TURTLES #6\nx1.5 Epsilon\nx1.05 Artifacts\nx1.05 Solutions\nx1.05 GP"
   },
   {
     "id": 7,
@@ -492,7 +499,8 @@
     ],
     "maxLevel": 999,
     "dcBoost": 1.14,
-    "junoBase": 1.5
+    "junoBase": 1.5,
+    "tooltip": "OMNI SCHEMATICS #7\nx1.05 Alpha\nx1.5 Archive Outposts\nx1.5 Institute Foundations"
   },
   {
     "id": 8,
@@ -560,7 +568,8 @@
     ],
     "maxLevel": 999,
     "dcBoost": 1.03,
-    "junoBase": 1
+    "junoBase": 1,
+    "tooltip": "G-CORP DATABANKS #8\nx1.15 Cash\nx1.5 Gamma"
   },
   {
     "id": 9,
@@ -621,7 +630,8 @@
     "dcBoost": 1.13,
     "junoBase": 1.02,
     "seMultiplier": 1,
-    "seAdditive": 1
+    "seAdditive": 1,
+    "tooltip": "NANO-TECH MODIFICATIONS #9\nx1.02 AP\nx1.01 SC"
   },
   {
     "id": 10,
@@ -674,7 +684,8 @@
     "dcBoost": 1.27,
     "junoBase": 3,
     "seMultiplier": 2,
-    "seAdditive": 0
+    "seAdditive": 0,
+    "tooltip": "MACRO-FACILITIES #10\n1.2x Helion\nx1.05 Laboratory Efficiency\nx3 Archeologist-Bots\nx3 Archive Efficiency"
   },
   {
     "id": 11,
@@ -746,7 +757,8 @@
     ],
     "maxLevel": 999,
     "dcBoost": 1.08,
-    "junoBase": 1
+    "junoBase": 1,
+    "tooltip": "QUANTUM PARTICLES #11\nx1.05 Alpha\nx1.75 Epsilon\nx1.1 Gamma\nx1.25 Ixion"
   },
   {
     "id": 12,
@@ -794,7 +806,8 @@
     "dcBoost": 1.38,
     "junoBase": 1.25,
     "seMultiplier": 0.5,
-    "seAdditive": 0.5
+    "seAdditive": 0.5,
+    "tooltip": "INTERPLANETARY COMS #12\nx1.25 Artifacts\nx1.05 Emblems"
   },
   {
     "id": 13,
@@ -871,7 +884,8 @@
     ],
     "maxLevel": 999,
     "dcBoost": 1.22,
-    "junoBase": 2.2
+    "junoBase": 2.2,
+    "tooltip": "CITY SIZED CONNECTION NETWORKS #13\nx2 Gamma\nx1.15 Buyers\nx1.1 DC\nx1.1 Solutions"
   },
   {
     "id": 14,
@@ -912,7 +926,8 @@
     ],
     "maxLevel": 999,
     "dcBoost": 1.7,
-    "junoBase": 1
+    "junoBase": 1,
+    "tooltip": "CELL REPLICATION TECH #14\nx2 Delta\nx5 Fenix\nx3 Rebirthologists\nx3 Institute Efficiency"
   },
   {
     "id": 15,
@@ -948,7 +963,8 @@
     "dcBoost": 1.45,
     "junoBase": 1.05,
     "seMultiplier": 5,
-    "seAdditive": 1
+    "seAdditive": 1,
+    "tooltip": "ADV. AI ROBOTICS #15\nx7 Ceti\nx1.75 Helion\nx1.05 DCMs\nx1.15 GP"
   },
   {
     "id": 16,
@@ -1066,7 +1082,8 @@
     ],
     "maxLevel": 100,
     "dcBoost": 1.33,
-    "junoBase": 1
+    "junoBase": 1,
+    "tooltip": "BLOCKCHAIN MODULE #16\n/1.01 Singularity Amplifier costs\nx1.1 DC\nx1.02 SC"
   },
   {
     "id": 17,
@@ -1183,10 +1200,11 @@
       }
     ],
     "maxLevel": 100,
-    "dcBoost": 1.05,
-    "junoBase": 1.05,
+    "dcBoost": 1.15,
+    "junoBase": 1.15,
     "seMultiplier": 1,
-    "seAdditive": 1
+    "seAdditive": 1,
+    "tooltip": "INNOVATION SURGE #17\n/1.02 Genesis Pod costs\n/1.02Data Center costs\nx1.15 AP"
   },
   {
     "id": 18,
@@ -1304,7 +1322,8 @@
     ],
     "maxLevel": 100,
     "dcBoost": 1,
-    "junoBase": 1
+    "junoBase": 1,
+    "tooltip": "CAPITAL ALLOCATION #18\n/1.01 Sequencing costs\nx1.03 Kappa\nx1.1 GP\nx1.1 Cash"
   },
   {
     "id": 19,
@@ -1426,6 +1445,7 @@
     "seMultiplier": 7,
     "seAdditive": 0,
     "extraJunoBase": 1.05,
-    "extraJunoExp": 2
+    "extraJunoExp": 2,
+    "tooltip": "DNA ENHANCEMENT #19\n+0.005 Kappa exponent"
   }
 ]

@@ -17,6 +17,7 @@ export type TechCardRow = {
   relative: number
   etaSeconds: number
   nextCost: string
+  tooltip: string
 }
 
 export type ExponentGainEntry = {

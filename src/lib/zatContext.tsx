@@ -47,6 +47,7 @@ export type TechRule = {
   extraJunoExp?: number
   seMultiplier?: number
   seAdditive?: number
+  tooltip: string
 }
 
 export type TechSeEffectRule = {

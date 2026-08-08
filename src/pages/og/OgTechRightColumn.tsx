@@ -1,6 +1,7 @@
 import { For, Index, Show, createSignal, onCleanup, onMount } from "solid-js"
 import { InfoCard, MetricRow } from "../../components/layout/contentBlocks"
 import { IntegerField } from "../../components/ui/formControls"
+import { Tooltip } from "../../components/ui/Tooltip"
 import { formatPercentFromRatio } from "../../lib/numberFormat"
 import { formatTimeDurationFromSeconds } from "../../lib/timeFormat"
 import { useOgTechContext } from "./ogTechContext"
@@ -149,8 +150,15 @@ export const OgTechRightColumn = () => {
           {(tech) => (
             <article class="rounded-xl border border-ink/15 bg-white p-3 dark:border-white/15 dark:bg-[#23344d]">
               <div class="flex items-start justify-between gap-2">
-                <div>
-                  <p class="text-base font-bold text-ink dark:text-white">{tech().label}</p>
+                <div class="min-w-0">
+                  <Show
+                    when={tech().tooltip}
+                    fallback={<p class="text-base font-bold text-ink dark:text-white">{tech().label}</p>}
+                  >
+                    <Tooltip content={tech().tooltip!} raw asChild>
+                      <p class="text-base font-bold text-ink dark:text-white">{tech().label}</p>
+                    </Tooltip>
+                  </Show>
                 </div>
                 <span class="rounded-full border border-accent/30 bg-accent/10 px-2 py-0.5 text-xs font-semibold text-ink/85 dark:text-white/85">
                   {formatPercentFromRatio(tech().relative / 100, 0)}

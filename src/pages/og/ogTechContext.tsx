@@ -257,6 +257,7 @@ export const OgTechProvider = (props: ParentProps) => {
         relative: row?.relative ?? 0,
         etaSeconds: row?.etaSeconds ?? Number.POSITIVE_INFINITY,
         nextCost: row?.nextCost ? row.nextCost.toString(2) : "-",
+        tooltip: tech.tooltip,
       }
     })
   })
