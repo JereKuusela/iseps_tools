@@ -770,7 +770,7 @@
     "notes": "Red IP surpasses White IP around this point and tends to be the better option going forward"
   },
   {
-    "se": 83,
+    "se": 78,
     "run": "grun",
     "add": [
       "W1",
@@ -820,6 +820,7 @@
       "Bu2",
       "Bu3",
       "Bu4",
+      "Bu6",
       "Bu7",
       "T1",
       "T2",
@@ -828,11 +829,24 @@
       "T5",
       "T6",
       "T7",
-      "25 WIP",
+      "20 WIP",
       "WM1",
-      "WM2",
-      "WM3"
+      "WM2"
     ]
+  },
+  {
+    "se": 79,
+    "run": "grun",
+    "add": "WIP"
+  },
+  {
+    "se": 83,
+    "run": "grun",
+    "add": [
+      "WIP",
+      "WM3"
+    ],
+    "remove": "Bu6"
   },
   {
     "se": 84,
@@ -887,6 +901,142 @@
   {
     "se": 153,
     "run": "grun",
+    "add": "WIP"
+  },
+  {
+    "se": 105,
+    "run": "jrun",
+    "add": [
+      "W1",
+      "W2",
+      "W3",
+      "W4",
+      "W5",
+      "W6",
+      "W7",
+      "W8",
+      "W9",
+      "W10",
+      "R1",
+      "R2",
+      "R3",
+      "R4",
+      "R5",
+      "R6",
+      "R7",
+      "B1",
+      "B2",
+      "B3",
+      "B4",
+      "B5",
+      "B6",
+      "B7",
+      "Y1",
+      "Y2",
+      "Y3",
+      "Y4",
+      "Y5",
+      "Y6",
+      "Y7",
+      "L1",
+      "L2",
+      "L3",
+      "L5",
+      "L6",
+      "L7",
+      "P1",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "O1",
+      "O2",
+      "O3",
+      "O4",
+      "O5",
+      "O6",
+      "O7",
+      "G1",
+      "G2",
+      "G3",
+      "Bu1",
+      "Bu2",
+      "Bu3",
+      "Bu4",
+      "Bu5",
+      "Bu6",
+      "Bu7",
+      "T1",
+      "T2",
+      "T3",
+      "T4",
+      "T5",
+      "T6",
+      "T7",
+      "31 WIP",
+      "WM1",
+      "WM2",
+      "WM3",
+      "3 RIP",
+      "RM1"
+    ]
+  },
+  {
+    "se": 106,
+    "run": "jrun",
+    "add": "WIP"
+  },
+  {
+    "se": 113,
+    "run": "jrun",
+    "add": [
+      "7 RIP",
+      "RM2"
+    ],
+    "remove": "7 WIP",
+    "notes": "RM2 significantly increases DC but reduces AP. Quantum reactor might make it worth it."
+  },
+  {
+    "se": 114,
+    "run": "jrun",
+    "add": "WIP"
+  },
+  {
+    "se": 133,
+    "run": "jrun",
+    "add": [
+      "15 RIP",
+      "RM3"
+    ],
+    "remove": "15 WIP",
+    "notes": "Quantum reactor is very strong at this point making DC important."
+  },
+  {
+    "se": 134,
+    "run": "jrun",
+    "add": "WIP"
+  },
+  {
+    "se": 145,
+    "run": "jrun",
+    "add": "G4",
+    "notes": "Gamma Spawn Rate cost reduction increases AP from PP 6-1 talent.\nNot fully sure when this becomes better than WIP."
+  },
+  {
+    "se": 146,
+    "run": "jrun",
+    "add": "WIP"
+  },
+  {
+    "se": 150,
+    "run": "jrun",
+    "add": "G6",
+    "notes": "G-Corp overclock modules give some good boosts.\nNot fully sure when this becomes better than WIP."
+  },
+  {
+    "se": 151,
+    "run": "jrun",
     "add": "WIP"
   }
 ]
