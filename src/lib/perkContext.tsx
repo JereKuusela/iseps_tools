@@ -1,23 +1,23 @@
 import { createContext, type Accessor, type ParentProps, useContext } from "solid-js"
-import perkGuideRowsJson from "../../data/perk_guide_rows.json"
+import perksJson from "../../data/perks.json"
 import perksMetaJson from "../../data/perks_meta.json"
 
-export type PerkRunType = "se_push" | (string & {})
+export type PerkRunType = "se" | "grun"
 
-export type PerkRunOption = {
+export type PerkRun = {
   value: PerkRunType
   label: string
 }
 
 export type PerkRowId = "W" | "R" | "B" | "Y" | "L" | "P" | "O" | "G" | "Bu" | "T"
 
-export type PerkRowMeta = {
+export type Perkrow = {
   id: PerkRowId
   label: string
   color: string
 }
 
-export type PerkMetaPerk = {
+export type Perk = {
   id: string
   rowId: PerkRowId
   tier: number
@@ -30,11 +30,11 @@ export type PerkExtraKey = (typeof PERK_EXTRA_KEYS)[number]
 
 export type PerkExtrasTooltips = Partial<Record<PerkRowId, Partial<Record<PerkExtraKey, string>>>>
 
-export type PerkMeta = {
-  runTypes: PerkRunOption[]
+export type PerkDefinitions = {
+  runTypes: PerkRun[]
   rowOrder: PerkRowId[]
-  rows: PerkRowMeta[]
-  perks: PerkMetaPerk[]
+  rows: Perkrow[]
+  perks: Perk[]
   extrasTooltips?: PerkExtrasTooltips
 }
 
@@ -48,25 +48,10 @@ export type PerkGuideEntry = {
   notes: string
 }
 
-type RawPerkGuideEntry = {
-  se: unknown
-  run: unknown
-  add?: unknown
-  remove?: unknown
-  notes?: unknown
-}
-
 export type PerkDataBundle = {
-  meta: PerkMeta
-  rows: PerkGuideEntry[]
+  definitions: PerkDefinitions
+  perks: PerkGuideEntry[]
 }
-
-const normalizeRun = (value: string): PerkRunType => {
-  const normalized = value.trim().toLowerCase()
-  if (normalized.length === 0) return "se_push"
-  return normalized as PerkRunType
-}
-
 const toInt = (value: unknown) => {
   const parsed = Number(value)
   if (!Number.isFinite(parsed)) return 0
@@ -184,11 +169,11 @@ const sortPerkTokens = (tokens: string[], rowOrder: PerkRowId[]) => {
   })
 }
 
-const rawMeta = perksMetaJson as PerkMeta
+const rawMeta = perksMetaJson as PerkDefinitions
 
-const normalizedMeta: PerkMeta = {
+const definitions: PerkDefinitions = {
   runTypes: rawMeta.runTypes.map((option) => ({
-    value: normalizeRun(option.value),
+    value: option.value,
     label: asText(option.label) || asText(option.value),
   })),
   rowOrder: rawMeta.rowOrder.map(asRowId).filter((entry): entry is PerkRowId => entry != null),
@@ -198,11 +183,11 @@ const normalizedMeta: PerkMeta = {
       if (!id) return null
       return {
         id,
-        label: asText(row.label) || id,
-        color: asText(row.color) || "#94A3B8",
+        label: row.label || id,
+        color: row.color,
       }
     })
-    .filter((entry): entry is PerkRowMeta => entry != null),
+    .filter((entry): entry is Perkrow => entry != null),
   perks: rawMeta.perks
     .map((perk) => {
       const rowId = asRowId(perk.rowId)
@@ -215,7 +200,7 @@ const normalizedMeta: PerkMeta = {
         tooltip: asText(perk.tooltip),
       }
     })
-    .filter((entry): entry is PerkMetaPerk => entry != null),
+    .filter((entry): entry is Perk => entry != null),
   extrasTooltips: (() => {
     const raw = rawMeta.extrasTooltips ?? {}
     const normalized: PerkExtrasTooltips = {}
@@ -243,42 +228,65 @@ const normalizedMeta: PerkMeta = {
   })(),
 }
 
-const rawGuideRows = (perkGuideRowsJson as unknown[])
-  .map((rawEntry) => {
-    const entry = (rawEntry ?? {}) as RawPerkGuideEntry
-    return {
-      se: toInt(entry.se),
-      run: normalizeRun(String(entry.run ?? "se_push")),
-      entry,
-    }
-  })
-  .filter((entry) => entry.se > 0)
-
-const rowsByRun = new Map<PerkRunType, { se: number; run: PerkRunType; entry: RawPerkGuideEntry }[]>()
-for (const row of rawGuideRows) {
-  const current = rowsByRun.get(row.run)
-  if (!current) {
-    rowsByRun.set(row.run, [row])
-    continue
-  }
-  current.push(row)
+export type RawPerkEntry = {
+  se: number
+  run: PerkRunType
+  add?: string | string[]
+  remove?: string | string[]
+  notes?: string
 }
 
-const normalizedRows: PerkGuideEntry[] = []
+const rawPerks: RawPerkEntry[] = perksJson as RawPerkEntry[]
 
-for (const [run, rows] of rowsByRun.entries()) {
-  rows.sort((a, b) => a.se - b.se)
+const perksByRun = new Map<PerkRunType, RawPerkEntry[]>()
+for (const perk of rawPerks) {
+  const current = perksByRun.get(perk.run)
+  if (!current) {
+    perksByRun.set(perk.run, [perk])
+    continue
+  }
+  current.push(perk)
+}
+
+export const fillPerkGaps = (run: PerkRunType, perks: RawPerkEntry[], maxSe: number) => {
+  const expanded: RawPerkEntry[] = []
+  let previous: RawPerkEntry | undefined = undefined
+  for (let se = 1; se <= maxSe; se += 1) {
+    const match = perks.find((row) => row.se === se)
+    if (match) {
+      previous = match
+      expanded.push(match)
+      continue
+    }
+    if (!previous) continue
+
+    const defaultEntry = {
+      se,
+      run,
+      add: previous.add,
+      remove: previous.remove,
+      // Notes don't carry over.
+    }
+
+    expanded.push(defaultEntry)
+  }
+
+  return expanded
+}
+
+const perkGuides: PerkGuideEntry[] = []
+
+for (const [run, perks] of perksByRun.entries()) {
+  const fullPerks = fillPerkGaps(run, perks, 170)
 
   let previousPerks = new Set<string>()
   let previousIpByRow: PerkIpByRow = {}
 
-  for (const row of rows) {
-    const raw = row.entry
-
+  for (const perk of fullPerks) {
     let nextPerks = new Set(previousPerks)
     let nextIpByRow = cloneIpByRowState(previousIpByRow)
 
-    for (const token of asTokenList(raw.remove)) {
+    for (const token of asTokenList(perk.remove)) {
       const ipToken = parseIpTokenDelta(token)
       if (ipToken) {
         const current = toInt(nextIpByRow[ipToken.rowId] ?? 0)
@@ -294,7 +302,7 @@ for (const [run, rows] of rowsByRun.entries()) {
       nextPerks.delete(token)
     }
 
-    for (const token of asTokenList(raw.add)) {
+    for (const token of asTokenList(perk.add)) {
       const ipToken = parseIpTokenDelta(token)
       if (ipToken) {
         const current = toInt(nextIpByRow[ipToken.rowId] ?? 0)
@@ -310,14 +318,14 @@ for (const [run, rows] of rowsByRun.entries()) {
       nextPerks.add(token)
     }
 
-    const perks = sortPerkTokens(Array.from(nextPerks), normalizedMeta.rowOrder)
+    const perks = sortPerkTokens(Array.from(nextPerks), definitions.rowOrder)
 
-    normalizedRows.push({
-      se: row.se,
+    perkGuides.push({
+      se: perk.se,
       run,
       perks,
       ipByRow: nextIpByRow,
-      notes: asText(raw.notes),
+      notes: asText(perk.notes),
     })
 
     previousPerks = new Set(perks)
@@ -325,14 +333,9 @@ for (const [run, rows] of rowsByRun.entries()) {
   }
 }
 
-normalizedRows.sort((a, b) => {
-  if (a.se !== b.se) return a.se - b.se
-  return a.run.localeCompare(b.run)
-})
-
-const perkDataBundle: PerkDataBundle = {
-  meta: normalizedMeta,
-  rows: normalizedRows,
+export const perkDataBundle: PerkDataBundle = {
+  definitions,
+  perks: perkGuides,
 }
 
 const PerkDataContext = createContext<Accessor<PerkDataBundle>>()

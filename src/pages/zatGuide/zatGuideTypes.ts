@@ -1,6 +1,6 @@
 import type { LargeNumber } from "../../lib/largeNumber"
 
-export type GuideRunType = "se_push" | "g_points" | "juno" | "cash"
+export type GuideRunType = "se" | "grun" | "jrun" | "crun"
 
 export type GuideNodeAmount = {
   id: string

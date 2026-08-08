@@ -1,8 +1,12 @@
 ﻿{
     "runTypes": [
         {
-            "value": "se_push",
+            "value": "se",
             "label": "SE Push"
+        },
+        {
+            "value": "grun",
+            "label": "G-Points"
         }
     ],
     "rowOrder": [

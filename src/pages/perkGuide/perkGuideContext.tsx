@@ -1,12 +1,6 @@
 import { createContext, createEffect, createMemo, type ParentProps, useContext } from "solid-js"
 import { createSyncedSignal } from "../../lib/persistedSignal"
-import {
-  type PerkGuideEntry,
-  type PerkMetaPerk,
-  type PerkRowId,
-  type PerkRunType,
-  usePerkData,
-} from "../../lib/perkContext"
+import { type PerkGuideEntry, type PerkRowId, type PerkRunType, usePerkData } from "../../lib/perkContext"
 import type { PerkGuideRowView, PerkRowLookup, PerkRunOption } from "./perkGuideTypes"
 
 const parseNumberish = (value: string) => {
@@ -21,9 +15,6 @@ type PerkGuideContextValue = {
   runType: () => PerkRunType
   setRunType: (next: PerkRunType) => PerkRunType
   runOptions: () => PerkRunOption[]
-  guideOptions: () => { value: string; label: string }[]
-  selectedGuideKey: () => string
-  setSelectedGuideKey: (next: string) => string
   selectedEntry: () => PerkGuideEntry | undefined
   previousEntry: () => PerkGuideEntry | undefined
   selectedChangesText: () => string[]
@@ -33,8 +24,6 @@ type PerkGuideContextValue = {
 }
 
 const PerkGuideContext = createContext<PerkGuideContextValue>()
-
-const buildGuideKey = (entry: PerkGuideEntry) => `${entry.run}|${entry.se}|${entry.perks.join(",")}`
 
 const formatPerkList = (perkIds: string[]) => perkIds.join(", ")
 
@@ -96,19 +85,11 @@ const derivePerkChangesText = (entry: PerkGuideEntry, previousEntry?: PerkGuideE
   return lines
 }
 
-const deriveGuideLabel = (entry: PerkGuideEntry, index: number) => {
-  if (entry.perks.length === 0) return `Guide ${index + 1}`
-  const preview = entry.perks.slice(0, 4)
-  const suffix = entry.perks.length > 4 ? ` +${entry.perks.length - 4}` : ""
-  return `${formatPerkList(preview)}${suffix}`
-}
-
 export const PerkGuideProvider = (props: ParentProps) => {
   const data = usePerkData()
 
   const [se, setSe] = createSyncedSignal("perk.guide.se", "1")
-  const [runType, setRunType] = createSyncedSignal<PerkRunType>("perk.guide.runType", "se_push")
-  const [selectedGuideKey, setSelectedGuideKey] = createSyncedSignal("perk.guide.key", "")
+  const [runType, setRunType] = createSyncedSignal<PerkRunType>("perk.guide.runType", "se")
 
   const normalizedSe = createMemo(() => {
     const parsed = Math.floor(parseNumberish(se()))
@@ -116,40 +97,19 @@ export const PerkGuideProvider = (props: ParentProps) => {
     return Math.max(1, parsed)
   })
 
-  const runOptions = createMemo<PerkRunOption[]>(() => data().meta.runTypes)
+  const runOptions = createMemo<PerkRunOption[]>(() => data().definitions.runTypes)
 
   const availableGuides = createMemo(() => {
     const currentSe = normalizedSe()
     const currentRun = runType()
-    return data().rows.filter((entry) => entry.se === currentSe && entry.run === currentRun)
+    return data().perks.filter((entry) => entry.se === currentSe && entry.run === currentRun)
   })
 
-  const selectedEntry = createMemo(() => {
-    const selectedKey = selectedGuideKey()
-    const guides = availableGuides()
-    return guides.find((entry) => buildGuideKey(entry) === selectedKey) ?? guides[0]
-  })
-
-  const guideOptions = createMemo(() => {
-    return availableGuides().map((entry, index) => ({
-      value: buildGuideKey(entry),
-      label: deriveGuideLabel(entry, index),
-    }))
-  })
-
-  createEffect(() => {
-    const selected = selectedEntry()
-    if (!selected) return
-
-    const key = buildGuideKey(selected)
-    if (selectedGuideKey() !== key) {
-      setSelectedGuideKey(key)
-    }
-  })
+  const selectedEntry = createMemo(() => availableGuides()[0])
 
   const rowLookup = createMemo<PerkRowLookup>(() => {
     const lookup: PerkRowLookup = new Map()
-    for (const perk of data().meta.perks) {
+    for (const perk of data().definitions.perks) {
       const current = lookup.get(perk.rowId)
       if (!current) {
         lookup.set(perk.rowId, [perk])
@@ -165,13 +125,13 @@ export const PerkGuideProvider = (props: ParentProps) => {
     return lookup
   })
 
-  const rowMetaMap = createMemo(() => new Map(data().meta.rows.map((row) => [row.id, row])))
+  const rowMetaMap = createMemo(() => new Map(data().definitions.rows.map((row) => [row.id, row])))
 
   const rowViews = createMemo<PerkGuideRowView[]>(() => {
     const entry = selectedEntry()
     const selectedPerks = new Set(entry?.perks ?? [])
 
-    return data().meta.rowOrder.map((rowId) => {
+    return data().definitions.rowOrder.map((rowId) => {
       const row = rowMetaMap().get(rowId) ?? {
         id: rowId,
         label: rowId,
@@ -199,7 +159,7 @@ export const PerkGuideProvider = (props: ParentProps) => {
     if (!current) return undefined
 
     const candidates = data()
-      .rows.filter((entry) => entry.run === current.run && entry.se < current.se)
+      .perks.filter((entry) => entry.run === current.run && entry.se < current.se)
       .sort((a, b) => b.se - a.se)
 
     return candidates[0]
@@ -219,14 +179,11 @@ export const PerkGuideProvider = (props: ParentProps) => {
         runType,
         setRunType,
         runOptions,
-        guideOptions,
-        selectedGuideKey,
-        setSelectedGuideKey,
         selectedEntry,
         previousEntry,
         selectedChangesText,
         rowViews,
-        rowOrder: () => data().meta.rowOrder,
+        rowOrder: () => data().definitions.rowOrder,
         hasDataForCurrentSelection: () => availableGuides().length > 0,
       }}
     >

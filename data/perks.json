@@ -1,50 +1,50 @@
 [
   {
     "se": 1,
-    "run": "se_push",
+    "run": "se",
     "add": "B1",
     "notes": "Congratulations on reaching your first Singularity!\n\nThe key to progressing quickly during the first few Singularity Events (SEs) is to use your crystals and tokens to upgrade your Alpha/Energy output as much as possible. This is going to be the main driver of progression until around SE4/5."
   },
   {
     "se": 2,
-    "run": "se_push",
+    "run": "se",
     "add": "B3"
   },
   {
     "se": 3,
-    "run": "se_push",
+    "run": "se",
     "add": "B2"
   },
   {
     "se": 4,
-    "run": "se_push",
+    "run": "se",
     "add": "R1",
     "notes": "It is a good idea to start levelling up your G-Point multiplier (at the bottom of the G-Corporation menu) in SE4. This will drive your progression for the next few Singularities."
   },
   {
     "se": 5,
-    "run": "se_push",
+    "run": "se",
     "add": "W1",
     "notes": "SE5 and the next few Singularities will be slower than anything up to this point. Put a few levels into the G-Point multiplier (at the bottom of the G-Corporation menu) if you haven't already done so and focus on levelling up your Companions."
   },
   {
     "se": 6,
-    "run": "se_push",
+    "run": "se",
     "add": "R2"
   },
   {
     "se": 7,
-    "run": "se_push",
+    "run": "se",
     "add": "W2"
   },
   {
     "se": 8,
-    "run": "se_push",
+    "run": "se",
     "add": "P1"
   },
   {
     "se": 9,
-    "run": "se_push",
+    "run": "se",
     "add": [
       "Y1",
       "Y3",
@@ -61,28 +61,28 @@
   },
   {
     "se": 10,
-    "run": "se_push",
+    "run": "se",
     "add": "R2"
   },
   {
     "se": 11,
-    "run": "se_push",
+    "run": "se",
     "add": "B3"
   },
   {
     "se": 12,
-    "run": "se_push",
+    "run": "se",
     "add": "W2",
     "notes": "It is usually a bad idea to use Egetuarium automation due to it's negative interaction with Egetuarian (Companion 11) and Project Leros (in the Corvus Funding menu under Son-Egetuar)."
   },
   {
     "se": 13,
-    "run": "se_push",
+    "run": "se",
     "add": "L1"
   },
   {
     "se": 14,
-    "run": "se_push",
+    "run": "se",
     "add": [
       "W3",
       "W4"
@@ -91,27 +91,27 @@
   },
   {
     "se": 15,
-    "run": "se_push",
+    "run": "se",
     "add": "L1"
   },
   {
     "se": 16,
-    "run": "se_push",
+    "run": "se",
     "add": "P1"
   },
   {
     "se": 17,
-    "run": "se_push",
+    "run": "se",
     "add": "P2"
   },
   {
     "se": 18,
-    "run": "se_push",
+    "run": "se",
     "add": "W7"
   },
   {
     "se": 19,
-    "run": "se_push",
+    "run": "se",
     "add": [
       "O1",
       "O2",
@@ -124,17 +124,17 @@
   },
   {
     "se": 20,
-    "run": "se_push",
+    "run": "se",
     "add": "P2"
   },
   {
     "se": 21,
-    "run": "se_push",
+    "run": "se",
     "add": "W7"
   },
   {
     "se": 22,
-    "run": "se_push",
+    "run": "se",
     "add": [
       "B4",
       "B6",
@@ -147,17 +147,17 @@
   },
   {
     "se": 23,
-    "run": "se_push",
+    "run": "se",
     "add": "P2"
   },
   {
     "se": 24,
-    "run": "se_push",
+    "run": "se",
     "add": "W7"
   },
   {
     "se": 25,
-    "run": "se_push",
+    "run": "se",
     "add": [
       "L2",
       "L3",
@@ -172,17 +172,17 @@
   },
   {
     "se": 26,
-    "run": "se_push",
+    "run": "se",
     "add": "W7"
   },
   {
     "se": 27,
-    "run": "se_push",
+    "run": "se",
     "add": "P2"
   },
   {
     "se": 28,
-    "run": "se_push",
+    "run": "se",
     "add": [
       "O4",
       "O6"
@@ -191,12 +191,12 @@
   },
   {
     "se": 29,
-    "run": "se_push",
+    "run": "se",
     "add": "P2"
   },
   {
     "se": 30,
-    "run": "se_push",
+    "run": "se",
     "add": [
       "O5",
       "O7"
@@ -205,22 +205,22 @@
   },
   {
     "se": 31,
-    "run": "se_push",
+    "run": "se",
     "add": "P3"
   },
   {
     "se": 32,
-    "run": "se_push",
+    "run": "se",
     "add": "W6"
   },
   {
     "se": 33,
-    "run": "se_push",
+    "run": "se",
     "add": "W8"
   },
   {
     "se": 34,
-    "run": "se_push",
+    "run": "se",
     "add": [
       "P4",
       "P5",
@@ -233,17 +233,17 @@
   },
   {
     "se": 35,
-    "run": "se_push",
+    "run": "se",
     "add": "G1"
   },
   {
     "se": 36,
-    "run": "se_push",
+    "run": "se",
     "add": "W2"
   },
   {
     "se": 37,
-    "run": "se_push",
+    "run": "se",
     "add": [
       "Bu1",
       "Bu2",
@@ -260,7 +260,7 @@
   },
   {
     "se": 38,
-    "run": "se_push",
+    "run": "se",
     "add": [
       "P4",
       "P5",
@@ -279,22 +279,22 @@
   },
   {
     "se": 39,
-    "run": "se_push",
+    "run": "se",
     "add": "B5"
   },
   {
     "se": 40,
-    "run": "se_push",
+    "run": "se",
     "add": "W8"
   },
   {
     "se": 41,
-    "run": "se_push",
+    "run": "se",
     "add": "W9"
   },
   {
     "se": 42,
-    "run": "se_push",
+    "run": "se",
     "add": [
       "Bu1",
       "Bu2",
@@ -311,27 +311,27 @@
   },
   {
     "se": 43,
-    "run": "se_push",
+    "run": "se",
     "add": "R3"
   },
   {
     "se": 44,
-    "run": "se_push",
+    "run": "se",
     "add": "R4"
   },
   {
     "se": 45,
-    "run": "se_push",
+    "run": "se",
     "add": "R5"
   },
   {
     "se": 46,
-    "run": "se_push",
+    "run": "se",
     "add": "W6"
   },
   {
     "se": 47,
-    "run": "se_push",
+    "run": "se",
     "add": [
       "R6",
       "R7"
@@ -340,12 +340,12 @@
   },
   {
     "se": 48,
-    "run": "se_push",
+    "run": "se",
     "add": "W6"
   },
   {
     "se": 49,
-    "run": "se_push",
+    "run": "se",
     "add": [
       "G2",
       "G3"
@@ -354,17 +354,17 @@
   },
   {
     "se": 50,
-    "run": "se_push",
+    "run": "se",
     "add": "W6"
   },
   {
     "se": 51,
-    "run": "se_push",
+    "run": "se",
     "add": "B5"
   },
   {
     "se": 52,
-    "run": "se_push",
+    "run": "se",
     "add": [
       "T4",
       "T6",
@@ -377,27 +377,27 @@
   },
   {
     "se": 53,
-    "run": "se_push",
+    "run": "se",
     "add": "W6"
   },
   {
     "se": 54,
-    "run": "se_push",
+    "run": "se",
     "add": "B5"
   },
   {
     "se": 55,
-    "run": "se_push",
+    "run": "se",
     "add": "Bu6"
   },
   {
     "se": 56,
-    "run": "se_push",
+    "run": "se",
     "add": "W8"
   },
   {
     "se": 57,
-    "run": "se_push",
+    "run": "se",
     "add": [
       "T2",
       "W10",
@@ -412,17 +412,17 @@
   },
   {
     "se": 58,
-    "run": "se_push",
+    "run": "se",
     "add": "P6"
   },
   {
     "se": 59,
-    "run": "se_push",
+    "run": "se",
     "add": "WIP"
   },
   {
     "se": 60,
-    "run": "se_push",
+    "run": "se",
     "add": [
       "WM1",
       "WIP"
@@ -431,32 +431,22 @@
   },
   {
     "se": 61,
-    "run": "se_push",
+    "run": "se",
     "add": "P6"
   },
   {
     "se": 62,
-    "run": "se_push",
+    "run": "se",
     "add": "B3"
   },
   {
     "se": 63,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 64,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 65,
-    "run": "se_push",
+    "run": "se",
     "add": "WIP"
   },
   {
     "se": 66,
-    "run": "se_push",
+    "run": "se",
     "add": [
       "WM2",
       "4 WIP"
@@ -470,7 +460,7 @@
   },
   {
     "se": 67,
-    "run": "se_push",
+    "run": "se",
     "add": [
       "L6",
       "P6"
@@ -479,7 +469,7 @@
   },
   {
     "se": 68,
-    "run": "se_push",
+    "run": "se",
     "add": [
       "G2",
       "G3"
@@ -488,82 +478,57 @@
   },
   {
     "se": 69,
-    "run": "se_push",
+    "run": "se",
     "add": "P6"
   },
   {
     "se": 70,
-    "run": "se_push",
+    "run": "se",
     "add": "B3"
   },
   {
     "se": 71,
-    "run": "se_push",
+    "run": "se",
     "add": "Bu6"
   },
   {
     "se": 72,
-    "run": "se_push",
+    "run": "se",
     "add": "Bu5"
   },
   {
     "se": 73,
-    "run": "se_push",
+    "run": "se",
     "add": "B5"
   },
   {
     "se": 74,
-    "run": "se_push",
+    "run": "se",
     "add": "T5"
   },
   {
     "se": 75,
-    "run": "se_push",
+    "run": "se",
     "add": "T3"
   },
   {
     "se": 76,
-    "run": "se_push",
+    "run": "se",
     "add": "Bu4"
   },
   {
     "se": 77,
-    "run": "se_push",
+    "run": "se",
     "add": "L5"
   },
   {
     "se": 78,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 79,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 80,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 81,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 82,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 83,
-    "run": "se_push",
+    "run": "se",
     "add": "WIP"
   },
   {
     "se": 84,
-    "run": "se_push",
+    "run": "se",
     "add": [
       "WM3",
       "9 WIP"
@@ -582,57 +547,57 @@
   },
   {
     "se": 85,
-    "run": "se_push",
+    "run": "se",
     "add": "B5"
   },
   {
     "se": 86,
-    "run": "se_push",
+    "run": "se",
     "add": "B3"
   },
   {
     "se": 87,
-    "run": "se_push",
+    "run": "se",
     "add": "Bu6"
   },
   {
     "se": 88,
-    "run": "se_push",
+    "run": "se",
     "add": "T5"
   },
   {
     "se": 89,
-    "run": "se_push",
+    "run": "se",
     "add": "T3"
   },
   {
     "se": 90,
-    "run": "se_push",
+    "run": "se",
     "add": "Bu4"
   },
   {
     "se": 91,
-    "run": "se_push",
+    "run": "se",
     "add": "P6"
   },
   {
     "se": 92,
-    "run": "se_push",
+    "run": "se",
     "add": "Bu5"
   },
   {
     "se": 93,
-    "run": "se_push",
+    "run": "se",
     "add": "L5"
   },
   {
     "se": 94,
-    "run": "se_push",
+    "run": "se",
     "add": "WIP"
   },
   {
     "se": 95,
-    "run": "se_push",
+    "run": "se",
     "add": [
       "G5",
       "G7"
@@ -641,47 +606,17 @@
   },
   {
     "se": 96,
-    "run": "se_push",
+    "run": "se",
     "add": "G6"
   },
   {
     "se": 97,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 98,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 99,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 100,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 101,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 102,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 103,
-    "run": "se_push",
+    "run": "se",
     "add": "WIP"
   },
   {
     "se": 104,
-    "run": "se_push",
+    "run": "se",
     "add": [
       "RM1",
       "3 RIP"
@@ -690,46 +625,20 @@
   },
   {
     "se": 105,
-    "run": "se_push",
+    "run": "se",
     "remove": "G6",
     "notes": "G6 becomes less useful once you get C35 and C36 to level 50. You could optionally keep G6 in your build if you are not doing separate GP runs.",
     "add": "2 WIP"
   },
   {
     "se": 106,
-    "run": "se_push",
+    "run": "se",
     "notes": "G6 becomes less useful once you get C35 and C36 to level 50. You could optionally keep G6 in your build if you are not doing separate GP runs.",
-    "add": "WIP"
-  },
-  {
-    "se": 107,
-    "run": "se_push",
-    "notes": "G6 becomes less useful once you get C35 and C36 to level 50. You could optionally keep G6 in your build if you are not doing separate GP runs.",
-    "add": "WIP"
-  },
-  {
-    "se": 108,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 109,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 110,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 111,
-    "run": "se_push",
     "add": "WIP"
   },
   {
     "se": 112,
-    "run": "se_push",
+    "run": "se",
     "add": [
       "RM2",
       "7 RIP"
@@ -738,22 +647,12 @@
   },
   {
     "se": 113,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 114,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 115,
-    "run": "se_push",
+    "run": "se",
     "add": "WIP"
   },
   {
     "se": 116,
-    "run": "se_push",
+    "run": "se",
     "add": [
       "Y2",
       "Y4"
@@ -763,66 +662,44 @@
   },
   {
     "se": 117,
-    "run": "se_push",
-    "notes": "Y2 and Y4 are worthwhile here to get 3 more Juno stability levels once you can get to DCM 83",
-    "add": "WIP"
-  },
-  {
-    "se": 118,
-    "run": "se_push",
+    "run": "se",
     "notes": "Y2 and Y4 are worthwhile here to get 3 more Juno stability levels once you can get to DCM 83",
     "add": "WIP"
   },
   {
     "se": 119,
-    "run": "se_push",
+    "run": "se",
     "add": "G6",
     "notes": "G6 becomes worthwhile again for more GP to unlock and boost C39"
   },
   {
     "se": 120,
-    "run": "se_push",
+    "run": "se",
     "notes": "G6 becomes worthwhile again for more GP to boost C39",
-    "add": "WIP"
-  },
-  {
-    "se": 121,
-    "run": "se_push",
-    "notes": "G6 becomes worthwhile again for more GP to boost C39",
-    "add": "WIP"
-  },
-  {
-    "se": 122,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 123,
-    "run": "se_push",
     "add": "WIP"
   },
   {
     "se": 124,
-    "run": "se_push",
+    "run": "se",
     "remove": "Y4",
     "notes": "Y4 is removed once Juno stability reaches 98+ without it",
     "add": "2 WIP"
   },
   {
     "se": 125,
-    "run": "se_push",
+    "run": "se",
     "remove": "Y2",
     "notes": "Y2 is removed once Juno stability reaches 99+ without it.",
     "add": "2 WIP"
   },
   {
     "se": 126,
-    "run": "se_push",
+    "run": "se",
     "add": "WIP"
   },
   {
     "se": 127,
-    "run": "se_push",
+    "run": "se",
     "add": [
       "RM3",
       "15 RIP"
@@ -836,129 +713,44 @@
   },
   {
     "se": 128,
-    "run": "se_push",
+    "run": "se",
     "add": "RM1"
   },
   {
     "se": 129,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 130,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 131,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 132,
-    "run": "se_push",
+    "run": "se",
     "add": "WIP"
   },
   {
     "se": 133,
-    "run": "se_push",
+    "run": "se",
     "notes": "At this point, if you have reached ZAT 11 and take Solutions node, you will then get Companion 41 and then perk G6 becomes worth taking to boost this.",
     "add": "WIP"
   },
   {
     "se": 134,
-    "run": "se_push",
+    "run": "se",
     "add": "G6",
     "notes": "At this point, if you have reached ZAT 11 and take Solutions node, you will then get Companion 41 and then perk G6 becomes worth taking to boost this."
   },
   {
     "se": 135,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 136,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 137,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 138,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 139,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 140,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 141,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 142,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 143,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 144,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 145,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 146,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 147,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 148,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 149,
-    "run": "se_push",
+    "run": "se",
     "add": "WIP"
   },
   {
     "se": 150,
-    "run": "se_push",
+    "run": "se",
     "add": "G4"
   },
   {
     "se": 151,
-    "run": "se_push",
+    "run": "se",
     "add": "WIP"
   },
   {
     "se": 152,
-    "run": "se_push",
+    "run": "se",
     "remove": "WIP",
     "add": [
       "Y2",
@@ -968,93 +760,133 @@
   },
   {
     "se": 153,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 154,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 155,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 156,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 157,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 158,
-    "run": "se_push",
-    "add": "WIP"
-  },
-  {
-    "se": 159,
-    "run": "se_push",
+    "run": "se",
     "add": "WIP"
   },
   {
     "se": 160,
-    "run": "se_push",
+    "run": "se",
     "add": "RIP",
     "notes": "Red IP surpasses White IP around this point and tends to be the better option going forward"
   },
   {
-    "se": 161,
-    "run": "se_push",
-    "add": "RIP"
+    "se": 83,
+    "run": "grun",
+    "add": [
+      "W1",
+      "W2",
+      "W3",
+      "W4",
+      "W5",
+      "W6",
+      "W7",
+      "W8",
+      "W9",
+      "W10",
+      "R1",
+      "R2",
+      "R3",
+      "R4",
+      "R5",
+      "R6",
+      "R7",
+      "Y1",
+      "L1",
+      "L2",
+      "L3",
+      "L5",
+      "L7",
+      "P1",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "O1",
+      "O2",
+      "O3",
+      "O4",
+      "O5",
+      "O6",
+      "O7",
+      "G1",
+      "G2",
+      "G3",
+      "G4",
+      "G5",
+      "G6",
+      "G7",
+      "Bu1",
+      "Bu2",
+      "Bu3",
+      "Bu4",
+      "Bu7",
+      "T1",
+      "T2",
+      "T3",
+      "T4",
+      "T5",
+      "T6",
+      "T7",
+      "25 WIP",
+      "WM1",
+      "WM2",
+      "WM3"
+    ]
   },
   {
-    "se": 162,
-    "run": "se_push",
-    "add": "RIP"
+    "se": 84,
+    "run": "grun",
+    "add": "WIP"
   },
   {
-    "se": 163,
-    "run": "se_push",
-    "add": "RIP"
+    "se": 91,
+    "run": "grun",
+    "add": [
+      "Bu6",
+      "B1",
+      "B2",
+      "B4",
+      "B5",
+      "B6",
+      "B7"
+    ],
+    "remove": "6 WIP"
   },
   {
-    "se": 164,
-    "run": "se_push",
-    "add": "RIP"
+    "se": 92,
+    "run": "grun",
+    "add": "WIP"
   },
   {
-    "se": 165,
-    "run": "se_push",
-    "add": "RIP"
+    "se": 105,
+    "run": "grun",
+    "add": [
+      "Y3",
+      "Y5",
+      "Y6",
+      "Y7",
+      "L6"
+    ],
+    "remove": "4 WIP"
   },
   {
-    "se": 166,
-    "run": "se_push",
-    "add": "RIP"
+    "se": 106,
+    "run": "grun",
+    "add": "WIP"
   },
   {
-    "se": 167,
-    "run": "se_push",
-    "add": "RIP"
+    "se": 152,
+    "run": "grun",
+    "add": [
+      "Y2",
+      "Y4"
+    ],
+    "remove": "WIP"
   },
   {
-    "se": 168,
-    "run": "se_push",
-    "add": "RIP"
-  },
-  {
-    "se": 169,
-    "run": "se_push",
-    "add": "RIP"
-  },
-  {
-    "se": 170,
-    "run": "se_push",
-    "add": "RIP"
+    "se": 153,
+    "run": "grun",
+    "add": "WIP"
   }
 ]

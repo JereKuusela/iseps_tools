@@ -1,7 +1,7 @@
 import { For, Show, createMemo } from "solid-js"
 import { InfoCard } from "../../components/layout/contentBlocks"
 import { Tooltip } from "../../components/ui/Tooltip"
-import { usePerkData, type PerkExtraKey, type PerkMetaPerk, type PerkRowId } from "../../lib/perkContext"
+import { usePerkData, type PerkExtraKey, type Perk, type PerkRowId } from "../../lib/perkContext"
 import { usePerkGuideContext } from "./perkGuideContext"
 
 const colorDotStyle = (hex: string) => ({
@@ -14,7 +14,7 @@ const inactiveDotStyle = {
   "border-color": "#94A3B8",
 }
 
-const sortPerks = (perks: PerkMetaPerk[]) => perks.slice().sort((a, b) => a.tier - b.tier)
+const sortPerks = (perks: Perk[]) => perks.slice().sort((a, b) => a.tier - b.tier)
 
 const tableCellClass =
   "align-middle border border-ink/15 bg-white/70 px-2 py-1 text-center text-xs dark:border-white/15 dark:bg-[#131f31]"
@@ -36,7 +36,7 @@ const TableDot = (props: { color: string; inactive?: boolean }) => (
   />
 )
 
-const PerkTierCell = (props: { perk: PerkMetaPerk | undefined; isTaken: boolean; color: string }) => (
+const PerkTierCell = (props: { perk: Perk | undefined; isTaken: boolean; color: string }) => (
   <td class={tableCellClass}>
     <div class={tableCellInnerClass}>
       <Show when={props.perk} fallback={<TableUnavailableContent />}>
@@ -90,9 +90,9 @@ export const PerkGuideRightColumn = () => {
   })
 
   const allPerksByRow = createMemo(() => {
-    const mapping = new Map<PerkRowId, PerkMetaPerk[]>()
+    const mapping = new Map<PerkRowId, Perk[]>()
 
-    for (const perk of data().meta.perks) {
+    for (const perk of data().definitions.perks) {
       const current = mapping.get(perk.rowId)
       if (!current) {
         mapping.set(perk.rowId, [perk])
@@ -113,7 +113,7 @@ export const PerkGuideRightColumn = () => {
     return mapping
   })
 
-  const getExtraTooltip = (rowId: PerkRowId, key: PerkExtraKey) => data().meta.extrasTooltips?.[rowId]?.[key]
+  const getExtraTooltip = (rowId: PerkRowId, key: PerkExtraKey) => data().definitions.extrasTooltips?.[rowId]?.[key]
 
   return (
     <InfoCard>

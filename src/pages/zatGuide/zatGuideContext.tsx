@@ -5,10 +5,10 @@ import { useZatData, ZatGuideEntry } from "../../lib/zatContext"
 import type { GuideNodeView, GuideRunType } from "./zatGuideTypes"
 
 const runOptions: { value: GuideRunType; label: string }[] = [
-  { value: "se_push", label: "SE Push" },
-  { value: "g_points", label: "G-Points" },
-  { value: "juno", label: "Juno" },
-  { value: "cash", label: "Cash" },
+  { value: "se", label: "SE Push" },
+  { value: "grun", label: "G-Points" },
+  { value: "jrun", label: "Juno" },
+  { value: "crun", label: "Cash" },
 ]
 
 const parseNumberish = (value: string) => {
@@ -42,7 +42,7 @@ export const ZatGuideProvider = (props: ParentProps) => {
   const data = useZatData()
 
   const [cycles, setCycles] = createSyncedSignal("zat.og.cycles", "0")
-  const [runType, setRunType] = createSyncedSignal<GuideRunType>("zat.guide.runType", "se_push")
+  const [runType, setRunType] = createSyncedSignal<GuideRunType>("zat.guide.runType", "se")
   const [selectedGuideTitle, setSelectedGuideTitle] = createSyncedSignal("zat.guide.title", "")
   const [sharesPercent, setSharesPercent] = createSyncedSignal("zat.guide.shares", "0")
   const [ogTechLevels] = createSyncedSignal<number[]>("zat.og.techLevels", [])

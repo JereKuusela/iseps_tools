@@ -1,7 +1,7 @@
 [
   {
     "cycle": 1,
-    "run": "se_push",
+    "run": "se",
     "nodes": [
       {
         "id": "centre"
@@ -10,7 +10,7 @@
   },
   {
     "cycle": 2,
-    "run": "se_push",
+    "run": "se",
     "nodes": [
       {
         "id": "centre"
@@ -22,7 +22,7 @@
   },
   {
     "cycle": 3,
-    "run": "se_push",
+    "run": "se",
     "nodes": [
       {
         "id": "centre"
@@ -36,7 +36,7 @@
   },
   {
     "cycle": 4,
-    "run": "se_push",
+    "run": "se",
     "nodes": [
       {
         "id": "centre"
@@ -50,7 +50,7 @@
   },
   {
     "cycle": 5,
-    "run": "se_push",
+    "run": "se",
     "nodes": [
       {
         "id": "centre"
@@ -67,7 +67,7 @@
   },
   {
     "cycle": 6,
-    "run": "se_push",
+    "run": "se",
     "nodes": [
       {
         "id": "centre"
@@ -84,7 +84,7 @@
   },
   {
     "cycle": 7,
-    "run": "se_push",
+    "run": "se",
     "nodes": [
       {
         "id": "centre"
@@ -101,7 +101,7 @@
   },
   {
     "cycle": 8,
-    "run": "se_push",
+    "run": "se",
     "nodes": [
       {
         "id": "centre"
@@ -121,7 +121,7 @@
   },
   {
     "cycle": 9,
-    "run": "se_push",
+    "run": "se",
     "nodes": [
       {
         "id": "centre"
@@ -144,7 +144,7 @@
   },
   {
     "cycle": 10,
-    "run": "se_push",
+    "run": "se",
     "nodes": [
       {
         "id": "centre"
@@ -170,7 +170,7 @@
   },
   {
     "cycle": 11,
-    "run": "se_push",
+    "run": "se",
     "nodes": [
       {
         "id": "centre"
@@ -200,7 +200,7 @@
   },
   {
     "cycle": 12,
-    "run": "se_push",
+    "run": "se",
     "nodes": [
       {
         "id": "centre"
@@ -229,7 +229,7 @@
   },
   {
     "cycle": 13,
-    "run": "se_push",
+    "run": "se",
     "nodes": [
       {
         "id": "centre"
@@ -261,7 +261,7 @@
   },
   {
     "cycle": 14,
-    "run": "se_push",
+    "run": "se",
     "title": "Main",
     "nodes": [
       {
@@ -293,7 +293,7 @@
   },
   {
     "cycle": 14,
-    "run": "se_push",
+    "run": "se",
     "title": "Alternative",
     "nodes": [
       {
@@ -330,7 +330,7 @@
   },
   {
     "cycle": 15,
-    "run": "se_push",
+    "run": "se",
     "nodes": [
       {
         "id": "centre"
@@ -368,7 +368,7 @@
   },
   {
     "cycle": 16,
-    "run": "se_push",
+    "run": "se",
     "nodes": [
       {
         "id": "centre"
@@ -406,7 +406,7 @@
   },
   {
     "cycle": 17,
-    "run": "se_push",
+    "run": "se",
     "nodes": [
       {
         "id": "centre"
@@ -445,7 +445,7 @@
   },
   {
     "cycle": 18,
-    "run": "se_push",
+    "run": "se",
     "title": "Gamma",
     "note": "Should be slightly better if you can afford the last G-Corp overclock module.",
     "nodes": [
@@ -487,7 +487,7 @@
   },
   {
     "cycle": 18,
-    "run": "se_push",
+    "run": "se",
     "title": "Ixion",
     "note": "Probably slightly worse. unless you can't afford the last G-Corp overclock module yet.",
     "nodes": [
@@ -529,7 +529,7 @@
   },
   {
     "cycle": 19,
-    "run": "se_push",
+    "run": "se",
     "nodes": [
       {
         "id": "centre"
@@ -576,7 +576,7 @@
   },
   {
     "cycle": 20,
-    "run": "se_push",
+    "run": "se",
     "nodes": [
       {
         "id": "centre"
@@ -624,7 +624,7 @@
   },
   {
     "cycle": 21,
-    "run": "se_push",
+    "run": "se",
     "nodes": [
       {
         "id": "centre"
@@ -672,7 +672,7 @@
   },
   {
     "cycle": 45,
-    "run": "se_push",
+    "run": "se",
     "nodes": [
       {
         "id": "centre"
@@ -741,7 +741,7 @@
   },
   {
     "cycle": 1,
-    "run": "g_points",
+    "run": "grun",
     "nodes": [
       {
         "id": "centre"
@@ -750,7 +750,7 @@
   },
   {
     "cycle": 2,
-    "run": "g_points",
+    "run": "grun",
     "nodes": [
       {
         "id": "centre"
@@ -762,7 +762,7 @@
   },
   {
     "cycle": 3,
-    "run": "g_points",
+    "run": "grun",
     "nodes": [
       {
         "id": "centre"
@@ -775,7 +775,7 @@
   },
   {
     "cycle": 4,
-    "run": "g_points",
+    "run": "grun",
     "nodes": [
       {
         "id": "centre"
@@ -788,7 +788,7 @@
   },
   {
     "cycle": 5,
-    "run": "g_points",
+    "run": "grun",
     "nodes": [
       {
         "id": "centre"
@@ -805,7 +805,7 @@
   },
   {
     "cycle": 6,
-    "run": "g_points",
+    "run": "grun",
     "nodes": [
       {
         "id": "centre"
@@ -826,7 +826,7 @@
   },
   {
     "cycle": 7,
-    "run": "g_points",
+    "run": "grun",
     "nodes": [
       {
         "id": "centre"
@@ -848,7 +848,7 @@
   },
   {
     "cycle": 8,
-    "run": "g_points",
+    "run": "grun",
     "nodes": [
       {
         "id": "centre"
@@ -870,7 +870,7 @@
   },
   {
     "cycle": 9,
-    "run": "g_points",
+    "run": "grun",
     "nodes": [
       {
         "id": "centre"
@@ -895,7 +895,7 @@
   },
   {
     "cycle": 10,
-    "run": "g_points",
+    "run": "grun",
     "nodes": [
       {
         "id": "centre"
@@ -921,7 +921,7 @@
   },
   {
     "cycle": 11,
-    "run": "g_points",
+    "run": "grun",
     "nodes": [
       {
         "id": "centre"
@@ -948,7 +948,7 @@
   },
   {
     "cycle": 12,
-    "run": "g_points",
+    "run": "grun",
     "nodes": [
       {
         "id": "centre"
@@ -978,7 +978,7 @@
   },
   {
     "cycle": 13,
-    "run": "g_points",
+    "run": "grun",
     "nodes": [
       {
         "id": "centre"
@@ -1009,7 +1009,7 @@
   },
   {
     "cycle": 14,
-    "run": "g_points",
+    "run": "grun",
     "nodes": [
       {
         "id": "centre"
@@ -1040,7 +1040,7 @@
   },
   {
     "cycle": 15,
-    "run": "g_points",
+    "run": "grun",
     "nodes": [
       {
         "id": "centre"
@@ -1074,7 +1074,7 @@
   },
   {
     "cycle": 16,
-    "run": "g_points",
+    "run": "grun",
     "nodes": [
       {
         "id": "centre"
@@ -1111,7 +1111,7 @@
   },
   {
     "cycle": 17,
-    "run": "g_points",
+    "run": "grun",
     "nodes": [
       {
         "id": "centre"
@@ -1150,7 +1150,7 @@
   },
   {
     "cycle": 18,
-    "run": "g_points",
+    "run": "grun",
     "nodes": [
       {
         "id": "centre"
@@ -1189,7 +1189,7 @@
   },
   {
     "cycle": 19,
-    "run": "g_points",
+    "run": "grun",
     "nodes": [
       {
         "id": "centre"
@@ -1229,7 +1229,7 @@
   },
   {
     "cycle": 20,
-    "run": "g_points",
+    "run": "grun",
     "nodes": [
       {
         "id": "centre"
@@ -1269,7 +1269,7 @@
   },
   {
     "cycle": 21,
-    "run": "g_points",
+    "run": "grun",
     "nodes": [
       {
         "id": "centre"
@@ -1317,7 +1317,7 @@
   },
   {
     "cycle": 1,
-    "run": "juno",
+    "run": "jrun",
     "nodes": [
       {
         "id": "centre"
@@ -1327,7 +1327,7 @@
   },
   {
     "cycle": 2,
-    "run": "juno",
+    "run": "jrun",
     "nodes": [
       {
         "id": "centre"
@@ -1340,7 +1340,7 @@
   },
   {
     "cycle": 3,
-    "run": "juno",
+    "run": "jrun",
     "nodes": [
       {
         "id": "centre"
@@ -1354,7 +1354,7 @@
   },
   {
     "cycle": 4,
-    "run": "juno",
+    "run": "jrun",
     "nodes": [
       {
         "id": "centre"
@@ -1373,7 +1373,7 @@
   },
   {
     "cycle": 5,
-    "run": "juno",
+    "run": "jrun",
     "nodes": [
       {
         "id": "centre"
@@ -1393,7 +1393,7 @@
   },
   {
     "cycle": 6,
-    "run": "juno",
+    "run": "jrun",
     "nodes": [
       {
         "id": "centre"
@@ -1413,7 +1413,7 @@
   },
   {
     "cycle": 7,
-    "run": "juno",
+    "run": "jrun",
     "nodes": [
       {
         "id": "centre"
@@ -1436,7 +1436,7 @@
   },
   {
     "cycle": 8,
-    "run": "juno",
+    "run": "jrun",
     "nodes": [
       {
         "id": "centre"
@@ -1459,7 +1459,7 @@
   },
   {
     "cycle": 9,
-    "run": "juno",
+    "run": "jrun",
     "nodes": [
       {
         "id": "centre"
@@ -1483,7 +1483,7 @@
   },
   {
     "cycle": 10,
-    "run": "juno",
+    "run": "jrun",
     "nodes": [
       {
         "id": "centre"
@@ -1507,7 +1507,7 @@
   },
   {
     "cycle": 11,
-    "run": "juno",
+    "run": "jrun",
     "nodes": [
       {
         "id": "centre"
@@ -1534,7 +1534,7 @@
   },
   {
     "cycle": 12,
-    "run": "juno",
+    "run": "jrun",
     "nodes": [
       {
         "id": "centre"
@@ -1562,7 +1562,7 @@
   },
   {
     "cycle": 13,
-    "run": "juno",
+    "run": "jrun",
     "nodes": [
       {
         "id": "centre"
@@ -1590,7 +1590,7 @@
   },
   {
     "cycle": 14,
-    "run": "juno",
+    "run": "jrun",
     "nodes": [
       {
         "id": "centre"
@@ -1621,7 +1621,7 @@
   },
   {
     "cycle": 15,
-    "run": "juno",
+    "run": "jrun",
     "nodes": [
       {
         "id": "centre"
@@ -1655,7 +1655,7 @@
   },
   {
     "cycle": 16,
-    "run": "juno",
+    "run": "jrun",
     "nodes": [
       {
         "id": "centre"
@@ -1692,7 +1692,7 @@
   },
   {
     "cycle": 17,
-    "run": "juno",
+    "run": "jrun",
     "nodes": [
       {
         "id": "centre"
@@ -1730,7 +1730,7 @@
   },
   {
     "cycle": 18,
-    "run": "juno",
+    "run": "jrun",
     "nodes": [
       {
         "id": "centre"
@@ -1768,7 +1768,7 @@
   },
   {
     "cycle": 19,
-    "run": "juno",
+    "run": "jrun",
     "title": "Start",
     "nodes": [
       {
@@ -1813,7 +1813,7 @@
   },
   {
     "cycle": 19,
-    "run": "juno",
+    "run": "jrun",
     "title": "Late",
     "nodes": [
       {
@@ -1860,7 +1860,7 @@
   },
   {
     "cycle": 20,
-    "run": "juno",
+    "run": "jrun",
     "nodes": [
       {
         "id": "centre"
@@ -1906,7 +1906,7 @@
   },
   {
     "cycle": 21,
-    "run": "juno",
+    "run": "jrun",
     "nodes": [
       {
         "id": "centre"
@@ -1955,7 +1955,7 @@
   },
   {
     "cycle": 1,
-    "run": "cash",
+    "run": "crun",
     "nodes": [
       {
         "id": "centre"
@@ -1965,7 +1965,7 @@
   },
   {
     "cycle": 2,
-    "run": "cash",
+    "run": "crun",
     "nodes": [
       {
         "id": "centre"
@@ -1978,7 +1978,7 @@
   },
   {
     "cycle": 3,
-    "run": "cash",
+    "run": "crun",
     "nodes": [
       {
         "id": "centre"
@@ -1992,7 +1992,7 @@
   },
   {
     "cycle": 4,
-    "run": "cash",
+    "run": "crun",
     "nodes": [
       {
         "id": "centre"
@@ -2006,7 +2006,7 @@
   },
   {
     "cycle": 5,
-    "run": "cash",
+    "run": "crun",
     "nodes": [
       {
         "id": "centre"
@@ -2023,7 +2023,7 @@
   },
   {
     "cycle": 6,
-    "run": "cash",
+    "run": "crun",
     "nodes": [
       {
         "id": "centre"
@@ -2041,7 +2041,7 @@
   },
   {
     "cycle": 7,
-    "run": "cash",
+    "run": "crun",
     "nodes": [
       {
         "id": "centre"
@@ -2059,7 +2059,7 @@
   },
   {
     "cycle": 8,
-    "run": "cash",
+    "run": "crun",
     "nodes": [
       {
         "id": "centre"
@@ -2080,7 +2080,7 @@
   },
   {
     "cycle": 9,
-    "run": "cash",
+    "run": "crun",
     "nodes": [
       {
         "id": "centre"
@@ -2105,7 +2105,7 @@
   },
   {
     "cycle": 10,
-    "run": "cash",
+    "run": "crun",
     "nodes": [
       {
         "id": "centre"
@@ -2133,7 +2133,7 @@
   },
   {
     "cycle": 11,
-    "run": "cash",
+    "run": "crun",
     "nodes": [
       {
         "id": "centre"
@@ -2162,7 +2162,7 @@
   },
   {
     "cycle": 12,
-    "run": "cash",
+    "run": "crun",
     "nodes": [
       {
         "id": "centre"
@@ -2191,7 +2191,7 @@
   },
   {
     "cycle": 13,
-    "run": "cash",
+    "run": "crun",
     "nodes": [
       {
         "id": "centre"
@@ -2223,7 +2223,7 @@
   },
   {
     "cycle": 14,
-    "run": "cash",
+    "run": "crun",
     "nodes": [
       {
         "id": "centre"
@@ -2258,7 +2258,7 @@
   },
   {
     "cycle": 15,
-    "run": "cash",
+    "run": "crun",
     "nodes": [
       {
         "id": "centre"
@@ -2296,7 +2296,7 @@
   },
   {
     "cycle": 16,
-    "run": "cash",
+    "run": "crun",
     "nodes": [
       {
         "id": "centre"
@@ -2335,7 +2335,7 @@
   },
   {
     "cycle": 17,
-    "run": "cash",
+    "run": "crun",
     "nodes": [
       {
         "id": "centre"
@@ -2374,7 +2374,7 @@
   },
   {
     "cycle": 18,
-    "run": "cash",
+    "run": "crun",
     "nodes": [
       {
         "id": "centre"

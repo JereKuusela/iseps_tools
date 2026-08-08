@@ -38,7 +38,7 @@ describe("getNodeCostAtLevel", () => {
     expect(getNodeCostAtLevel("sellValue", 1)).toBe(2)
     expect(getNodeCostAtLevel("sellValue", 50)).toBe(132)
     expect(getNodeCostAtLevel("particleOutput", 1)).toBe(5)
-    expect(getNodeCostAtLevel("particleOutput", 5)).toBe(174)
+    expect(getNodeCostAtLevel("particleOutput", 5)).toBe(86)
     expect(getNodeCostAtLevel("fabricatorSpeed", 19)).toBe(100)
     expect(getNodeCostAtLevel("maxOfflineTimeCap", 16)).toBe(1)
   })

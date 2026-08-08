@@ -1,4 +1,4 @@
-import type { PerkGuideEntry, PerkMetaPerk, PerkRowId, PerkRowMeta, PerkRunType } from "../../lib/perkContext"
+import type { PerkGuideEntry, Perk, PerkRowId, Perkrow, PerkRunType } from "../../lib/perkContext"
 
 export type PerkRunOption = {
   value: PerkRunType
@@ -6,8 +6,8 @@ export type PerkRunOption = {
 }
 
 export type PerkGuideRowView = {
-  row: PerkRowMeta
-  activePerks: PerkMetaPerk[]
+  row: Perkrow
+  activePerks: Perk[]
   ip: number
   milestones: {
     m1: boolean
@@ -30,4 +30,4 @@ export type PerkGuideSelection = {
 
 export type PerkGuideKey = `${PerkRunType}|${number}`
 
-export type PerkRowLookup = Map<PerkRowId, PerkMetaPerk[]>
+export type PerkRowLookup = Map<PerkRowId, Perk[]>
