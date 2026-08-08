@@ -50,7 +50,7 @@ type ZatNodeData = {
 
 type ZatGuideData = {
   cycle: number
-  run: string
+  run: "se" | "jrun" | "crun" | "grun"
   nodes: Array<{
     id: string
     amount?: number
@@ -90,7 +90,7 @@ const techs: TechData[] = (techsJson as TechData[]).slice().sort((a, b) => a.id 
 const premiumRules: PremiumRule[] = premiumJson as PremiumRule[]
 const zatNodes: ZatNodeData[] = (zatNodesJson as ZatNodeData[]).slice()
 const junoGuides: ZatGuideData[] = parseZatGuides(zatGuidesJson as ZatGuideData[])
-  .filter((entry) => entry.run === "juno")
+  .filter((entry) => entry.run === "jrun")
   .slice()
   .sort((a, b) => a.cycle - b.cycle)
 
