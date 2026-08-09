@@ -685,7 +685,7 @@
     "junoBase": 3,
     "seMultiplier": 2,
     "seAdditive": 0,
-    "tooltip": "MACRO-FACILITIES #10\n1.2x Helion\nx1.05 Laboratory Efficiency\nx3 Archeologist-Bots\nx3 Archive Efficiency"
+    "tooltip": "MACRO-FACILITIES #10\n1.2x Helion\nx1.05 Laboratory Equipment\nx3 Archeologists\nx3 Archive Trinkets"
   },
   {
     "id": 11,
@@ -927,7 +927,7 @@
     "maxLevel": 999,
     "dcBoost": 1.7,
     "junoBase": 1,
-    "tooltip": "CELL REPLICATION TECH #14\nx2 Delta\nx5 Fenix\nx3 Rebirthologists\nx3 Institute Efficiency"
+    "tooltip": "CELL REPLICATION TECH #14\nx2 Delta\nx5 Fenix\nx3 Rebirthologists\nx3 Institute Infusion"
   },
   {
     "id": 15,

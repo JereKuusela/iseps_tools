@@ -103,537 +103,537 @@
       "rowId": "W",
       "tier": 1,
       "label": "W1",
-      "tooltip": "INNER FOCUS\n+50% Cash for every White perk.\n+40% DCMs.\n+100% Buyers for every White perk.\nDCM 1 bonus from +100% to +200%."
+      "tooltip": "INNER FOCUS\n+50% Cash per White perk\n+40% DCMs\n+100% Buyers per White perk\nDCM 1 bonus from +100% to +200%"
     },
     {
       "id": "W2",
       "rowId": "W",
       "tier": 2,
       "label": "W2",
-      "tooltip": "SINGULARITY PROJECTOR\n+20% AP for every perk.\n+10% DCM.\n+25% Cash for every White perk.\nDCM 2 bonus from +20% to +100%."
+      "tooltip": "SINGULARITY PROJECTOR\n+20% AP per perk\n+10% DCM\n+25% Cash per White perk\nDCM 2 bonus from +20% to +100%"
     },
     {
       "id": "W3",
       "rowId": "W",
       "tier": 3,
       "label": "W3",
-      "tooltip": "DC-WATCH\n+20% AP for every perk.\n+20% DCMs.\n+50% DC from center node.\nDCM 3 bonus from /8 to /100."
+      "tooltip": "DC-WATCH\n+20% AP per perk\n+20% DCMs\n+50% DC from center node\nDCM 3 bonus from /8 to /100"
     },
     {
       "id": "W4",
       "rowId": "W",
       "tier": 4,
       "label": "W4",
-      "tooltip": "SC-WATCH\n+20% AP for every perk.\n+25% Cash for every White perk.\n+1% SC for every perk.\n+1 max level to Infinity Multipliers."
+      "tooltip": "SC-WATCH\n+20% AP per perk\n+25% Cash per White perk\n+1% SC per perk\n+1 max level to Infinity Multipliers"
     },
     {
       "id": "W5",
       "rowId": "W",
       "tier": 5,
       "label": "W5",
-      "tooltip": "MONETIZATION BOT\n+20% AP for every perk.\n+150% Cash and Buyers for every White perk.\nDCM 4 bonus from /10 to /500."
+      "tooltip": "MONETIZATION BOT\n+20% AP per perk\n+150% Cash and Buyers per White perk\nDCM 4 bonus from /10 to /500"
     },
     {
       "id": "W6",
       "rowId": "W",
       "tier": 6,
       "label": "W6",
-      "tooltip": "DC-SCANNER\n+10% AP for every perk.\n+20% DCMs.\n+50% DC from center node.\nDCM 5 bonus from +40% to +100%."
+      "tooltip": "DC-SCANNER\n+10% AP per perk\n+20% DCMs\n+50% DC from center node\nDCM 5 bonus from +40% to +100%"
     },
     {
       "id": "W7",
       "rowId": "W",
       "tier": 7,
       "label": "W7",
-      "tooltip": "SC-PRINTER\n+20% AP for every perk.\n+10% DCMs.\n+1.5% SC for every perk.\nDCM 6 bonus from +50% to +80%."
+      "tooltip": "SC-PRINTER\n+20% AP per perk\n+10% DCMs\n+1.5% SC per perk\nDCM 6 bonus from +50% to +80%"
     },
     {
       "id": "W8",
       "rowId": "W",
       "tier": 8,
       "label": "W8",
-      "tooltip": "DATA DRONE\n+10% AP for every perk.\n+20% DCMs.\n+1% DC from center node for every perk."
+      "tooltip": "DATA DRONE\n+10% AP per perk\n+20% DCMs\n+1% DC from center node per perk"
     },
     {
       "id": "W9",
       "rowId": "W",
       "tier": 9,
       "label": "W9",
-      "tooltip": "DC-JETPACK\n+5% AP for every White perk.\n+20% DCMs.\n+50% DC from center node."
+      "tooltip": "DC-JETPACK\n+5% AP per White perk\n+20% DCMs\n+50% DC from center node"
     },
     {
       "id": "W10",
       "rowId": "W",
       "tier": 10,
       "label": "W10",
-      "tooltip": "TRINITY BOTS\n+2% Solutions for every perk.\n+2% GP for every perk.\n+2% Emblems for every perk.\n+10% DCMs."
+      "tooltip": "TRINITY BOTS\n+2% Solutions per perk\n+2% GP per perk\n+2% Emblems per perk\n+10% DCMs"
     },
     {
       "id": "R1",
       "rowId": "R",
       "tier": 1,
       "label": "R1",
-      "tooltip": "CYBERNETIC BRAIN MODIFICATIONS\n+50% Alpha output for every Red perk.\n+10% Alpha Lifetime output.\n+20% Researches.\nResearch 1 bonus from +30% to +200%."
+      "tooltip": "CYBERNETIC BRAIN MODIFICATIONS\n+50% Alpha per Red perk\n+10% Alpha Lifetime output\n+20% Researches\nResearch 1 bonus from +30% to +200%"
     },
     {
       "id": "R2",
       "rowId": "R",
       "tier": 2,
       "label": "R2",
-      "tooltip": "SMART AI ASSISTANCE\n+50% Alpha output for every Red perk.\n/100 Alpha costs for every Red perk.\n+40% Researches.\nResearch 2 bonus from +50% to +75%."
+      "tooltip": "SMART AI ASSISTANCE\n+50% Alpha per Red perk\n/100 Alpha costs per Red perk\n+40% Researches\nResearch 2 bonus from +50% to +75%"
     },
     {
       "id": "R3",
       "rowId": "R",
       "tier": 3,
       "label": "R3",
-      "tooltip": "IMPROVED AUTOMATION TECHNOLOGY\n+120% Alpha output for every Red perk.\n+1 base Alpha Artifacts for every Red and Lime perk.\n/500,000 Alpha Artifact costs for every Red and Lime perk.\nResearch 3 bonus from +15% to +50%."
+      "tooltip": "IMPROVED AUTOMATION TECHNOLOGY\n+120% Alpha per Red perk\n+1 base Alpha Artifacts per Red and Lime perk\n/500,000 Alpha Artifact costs per Red and Lime perk\nResearch 3 bonus from +15% to +50%"
     },
     {
       "id": "R4",
       "rowId": "R",
       "tier": 4,
       "label": "R4",
-      "tooltip": "OVERCLOCKED ALPHA-MATION\n+300% Alpha output for each Red Perk owned.\n+5 base City of Tomorrow Alpha Solutions for each Red and Purple Perk owned.\nDivides City of Tomorrow Alpha Solution costs by 250,000 for each Red and Purple Perk owned.\nImproves Research 4 (/10 -\u003e /10,000)."
+      "tooltip": "OVERCLOCKED ALPHA-MATION\n+300% Alpha per Red perk\n+5 base Alpha Solutions per Red and Purple perk\n/250,000 Alpha Solution costs per Red and Purple perk\nResearch 4 bonus from /10 to /10,000"
     },
     {
       "id": "R5",
       "rowId": "R",
       "tier": 5,
       "label": "R5",
-      "tooltip": "ALPHA SINGULARITY SERVERS\n+2.5% Alpha output (compounding) for each Perk owned in any path.\n+1 free and max Corvus Alpha-Prime Project level for each Red Perk owned.\nResearch Tiers 1-7 persist through Simulation Resets.\nImproves Research 5 (/2 -\u003e /500)."
+      "tooltip": "ALPHA SINGULARITY SERVERS\nx1.025 Alpha per perk\n+1 free and max Corvus Alpha-Prime level per Red perk\nResearch Tiers 1-7 persist through Simulation Resets\nResearch 5 bonus from /2 to /500"
     },
     {
       "id": "R6",
       "rowId": "R",
       "tier": 6,
       "label": "R6",
-      "tooltip": "RESEARCH EQUALS SOLUTIONS?\n+0.1% Solutions gained from Researches done for each Red Perk owned.\nReduces Research Automation intervals by 50%.\nImproves Research 6 (+200% -\u003e +2,000%)."
+      "tooltip": "RESEARCH EQUALS SOLUTIONS?\n+0.1% Solutions per Research per Red perk\n/2 Research automation interval\nResearch 6 bonus from +200% to +2,000%"
     },
     {
       "id": "R7",
       "rowId": "R",
       "tier": 7,
       "label": "R7",
-      "tooltip": "DATA CUBE RESEARCH TARGETING\n+0.1% Data Cubes gained per Research done for each Red Perk owned.\nImproves Research 7 (+100% -\u003e +500%)\nUnlock Alpha Particle in the SC Dump."
+      "tooltip": "DATA CUBE RESEARCH TARGETING\n+0.1% DC per Research per Red perk\nResearch 7 bonus from +100% to +500%\nUnlocks SC dump for Alpha"
     },
     {
       "id": "B1",
       "rowId": "B",
       "tier": 1,
       "label": "B1",
-      "tooltip": "INTELLI-CHIPS\n+400% Beta output for each Blue Perk owned.\n+20% total Beta Sphere Size.\n+200% Beta Laboratory Scientists hired.\n+5% base Beta Laboratory Equipment for each Blue Perk owned."
+      "tooltip": "INTELLI-CHIPS\n+400% Beta per Blue perk\n+20% total Beta Sphere Size\n+200% Scientists\n+5% base Equipment bonus per Blue perk"
     },
     {
       "id": "B2",
       "rowId": "B",
       "tier": 2,
       "label": "B2",
-      "tooltip": "COOL SCIENTISTS\n+600% Beta output for each Blue Perk owned.\n+5% base Beta Laboratory Morale for each Blue Perk owned.\nDivides Beta Laboratory Scientist costs by 500 for each Blue Perk owned.\nUnlocks Cool Scientists in the Beta Laboratory. Each Cool Scientist adds +100% (additive) to Beta Laboratory output. You gain 1 Cool Scientist for every 10k regular Scientists (max 20)."
+      "tooltip": "COOL SCIENTISTS\n+600% Beta per Blue perk\n+5% base Equipment bonus per Blue perk\n/500 Scientist costs per Blue perk\nUnlocks Cool Scientists. Cool Scientists add +100% to Laboratory output. You gain 1 Cool Scientist per 10k Scientists (max 20)"
     },
     {
       "id": "B3",
       "rowId": "B",
       "tier": 3,
       "label": "B3",
-      "tooltip": "B-ASSISTANCE BOT\n+10% base Beta Laboratory Equipment for each Blue Perk owned.\n+10% base Beta Laboratory Morale bonus for each Blue Perk owned.\nDivides Beta Laboratory Equipment and Morale costs by 600 for each Blue Perk owned."
+      "tooltip": "B-ASSISTANCE BOT\n+10% base Equipment bonus per Blue perk\n+10% base Morale bonus per Blue perk\n/600 Equipment cost per Blue perk\n/600 Morale cost per Blue perk"
     },
     {
       "id": "B4",
       "rowId": "B",
       "tier": 4,
       "label": "B4",
-      "tooltip": "BETA-COATED COATS\n+7,000% Beta output for each Blue Perk owned.\nDivides Beta costs by 512,000 for each Blue Perk owned.\nDivides Beta Laboratory Scientist and Morale costs by 512,000 for each Blue Perk owned.\n+60% Cool Scientists output."
+      "tooltip": "BETA-COATED COATS\n+7,000% Beta per Blue perk\n/512,000 Beta cost per Blue perk\n/512,000 Scientist cost per Blue perk\n/512,000 Morale cost per Blue perk\n+60% Cool Scientists output"
     },
     {
       "id": "B5",
       "rowId": "B",
       "tier": 5,
       "label": "B5",
-      "tooltip": "COOL SCIENTISTS EXPANSION PLAN\n+5% of Cool Scientist\u0027s bonus also applies to the Archive Initiative and Fenix Institute for each Blue, Yellow and Orange Perks owned (max 100%).\nDivides Beta Laboratory Scientist costs by 10 (compounding) for each active Cool Scientist. \n+40% Cool Scientists output.\n+10 maximum Cool Scientists (max 30). These are unlocked starting at 400k regular Scientists and gain 1 Cool Scientist for every 200k regular Scientists."
+      "tooltip": "COOL SCIENTISTS EXPANSION PLAN\n+5% Cool Scientists bonus also applies to Archive and Institute per Blue, Yellow and Orange perks (max 100%)\nx0.1 Scientist cost per Cool Scientist. \n+40% Cool Scientists output\n+10 maximum Cool Scientists (max 30). These are unlocked at 400k Scientists and then every 200k Scientists"
     },
     {
       "id": "B6",
       "rowId": "B",
       "tier": 6,
       "label": "B6",
-      "tooltip": "EQUIPMENT PRODUCTION EFFICIENCY\n+300% Beta Laboratory Scientists hired.\n+10% Beta Laboratory output (compounding) for each Blue Perk owned.\n+50% Beta Laboratory Equipment purchased.\nDivides Beta Laboratory Equipment and Morale costs by 5 (compounding) for each non-Red Perk owned."
+      "tooltip": "EQUIPMENT PRODUCTION EFFICIENCY\n+300% Scientists\nx1.1 Laboratory output per Blue perk\n+50% Equipment\nx0.2 Equipment cost per non-Red perk\nx0.2 Morale cost per non-Red perk"
     },
     {
       "id": "B7",
       "rowId": "B",
       "tier": 7,
       "label": "B7",
-      "tooltip": "LAB-2-DC CONVERSION\nThe Beta Laboratory now also grants you additional Data Cubes based on total Beta Laboratory output.\nDivides Beta Laboratory Morale costs by 3 (compounding) for each Perk owned in any path.\n+1.25% Cool Scientist bonus (compounding) for each active Cool Scientist.\nUnlock Beta Particle in the SC Dump."
+      "tooltip": "LAB-2-DC CONVERSION\nUnlocks DC bonus from Laboratory output\nx0.33 Morale cost per perk\nx1.0125 Cool Scientist bonus per Cool Scientist\nUnlocks SC dump for Beta"
     },
     {
       "id": "Y1",
       "rowId": "Y",
       "tier": 1,
       "label": "Y1",
-      "tooltip": "ARCHIVE EXPERTS\n+10,000% Ceti output for each Yellow Perk owned.\n+1,000% Energy Price per 100 Archeologist Construction Rounds in the Archive Initiative.\n+150 base Archive Archeologists amount for each Yellow Perk owned.\nUnlocks Archive Experts in the Archive Initiative. Each Archive Expert adds +100% (additive) to Archive Initiative output. You gain 1 Archive Expert for every 25k regular Archeologists (max 20)."
+      "tooltip": "ARCHIVE EXPERTS\n+10,000% Ceti per Yellow perk\n+1,000% Cash per 100 Arch-Bot level\n+150 base Arch-Bots per Yellow perk\nUnlocks Archive Experts. Archive Experts add +100% to Archive output. You gain Archive Expert per 25k Arch-Bots (max 20)"
     },
     {
       "id": "Y2",
       "rowId": "Y",
       "tier": 2,
       "label": "Y2",
-      "tooltip": "SITE-SCANNER DRONES\n+8,000% Archive output for every 50 Energy Price levels owned.\nDivides Archive Archeologist cost by 750,000 for each Yellow Perk owned.\n+300% Buyers bonus for each active Archive Expert.\nDivides Ceti costs by 500,000 for each Yellow and Lime Perk owned."
+      "tooltip": "SITE-SCANNER DRONES\n+8,000% Archive output per 50 Energy Price levels\n/750,000 Arch-Bots cost per Yellow perk\n+300% Buyers per Archive Expert\n/500,000 Ceti cost per Yellow and Lime perk"
     },
     {
       "id": "Y3",
       "rowId": "Y",
       "tier": 3,
       "label": "Y3",
-      "tooltip": "ARC-TECH EXCAVATORS\n+4 base Egetuarium Ceti Artifacts and City of Tomorrow Ceti Solutions for each active Archive Expert.\nDivides Archive Trinket costs by 250,000 for each Yellow Perk owned.\n+500% Archive Experts output.\n+1,200% Energy Price per 100 Trinket efficiency levels in the Archive Initiative."
+      "tooltip": "ARC-TECH EXCAVATORS\n+4 base Ceti Artifacts per Archive Expert\n+4 base Ceti Solutions per Archive Expert\n/250,000 Trinket cost per Yellow perk\n+500% Archive Experts output\n+1,200% Energy Price per 100 Trinkets level"
     },
     {
       "id": "Y4",
       "rowId": "Y",
       "tier": 4,
       "label": "Y4",
-      "tooltip": "WASTA MOON EXPLORATION PLANS\n+8 base Egetuarium Ceti Artifacts and City of Tomorrow Ceti Solutions for each Yellow, Lime and Purple Perk owned.\n40% reduction to the Ceti Artfact cost multipliers, and 20% reduction to the Ceti Solution cost multipliers.\n+1,500% Archive Experts output.\n+2,200% Energy Price per 100 Outposts setup in the Archive Initiative."
+      "tooltip": "WASTA MOON EXPLORATION PLANS\n+8 base Ceti Artifacts per Yellow, Lime and Purple perk\n+8 base Ceti Solutions per Yellow, Lime and Purple perk\n-40% Ceti Artifact cost multiplier\n-20% Ceti Solution cost multiplier\n+1,500% Archive Expert output\n+2,200% Cash per 100 Outpost level"
     },
     {
       "id": "Y5",
       "rowId": "Y",
       "tier": 5,
       "label": "Y5",
-      "tooltip": "CONSTRUCTION BREAKTHROUGH\n+225% Archive Archeologist constructed for each Yellow and Orange Perk owned.\n+2,000% base Archive Trinkets for each Yellow and Orange Perk owned.\n+1,250% base Archive Outposts for each Yellow and Orange Perk owned.\nDivides Archive Outpost cost by 500,000 for each Yellow and Orange Perk owned."
+      "tooltip": "CONSTRUCTION BREAKTHROUGH\n+225% Arch-Bots per Yellow and Orange perk\n+2,000% base Trinket bonus per Yellow and Orange perk\n+1,250% base Outpost bonus per Yellow and Orange perk\n/500,000 Outpost cost per Yellow and Orange perk"
     },
     {
       "id": "Y6",
       "rowId": "Y",
       "tier": 6,
       "label": "Y6",
-      "tooltip": "ANCIENT KNOWLEDGE HOTSPOTS\nDivides Ceti Artifact and Ceti Solution costs by 20 (compounding) for each active Archive Expert.\n+5% Data Cubes gained (compounding) for each active Archive Expert.\n+2% Singularity Cubes gained (compounding) for each active Archive Expert.\n+10 maximum Archive Experts (max 30). These are unlocked starting at 1 million Arch-Bots and gain 1 Archive Expert for every 500k Arch-Bots."
+      "tooltip": "ANCIENT KNOWLEDGE HOTSPOTS\nx0.05 Ceti Artifact cost every Archive Expert\nx0.05 Ceti Solution cost every Archive Expert\nx1.05 DC per Archive Expert\nx1.02 SC per active Archive Expert\n+10 maximum Archive Experts (max 30). Unlocked at 1 million Arch-Bots and then every 500k Arch-Bots"
     },
     {
       "id": "Y7",
       "rowId": "Y",
       "tier": 7,
       "label": "Y7",
-      "tooltip": "ARCH-2-DC CONVERTER\nThe Archive Initiative now also grants you additional Data Cubes based on total Archive Initiative output.\n+13% Buyers bonus (compounding) for each active Archive Expert.\nDivides Archive Outpost and Trinket cost by 10 (compounding) for each Perk owned in any path.\nUnlock Ceti Particle in the SC Dump."
+      "tooltip": "ARCH-2-DC CONVERTER\nUnlocks DC bonus from Archive\nx1.13 Buyers per Archive Expert\nx0.1 Outpost cost per perk\nx0.1 Trinket cost per perk\nUnlocks SC dump for Ceti"
     },
     {
       "id": "L1",
       "rowId": "L",
       "tier": 1,
       "label": "L1",
-      "tooltip": "ELIXIR OF EGE\n+10,000% Delta output for each each Lime Perk owned.\n+100% Egetuarium Artifacts for each each Lime Perk owned.\nDivides Delta costs by 10,000 for each each Lime and Yellow Perk owned.\nUnlock Egetuarium Delta Artifacts."
+      "tooltip": "ELIXIR OF EGE\n+10,000% Delta per Lime perk\n+100% Artifacts per Lime perk\n/10,000 Delta cost per Lime and Yellow perk\nUnlocks Delta Artifacts"
     },
     {
       "id": "L2",
       "rowId": "L",
       "tier": 2,
       "label": "L2",
-      "tooltip": "RELIC OF REFLECTION\nDivides Artifact costs by 25,000 for each Lime, Red, Blue, Yellow and White Perk owned.\nDivides Alpha and Beta Artifact costs by 25,000 for each Perk owned in any path.\nDivides Delta costs by 25,000 for each Lime and Orange Perk owned.\n+1% base Egetuarium All Particle trades for each Lime Perk owned."
+      "tooltip": "RELIC OF REFLECTION\n/25,000 Artifact cost per Lime, Red, Blue, Yellow and White perk\n/25,000 Alpha Artifact cost per perk\n/25,000 Beta Artifact cost per perk\n/25,000 Delta cost per Lime and Orange perk\n+1% base AP trade bonus per Lime perk"
     },
     {
       "id": "L3",
       "rowId": "L",
       "tier": 3,
       "label": "L3",
-      "tooltip": "DELTANTLERS\n+4 base Delta Artifacts for each Lime, Yellow and Purple Perk owned.\nDivides Delta Artifact costs by 250,000 for each Perk owned in any path.\nDivides Delta costs by 250,000 for each Lime and Purple Perk owned.\n+1% base Egetuarium All Particle trades for each Lime Perk owned."
+      "tooltip": "DELTANTLERS\n+4 base Delta Artifacts per Lime, Yellow and Purple perk\n/250,000 Delta Artifact cost per perk\n/250,000 Delta cost per Lime and Purple perk\n+1% base DC trade bonus per Lime perk"
     },
     {
       "id": "L4",
       "rowId": "L",
       "tier": 4,
       "label": "L4",
-      "tooltip": "LUCKY 4-LEAF CLOVER\n+12 hours to maximum offline gains.\nProvides a move favorable chance to be rewarded a Large Time Skip when completing a Task (Odds -\u003e S: -10%, M: -5%, L: +15%).\nChests appear 10% faster.\n+5% base Egetuarium Data Cubes."
+      "tooltip": "LUCKY 4-LEAF CLOVER\n+12 hours to maximum offline gains\nIncreases chance of Large Time Skips when completing a Task (Odds -\u003e S: -10%, M: -5%, L: +15%)\nChests appear 10% faster\n+5% base DC trade bonus"
     },
     {
       "id": "L5",
       "rowId": "L",
       "tier": 5,
       "label": "L5",
-      "tooltip": "DELTA BREW\n+10,000% Delta output for each Perk owned in any path.\nDivides Delta Artifact and Delta Solution costs by 7 (compounding) for each Perk owned in any path.\nDivides Delta costs by 3 (compounding) for each Lime and Teal Perk owned.\n+1% base Egetuarium Data Cube trades for each Lime Perk owned."
+      "tooltip": "DELTA BREW\n+10,000% Delta per perk\nx0.142857 Delta Artifact cost per perk\nx0.142857 Delta Solution cost per perk\nx0.33 Delta cost per Lime and Teal perk\n+1% base DC trade bonus per Lime perk"
     },
     {
       "id": "L6",
       "rowId": "L",
       "tier": 6,
       "label": "L6",
-      "tooltip": "EGETUARIAN RAMEN\n70% reduction to the Delta Artfact cost multipliers, and 20% reduction to the Delta Solution cost multipliers.\n+8% Data Cubes for each Lime Perk owned.\n+15%  Buyers for each Lime Perk owned.\n+20% Energy Price for each Lime Perk owned."
+      "tooltip": "EGETUARIAN RAMEN\n-70% Delta Artifact cost multiplier\n-20% Delta Solution cost multiplier\n+8% DC per Lime perk\n+15% Buyers per Lime perk\n+20% Cash per Lime perk"
     },
     {
       "id": "L7",
       "rowId": "L",
       "tier": 7,
       "label": "L7",
-      "tooltip": "POT O\u0027 GOLD\nDivides Corvus Son-Egetuar Project costs by 3 (compounding) for every 100 Trinket purchase rounds.\n+3% Data Cubes (compounding) for each Perk owned in any path.\nDivides Corvus Radar costs by 5 for each Perk owned in any path.\nUnlock Delta Particle in the SC Dump."
+      "tooltip": "POT O\u0027 GOLD\nx0.33 Corvus Son-Egetuar cost per 100 Trinket level\nx1.03 DC per perk\n/5 Corvus Radar cost per perk\nUnlocks DC dump for Delta"
     },
     {
       "id": "P1",
       "rowId": "P",
       "tier": 1,
       "label": "P1",
-      "tooltip": "E-GEL\n+15,000% Epsilon output for each Purple Perk owned.\nDivides Epsilon costs by 400,000 for each Purple Perk owned.\n+200% City of Tomorrow Solutions.\n+20% City of Tomorrow Epsilon Solutions."
+      "tooltip": "E-GEL\n+15,000% Epsilon per Purple perk\n/400,000 Epsilon cost per Purple perk\n+200% Solutions\n+20% Epsilon Solutions"
     },
     {
       "id": "P2",
       "rowId": "P",
       "tier": 2,
       "label": "P2",
-      "tooltip": "SOLUTION-BOY\n+10 base City of Tomorrow Epsilon Solutions for each Purple, Blue and Burgundy Perk owned.\n+600% City of Tomorrow Solutions.\nDivides Beta, Delta and Epsilon Solution costs by 500,000 for each Purple, Blue and Lime Perk owned.\nUnlock City of Tomorrow Delta Solutions."
+      "tooltip": "SOLUTION-BOY\n+10 base Epsilon Solutions per Purple, Blue and Burgundy perk\n+600% Solutions\n/500,000 Beta Solution cost per Purple, Blue and Lime perk\n/500,000 Delta Solution cost per Purple, Blue and Lime perk\n/500,000 Epsilon Solution cost per Purple, Blue and Lime perk\nUnlocks Delta Solutions"
     },
     {
       "id": "P3",
       "rowId": "P",
       "tier": 3,
       "label": "P3",
-      "tooltip": "9-G NETWORK SYSTEM\n+50% City of Tomorrow Solutions for each Purple and Orange Perk owned.\n+30% City of Tomorrow Epsilon Solutions.\n+5 base City of Tomorrow Solutions for each Perk owned in any path.\nDivides Epsilon costs by 500,000 for each Purple Perk owned."
+      "tooltip": "9-G NETWORK SYSTEM\n+50% Solutions per Purple and Orange perk\n+30% Epsilon Solutions\n+5 base Solutions per perk\n/500,000 Epsilon cost per Purple perk"
     },
     {
       "id": "P4",
       "rowId": "P",
       "tier": 4,
       "label": "P4",
-      "tooltip": "ENERGY SOLUTIONS\n+5,000% Energy Price bonus for every 100 combined Epsilon Duration and Burst Size levels.\n+600% City of Tomorrow Solutions.\n+5% City of Tomorrow Epsilon Solutions for each Purple, Red and Burgundy Perk owned.\nUnlock City of Tomorrow Alpha Solutions."
+      "tooltip": "ENERGY SOLUTIONS\n+5,000% Cash per 100 Epsilon Duration and Burst Size level\n+600% Solutions\n+5% Solutions per Purple, Red and Burgundy perk\nUnlocks Alpha Solutions"
     },
     {
       "id": "P5",
       "rowId": "P",
       "tier": 5,
       "label": "P5",
-      "tooltip": "LABORATORY SOLUTIONS\n+20,000% Epsilon output for every Purple and Blue perk.\n+1000% Solutions.\nUnlock Beta Solutions.\nx2 CoT Beta bonus."
+      "tooltip": "LABORATORY SOLUTIONS\n+20,000% Epsilon per Purple and Blue perk\n+1000% Solutions\nUnlocks Beta Solutions\nx2 CoT Beta bonus"
     },
     {
       "id": "P6",
       "rowId": "P",
       "tier": 6,
       "label": "P6",
-      "tooltip": "ELECTRIC SOLUTIONS\nx3 CoT Ceti bonus.\n+100% Solutions for every 50 Epsilon Attraction level.\n+50% Epsilon Solutions and Epsilon Emblems.\nUnlocks Ceti Solutions."
+      "tooltip": "ELECTRIC SOLUTIONS\nx3 CoT Ceti bonus\n+100% Solutions per 50 Epsilon Attraction level\n+50% Epsilon Solutions\n+50% Epsilon Emblems\nUnlocks Ceti Solutions"
     },
     {
       "id": "P7",
       "rowId": "P",
       "tier": 7,
       "label": "P7",
-      "tooltip": "DATA SOLUTIONS\n/50,000 Solution cost for every Purple perk.\nUnlocks DC bonus from Solutions.\nUnlocks SC dump for Epsilon.\nx4 CoT Delta bonus."
+      "tooltip": "DATA SOLUTIONS\n/50,000 Solutions cost per Purple perk\nUnlocks DC bonus from Solutions\nUnlocks SC dump for Epsilon\nx4 CoT Delta bonus"
     },
     {
       "id": "O1",
       "rowId": "O",
       "tier": 1,
       "label": "O1",
-      "tooltip": "REGENESIST\n+20,000% Fenix output for each Orange and Purple Perk owned.\n+125% Fenix Institute Rebirthologists bonus for each Orange, Purple and Yellow Perk owned.\n+70% City of Tomorrow Fenix Solutions and Tiberius Fenix Emblems acquired.\nUnlocks Regenesists in the Fenix Institute. Each Regenesist adds +100% (additive) to Fenix Insitute output. You gain 1 Regenesist for every 50k Rebirthologists (max 20)."
+      "tooltip": "REGENESIST\n+20,000% Fenix per Orange and Purple perk\n+125% Rebirthologists per Orange, Purple and Yellow perk\n+70% Fenix Solutions\n+70% Fenix Emblems\nUnlocks Regenesists. Regenesists add +100% to Institute output. You gain 1 Regenesist per 50k Rebirthologists (max 20)"
     },
     {
       "id": "O2",
       "rowId": "O",
       "tier": 2,
       "label": "O2",
-      "tooltip": "FENIX NUTRITION SUPPLEMENTS\n+20 base City of Tomorrow Fenix Solutions per active Regenesist.\n+1,000% Regenesist output.\nDivides Rebirthologist costs by 250,000 for each Orange, REd and Yellow Perk owned.\nDivides Fenix costs by 5 (compounding) for each active Regenesist."
+      "tooltip": "FENIX NUTRITION SUPPLEMENTS\n+20 base Fenix Solutions per Regenesist\n+1,000% Regenesist output\n/250,000 Rebirthologist cost per Orange, Red and Yellow perk\nx0.2 Fenix cost per active Regenesist"
     },
     {
       "id": "O3",
       "rowId": "O",
       "tier": 3,
       "label": "O3",
-      "tooltip": "Effect text for O3 is not available yet."
+      "tooltip": "CONSTRUCTOBOTS\n+5 base Rebirthologists per Regenesist\n50% of Regenesists also act as Cool Scientists and Archive Experts\n+50% Archive output per 100 Infusion level\n+50% Laboratory output per 100 Foundation level"
     },
     {
       "id": "O4",
       "rowId": "O",
       "tier": 4,
       "label": "O4",
-      "tooltip": "Effect text for O4 is not available yet."
+      "tooltip": "INSTITUTE EXPANSION CHIPSET\n+0.4 Researches per Regenesist\n+2,000% Regenesist output\n/500,000 Foundation cost per perk\n+5 maximum Regenesists (max 25). Unlocked at 20 million Rebirthologists and then per 10 million Rebirthologists"
     },
     {
       "id": "O5",
       "rowId": "O",
       "tier": 5,
       "label": "O5",
-      "tooltip": "Effect text for O5 is not available yet."
+      "tooltip": "DNA INFUSION\n+250% Infusions per Orange and Yellow Perk owned\n+150% base Foundation bonus per Orange perk\n+150% base Infusion bonus per Orange perk\n/250,000 Infusion cost per perk\n+30% Fenix Solutions\n+30% Fenix Emblems"
     },
     {
       "id": "O6",
       "rowId": "O",
       "tier": 6,
       "label": "O6",
-      "tooltip": "Effect text for O6 is not available yet."
+      "tooltip": "G-CORP ENHANCER-PANEL\n+2% Fenix Solutions per perk\n+2% Fenix Emblems per perk\nx1.07 GP per Regenesist\n+3% SC per Regenesist\n+5 maximum Regenesists (max 30). Unlocked at 200 million Rebirthologists and then per 100 million Rebirthologists"
     },
     {
       "id": "O7",
       "rowId": "O",
       "tier": 7,
       "label": "O7",
-      "tooltip": "Effect text for O7 is not available yet."
+      "tooltip": "REBIRTHOBOT\nUnlocks DC from Institute\n+750% Cash per 100 DNA Infusion and Foundation level\n+0.2 DMC per Regenesist\nUnlocks SC dump for Fenix"
     },
     {
       "id": "G1",
       "rowId": "G",
       "tier": 1,
       "label": "G1",
-      "tooltip": "G-BOT (LOOKS MEAN BUT VERY HAPPY TO HELP)\n+250% Gamma output for each Green perk owned.\n+2% G-Points output (compounding) for each Perk owned in any path.\nAll Common Companions become more powerful.\n+5 maximum G-Point Conversion Multiplier levels."
+      "tooltip": "G-BOT (LOOKS MEAN BUT VERY HAPPY TO HELP)\n+250% Gamma per Green perk\nx1.02 GP per perk\nCommon Companions become more powerful\n+5 maximum GP Multiplier levels"
     },
     {
       "id": "G2",
       "rowId": "G",
       "tier": 2,
       "label": "G2",
-      "tooltip": "G-DRILLAH\n+2 free and +6 maximum GP Per Conversion levels for each Perk owned in any path.\n+3% G-Points output (compounding) for each Perk owned in any path.\nDivides Common Companion costs by 200."
+      "tooltip": "G-DRILLAH\n+2 free and +6 maximum GP Conversion levels per perk\nx1.03 GP per perk\n/200 Common Companion costs"
     },
     {
       "id": "G3",
       "rowId": "G",
       "tier": 3,
       "label": "G3",
-      "tooltip": "Effect text for G3 is not available yet."
+      "tooltip": "G-KICKS (YOUR COMPANIONS WILL LOVE YOU)\n+400% Gamma per Green perk\n/50,000 Gamma cost per Green perk\nUncommon Companions become more powerful\n+10 maximum GP Multiplier levels"
     },
     {
       "id": "G4",
       "rowId": "G",
       "tier": 4,
       "label": "G4",
-      "tooltip": "Effect text for G4 is not available yet."
+      "tooltip": "G-LOAD (CORE-FUELED TRANSPORT CARTS)\n+1,500% Gamma per Green perk\nx1.04 GP per perk\nx0.87 Gamma Spawn Rate cost per Gamma Rank\nUnlocks Gamme rewards from Supply Bot and BB-Bot"
     },
     {
       "id": "G5",
       "rowId": "G",
       "tier": 5,
       "label": "G5",
-      "tooltip": "Effect text for G5 is not available yet."
+      "tooltip": "G-FUEL (E200+)\n+2,000% Gamma per Green perk\nx0.8 Gamma Volatility cost per Gamma Rank\nTalent IC5-1 bonus to 0.25%\n+10 maximum GP Multiplier levels\n+10% DC\n+10% SC"
     },
     {
       "id": "G6",
       "rowId": "G",
       "tier": 6,
       "label": "G6",
-      "tooltip": "Effect text for G6 is not available yet."
+      "tooltip": "G-CELL (GREEN GAMMA ENERGIZER)\n+2,200% Gamma per Green perk\n/25,000 Gamma cost per Green perk\nx0.7142 (/1.4) GP Multiplier cost per Green perk\n+10% bonus to Corvus Ga-Ma Six per Green perk\n+10% DC\n+10% SC"
     },
     {
       "id": "G7",
       "rowId": "G",
       "tier": 7,
       "label": "G7",
-      "tooltip": "Effect text for G7 is not available yet."
+      "tooltip": "GAMMA FALLOUT (RADIOACTIVE DEFENSIVE PLATING)\n+1 free and +3 maximum GP Multiplier levels per 10 perk\n+1 free and +1 maximum GP Interval level per 10 perk\n+1 maximum Corvus Ga-Ma Six level per 75 Gamma Rank\nUnlocks SC dump for Gamma\n+25% DC\n+25% SC"
     },
     {
       "id": "Bu1",
       "rowId": "Bu",
       "tier": 1,
       "label": "Bu1",
-      "tooltip": "HELION ACCUMULATOR\n+200% Helion output for each Burgundy Perk owned.\n+4% Corvus Extractions done for each Burgundy, Purple and Green Perk owned.\n+20% Energy Price for each Burgundy Perk owned."
+      "tooltip": "HELION ACCUMULATOR\n+200% Helion per Burgundy perk\n+4% Extractions per Burgundy, Purple and Green perk\n+20% Cash per Burgundy perk"
     },
     {
       "id": "Bu2",
       "rowId": "Bu",
       "tier": 2,
       "label": "Bu2",
-      "tooltip": "HELION GENERATOR\n+200% Helion output for each Burgundy Perk owned.\n+3% Corvus Extractions done for each Burgundy, Blue and Yellow Perk owned.\n+30% Energy Price for each Burgundy Perk owned.\n+5% Buyers for each Burgundy and White Perk owned."
+      "tooltip": "HELION GENERATOR\n+200% Helion per Burgundy perk\n+3% Extractions per Burgundy, Blue and Yellow perk\n+30% Cash per Burgundy perk\n+5% Buyers per Burgundy and White perk"
     },
     {
       "id": "Bu3",
       "rowId": "Bu",
       "tier": 3,
       "label": "Bu3",
-      "tooltip": "HELION SATISFACTORY\n+300% Helion output for each Burgundy Perk owned.\n+3% Corvus Extractions owned for each Burgundy, Red and Lime Perk owned.\n+5% Buyers for each Burgundy and White Perk owned."
+      "tooltip": "HELION SATISFACTORY\n+300% Helion per Burgundy perk\n+3% Extractions per Burgundy, Red and Lime perk\n+5% Buyers per Burgundy and White perk"
     },
     {
       "id": "Bu4",
       "rowId": "Bu",
       "tier": 4,
       "label": "Bu4",
-      "tooltip": "HELION EXPEDITION\n+400% Helion output for each Burgundy, Purple and Green Perk owned.\n+0.6% Corvus Ga-Ma Six and Terra Project Extraction bonuses for each Corvus Radar level.\n+2 maximum levels to all Corvus Projects.\nReduces Corvus Project Automation intervals by 50%."
+      "tooltip": "HELION EXPEDITION\n+400% Helion per Burgundy, Purple and Green perk\n+0.6% Corvus Ga-Ma Six bonus per Radar\n+0.6% Corvus Terra bonus per Radar\n+2 maximum levels to all Corvus projects\n/2 Corvus automation interval"
     },
     {
       "id": "Bu5",
       "rowId": "Bu",
       "tier": 5,
       "label": "Bu5",
-      "tooltip": "HELION EXPLORATION\n+400% Helion output for each Burgundy, Blue and Yellow Perk owned.\n+0.6% Corvus Wasta and Shiva Ten Project Extraction bonuses for each Corvus Radar level.\nCorvus Project Automation attempts to make 2 buys per interval.\nUnlock Helion rewards from the Supply Bot and BB-Bot."
+      "tooltip": "HELION EXPLORATION\n+400% Helion per Burgundy, Blue and Yellow perk\n+0.6% Corvus Wasta bonus per Radar\n+0.6% Corvus Shiva Ten bonus per Radar\nx2 Corvus automation effect\nUnlocks Helion rewards from Supply Bot and BB-Bot"
     },
     {
       "id": "Bu6",
       "rowId": "Bu",
       "tier": 6,
       "label": "Bu6",
-      "tooltip": "HELION ODYSSEY\n+400% Helion output for each Burgundy, Red and Lime Perk owned.\n+0.6% Corvus Alpha-Prime and Son-Egetuar Project Extraction bonuses for each Corvus Radar level.\nDivides Helion costs by 1,500 for each Burgundy Perk owned.\n5% of Corvus Project levels are retained between Simulation Resets for each Burgundy Perk owned (max 40%)."
+      "tooltip": "HELION ODYSSEY\n+400% Helion per Burgundy, Red and Lime perk\n+0.6% Corvus Alpha-Prime bonus per Radar\n+0.6% Corvus Son-Egetuar bonus per Radar\n/1,500 Helion cost per Burgundy perk\n+5% Corvus Projects retained per Burgundy perk (max 40%)"
     },
     {
       "id": "Bu7",
       "rowId": "Bu",
       "tier": 7,
       "label": "Bu7",
-      "tooltip": "THE WARFSTACHE\nThe Corvus Initiative now also grants you additional Data Cubes based on total Extractions and Radars/Beason bonus.\nDivides Corvus Extraction costs by 1,000 for each Burgundy Perk owned.\nDivides Corvus Radar costs by 1.8 (compounding) for each Burgundy Perk owned.\nUnlock Helion Particle in the SC Dump."
+      "tooltip": "THE WARFSTACHE\nUnlocks DC from Corvus\n/1,000 Extraction cost per Burgundy perk\nx0.56 (/1.8) Radar cost per Burgundy perk\nUnlocks SC dump for Helion"
     },
     {
       "id": "T1",
       "rowId": "T",
       "tier": 1,
       "label": "T1",
-      "tooltip": "TIBERIUS SC4V-D0G\n+400% Ixion output for each Teal Perk owned.\n+200% Tiberius Emblems.\n+20% Emblem Milestones.\n+1 free Emblem Milestone 11 level."
+      "tooltip": "TIBERIUS SC4V-D0G\n+400% Ixion per Teal perk\n+200% Emblems\n+20% Emblem Milestones\n+1 free Emblem Milestone 11"
     },
     {
       "id": "T2",
       "rowId": "T",
       "tier": 2,
       "label": "T2",
-      "tooltip": "TIBERIUS TASK TEAM\n+800% Ixion output for each Teal Perk owned.\n+60% Tiberius Emblems for each Teal Perk owned.\n+2% Emblem Milestones for each Teal Perk owned.\n+1% of spent Emblems are retained when performing a Simulation Reset for each Teal Perk owned (20% max)."
+      "tooltip": "TIBERIUS TASK TEAM\n+800% Ixion per Teal perk\n+60% Emblems per Teal perk\n+2% Emblem Milestones per Teal perk\n+1% Emblems retained per Teal perk (20% max)"
     },
     {
       "id": "T3",
       "rowId": "T",
       "tier": 3,
       "label": "T3",
-      "tooltip": "EMBLEM MEMORY CHIP\n+800% Ixion output for each Teal Perk owned.\n+100% Tiberius Emblems for each Teal Perk owned.\n+2.5% Tasks Completed for each Teal Perk owned.\nTiberius Emblem Milestones 1 through 10 persist through Simulation Resets."
+      "tooltip": "EMBLEM MEMORY CHIP\n+800% Ixion per Teal perk\n+100% Emblems per Teal perk\n+2.5% Tasks per Teal perk\nEmblem Milestones 1-10 retained"
     },
     {
       "id": "T4",
       "rowId": "T",
       "tier": 4,
       "label": "T4",
-      "tooltip": "Effect text for T4 is not available yet."
+      "tooltip": "MILESTONE ENHANCEMENT CHIP\n+800% Ixion per Teal perk\n+60% Emblems per Teal perk\n+0.5% Emblem Milestones per Teal perk\n/50,000 Emblem cost per Teal perk"
     },
     {
       "id": "T5",
       "rowId": "T",
       "tier": 5,
       "label": "T5",
-      "tooltip": "EPSI-TECH N4V-BOT\n+1% Tiberius Emblems for each Perk owned in any path.\nDivides Ixion Concentration cost by 10 (compounding) for each Teal Perk owned.\n+2% Singularity Cubes gained for each Teal Perk owned.\nUnlock Tiberius Epsilon Emblems."
+      "tooltip": "EPSI-TECH N4V-BOT\n+1% Emblems per perk\nx0.1 (/10) Ixion Concentration cost per Teal perk\n+2% SC per Teal perk\nUnlocks Epsilon Emblems"
     },
     {
       "id": "T6",
       "rowId": "T",
       "tier": 6,
       "label": "T6",
-      "tooltip": "Effect text for T6 is not available yet."
+      "tooltip": "FENI-TECH N4V-B0T\n+50% Emblems per perk\nx0.0667 (/15) Ixion Lifetime cost per Teal perk\n+2% SC per Teal perk\nUnlocks Fenix Emblems"
     },
     {
       "id": "T7",
       "rowId": "T",
       "tier": 7,
       "label": "T7",
-      "tooltip": "Effect text for T7 is not available yet."
+      "tooltip": "IXO-TECH HYBRID PRINTER\n+10% Emblem Milestones\n+20% DC per Teal perk\n+3% SC per Teal perk\nUnlocks SC dump for Ixion"
     }
   ],
   "extrasTooltips": {
-    "Y": {
-      "M1": "YELLOW MASTERY #1\nx10 DC gained.\n3x Total Archive Initiative Output.",
-      "M3": "YELLOW MASTERY #3\nx30 DC gained.\n5x Total Archive Initiative Output.",
-      "IP": "THE YELLOW INFINITY PERK\nThis perk counts as +3 Yellow Perks, buffing bonuses which scale from the number of Yellow Perks. This only applies to bonuses found within the Yellow path.\n+100% Ceti Output (compounding).\nDivides Arch-bots, Trinkets, and Outpost costs by 1000 (compounding).\n+20% DC gained (compounding).",
-      "M2": "YELLOW MASTERY #2\nx20 DC gained.\n4x Total Archive Initiative Output."
-    },
     "W": {
-      "IP": "THE WHITE INFINITY PERK\nThis Perk can be purchased multiple times, and will boost the output of every other Perk as if you have 1 more perk in the path per level.\nPerks that scale off \"each Perk owned in any path\" and perks which scale from multiple Perk paths will only count as +1 to the total number of Perks.\n+0.2% All Particle outputs per level in this Perk, for each unique non-infinity Perk owned (compounding)",
-      "M3": "WHITE MASTERY #3\nx30 DC gained.\nx1.24 DC Milestones owned.",
-      "M2": "WHITE MASTERY #2\nx20 DC gained.\nx1.16 DC Milestones owned.",
-      "M1": "WHITE MASTERY #1\nx10 DC gained.\nx1.08 DC Milestones owned."
+      "IP": "THE WHITE INFINITY PERK\n+1 perk\nx(1 + 0.002 per WIP) AP per non-infinity perk",
+      "M1": "WHITE MASTERY #1\nx10 DC\nx1.08 DCMs",
+      "M2": "WHITE MASTERY #2\nx20 DC\nx1.16 DCMs",
+      "M3": "WHITE MASTERY #3\nx30 DC\nx1.24 DCMs"
     },
     "R": {
-      "M1": "RED MASTERY #1\nx10 DC gained.\nx1.08 Researches done.",
-      "M3": "RED MASTERY #3\nx30 DC gained.\nx1.24 Researches done.",
-      "IP": "THE RED INFINITY PERK\nThis perk counts as +3 Red Perks, buffing bonuses which scale from the number of Red Perks. This only applies to bonuses found within the Red path.\n+25% Alpha Output (compounding).\n+5% Researches done (compounding).",
-      "M2": "RED MASTERY #2\nx20 DC gained.\nx1.16 Researches done."
+      "IP": "THE RED INFINITY PERK\n+3 Red perks in Red path\nx1.25 Alpha\nx1.05 Researches",
+      "M1": "RED MASTERY #1\nx10 DC\nx1.08 Researches",
+      "M2": "RED MASTERY #2\nx20 DC\nx1.16 Researches",
+      "M3": "RED MASTERY #3\nx30 DC\nx1.24 Researches"
     },
     "B": {
-      "M1": "BLUE MASTERY #1\nx10 DC gained.\n2x Total Beta Laboratory Output.",
-      "M3": "BLUE MASTERY #3\nx30 DC gained.\n4x Total Beta Laboratory Output.",
-      "IP": "THE BLUE INFINITY PERK\nThis perk counts as +3 Blue Perks, buffing bonuses which scale from the number of Blue Perks. This only applies to bonuses found within the Blue path.\n+100% Beta Output (compounding).\nDivides Scientist, Equipment, and Morale costs by 1000 (compounding).",
-      "M2": "BLUE MASTERY #2\nx20 DC gained.\n3x Total Beta Laboratory Output."
+      "IP": "THE BLUE INFINITY PERK\n+3 Blue perks in Blue path\nx2 Beta\nx0.001 (/1000) Scientist, Equipment, and Morale cost",
+      "M1": "BLUE MASTERY #1\nx10 DC\n2x Laboratory output",
+      "M2": "BLUE MASTERY #2\nx20 DC\n3x Laboratory output",
+      "M3": "BLUE MASTERY #3\nx30 DC\n4x Laboratory output"
+    },
+    "Y": {
+      "IP": "THE YELLOW INFINITY PERK\n+3 Yellow perks in Yellow path\nx2 Ceti\nx0.001 (/1000) Arch-bots, Trinkets, and Outpost cost\nx1.2 DC",
+      "M1": "YELLOW MASTERY #1\nx10 DC\n3x Archive output",
+      "M2": "YELLOW MASTERY #2\nx20 DC\n4x Archive output",
+      "M3": "YELLOW MASTERY #3\nx30 DC\n5x Archive output"
     }
   }
 }

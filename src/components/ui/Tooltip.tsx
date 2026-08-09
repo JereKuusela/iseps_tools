@@ -25,10 +25,6 @@ export const Tooltip = (props: TooltipProps) => {
   })
 
   const handleTriggerClick = () => {
-    if (props.asChild) {
-      return
-    }
-
     const next = !pinnedOpen()
     batch(() => {
       if (next) {

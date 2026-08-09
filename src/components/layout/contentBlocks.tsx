@@ -36,8 +36,28 @@ export const InfoCard = (props: InfoCardProps) => {
       {props.title || props.closable ? (
         <div class="flex items-center justify-between gap-2">
           <div class="flex items-center gap-2">
-            {props.title ? <h3 class={headingClass.trim()}>{props.title}</h3> : null}
-            {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
+            {props.closable && props.title ? (
+              <>
+                <button
+                  type="button"
+                  class="flex items-center gap-2 text-left xl:hidden"
+                  onClick={handleToggleClosed}
+                  aria-label={isClosed() ? "Expand section" : "Collapse section"}
+                >
+                  <h3 class={headingClass.trim()}>{props.title}</h3>
+                  {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
+                </button>
+                <div class="hidden items-center gap-2 xl:flex">
+                  <h3 class={headingClass.trim()}>{props.title}</h3>
+                  {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
+                </div>
+              </>
+            ) : (
+              <>
+                {props.title ? <h3 class={headingClass.trim()}>{props.title}</h3> : null}
+                {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
+              </>
+            )}
           </div>
           <div class="flex items-center gap-2">
             {props.headerActions}
