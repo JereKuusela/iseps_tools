@@ -10,6 +10,7 @@ import {
 } from "../../components/ui/formControls"
 import { SummaryInputModal } from "../../components/ui/SummaryInputModal"
 import { formatCompactMultiplier, formatFixed, formatMultiplier } from "../../lib/numberFormat"
+import { formatLocalTimestampFromMinutes } from "../../lib/timeFormat"
 import type { ZatMode } from "../../lib/zatCalculator"
 import { useZatData, type JunoExponentType } from "../../lib/zatContext"
 import type { GainUnit } from "./ogTypes"
@@ -105,6 +106,8 @@ export const OgTechLeftColumn = () => {
     const manualExtra = Math.max(0, totalExtra - og.autoExtraExponent())
     og.setExtraExponent(formatFixed(manualExtra, 3, "0.000"))
   }
+
+  const cycleTitle = () => `Next cycle: ${og.goalCycle()}`
 
   return (
     <>
@@ -223,6 +226,22 @@ export const OgTechLeftColumn = () => {
                 />
               )}
             </For>
+          </div>
+        </div>
+      </InfoCard>
+
+      <InfoCard title={cycleTitle()} closable>
+        <div class="grid gap-1">
+          <NumberField label="Status" value={og.statusAmount()} onInput={og.setStatusAmount} min={0} step={0.01} />
+          <div class="rounded border border-ink/20 bg-white dark:border-white/15 dark:bg-[#253a56] mt-1">
+            <MetricRow label="Cost" value={og.goalCost()} />
+            <MetricRow label="Progress" value={og.goalProgress()} />
+            <MetricRow label="ETA" value={og.etaLabel()} />
+            <MetricRow
+              label="Finish date"
+              value={formatLocalTimestampFromMinutes(og.etaMinutes())}
+              withBorder={false}
+            />
           </div>
         </div>
       </InfoCard>

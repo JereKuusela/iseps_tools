@@ -11,6 +11,7 @@ import {
   type ScGoalType,
 } from "../../lib/scCalculator"
 import { useScContext } from "../../lib/scContext"
+import { calculateSuppliesMultiplier } from "../../lib/suppliesTime"
 import { formatLocalTimestampFromMinutes, formatTimeDuration } from "../../lib/timeFormat"
 import type { PanelOutput, ScGoalOption } from "./scTypes"
 
@@ -94,13 +95,9 @@ export const ScRightColumn = () => {
     return small * 3 + medium * 5 + large * 12
   })
 
-  const onlineExtraMinutes = createMemo(() => {
-    const onlineHours = clamp(parseNumberish(sc.onlineHoursPerDay()), 0, 24)
-    const boostedHours = Math.min(onlineHours, 10)
-    const baseExtraPerHour = 38
-    const alphaMultiplier = 1 + Math.max(0, parseNumberish(sc.alphaSuppliesLevel())) * 0.01
-    return boostedHours * baseExtraPerHour * alphaMultiplier
-  })
+  const onlineExtraMinutes = createMemo(() =>
+    calculateSuppliesMultiplier(parseNumberish(sc.onlineHoursPerDay()), parseNumberish(sc.alphaSuppliesLevel())),
+  )
 
   const outputs = createMemo<PanelOutput[]>(() => {
     const futureDc = 1 + parsePositive(sc.futureDcBoostPct())
@@ -129,7 +126,7 @@ export const ScRightColumn = () => {
         retainedSc: retainedSc(),
         futureDc,
         futureSc,
-        extraMinutesPerDay: onlineExtraMinutes(),
+        suppliesMultiplier: onlineExtraMinutes(),
         type: panel.goalType,
         customScGoal: isCustomSc ? customGoal : undefined,
       })
@@ -146,7 +143,7 @@ export const ScRightColumn = () => {
           futureDc,
           futureSc,
           timeSkips: totalSkipMinutes(),
-          extraMinutesPerDay: onlineExtraMinutes(),
+          suppliesMultiplier: onlineExtraMinutes(),
           type: panel.goalType,
           customScGoal: isCustomSc ? customGoal : undefined,
         })

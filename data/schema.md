@@ -142,6 +142,47 @@ Rules for calculating SC tool values.
   - `se`: SE level where this multiplier becomes active.
   - `mult`: Multiplier applied cumulatively at and above this SE.
 
+## token_upgrade_definitions.json
+
+Upgrade definitions for the Token calculator.
+
+- `upgrades`: List of token upgrade tracks.
+  - `id`: Stable upgrade identifier.
+  - `label`: Display name.
+  - `group`: Upgrade group (`output`, `supplies`, `bbbot`, `special`).
+  - `resource`: Optional resource key used for target-weight mapping.
+  - `maxLevel`: Maximum level.
+  - `baseValue`: Optional fallback value used when precomputed rows are missing.
+  - `baseline`: Optional baseline for additive tracks (such as BB-Bot percentage baselines).
+  - `requires`: Optional prerequisite rule.
+    - `id`: Required upgrade ID.
+    - `minLevel`: Minimum level needed for unlock.
+  - `costAnchors`: Piecewise linear cost anchors.
+    - `level`: Anchor level.
+    - `cost`: Cost at this anchor level.
+    - `step`: Per-level linear increment from this level until next anchor.
+
+## token_upgrade_levels.csv
+
+Precomputed per-level values for Token recommendations.
+
+- `upgradeId`: Upgrade identifier matching `token_upgrade_definitions.json`.
+- `level`: Upgrade level represented by this row.
+- `cost`: Cost for buying this level, stored with 2 decimals.
+- `shortTerm`: Immediate effect-per-cost term stored as integer (`(shortTermValue / cost) * 100000000`).
+- `longTerm`: Long-horizon effect-per-cost term stored as integer (`(longTermValue / cost) * 100000000`).
+
+This file is generated from definitions by `scripts/generateTokenUpgradeCsv.mjs`.
+
+## token_resource_targets.csv
+
+Resource output target weights used to bias recommendations by progression stage.
+
+- Columns: Resource-specific target weights in this fixed order:
+  - `cash`, `alpha`, `beta`, `ceti`, `delta`, `epsilon`, `fenix`, `gamma`, `helion`, `ixion`, `juno`, `kappa`
+- Row order maps to fixed output breakpoints:
+  - 350, 1100, 1150, 1200, 1250, 1300, 1350, 1400
+
 ## techs.json
 
 Rules for calculating tech cost and tech value.

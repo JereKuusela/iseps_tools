@@ -10,14 +10,16 @@ import { FactoryProductionPage } from "./pages/factoryProduction/FactoryProducti
 import { HomePage } from "./pages/HomePage"
 import { OgTechPage } from "./pages/og/OgTechPage"
 import { PerkGuidePage } from "./pages/perkGuide/PerkGuidePage"
-import { PenrosePage } from "./pages/penrose/PenrosePage"
 import { PremiumCrystalTokenPage, PremiumHaulerMinePage } from "./pages/PremiumPage"
 import { ScPage } from "./pages/sc/ScPage"
 import { SettingsPage } from "./pages/SettingsPage"
+import { TokensPage } from "./pages/tokens/TokensPage"
 import { ZatGuidePage } from "./pages/zatGuide/ZatGuidePage"
 import { initCloudSync } from "./lib/cloudSync"
+import { migrateTokenSharedInputs } from "./lib/tokenSharedInputs"
 import "./index.css"
 
+migrateTokenSharedInputs()
 initCloudSync()
 
 const HomeRoute = () => (
@@ -38,15 +40,15 @@ const PerkGuideRoute = () => (
   </App>
 )
 
-const ZatGuideRoute = () => (
+const TokensRoute = () => (
   <App>
-    <ZatGuidePage />
+    <TokensPage />
   </App>
 )
 
-const PenroseRoute = () => (
+const ZatGuideRoute = () => (
   <App>
-    <PenrosePage />
+    <ZatGuidePage />
   </App>
 )
 
@@ -104,12 +106,12 @@ render(
       <Router>
         <Route path={ROUTES.home} component={HomeRoute} />
         <Route path={ROUTES.ogTech} component={OgTechRoute} />
+        <Route path={ROUTES.tokens} component={TokensRoute} />
         <Route path={ROUTES.perks} component={PerkGuideRoute} />
         <Route path={ROUTES.cruise} component={CruiseRoute} />
         <Route path={ROUTES.factory} component={FactoryRoute} />
         <Route path={ROUTES.factoryProduction} component={FactoryProductionRoute} />
         <Route path={ROUTES.zatGuide} component={ZatGuideRoute} />
-        <Route path={ROUTES.penrose} component={PenroseRoute} />
         <Route path={ROUTES.sc} component={ScRoute} />
         <Route path={ROUTES.credits} component={CreditsRoute} />
         <Route path={ROUTES.settings} component={SettingsRoute} />

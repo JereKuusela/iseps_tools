@@ -682,3 +682,16 @@ export const calculateNextZatCost = (amount: LargeNumber): NextZatCostResult => 
 
   return { cycle, cost: largeFromPow10(cost) }
 }
+
+export const calculateZatCostForCycle = (cycle: number): LargeNumber => {
+  const targetCycle = Math.max(1, Math.floor(cycle))
+  let cost = 0
+  let exponent = 0
+
+  for (let currentCycle = 1; currentCycle <= targetCycle; currentCycle += 1) {
+    exponent += cycleMultiplierIncreases.get(currentCycle) ?? 0
+    cost += exponent
+  }
+
+  return largeFromPow10(cost)
+}

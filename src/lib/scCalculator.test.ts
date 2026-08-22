@@ -97,11 +97,39 @@ describe("iterateTimeToReachGoal", () => {
       retainedSc: 1,
       futureDc: 1,
       futureSc: 1,
+      suppliesMultiplier: 1,
       type: "battery1",
     })
 
     expect(result.minutes).toEqual(4101)
   })
+
+  it("applies extra minutes-per-day percentage bonus", () => {
+    const baseInput = {
+      se: 100,
+      goalDc: new LargeNumber(1, 500),
+      currentDc: new LargeNumber(1, 490),
+      dcGainPerMinute: new LargeNumber(2, 487),
+      minutesInSe: 0,
+      retainedDc: 1,
+      retainedSc: 1,
+      futureDc: 1,
+      futureSc: 1,
+      type: "battery1" as const,
+    }
+
+    const withoutBonus = iterateTimeToReachGoal({
+      ...baseInput,
+      suppliesMultiplier: 1,
+    })
+    const withBonus = iterateTimeToReachGoal({
+      ...baseInput,
+      suppliesMultiplier: 1.5,
+    })
+
+    expect(withBonus.minutes).toBeLessThan(withoutBonus.minutes)
+  })
+
   it("returns finite minutes when gain is positive", () => {
     const result = iterateTimeToReachGoal({
       se: 120,
@@ -114,7 +142,7 @@ describe("iterateTimeToReachGoal", () => {
       futureDc: 1.5,
       futureSc: 1.4,
       timeSkips: 79,
-      extraMinutesPerDay: 180,
+      suppliesMultiplier: 1.18,
       type: "battery1",
     })
 
