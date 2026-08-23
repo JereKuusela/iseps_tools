@@ -46,34 +46,26 @@ export const OgTechRightColumn = () => {
         <Index each={og.techCardRows()}>
           {(tech) => (
             <article class="rounded-xl border border-ink/15 bg-white p-3 dark:border-white/15 dark:bg-[#23344d]">
-              <div class="flex items-start justify-between gap-2">
-                <div class="min-w-0">
-                  <Show
-                    when={tech().tooltip}
-                    fallback={<p class="text-base font-bold text-ink dark:text-white">{tech().label}</p>}
-                  >
-                    <Tooltip content={tech().tooltip!} raw asChild>
-                      <p class="text-base font-bold text-ink dark:text-white">{tech().label}</p>
-                    </Tooltip>
-                  </Show>
-                </div>
-                <span class="rounded-full border border-accent/30 bg-accent/10 px-2 py-0.5 text-xs font-semibold text-ink/85 dark:text-white/85">
-                  {formatPercentFromRatio(tech().relative / 100, 0)}
-                </span>
-              </div>
-              <div class="mt-3">
-                <IntegerField
-                  label="Level"
-                  value={String(tech().level)}
-                  onInput={(next) => og.setTechLevel(tech().id, parseNumberish(next))}
-                  step={1}
-                  min={0}
-                  max={tech().maxLevel}
-                />
-              </div>
-              <div class="mt-3 space-y-1 text-xs text-ink/75 dark:text-white/75">
-                <p>ETA: {secondsToLabel(tech().etaSeconds)}</p>
-                <p class="font-mono">Cost: {tech().nextCost}</p>
+              <IntegerField
+                label={
+                  <Tooltip content={tech().tooltip} raw asChild>
+                    <span class="text-base font-bold normal-case tracking-normal text-ink dark:text-white">
+                      {tech().label}
+                    </span>
+                  </Tooltip>
+                }
+                value={String(tech().level)}
+                onInput={(next) => og.setTechLevel(tech().id, parseNumberish(next))}
+                step={1}
+                min={0}
+                max={tech().maxLevel}
+                align="right"
+              />
+              <div class="mt-2 grid grid-cols-[3.25rem_minmax(0,1fr)] gap-x-2 gap-y-1 text-xs text-ink/75 dark:text-white/75">
+                <span class="font-semibold uppercase tracking-[0.08em] text-ink/60 dark:text-white/60">Cost</span>
+                <span class="font-mono text-right">{tech().nextCost}</span>
+                <span class="font-semibold uppercase tracking-[0.08em] text-ink/60 dark:text-white/60">ETA</span>
+                <span class="font-mono text-right">{secondsToLabel(tech().etaSeconds)}</span>
               </div>
             </article>
           )}

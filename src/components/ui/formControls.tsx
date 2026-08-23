@@ -33,7 +33,7 @@ type DecimalFieldProps = NumberFieldProps & {
 }
 
 type IntegerFieldProps = {
-  label: string
+  label: JSX.Element
   value: string
   onInput: (next: string) => void
   placeholder?: string
@@ -42,6 +42,7 @@ type IntegerFieldProps = {
   max?: number
   step?: number
   tooltip?: TooltipKey
+  align?: "left" | "right"
 }
 
 type TextInputFieldProps = {
@@ -405,6 +406,8 @@ export const IntegerField = (props: IntegerFieldProps) => {
     props.onInput("0")
   }
 
+  const isRightAligned = () => props.align === "right"
+
   return (
     <TextField.Root value={props.value} onChange={onChange} class="grid gap-1.5">
       <div class={"grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2"}>
@@ -414,7 +417,7 @@ export const IntegerField = (props: IntegerFieldProps) => {
           </TextField.Label>
           {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
         </div>
-        <div class={"min-w-0"}>
+        <div class={isRightAligned() ? "min-w-0 justify-self-end" : "min-w-0"}>
           <TextField.Input
             type="number"
             inputMode="numeric"
@@ -428,7 +431,9 @@ export const IntegerField = (props: IntegerFieldProps) => {
             placeholder={props.placeholder}
             onKeyDown={blurOnEnterOrEscape}
             onBlur={(event) => onBlur(event.currentTarget.value)}
-            class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+            class={`rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white ${
+              isRightAligned() ? "w-[4rem] min-w-[4rem]" : "w-full"
+            }`}
           />
         </div>
       </div>
