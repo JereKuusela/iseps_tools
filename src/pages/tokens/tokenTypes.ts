@@ -43,6 +43,18 @@ export const SUPPLY_RESOURCES: TokenResourceId[] = [
 
 export const BBBOT_RESOURCES: TokenResourceId[] = [...SUPPLY_RESOURCES]
 
+type OutputUpgradeId = `output.${TokenResourceId}`
+type SuppliesUpgradeId =
+  | `supplies.${Exclude<TokenResourceId, "ixion" | "juno" | "kappa">}`
+  | "supplies.tokenBonus"
+  | "supplies.crystalBonus"
+type BbBotUpgradeId =
+  | `bbbot.${Exclude<TokenResourceId, "ixion" | "juno" | "kappa">}`
+  | "bbbot.duration"
+  | "bbbot.tokenBonus"
+
+export type TokenId = OutputUpgradeId | SuppliesUpgradeId | BbBotUpgradeId
+
 export type CostAnchor = {
   level: number
   cost: number
@@ -50,12 +62,12 @@ export type CostAnchor = {
 }
 
 export type UpgradeRequirement = {
-  id: string
+  id: TokenId
   minLevel: number
 }
 
 export type TokenUpgradeDefinition = {
-  id: string
+  id: TokenId
   label: string
   group: TokenUpgradeGroup
   resource?: TokenResourceId
@@ -71,7 +83,7 @@ export type TokenUpgradeDefinitionDocument = {
 }
 
 export type TokenLevelRow = {
-  upgradeId: string
+  upgradeId: TokenId
   level: number
   cost: number
   shortTerm: number
@@ -93,12 +105,10 @@ export type TokenInputState = {
   blendPercent: number
   granularity: string
   onlineHoursPerDay: string
-  alphaSuppliesLevel: string
-  junoOutputLevel: string
 }
 
 export type TokenRecommendationRow = {
-  id: string
+  id: TokenId
   currentLevel: number
   nextLevel: number | null
   cost: number

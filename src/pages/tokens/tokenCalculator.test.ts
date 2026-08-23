@@ -4,13 +4,13 @@ import type { TokenInputState, TokenLoadedData } from "./tokenTypes"
 
 const baseInput: TokenInputState = {
   levels: {
-    "special.a": "0",
-    "special.b": "0",
+    "bbbot.duration": "0",
+    "bbbot.tokenBonus": "0",
     "supplies.alpha": "0",
   },
   enabled: {
-    "special.a": true,
-    "special.b": true,
+    "bbbot.duration": true,
+    "bbbot.tokenBonus": true,
     "supplies.alpha": true,
   },
   outputLevelsByResource: {
@@ -19,21 +19,19 @@ const baseInput: TokenInputState = {
   blendPercent: 0.5,
   granularity: "1",
   onlineHoursPerDay: "0",
-  alphaSuppliesLevel: "0",
-  junoOutputLevel: "0",
 }
 
 const testData: TokenLoadedData = {
   upgrades: [
     {
-      id: "special.a",
+      id: "bbbot.duration",
       label: "Special A",
       group: "special",
       maxLevel: 10,
       costAnchors: [{ level: 1, cost: 10, step: 0 }],
     },
     {
-      id: "special.b",
+      id: "bbbot.tokenBonus",
       label: "Special B",
       group: "special",
       maxLevel: 10,
@@ -58,9 +56,9 @@ const testData: TokenLoadedData = {
   ],
   rowByKey: new Map([
     [
-      "special.a:1",
+      "bbbot.duration:1",
       {
-        upgradeId: "special.a",
+        upgradeId: "bbbot.duration",
         level: 1,
         cost: 10,
         shortTerm: 300000,
@@ -68,9 +66,9 @@ const testData: TokenLoadedData = {
       },
     ],
     [
-      "special.a:2",
+      "bbbot.duration:2",
       {
-        upgradeId: "special.a",
+        upgradeId: "bbbot.duration",
         level: 2,
         cost: 10,
         shortTerm: 250000,
@@ -78,9 +76,9 @@ const testData: TokenLoadedData = {
       },
     ],
     [
-      "special.a:3",
+      "bbbot.duration:3",
       {
-        upgradeId: "special.a",
+        upgradeId: "bbbot.duration",
         level: 3,
         cost: 10,
         shortTerm: 50000,
@@ -88,9 +86,9 @@ const testData: TokenLoadedData = {
       },
     ],
     [
-      "special.b:1",
+      "bbbot.tokenBonus:1",
       {
-        upgradeId: "special.b",
+        upgradeId: "bbbot.tokenBonus",
         level: 1,
         cost: 10,
         shortTerm: 100000,
@@ -150,7 +148,7 @@ describe("calculateTokenRecommendations", () => {
       },
       levels: {
         ...baseInput.levels,
-        "special.a": "0",
+        "bbbot.duration": "0",
       },
     }
 
@@ -173,7 +171,7 @@ describe("calculateTokenRecommendations", () => {
           costAnchors: [{ level: 1, cost: 1, step: 0 }],
         },
         {
-          id: "special.a",
+          id: "bbbot.duration",
           label: "Special A",
           group: "special",
           maxLevel: 10,
@@ -202,9 +200,9 @@ describe("calculateTokenRecommendations", () => {
           },
         ],
         [
-          "special.a:1",
+          "bbbot.duration:1",
           {
-            upgradeId: "special.a",
+            upgradeId: "bbbot.duration",
             level: 1,
             cost: 10,
             shortTerm: 999999,
@@ -216,7 +214,7 @@ describe("calculateTokenRecommendations", () => {
 
     const result = calculateTokenRecommendations(gatedInput, gatedData)
 
-    expect(result.best?.id).toBe("special.a")
+    expect(result.best?.id).toBe("bbbot.duration")
   })
 
   it("keeps special scores stable across output-level changes", () => {
@@ -253,18 +251,18 @@ describe("calculateTokenRecommendations", () => {
       outputLevelsByResource: completeOutputLevels,
       levels: {
         ...baseInput.levels,
-        "special.suppliesToken": "0",
+        "supplies.tokenBonus": "0",
       },
       enabled: {
         ...baseInput.enabled,
-        "special.suppliesToken": true,
+        "supplies.tokenBonus": true,
       },
     }
 
     const multiSourceData: TokenLoadedData = {
       upgrades: [
         {
-          id: "special.suppliesToken",
+          id: "supplies.tokenBonus",
           label: "Supplies Extra Tokens",
           group: "special",
           maxLevel: 10,
@@ -273,9 +271,9 @@ describe("calculateTokenRecommendations", () => {
       ],
       rowByKey: new Map([
         [
-          "special.suppliesToken:1",
+          "supplies.tokenBonus:1",
           {
-            upgradeId: "special.suppliesToken",
+            upgradeId: "supplies.tokenBonus",
             level: 1,
             cost: 10,
             shortTerm: 100000,
@@ -299,7 +297,7 @@ describe("calculateTokenRecommendations", () => {
 
   it("ranks by weighted value per cost", () => {
     const result = calculateTokenRecommendations(baseInput, testData)
-    expect(result.best?.id).toBe("special.a")
+    expect(result.best?.id).toBe("bbbot.duration")
     expect(result.rows[0]?.score).toBeGreaterThan(result.rows[1]?.score ?? 0)
   })
 
@@ -324,17 +322,16 @@ describe("calculateTokenRecommendations", () => {
   it("merges sequential top recommendations but keeps first-step value", () => {
     const result = calculateTokenRecommendations(baseInput, testData)
 
-    const specialRow = result.rows.find((row) => row.id === "special.a")
+    const specialRow = result.rows.find((row) => row.id === "bbbot.duration")
     expect(specialRow?.nextLevel).toBe(2)
     expect(specialRow?.cost).toBe(20)
   })
 
-  it("scales supplies scores by online hours and alpha supplies", () => {
+  it("scales supplies scores by online hours", () => {
     const baseline = calculateTokenRecommendations(
       {
         ...baseInput,
         onlineHoursPerDay: "0",
-        alphaSuppliesLevel: "0",
       },
       testData,
     )
@@ -343,7 +340,6 @@ describe("calculateTokenRecommendations", () => {
       {
         ...baseInput,
         onlineHoursPerDay: "10",
-        alphaSuppliesLevel: "100",
       },
       testData,
     )
@@ -359,7 +355,6 @@ describe("calculateTokenRecommendations", () => {
       {
         ...baseInput,
         onlineHoursPerDay: "10",
-        alphaSuppliesLevel: "0",
       },
       testData,
     )
@@ -368,7 +363,6 @@ describe("calculateTokenRecommendations", () => {
       {
         ...baseInput,
         onlineHoursPerDay: "24",
-        alphaSuppliesLevel: "0",
       },
       testData,
     )
@@ -390,7 +384,7 @@ describe("calculateTokenRecommendations", () => {
         ...baseInput,
         levels: {
           ...baseInput.levels,
-          "special.a": "12.8",
+          "bbbot.duration": "12.8",
         },
         outputLevelsByResource: {
           ...baseInput.outputLevelsByResource,

@@ -3,6 +3,7 @@ import type {
   TokenLoadedData,
   TokenUpgradeDefinition,
   TokenUpgradeDefinitionDocument,
+  TokenId,
 } from "./tokenTypes"
 
 const asNumber = (value: string | number | undefined, fallback = 0) => {
@@ -12,7 +13,7 @@ const asNumber = (value: string | number | undefined, fallback = 0) => {
 
 const hasValue = (value: string | undefined) => value != null && value.trim().length > 0
 
-const parseLevelRowsCsv = (rawCsv: string): TokenLevelRow[] => {
+const parseLevelRowsCsv = (rawCsv: string, validUpgradeIds: Set<TokenId>): TokenLevelRow[] => {
   const lines = rawCsv
     .split(/\r?\n/)
     .map((line) => line.trim())
@@ -31,7 +32,10 @@ const parseLevelRowsCsv = (rawCsv: string): TokenLevelRow[] => {
   return rows
     .map((line) => {
       const values = line.split(",")
-      const upgradeId = values[upgradeIdIndex] ?? ""
+      const rawUpgradeId = (values[upgradeIdIndex] ?? "").trim()
+      if (!validUpgradeIds.has(rawUpgradeId as TokenId)) return null
+
+      const upgradeId = rawUpgradeId as TokenId
       const level = asNumber(values[levelIndex])
       const cost = asNumber(values[costIndex])
 
@@ -49,6 +53,7 @@ const parseLevelRowsCsv = (rawCsv: string): TokenLevelRow[] => {
         longTerm,
       }
     })
+    .filter((row): row is TokenLevelRow => row !== null)
     .filter((row) => row.upgradeId && row.level > 0)
 }
 
@@ -58,7 +63,7 @@ const parseUpgradeDefinitions = (document: TokenUpgradeDefinitionDocument): Toke
   return upgrades
     .map((upgrade) => ({
       ...upgrade,
-      id: String(upgrade.id ?? "").trim(),
+      id: String(upgrade.id ?? "").trim() as TokenId,
       label: String(upgrade.label ?? "").trim(),
       maxLevel: Math.max(1, Math.floor(asNumber(upgrade.maxLevel, 1))),
       baseValue: asNumber(upgrade.baseValue, 0),
@@ -81,7 +86,8 @@ export const loadTokenData = async (): Promise<TokenLoadedData> => {
   ])
 
   const upgrades = parseUpgradeDefinitions(definitionsModule.default as TokenUpgradeDefinitionDocument)
-  const levelRows = parseLevelRowsCsv(levelRowsModule.default)
+  const validUpgradeIds = new Set<TokenId>(upgrades.map((upgrade) => upgrade.id))
+  const levelRows = parseLevelRowsCsv(levelRowsModule.default, validUpgradeIds)
 
   const rowByKey = new Map<string, TokenLevelRow>()
   for (const row of levelRows) {

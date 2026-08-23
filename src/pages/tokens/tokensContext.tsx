@@ -1,9 +1,10 @@
 import { createContext, createMemo, createResource, type ParentProps, useContext } from "solid-js"
 import { createSyncedSignal } from "../../lib/persistedSignal"
-import { TOKEN_SHARED_KEYS } from "../../lib/tokenSharedInputs"
+import { getTokenKey, TOKEN_SHARED_KEYS } from "../../lib/tokenSharedInputs"
 import { calculateTokenRecommendations, calculateTotalTokensSpent } from "./tokenCalculator"
 import { loadTokenData } from "./tokenData"
-import { OUTPUT_RESOURCES, type TokenLevelMap, type TokenUpgradeDefinition } from "./tokenTypes"
+import { OUTPUT_RESOURCES, type TokenLevelMap, type TokenUpgradeDefinition, type TokenId } from "./tokenTypes"
+import tokenUpgradeDefinitions from "../../../data/token_upgrade_definitions.json"
 
 const parseNumberish = (value: string) => {
   const parsed = Number(value)
@@ -34,6 +35,7 @@ export const PARTICLE_ORDER = [
 export type UnlockedParticle = (typeof PARTICLE_ORDER)[number]
 
 const BLEND_STEP_TO_SHORT_TERM_PERCENT = [0, 0.5, 1] as const
+const TOKEN_UPGRADE_IDS = tokenUpgradeDefinitions.upgrades.map((upgrade) => upgrade.id as TokenId)
 
 type TokensContextValue = {
   isLoading: () => boolean
@@ -54,7 +56,7 @@ type TokensContextValue = {
   outputLevelsByResource: () => TokenLevelMap
   setOutputLevelByResource: (resource: string, next: string) => void
   levels: () => TokenLevelMap
-  setUpgradeLevel: (upgradeId: string, next: string) => void
+  setUpgradeLevel: (upgradeId: TokenId, next: string) => void
   upgrades: () => TokenUpgradeDefinition[]
   recommendationRows: () => ReturnType<typeof calculateTokenRecommendations>["rows"]
   bestRecommendation: () => ReturnType<typeof calculateTokenRecommendations>["best"]
@@ -72,8 +74,7 @@ export const TokensProvider = (props: ParentProps) => {
   const [blendStep, setBlendStep] = createSyncedSignal("token.blendStep", "1")
   const [granularity, setGranularity] = createSyncedSignal("token.granularity", "25")
 
-  const [onlineHoursPerDay, setOnlineHoursPerDay] = createSyncedSignal(TOKEN_SHARED_KEYS.onlineHoursPerDay, "0")
-  const [junoOutputLevel, setJunoOutputLevel] = createSyncedSignal(TOKEN_SHARED_KEYS.junoOutputLevel, "0")
+  const [onlineHoursPerDay, setOnlineHoursPerDay] = createSyncedSignal(TOKEN_SHARED_KEYS.onlineHoursPerDay, "10")
   const [unlockedParticle, setUnlockedParticle] = createSyncedSignal<UnlockedParticle>(
     "token.unlockedParticle",
     "kappa",
@@ -87,18 +88,30 @@ export const TokensProvider = (props: ParentProps) => {
     true,
   )
 
-  const [levels, setLevels] = createSyncedSignal<TokenLevelMap>("token.upgradeLevels", {})
-  const [outputLevelsByResource, setOutputLevelsByResource] = createSyncedSignal<TokenLevelMap>(
-    "token.outputLevelsByResource",
-    createDefaultLevelMap(OUTPUT_RESOURCES),
+  const upgradeLevelSignals = new Map(
+    TOKEN_UPGRADE_IDS.map((upgradeId) => [upgradeId, createSyncedSignal(getTokenKey(upgradeId), "0")] as const),
   )
+
+  const readUpgradeLevel = (upgradeId: TokenId) => {
+    const signal = upgradeLevelSignals.get(upgradeId)
+    return signal ? signal[0]() : "0"
+  }
+
+  const writeUpgradeLevel = (upgradeId: TokenId, next: string) => {
+    const signal = upgradeLevelSignals.get(upgradeId)
+    if (!signal) return
+    signal[1](next)
+  }
 
   const normalizedLevels = createMemo(() => {
     const ids = tokenData()?.upgrades.map((upgrade) => upgrade.id) ?? []
-    return {
-      ...createDefaultLevelMap(ids),
-      ...levels(),
+    const result = createDefaultLevelMap(ids)
+
+    for (const id of ids as TokenId[]) {
+      result[id] = readUpgradeLevel(id)
     }
+
+    return result
   })
 
   const blendPercent = createMemo(() => {
@@ -157,10 +170,15 @@ export const TokensProvider = (props: ParentProps) => {
   })
 
   const normalizedOutputLevels = createMemo(() => {
+    const levelMap = normalizedLevels()
+    const result = createDefaultLevelMap(OUTPUT_RESOURCES)
+
+    for (const resource of OUTPUT_RESOURCES) {
+      result[resource] = levelMap[`output.${resource}`] ?? "0"
+    }
+
     return {
-      ...createDefaultLevelMap(OUTPUT_RESOURCES),
-      ...outputLevelsByResource(),
-      juno: junoOutputLevel(),
+      ...result,
     }
   })
 
@@ -173,8 +191,6 @@ export const TokensProvider = (props: ParentProps) => {
         blendPercent: blendPercent(),
         granularity: granularity(),
         onlineHoursPerDay: onlineHoursPerDay(),
-        alphaSuppliesLevel: levels()["supplies.alpha"] ?? "0",
-        junoOutputLevel: junoOutputLevel(),
       },
       tokenData() ?? null,
     ),
@@ -189,30 +205,19 @@ export const TokensProvider = (props: ParentProps) => {
         blendPercent: blendPercent(),
         granularity: granularity(),
         onlineHoursPerDay: onlineHoursPerDay(),
-        alphaSuppliesLevel: levels()["supplies.alpha"] ?? "0",
-        junoOutputLevel: junoOutputLevel(),
       },
       tokenData() ?? null,
     ),
   )
 
   const setOutputLevelByResource = (resource: string, next: string) => {
-    if (resource === "juno") {
-      setJunoOutputLevel(next)
-      return
-    }
-
-    setOutputLevelsByResource((previous) => ({
-      ...previous,
-      [resource]: String(Math.max(0, Math.floor(parseNumberish(next)))),
-    }))
+    const normalized = String(Math.max(0, Math.floor(parseNumberish(next))))
+    writeUpgradeLevel(`output.${resource}` as TokenId, normalized)
   }
 
-  const setUpgradeLevel = (upgradeId: string, next: string) => {
-    setLevels((previous) => ({
-      ...previous,
-      [upgradeId]: String(Math.max(0, Math.floor(parseNumberish(next)))),
-    }))
+  const setUpgradeLevel = (upgradeId: TokenId, next: string) => {
+    const normalized = String(Math.max(0, Math.floor(parseNumberish(next))))
+    writeUpgradeLevel(upgradeId, normalized)
   }
 
   const applyBest = () => {

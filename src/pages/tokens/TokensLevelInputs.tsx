@@ -2,13 +2,14 @@ import { For } from "solid-js"
 import { InfoCard } from "../../components/layout/contentBlocks"
 import { IntegerField } from "../../components/ui/formControls"
 import { PARTICLE_ORDER, useTokensContext } from "./tokensContext"
+import type { TokenId } from "./tokenTypes"
 
 const RESOURCE_ORDER = ["cash", ...PARTICLE_ORDER] as const
 const SPECIAL_UPGRADE_IDS = [
-  "special.suppliesToken",
-  "special.suppliesCrystal",
-  "special.bbbotDuration",
-  "special.bbbotToken",
+  "supplies.tokenBonus",
+  "supplies.crystalBonus",
+  "bbbot.duration",
+  "bbbot.tokenBonus",
 ] as const
 
 type SpecialRow = {
@@ -41,12 +42,12 @@ export const TokensLevelInputs = () => {
   }
 
   const getUpgradeId = (group: "supplies" | "bbbot", resource: string) => {
-    const id = `${group}.${resource}`
+    const id = `${group}.${resource}` as TokenId
     return tokens.upgrades().some((upgrade) => upgrade.id === id) ? id : null
   }
 
   const getOutputUpgradeId = (resource: string) => {
-    const id = `output.${resource}`
+    const id = `output.${resource}` as TokenId
     return tokens.upgrades().some((upgrade) => upgrade.id === id) ? id : null
   }
 

@@ -1,4 +1,10 @@
-import type { TokenInputState, TokenLoadedData, TokenRecommendationRow, TokenUpgradeDefinition } from "./tokenTypes"
+import type {
+  TokenInputState,
+  TokenLoadedData,
+  TokenRecommendationRow,
+  TokenUpgradeDefinition,
+  TokenId,
+} from "./tokenTypes"
 import { getSupplyRatio } from "../../lib/suppliesTime"
 
 const parseNumberish = (value: string) => {
@@ -49,7 +55,7 @@ const getLevelRow = (data: TokenLoadedData, upgrade: TokenUpgradeDefinition, lev
   }
 }
 
-const isUpgradeEnabled = (upgradeId: string, enabledMap: TokenInputState["enabled"]) => {
+const isUpgradeEnabled = (upgradeId: TokenId, enabledMap: TokenInputState["enabled"]) => {
   const current = enabledMap[upgradeId]
   return current == null ? true : Boolean(current)
 }
@@ -62,7 +68,7 @@ const isUnlocked = (upgrade: TokenUpgradeDefinition, levels: TokenInputState["le
 
 const isSuppliesScaledUpgrade = (upgrade: TokenUpgradeDefinition) => {
   if (upgrade.group == "supplies") return true
-  if (upgrade.id == "special.suppliesToken" || upgrade.id == "special.suppliesCrystal") return true
+  if (upgrade.id == "supplies.tokenBonus" || upgrade.id == "supplies.crystalBonus") return true
   return false
 }
 
@@ -78,7 +84,7 @@ const resolveCurrentLevel = (input: TokenInputState, upgrade: TokenUpgradeDefini
 const resolveRankingLevel = (
   row: TokenRecommendationRow,
   granularity: number,
-  upgradesById: Map<string, TokenUpgradeDefinition>,
+  upgradesById: Map<TokenId, TokenUpgradeDefinition>,
 ) => {
   const upgrade = upgradesById.get(row.id)
   if (!upgrade || upgrade.group !== "output" || granularity <= 1 || row.currentLevel > 1000) {
@@ -91,7 +97,7 @@ const compareRecommendationRows = (
   left: TokenRecommendationRow,
   right: TokenRecommendationRow,
   granularity: number,
-  upgradesById: Map<string, TokenUpgradeDefinition>,
+  upgradesById: Map<TokenId, TokenUpgradeDefinition>,
 ) => {
   if (right.score !== left.score) return right.score - left.score
   const leftRankingLevel = resolveRankingLevel(left, granularity, upgradesById)
@@ -104,7 +110,7 @@ const insertRankedRecommendation = (
   rows: TokenRecommendationRow[],
   nextRow: TokenRecommendationRow,
   granularity: number,
-  upgradesById: Map<string, TokenUpgradeDefinition>,
+  upgradesById: Map<TokenId, TokenUpgradeDefinition>,
 ) => {
   let insertAt = rows.findIndex((row) => compareRecommendationRows(nextRow, row, granularity, upgradesById) < 0)
   if (insertAt < 0) insertAt = rows.length

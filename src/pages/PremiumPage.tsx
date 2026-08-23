@@ -7,6 +7,7 @@ import { sanitizeNumberishInput } from "../components/ui/formControls"
 import { Tooltip } from "../components/ui/Tooltip"
 import { formatFixed } from "../lib/numberFormat"
 import { createSyncedSignal } from "../lib/persistedSignal"
+import { TOKEN_SHARED_KEYS } from "../lib/tokenSharedInputs"
 import type { TooltipKey } from "../lib/tooltips"
 import { useZatData, type PremiumCrystalTokenMethod, type PremiumHaulerLayer } from "../lib/zatContext"
 
@@ -114,7 +115,7 @@ const CrystalAndTokenTab = () => {
   const [bbDurationUpgrade, setBbDurationUpgrade] = createSyncedSignal("premium.bbDurationUpgrade", "0")
   const [bbTokenUpgrade, setBbTokenUpgrade] = createSyncedSignal("premium.bbTokenUpgrade", "0")
   const [chestEnhancer, setChestEnhancer] = createSyncedSignal("premium.chestEnhancer", "0")
-  const [averageHoursPerDay, setAverageHoursPerDay] = createSyncedSignal("premium.averageHoursPerDay", "10")
+  const [averageHoursPerDay, setAverageHoursPerDay] = createSyncedSignal(TOKEN_SHARED_KEYS.onlineHoursPerDay, "10")
   const [includeDailyRewards, setIncludeDailyRewards] = createSyncedSignal("premium.includeDailyRewards", false)
   const [seItem, setSeItem] = createSyncedSignal("premium.seItem", "11")
   const [luckyLeafClover, setLuckyLeafClover] = createSyncedSignal("premium.luckyLeafClover", false)

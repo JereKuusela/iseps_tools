@@ -499,7 +499,7 @@
       ]
     },
     {
-      "id": "special.suppliesToken",
+      "id": "supplies.tokenBonus",
       "label": "Supplies Extra Tokens",
       "group": "special",
       "maxLevel": 25,
@@ -513,7 +513,7 @@
       ]
     },
     {
-      "id": "special.suppliesCrystal",
+      "id": "supplies.crystalBonus",
       "label": "Supplies Extra Crystals",
       "group": "special",
       "maxLevel": 8,
@@ -527,7 +527,7 @@
       ]
     },
     {
-      "id": "special.bbbotDuration",
+      "id": "bbbot.duration",
       "label": "BB-Bot Duration",
       "group": "special",
       "maxLevel": 40,
@@ -541,13 +541,13 @@
       ]
     },
     {
-      "id": "special.bbbotToken",
+      "id": "bbbot.tokenBonus",
       "label": "BB-Bot Extra Tokens",
       "group": "special",
       "maxLevel": 20,
       "baseValue": 0.04,
       "requires": {
-        "id": "special.bbbotDuration",
+        "id": "bbbot.duration",
         "minLevel": 40
       },
       "costAnchors": [

@@ -2,7 +2,7 @@ import { createContext, createMemo, type ParentProps, useContext } from "solid-j
 import { LargeNumber } from "../../lib/largeNumber"
 import { formatPercentFromRatio } from "../../lib/numberFormat"
 import { createSyncedSignal } from "../../lib/persistedSignal"
-import { TOKEN_SHARED_KEYS } from "../../lib/tokenSharedInputs"
+import { getTokenKey } from "../../lib/tokenSharedInputs"
 import { useZatData, type JunoExponentType } from "../../lib/zatContext"
 import {
   calculateZatCostForCycle,
@@ -146,7 +146,7 @@ export const OgTechProvider = (props: ParentProps) => {
   const [junoBundle, setJunoBundle] = createSyncedSignal("zat.og.bundle.juno", false)
   const [ixionJunoBundle, setIxionJunoBundle] = createSyncedSignal("zat.og.bundle.ixion", false)
   const [junoKappaBundle, setJunoKappaBundle] = createSyncedSignal("zat.og.bundle.kappa", false)
-  const [tokens, setTokens] = createSyncedSignal(TOKEN_SHARED_KEYS.junoOutputLevel, "0")
+  const [tokens, setTokens] = createSyncedSignal(getTokenKey("output.juno"), "0")
 
   const [sharesPercent, setSharesPercent] = createSyncedSignal("zat.guide.shares", "0")
 

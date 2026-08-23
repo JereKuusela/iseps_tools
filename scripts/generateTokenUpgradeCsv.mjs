@@ -233,11 +233,11 @@ const getPriorityForOutputLevel = (resource, outputLevel, resourceTargetMap) => 
 const resolveSourceResources = (upgrade) => {
   if (upgrade.resource) return [upgrade.resource]
 
-  if (upgrade.id === "special.suppliesToken" || upgrade.id === "special.suppliesCrystal") {
+  if (upgrade.id === "supplies.tokenBonus" || upgrade.id === "supplies.crystalBonus") {
     return SUPPLY_RESOURCES
   }
 
-  if (upgrade.id === "special.bbbotDuration" || upgrade.id === "special.bbbotToken") {
+  if (upgrade.id === "bbbot.duration" || upgrade.id === "bbbot.tokenBonus") {
     return SUPPLY_RESOURCES
   }
 

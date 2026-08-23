@@ -1,3 +1,5 @@
+export const STORAGE_WRITE_EVENT = "app:storage-write"
+
 export const readFromStorage = <T>(key: string, fallbackValue: T) => {
   const rawValue = localStorage.getItem(key)
   if (rawValue == null) return fallbackValue
@@ -20,4 +22,8 @@ export const writeToStorage = (key: string, value: unknown) => {
   if (typeof value == "string") localStorage.setItem(key, value)
   else if (typeof value == "number" || typeof value == "boolean") localStorage.setItem(key, value.toString())
   else localStorage.setItem(key, JSON.stringify(value))
+
+  if (typeof window !== "undefined" && typeof window.dispatchEvent === "function") {
+    window.dispatchEvent(new CustomEvent(STORAGE_WRITE_EVENT, { detail: { key } }))
+  }
 }
