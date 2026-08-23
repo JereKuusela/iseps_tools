@@ -60,6 +60,5 @@
   "premium.unlockedLayers": "Highest unlocked layer in the hauler mine route.",
   "premium.haulerTokenBooster": "Shared with Crystal and Token tab. Applies to all hauler token rewards.",
   "perkGuide.panel": "SE-based perk recommendations with change notes and mobile-friendly layout.",
-  "zatGuide.panel": "ZAT node recommendations for various runs.<br>Shows total boosts.",
-  "credits.panel": "Contributors, references, and acknowledgements from data/credits.json."
+  "zatGuide.panel": "ZAT node recommendations for various runs.<br>Shows total boosts."
 }
