@@ -7,6 +7,7 @@ export type BestNextRow = {
   targetLevel: string | number | null
   value: string
   data: string
+  id?: string | number
 }
 
 export type BulkActionOption = {
@@ -19,6 +20,7 @@ type BestNextSummaryProps = {
   buyDisabled?: boolean
   buyLabel?: string
   bulkActions?: BulkActionOption[]
+  rowAction?: (id: string | number) => void
   footer: JSX.Element
   rows: BestNextRow[]
   dataHeader: string
@@ -28,6 +30,7 @@ type BestNextSummaryProps = {
 export const BestNextSummary = (props: BestNextSummaryProps) => {
   const [isActionsOpen, setIsActionsOpen] = createSignal(false)
   let actionsMenuRef: HTMLDivElement | undefined
+  const hasRowAction = () => !!props.rowAction
   const bestRow = () => props.rows[0]
   const tableRows = () => props.rows.slice(1)
   const columnWidths = createMemo(() => {
@@ -144,12 +147,18 @@ export const BestNextSummary = (props: BestNextSummaryProps) => {
               <col style={{ width: columnWidths()[0] }} />
               <col style={{ width: columnWidths()[1] }} />
               <col style={{ width: columnWidths()[2] }} />
+              <Show when={hasRowAction()}>
+                <col style={{ width: "2.5rem" }} />
+              </Show>
             </colgroup>
             <thead class="bg-mist/80 text-[11px] uppercase tracking-[0.08em] text-ink/70 dark:bg-[#1a2a3f] dark:text-white/70 sm:text-xs">
               <tr>
                 <th class="px-2 py-1.5">Item</th>
                 <th class="px-2 py-1.5">Value</th>
                 <th class="px-2 py-1.5">{props.dataHeader}</th>
+                <Show when={hasRowAction()}>
+                  <th class="px-2 py-1.5 text-center"></th>
+                </Show>
               </tr>
             </thead>
             <tbody>
@@ -159,6 +168,18 @@ export const BestNextSummary = (props: BestNextSummaryProps) => {
                     <td class="truncate px-2 py-1 font-semibold text-ink dark:text-white">{row.item}</td>
                     <td class="whitespace-nowrap px-2 py-1 text-ink/80 dark:text-white/80">{row.value}</td>
                     <td class="whitespace-nowrap px-2 py-1 text-ink/80 dark:text-white/80">{row.data}</td>
+                    <Show when={hasRowAction()}>
+                      <td class="px-2 py-1 text-center">
+                        <button
+                          type="button"
+                          class="h-6 w-6 rounded-md border border-ink/25 bg-white/90 text-xs text-ink/85 transition hover:-translate-y-0.5 hover:bg-ink hover:text-white disabled:cursor-not-allowed disabled:opacity-35 dark:border-white/30 dark:bg-[#1f3047] dark:text-white/85 dark:hover:bg-white dark:hover:text-ink"
+                          onClick={() => props.rowAction?.(row.id ?? row.item)}
+                          aria-label={"Buy next level for " + row.item}
+                        >
+                          🛒
+                        </button>
+                      </td>
+                    </Show>
                   </tr>
                 )}
               </For>

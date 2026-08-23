@@ -79,6 +79,8 @@ type OgTechContextValue = {
   setMode: (next: ZatMode) => ZatMode
   statusAmount: () => string
   setStatusAmount: (next: string) => string
+  statusAutoIncrement: () => boolean
+  setStatusAutoIncrement: (checked: boolean) => boolean
   goalCycle: () => number
   goalCost: () => string
   goalProgress: () => string
@@ -117,7 +119,7 @@ type OgTechContextValue = {
   totalExponent: () => number
   exponentGainEntries: () => ExponentGainEntry[]
   bestTech: () => BestTech
-  topFive: () => TopTechEntry[]
+  topSix: () => TopTechEntry[]
   techCardRows: () => TechCardRow[]
   buyNextBest: () => void
   buyNextForTech: (id: number) => void
@@ -137,6 +139,7 @@ export const OgTechProvider = (props: ParentProps) => {
   const [gainUnit, setGainUnit] = createSyncedSignal<GainUnit>("zat.og.gainUnit", "hour")
   const [junoAmount, setJunoAmount] = createSyncedSignal("zat.og.junoAmount", "")
   const [statusAmount, setStatusAmount] = createSyncedSignal("penrose.statusAmount", "0")
+  const [statusAutoIncrement, setStatusAutoIncrement] = createSyncedSignal("zat.og.statusAutoIncrement", true)
   const [mode, setMode] = createSyncedSignal<ZatMode>("zat.og.mode", "juno")
 
   const [junoOutput, setJunoOutput] = createSyncedSignal(TOKEN_SHARED_KEYS.junoOutputLevel, "0")
@@ -307,11 +310,11 @@ export const OgTechProvider = (props: ParentProps) => {
     }
   })
 
-  const topFive = createMemo<TopTechEntry[]>(() => {
+  const topSix = createMemo<TopTechEntry[]>(() => {
     const all = rankedRows()
     if (all.length === 0) return []
 
-    return all.slice(1, 6).map((row) => ({
+    return all.slice(0, 6).map((row) => ({
       id: row.id,
       level: row.nextLevel ?? row.currentLevel,
       score: row.score,
@@ -351,6 +354,7 @@ export const OgTechProvider = (props: ParentProps) => {
   }
 
   const incrementStatusByCost = (cost: LargeNumber) => {
+    if (!statusAutoIncrement()) return
     const current = parseLargeNumberSafe(statusAmount())
     setStatusAmount(current.add(cost).toString(2))
   }
@@ -440,6 +444,8 @@ export const OgTechProvider = (props: ParentProps) => {
         setJunoAmount,
         statusAmount,
         setStatusAmount,
+        statusAutoIncrement,
+        setStatusAutoIncrement,
         mode,
         setMode,
         goalCycle,
@@ -480,7 +486,7 @@ export const OgTechProvider = (props: ParentProps) => {
         totalExponent,
         exponentGainEntries,
         bestTech,
-        topFive,
+        topSix,
         techCardRows,
         buyNextBest,
         buyNextForTech,

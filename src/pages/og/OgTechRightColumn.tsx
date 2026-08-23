@@ -30,24 +30,14 @@ export const OgTechRightColumn = () => {
           { label: "Clear tech", onClick: og.clearTechLevels },
         ]}
         footer={<MetricRow label="Total techs" value={og.totalTechLevels()} withBorder={false} />}
-        rows={[
-          ...(bestTech()
-            ? [
-                {
-                  item: `OG${bestTech()!.id}`,
-                  targetLevel: bestTech()!.level,
-                  value: "-",
-                  data: secondsToLabel(bestTech()!.etaSeconds),
-                },
-              ]
-            : []),
-          ...og.topFive().map((entry) => ({
-            item: `OG${entry.id}`,
-            targetLevel: entry.level,
-            value: formatPercentFromRatio(entry.relative / 100, 0),
-            data: secondsToLabel(entry.etaSeconds),
-          })),
-        ]}
+        rows={og.topSix().map((entry) => ({
+          id: entry.id,
+          item: `OG${entry.id}`,
+          targetLevel: entry.level,
+          value: formatPercentFromRatio(entry.relative / 100, 0),
+          data: secondsToLabel(entry.etaSeconds),
+        }))}
+        rowAction={(id) => og.buyNextForTech(Number(id))}
         dataHeader="Remaining"
         columnRatios={[35, 30, 35]}
       />
@@ -71,7 +61,7 @@ export const OgTechRightColumn = () => {
                   {formatPercentFromRatio(tech().relative / 100, 0)}
                 </span>
               </div>
-              <div class="mt-3 grid grid-cols-[1fr_auto] items-end">
+              <div class="mt-3">
                 <IntegerField
                   label="Level"
                   value={String(tech().level)}
@@ -80,16 +70,6 @@ export const OgTechRightColumn = () => {
                   min={0}
                   max={tech().maxLevel}
                 />
-                <button
-                  type="button"
-                  class="h-8 w-8 rounded-lg border border-ink/25 bg-white/90 text-lg text-ink/85 transition hover:-translate-y-0.5 hover:bg-ink hover:text-white disabled:cursor-not-allowed disabled:opacity-35 dark:border-white/30 dark:bg-[#1f3047] dark:text-white/85 dark:hover:bg-white dark:hover:text-ink"
-                  onClick={() => og.buyNextForTech(tech().id)}
-                  disabled={tech().nextLevel === null}
-                  title={tech().nextLevel === null ? "Max level reached" : "Buy next level"}
-                  aria-label={`Buy next level for ${tech().label}`}
-                >
-                  🛒
-                </button>
               </div>
               <div class="mt-3 space-y-1 text-xs text-ink/75 dark:text-white/75">
                 <p>ETA: {secondsToLabel(tech().etaSeconds)}</p>

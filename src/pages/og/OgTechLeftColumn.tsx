@@ -232,10 +232,15 @@ export const OgTechLeftColumn = () => {
 
       <InfoCard title={cycleTitle()} closable>
         <div class="grid gap-1">
-          <NumberField label="Status" value={og.statusAmount()} onInput={og.setStatusAmount} min={0} step={0.01} />
+          <NumberField label="Progress" value={og.statusAmount()} onInput={og.setStatusAmount} min={0} step={0.01} />
+          <ToggleField
+            label="Automatically progress from buys"
+            checked={og.statusAutoIncrement()}
+            onChange={og.setStatusAutoIncrement}
+          />
           <div class="rounded border border-ink/20 bg-white dark:border-white/15 dark:bg-[#253a56] mt-1">
+            <MetricRow label="Status" value={og.goalProgress()} />
             <MetricRow label="Cost" value={og.goalCost()} />
-            <MetricRow label="Progress" value={og.goalProgress()} />
             <MetricRow label="ETA" value={og.etaLabel()} />
             <MetricRow
               label="Finish date"
