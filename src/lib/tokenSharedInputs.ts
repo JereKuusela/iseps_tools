@@ -10,7 +10,7 @@ const LEGACY_KEYS = {
   scOnlineHoursPerDay: "sc.onlineHoursPerDay",
   premiumAverageHoursPerDay: "premium.averageHoursPerDay",
   scAlphaSuppliesLevel: "sc.alphaSuppliesLevel",
-  ogJunoOutputLevel: "zat.og.junoOutput",
+  ogTokens: "zat.og.tokens",
 } as const
 
 const hasStoredValue = (key: string) => localStorage.getItem(key) != null
@@ -36,5 +36,5 @@ export const migrateTokenSharedInputs = () => {
   )
 
   migrateStringKey(TOKEN_SHARED_KEYS.alphaSuppliesLevel, [LEGACY_KEYS.scAlphaSuppliesLevel], "10")
-  migrateStringKey(TOKEN_SHARED_KEYS.junoOutputLevel, [LEGACY_KEYS.ogJunoOutputLevel], "10")
+  migrateStringKey(TOKEN_SHARED_KEYS.junoOutputLevel, [LEGACY_KEYS.ogTokens], "10")
 }

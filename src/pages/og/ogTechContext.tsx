@@ -142,11 +142,11 @@ export const OgTechProvider = (props: ParentProps) => {
   const [statusAutoIncrement, setStatusAutoIncrement] = createSyncedSignal("zat.og.statusAutoIncrement", true)
   const [mode, setMode] = createSyncedSignal<ZatMode>("zat.og.mode", "juno")
 
-  const [junoOutput, setJunoOutput] = createSyncedSignal(TOKEN_SHARED_KEYS.junoOutputLevel, "0")
+  const [junoOutput, setJunoOutput] = createSyncedSignal("zat.og.junoOutput", "0")
   const [junoBundle, setJunoBundle] = createSyncedSignal("zat.og.bundle.juno", false)
   const [ixionJunoBundle, setIxionJunoBundle] = createSyncedSignal("zat.og.bundle.ixion", false)
   const [junoKappaBundle, setJunoKappaBundle] = createSyncedSignal("zat.og.bundle.kappa", false)
-  const [tokens, setTokens] = createSyncedSignal("zat.og.tokens", "0")
+  const [tokens, setTokens] = createSyncedSignal(TOKEN_SHARED_KEYS.junoOutputLevel, "0")
 
   const [sharesPercent, setSharesPercent] = createSyncedSignal("zat.guide.shares", "0")
 
