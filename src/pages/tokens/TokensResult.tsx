@@ -37,7 +37,7 @@ export const TokensResult = () => {
             <input
               type="range"
               min="0"
-              max="4"
+              max="2"
               step="1"
               value={tokens.blendStep()}
               onInput={(event) => tokens.setBlendStep(event.currentTarget.value)}
@@ -51,17 +51,22 @@ export const TokensResult = () => {
         rows={tokens
           .recommendationRows()
           .slice(0, 8)
-          .map((row, index) => ({
-            item:
-              row.nextLevel === null
-                ? row.label
-                : index === 0 && row.nextLevel > row.currentLevel + 1
-                  ? `${row.label}: ${row.currentLevel} → ${row.nextLevel}`
-                  : `${row.label}: ${row.nextLevel}`,
-            targetLevel: null,
-            value: formatPercentFromRatio(relativeValueRatio(row.score), 1).replace(/\.0+%$/, "%"),
-            data: `${formatCost(row.cost)}${index === 0 ? " tokens" : ""}`,
-          }))}
+          .map((row, index) => {
+            const upgrade = tokens.upgrades().find((candidate) => candidate.id === row.id)
+            const label = upgrade?.label ?? row.id
+
+            return {
+              item:
+                row.nextLevel === null
+                  ? label
+                  : index === 0 && row.nextLevel > row.currentLevel + 1
+                    ? `${label}: ${row.currentLevel} → ${row.nextLevel}`
+                    : `${label}: ${row.nextLevel}`,
+              targetLevel: null,
+              value: formatPercentFromRatio(relativeValueRatio(row.score), 1).replace(/\.0+%$/, "%"),
+              data: `${formatCost(row.cost)}${index === 0 ? " tokens" : ""}`,
+            }
+          })}
         dataHeader="Cost"
         columnRatios={[50, 25, 25]}
       />

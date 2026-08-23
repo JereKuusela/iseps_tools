@@ -32,9 +32,9 @@ export const migrateTokenSharedInputs = () => {
   migrateStringKey(
     TOKEN_SHARED_KEYS.onlineHoursPerDay,
     [LEGACY_KEYS.scOnlineHoursPerDay, LEGACY_KEYS.premiumAverageHoursPerDay],
-    "0",
+    "10",
   )
 
-  migrateStringKey(TOKEN_SHARED_KEYS.alphaSuppliesLevel, [LEGACY_KEYS.scAlphaSuppliesLevel], "0")
-  migrateStringKey(TOKEN_SHARED_KEYS.junoOutputLevel, [LEGACY_KEYS.ogJunoOutputLevel], "0")
+  migrateStringKey(TOKEN_SHARED_KEYS.alphaSuppliesLevel, [LEGACY_KEYS.scAlphaSuppliesLevel], "10")
+  migrateStringKey(TOKEN_SHARED_KEYS.junoOutputLevel, [LEGACY_KEYS.ogJunoOutputLevel], "10")
 }

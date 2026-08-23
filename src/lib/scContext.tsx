@@ -84,7 +84,7 @@ export const ScProvider = (props: ParentProps) => {
   const [timeSkipSmall, setTimeSkipSmall] = createSyncedSignal("sc.timeSkipSmall", "0")
   const [timeSkipMedium, setTimeSkipMedium] = createSyncedSignal("sc.timeSkipMedium", "0")
   const [timeSkipLarge, setTimeSkipLarge] = createSyncedSignal("sc.timeSkipLarge", "0")
-  const [onlineHoursPerDay, setOnlineHoursPerDay] = createSyncedSignal(TOKEN_SHARED_KEYS.onlineHoursPerDay, "0")
+  const [onlineHoursPerDay, setOnlineHoursPerDay] = createSyncedSignal(TOKEN_SHARED_KEYS.onlineHoursPerDay, "10")
   const [alphaSuppliesLevel, setAlphaSuppliesLevel] = createSyncedSignal(TOKEN_SHARED_KEYS.alphaSuppliesLevel, "0")
   const [futureDcBoostPct, setFutureDcBoostPct] = createSyncedSignal("sc.futureDcBoostPct", "0")
   const [futureScBoostPct, setFutureScBoostPct] = createSyncedSignal("sc.futureScBoostPct", "0")

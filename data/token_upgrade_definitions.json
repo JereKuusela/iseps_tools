@@ -248,7 +248,7 @@
       "label": "Alpha Supplies",
       "group": "supplies",
       "resource": "alpha",
-      "maxLevel": 2,
+      "maxLevel": 95,
       "baseValue": 0.025,
       "costAnchors": [
         {
@@ -263,7 +263,7 @@
       "label": "Beta Supplies",
       "group": "supplies",
       "resource": "beta",
-      "maxLevel": 2,
+      "maxLevel": 95,
       "baseValue": 0.02,
       "costAnchors": [
         {
@@ -278,7 +278,7 @@
       "label": "Ceti Supplies",
       "group": "supplies",
       "resource": "ceti",
-      "maxLevel": 2,
+      "maxLevel": 95,
       "baseValue": 0.02,
       "costAnchors": [
         {
@@ -293,7 +293,7 @@
       "label": "Delta Supplies",
       "group": "supplies",
       "resource": "delta",
-      "maxLevel": 2,
+      "maxLevel": 95,
       "baseValue": 0.025,
       "costAnchors": [
         {
@@ -308,7 +308,7 @@
       "label": "Epsilon Supplies",
       "group": "supplies",
       "resource": "epsilon",
-      "maxLevel": 2,
+      "maxLevel": 95,
       "baseValue": 0.02,
       "costAnchors": [
         {
@@ -323,7 +323,7 @@
       "label": "Fenix Supplies",
       "group": "supplies",
       "resource": "fenix",
-      "maxLevel": 2,
+      "maxLevel": 95,
       "baseValue": 0.02,
       "costAnchors": [
         {
@@ -338,7 +338,7 @@
       "label": "Gamma Supplies",
       "group": "supplies",
       "resource": "gamma",
-      "maxLevel": 2,
+      "maxLevel": 95,
       "baseValue": 0.025,
       "costAnchors": [
         {
@@ -353,7 +353,7 @@
       "label": "Helion Supplies",
       "group": "supplies",
       "resource": "helion",
-      "maxLevel": 2,
+      "maxLevel": 95,
       "baseValue": 0.025,
       "costAnchors": [
         {
@@ -506,8 +506,8 @@
       "baseValue": 0.025,
       "costAnchors": [
         {
-          "level": 1,
-          "cost": 1,
+          "level": 15,
+          "cost": 235,
           "step": 0
         }
       ]
@@ -521,8 +521,8 @@
       "costAnchors": [
         {
           "level": 1,
-          "cost": 1,
-          "step": 0
+          "cost": 100,
+          "step": 300
         }
       ]
     },

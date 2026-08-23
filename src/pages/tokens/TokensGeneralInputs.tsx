@@ -1,46 +1,44 @@
-import { For } from "solid-js"
-import { InfoCard } from "../../components/layout/contentBlocks"
-import { IntegerField, ToggleField } from "../../components/ui/formControls"
+import { InfoCard, MetricRow } from "../../components/layout/contentBlocks"
+import { IntegerField, SelectField, ToggleField } from "../../components/ui/formControls"
+import { LargeNumber } from "../../lib/largeNumber"
+import { formatLargeNumber } from "../../lib/numberFormat"
 import { PARTICLE_ORDER, useTokensContext, type UnlockedParticle } from "./tokensContext"
+
+const formatSpent = (value: number) => {
+  const rounded = Math.round(value * 100) / 100
+  if (Number.isInteger(rounded)) return Math.trunc(rounded).toLocaleString("en-US")
+  return rounded.toLocaleString("en-US", { maximumFractionDigits: 2 })
+}
 
 export const TokensGeneralInputs = () => {
   const tokens = useTokensContext()
+  const unlockedParticleOptions = () =>
+    PARTICLE_ORDER.map((id) => ({ value: id, label: id.charAt(0).toUpperCase() + id.slice(1) }))
 
   return (
     <InfoCard>
-      <div class="grid gap-3">
-        <div class="grid gap-2 sm:grid-cols-2">
-          <IntegerField
-            label="Hours/day"
-            value={tokens.onlineHoursPerDay()}
-            onInput={tokens.setOnlineHoursPerDay}
-            min={0}
-            max={24}
-            step={1}
-          />
-          <IntegerField
-            label="Granularity"
-            value={tokens.granularity()}
-            onInput={tokens.setGranularity}
-            min={1}
-            step={1}
-          />
-        </div>
-
-        <div class="grid gap-1.5">
-          <label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
-            Unlocked particle
-          </label>
-          <select
-            value={tokens.unlockedParticle()}
-            onChange={(event) => tokens.setUnlockedParticle(event.currentTarget.value as UnlockedParticle)}
-            class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
-          >
-            <For each={PARTICLE_ORDER}>
-              {(id) => <option value={id}>{id.charAt(0).toUpperCase() + id.slice(1)}</option>}
-            </For>
-          </select>
-        </div>
+      <div class="grid gap-1">
+        <IntegerField
+          label="Active hours/day"
+          value={tokens.onlineHoursPerDay()}
+          onInput={tokens.setOnlineHoursPerDay}
+          min={0}
+          max={24}
+          step={1}
+        />
+        <IntegerField
+          label="Output step"
+          value={tokens.granularity()}
+          onInput={tokens.setGranularity}
+          min={1}
+          step={1}
+        />
+        <SelectField
+          label="Unlocked particle"
+          value={tokens.unlockedParticle()}
+          onChange={(next) => tokens.setUnlockedParticle(next as UnlockedParticle)}
+          options={unlockedParticleOptions()}
+        />
 
         <div class="grid gap-2">
           <ToggleField
@@ -55,34 +53,11 @@ export const TokensGeneralInputs = () => {
           />
         </div>
 
-        <div class="grid gap-2 sm:grid-cols-2">
-          <IntegerField
-            label="Supplies token"
-            value={tokens.levels()["special.suppliesToken"] ?? "0"}
-            onInput={(next) => tokens.setUpgradeLevel("special.suppliesToken", next)}
-            min={0}
-            step={1}
-          />
-          <IntegerField
-            label="Supplies crystal"
-            value={tokens.levels()["special.suppliesCrystal"] ?? "0"}
-            onInput={(next) => tokens.setUpgradeLevel("special.suppliesCrystal", next)}
-            min={0}
-            step={1}
-          />
-          <IntegerField
-            label="BB-Bot duration"
-            value={tokens.levels()["special.bbbotDuration"] ?? "0"}
-            onInput={(next) => tokens.setUpgradeLevel("special.bbbotDuration", next)}
-            min={0}
-            step={1}
-          />
-          <IntegerField
-            label="BB-Bot token"
-            value={tokens.levels()["special.bbbotToken"] ?? "0"}
-            onInput={(next) => tokens.setUpgradeLevel("special.bbbotToken", next)}
-            min={0}
-            step={1}
+        <div class="rounded border border-ink/20 bg-white dark:border-white/15 dark:bg-[#253a56] mt-1">
+          <MetricRow
+            label="Tokens spent"
+            value={formatLargeNumber(LargeNumber.from(tokens.totalTokensSpent()), 2)}
+            withBorder={false}
           />
         </div>
       </div>

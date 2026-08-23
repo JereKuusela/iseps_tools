@@ -114,7 +114,7 @@ const CrystalAndTokenTab = () => {
   const [bbDurationUpgrade, setBbDurationUpgrade] = createSyncedSignal("premium.bbDurationUpgrade", "0")
   const [bbTokenUpgrade, setBbTokenUpgrade] = createSyncedSignal("premium.bbTokenUpgrade", "0")
   const [chestEnhancer, setChestEnhancer] = createSyncedSignal("premium.chestEnhancer", "0")
-  const [averageHoursPerDay, setAverageHoursPerDay] = createSyncedSignal("premium.averageHoursPerDay", "24")
+  const [averageHoursPerDay, setAverageHoursPerDay] = createSyncedSignal("premium.averageHoursPerDay", "10")
   const [includeDailyRewards, setIncludeDailyRewards] = createSyncedSignal("premium.includeDailyRewards", false)
   const [seItem, setSeItem] = createSyncedSignal("premium.seItem", "11")
   const [luckyLeafClover, setLuckyLeafClover] = createSyncedSignal("premium.luckyLeafClover", false)

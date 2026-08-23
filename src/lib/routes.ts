@@ -19,7 +19,7 @@ export const ROUTES = {
 
 export const primaryTabs: TabItem[] = [
   { href: ROUTES.ogTech, label: "OG Tech" },
-  //{ href: ROUTES.tokens, label: "Tokens" },
+  { href: ROUTES.tokens, label: "Tokens" },
   { href: ROUTES.perks, label: "Perks" },
   { href: ROUTES.zatGuide, label: "ZAT" },
   { href: ROUTES.sc, label: "SC" },
@@ -39,13 +39,11 @@ export const toolCards: ToolCardItem[] = [
     label: "OG Tech",
     description: "Plan OG tech upgrades by comparing gains, costs, and ETA based on your current output.",
   },
-  /*
   {
     href: ROUTES.tokens,
     label: "Tokens",
     description: "Rank token upgrades by projected value per token cost and track shared progression inputs.",
   },
-  */
   {
     href: ROUTES.perks,
     label: "Perks",

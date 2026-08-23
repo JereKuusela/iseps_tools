@@ -3,8 +3,8 @@ import { calculateSuppliesMultiplier } from "./suppliesTime"
 
 describe("calculateExtraPerDay", () => {
   it("returns a time multiplier", () => {
-    const multiplier = calculateSuppliesMultiplier(560, 1)
-    expect(multiplier).toBeCloseTo(1 + 1 / 9)
+    const multiplier = calculateSuppliesMultiplier(10, 1)
+    expect(multiplier).toBeCloseTo(1 + 20 / (7 * 1440))
   })
 
   it("returns neutral multiplier when supplies level is zero", () => {
@@ -12,8 +12,8 @@ describe("calculateExtraPerDay", () => {
   })
 
   it("caps online time contribution", () => {
-    const atCap = calculateSuppliesMultiplier(560, 5)
-    const aboveCap = calculateSuppliesMultiplier(24_000, 5)
+    const atCap = calculateSuppliesMultiplier(10, 5)
+    const aboveCap = calculateSuppliesMultiplier(24, 5)
 
     expect(aboveCap).toBeCloseTo(atCap)
   })

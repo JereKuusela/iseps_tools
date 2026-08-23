@@ -78,15 +78,9 @@ export type TokenLevelRow = {
   longTerm: number
 }
 
-export type TokenTargetRow = {
-  level: number
-  weights: Partial<Record<TokenResourceId, number>>
-}
-
 export type TokenLoadedData = {
   upgrades: TokenUpgradeDefinition[]
   rowByKey: Map<string, TokenLevelRow>
-  targetRows: TokenTargetRow[]
 }
 
 export type TokenLevelMap = Record<string, string>
@@ -96,7 +90,7 @@ export type TokenInputState = {
   levels: TokenLevelMap
   enabled: TokenToggleMap
   outputLevelsByResource: Record<string, string>
-  blendPercent: string
+  blendPercent: number
   granularity: string
   onlineHoursPerDay: string
   alphaSuppliesLevel: string
@@ -105,17 +99,8 @@ export type TokenInputState = {
 
 export type TokenRecommendationRow = {
   id: string
-  label: string
-  group: TokenUpgradeGroup
-  resource?: TokenResourceId
   currentLevel: number
   nextLevel: number | null
-  maxLevel: number
   cost: number
-  shortTermValue: number
-  longTermValue: number
-  weightedValue: number
   score: number
-  projectedTimeSeconds: number | null
-  projectionReady: boolean
 }

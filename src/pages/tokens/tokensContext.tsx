@@ -1,7 +1,7 @@
 import { createContext, createMemo, createResource, type ParentProps, useContext } from "solid-js"
 import { createSyncedSignal } from "../../lib/persistedSignal"
 import { TOKEN_SHARED_KEYS } from "../../lib/tokenSharedInputs"
-import { calculateTokenRecommendations } from "./tokenCalculator"
+import { calculateTokenRecommendations, calculateTotalTokensSpent } from "./tokenCalculator"
 import { loadTokenData } from "./tokenData"
 import { OUTPUT_RESOURCES, type TokenLevelMap, type TokenUpgradeDefinition } from "./tokenTypes"
 
@@ -33,14 +33,14 @@ export const PARTICLE_ORDER = [
 
 export type UnlockedParticle = (typeof PARTICLE_ORDER)[number]
 
-const BLEND_STEP_TO_SHORT_TERM_PERCENT = [100, 75, 50, 25, 0] as const
+const BLEND_STEP_TO_SHORT_TERM_PERCENT = [0, 0.5, 1] as const
 
 type TokensContextValue = {
   isLoading: () => boolean
   loadError: () => string | null
   blendStep: () => string
   setBlendStep: (next: string) => string
-  blendPercent: () => string
+  blendPercent: () => number
   granularity: () => string
   setGranularity: (next: string) => string
   onlineHoursPerDay: () => string
@@ -58,6 +58,7 @@ type TokensContextValue = {
   upgrades: () => TokenUpgradeDefinition[]
   recommendationRows: () => ReturnType<typeof calculateTokenRecommendations>["rows"]
   bestRecommendation: () => ReturnType<typeof calculateTokenRecommendations>["best"]
+  totalTokensSpent: () => number
   applyBest: () => void
   applyBestAll: () => void
   applyBestCount: (count: number) => void
@@ -68,8 +69,8 @@ const TokensContext = createContext<TokensContextValue>()
 export const TokensProvider = (props: ParentProps) => {
   const [tokenData] = createResource(loadTokenData)
 
-  const [blendStep, setBlendStep] = createSyncedSignal("token.blendStep", "2")
-  const [granularity, setGranularity] = createSyncedSignal("token.granularity", "50")
+  const [blendStep, setBlendStep] = createSyncedSignal("token.blendStep", "1")
+  const [granularity, setGranularity] = createSyncedSignal("token.granularity", "25")
 
   const [onlineHoursPerDay, setOnlineHoursPerDay] = createSyncedSignal(TOKEN_SHARED_KEYS.onlineHoursPerDay, "0")
   const [junoOutputLevel, setJunoOutputLevel] = createSyncedSignal(TOKEN_SHARED_KEYS.junoOutputLevel, "0")
@@ -79,11 +80,11 @@ export const TokensProvider = (props: ParentProps) => {
   )
   const [unlockGammaSuppliesBbBot, setUnlockGammaSuppliesBbBot] = createSyncedSignal(
     "token.unlockGammaSuppliesBbBot",
-    false,
+    true,
   )
   const [unlockHelionSuppliesBbBot, setUnlockHelionSuppliesBbBot] = createSyncedSignal(
     "token.unlockHelionSuppliesBbBot",
-    false,
+    true,
   )
 
   const [levels, setLevels] = createSyncedSignal<TokenLevelMap>("token.upgradeLevels", {})
@@ -101,8 +102,8 @@ export const TokensProvider = (props: ParentProps) => {
   })
 
   const blendPercent = createMemo(() => {
-    const parsed = Math.max(0, Math.min(4, Math.floor(parseNumberish(blendStep()))))
-    return String(BLEND_STEP_TO_SHORT_TERM_PERCENT[parsed] ?? 50)
+    const parsed = Math.max(0, Math.min(2, Math.floor(parseNumberish(blendStep()))))
+    return BLEND_STEP_TO_SHORT_TERM_PERCENT[parsed] ?? 0.5
   })
 
   const resourceRank = createMemo(() => {
@@ -179,6 +180,22 @@ export const TokensProvider = (props: ParentProps) => {
     ),
   )
 
+  const totalTokensSpent = createMemo(() =>
+    calculateTotalTokensSpent(
+      {
+        levels: normalizedLevels(),
+        enabled: normalizedEnabled(),
+        outputLevelsByResource: normalizedOutputLevels(),
+        blendPercent: blendPercent(),
+        granularity: granularity(),
+        onlineHoursPerDay: onlineHoursPerDay(),
+        alphaSuppliesLevel: levels()["supplies.alpha"] ?? "0",
+        junoOutputLevel: junoOutputLevel(),
+      },
+      tokenData() ?? null,
+    ),
+  )
+
   const setOutputLevelByResource = (resource: string, next: string) => {
     if (resource === "juno") {
       setJunoOutputLevel(next)
@@ -202,10 +219,13 @@ export const TokensProvider = (props: ParentProps) => {
     const best = recommendation().best
     if (!best || best.nextLevel === null) return
 
-    const nextSingleLevel = Math.min(best.maxLevel, best.currentLevel + 1)
+    const upgrade = tokenData()?.upgrades.find((candidate) => candidate.id === best.id)
+    if (!upgrade) return
 
-    if (best.group === "output" && best.resource) {
-      setOutputLevelByResource(best.resource, String(nextSingleLevel))
+    const nextSingleLevel = Math.min(upgrade.maxLevel, best.currentLevel + 1)
+
+    if (upgrade.group === "output" && upgrade.resource) {
+      setOutputLevelByResource(upgrade.resource, String(nextSingleLevel))
       return
     }
 
@@ -216,14 +236,17 @@ export const TokensProvider = (props: ParentProps) => {
     recommendationRow: NonNullable<ReturnType<typeof calculateTokenRecommendations>["best"]>,
     targetLevel: number,
   ) => {
+    const upgrade = tokenData()?.upgrades.find((candidate) => candidate.id === recommendationRow.id)
+    if (!upgrade) return
+
     const clampedTargetLevel = Math.max(
       recommendationRow.currentLevel,
-      Math.min(recommendationRow.maxLevel, Math.floor(targetLevel)),
+      Math.min(upgrade.maxLevel, Math.floor(targetLevel)),
     )
     if (clampedTargetLevel <= recommendationRow.currentLevel) return
 
-    if (recommendationRow.group === "output" && recommendationRow.resource) {
-      setOutputLevelByResource(recommendationRow.resource, String(clampedTargetLevel))
+    if (upgrade.group === "output" && upgrade.resource) {
+      setOutputLevelByResource(upgrade.resource, String(clampedTargetLevel))
       return
     }
 
@@ -273,6 +296,7 @@ export const TokensProvider = (props: ParentProps) => {
         upgrades: () => tokenData()?.upgrades ?? [],
         recommendationRows: () => recommendation().rows,
         bestRecommendation: () => recommendation().best,
+        totalTokensSpent,
         applyBest,
         applyBestAll,
         applyBestCount,
