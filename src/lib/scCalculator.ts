@@ -73,7 +73,7 @@ export type TimeToGoalInput = {
   futureDc: number
   futureSc: number
   timeSkips?: number
-  extraMinutesPerDay?: number
+  suppliesMultiplier: number
   type: ScGoalType
   customScGoal?: LargeNumber
 }
@@ -337,11 +337,9 @@ export const iterateTimeToReachGoal = (input: TimeToGoalInput): TimeToGoalResult
   const dcExponent = scExponentForSeInversed(effectiveSe, currentSe)
 
   const currentAfterSkips = applyTimeSkips(currentDc, dcGainPerMinute, input.timeSkips)
-  const extraMinutesPerDay = Math.max(0, toSafePositiveNumber(input.extraMinutesPerDay ?? 0))
-  const extraMinuteMultiplier = 1 + extraMinutesPerDay / 1440
 
   const preBoostCurrentDc = currentAfterSkips.multiply(input.futureDc)
-  const preBoostDcGainPerMinute = dcGainPerMinute.multiply(input.futureDc * extraMinuteMultiplier)
+  const preBoostDcGainPerMinute = dcGainPerMinute.multiply(input.futureDc * input.suppliesMultiplier)
 
   const futureScScaleLog10 = input.type == "customDc" ? 0 : safeLog10(input.futureSc)
   const preBoostGoalDc =

@@ -16,6 +16,7 @@ import { formatCompactMultiplier } from "../../lib/numberFormat"
 import { calculateDcReplicator, calculateSeReplicator } from "../../lib/scCalculator"
 import type { ScGainUnit } from "../../lib/scContext"
 import { useScContext } from "../../lib/scContext"
+import { calculateSuppliesMultiplier } from "../../lib/suppliesTime"
 import { formatTimeDurationFromMinutes } from "../../lib/timeFormat"
 import type { TooltipKey } from "../../lib/tooltips"
 
@@ -111,12 +112,10 @@ export const ScLeftColumn = () => {
     return small * 3 + medium * 5 + large * 12
   })
   const onlineBonusMultiplier = createMemo(() => {
-    const onlineHours = clamp(parseFiniteNumber(sc.onlineHoursPerDay(), 0), 0, 24)
-    const boostedHours = Math.min(onlineHours, 10)
-    const baseExtraPerHour = 38
-    const alphaMultiplier = 1 + Math.max(0, parseFiniteNumber(sc.alphaSuppliesLevel(), 0)) * 0.01
-    const onlineExtraMinutes = boostedHours * baseExtraPerHour * alphaMultiplier
-    return 1 + onlineExtraMinutes / 1440
+    return calculateSuppliesMultiplier(
+      parseFiniteNumber(sc.onlineHoursPerDay(), 0),
+      parseFiniteNumber(sc.alphaSuppliesLevel(), 0),
+    )
   })
 
   const setReplicatorMinutesFromTotal = (totalMinutes: number) => {

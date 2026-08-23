@@ -1,8 +1,12 @@
 import { createContext, createMemo, type ParentProps, useContext } from "solid-js"
 import { LargeNumber } from "../../lib/largeNumber"
+import { formatPercentFromRatio } from "../../lib/numberFormat"
 import { createSyncedSignal } from "../../lib/persistedSignal"
+import { TOKEN_SHARED_KEYS } from "../../lib/tokenSharedInputs"
 import { useZatData, type JunoExponentType } from "../../lib/zatContext"
 import {
+  calculateZatCostForCycle,
+  calculateNextZatCost,
   calculateTechValues,
   calculateExponentIncreaseMultipliers,
   calculateNextThreeTechCosts,
@@ -31,6 +35,22 @@ const parseLargeNumberSafe = (value: string): LargeNumber => {
   }
 }
 
+const formatDuration = (hours: number) => {
+  if (Number.isNaN(hours) || hours < 0) return "Unknown"
+  if (!Number.isFinite(hours)) return "> 10 years"
+  if (hours < 1 / 60) return "< 1 min"
+
+  const minutes = hours * 60
+  if (minutes < 120) return `${minutes.toFixed(1)} min`
+
+  if (hours < 72) return `${hours.toFixed(1)} hr`
+
+  const days = hours / 24
+  if (days < 3650) return `${days.toFixed(1)} days`
+
+  return "> 10 years"
+}
+
 const estimateSeconds = (cost: LargeNumber, current: LargeNumber, gainPerSecond: LargeNumber) => {
   if (gainPerSecond.compare(0) <= 0) return Number.POSITIVE_INFINITY
   if (cost.compare(current) <= 0) return 0
@@ -57,6 +77,15 @@ type OgTechContextValue = {
   setJunoAmount: (next: string) => string
   mode: () => ZatMode
   setMode: (next: ZatMode) => ZatMode
+  statusAmount: () => string
+  setStatusAmount: (next: string) => string
+  statusAutoIncrement: () => boolean
+  setStatusAutoIncrement: (checked: boolean) => boolean
+  goalCycle: () => number
+  goalCost: () => string
+  goalProgress: () => string
+  etaLabel: () => string
+  etaMinutes: () => number
   junoOutput: () => string
   setJunoOutput: (next: string) => string
   junoBundle: () => boolean
@@ -90,7 +119,7 @@ type OgTechContextValue = {
   totalExponent: () => number
   exponentGainEntries: () => ExponentGainEntry[]
   bestTech: () => BestTech
-  topFive: () => TopTechEntry[]
+  topSix: () => TopTechEntry[]
   techCardRows: () => TechCardRow[]
   buyNextBest: () => void
   buyNextForTech: (id: number) => void
@@ -109,9 +138,11 @@ export const OgTechProvider = (props: ParentProps) => {
   const [gainValue, setGainValue] = createSyncedSignal("zat.og.gain", "1.00e1")
   const [gainUnit, setGainUnit] = createSyncedSignal<GainUnit>("zat.og.gainUnit", "hour")
   const [junoAmount, setJunoAmount] = createSyncedSignal("zat.og.junoAmount", "")
+  const [statusAmount, setStatusAmount] = createSyncedSignal("penrose.statusAmount", "0")
+  const [statusAutoIncrement, setStatusAutoIncrement] = createSyncedSignal("zat.og.statusAutoIncrement", true)
   const [mode, setMode] = createSyncedSignal<ZatMode>("zat.og.mode", "juno")
 
-  const [junoOutput, setJunoOutput] = createSyncedSignal("zat.og.junoOutput", "0")
+  const [junoOutput, setJunoOutput] = createSyncedSignal(TOKEN_SHARED_KEYS.junoOutputLevel, "0")
   const [junoBundle, setJunoBundle] = createSyncedSignal("zat.og.bundle.juno", false)
   const [ixionJunoBundle, setIxionJunoBundle] = createSyncedSignal("zat.og.bundle.ixion", false)
   const [junoKappaBundle, setJunoKappaBundle] = createSyncedSignal("zat.og.bundle.kappa", false)
@@ -139,6 +170,57 @@ export const OgTechProvider = (props: ParentProps) => {
   })
 
   const currentJuno = createMemo(() => parseLargeNumberSafe(junoAmount()))
+  const normalizedStatusAmount = createMemo(() => parseLargeNumberSafe(statusAmount()))
+
+  const cycleInputFloor = createMemo(() => Math.max(0, Math.floor(parseNumberish(cycles()))))
+  const cycleFloorCost = createMemo(() => {
+    const floorCycle = Math.max(1, cycleInputFloor())
+    return calculateZatCostForCycle(floorCycle)
+  })
+
+  const nextCycleInputAmount = createMemo(() => {
+    const status = normalizedStatusAmount()
+    const gain = gainPerSecond()
+    const baseAmount = status.compare(gain) >= 0 ? status : gain
+    const floorAmount = cycleFloorCost()
+    return baseAmount.compare(floorAmount) >= 0 ? baseAmount : floorAmount
+  })
+
+  const nextCycleInfo = createMemo(() => calculateNextZatCost(nextCycleInputAmount()))
+  const goalCycle = createMemo(() => Math.max(1, Math.floor(nextCycleInfo().cycle)))
+  const goalCostValue = createMemo(() => nextCycleInfo().cost)
+
+  const junoRemainingToGoal = createMemo(() => {
+    const targetCost = goalCostValue()
+    const current = normalizedStatusAmount()
+    if (targetCost.compare(current) <= 0) return LargeNumber.zero()
+    return targetCost.subtract(current)
+  })
+
+  const goalCost = createMemo(() => goalCostValue().toString(2))
+
+  const etaHours = createMemo(() => {
+    const rate = gainPerSecond()
+    if (rate.compare(0) <= 0) return Number.POSITIVE_INFINITY
+
+    const remaining = junoRemainingToGoal().divide(rate)
+    if (remaining.exponent > 12) return Number.POSITIVE_INFINITY
+    const seconds = remaining.mantissa * 10 ** remaining.exponent
+    return seconds / 3600
+  })
+
+  const goalProgress = createMemo(() => {
+    const current = normalizedStatusAmount()
+    const target = goalCostValue()
+    if (target.compare(0) <= 0) return "100%"
+    if (current.compare(target) >= 0) return "100%"
+    const ratio = current.divide(target)
+    const asNumber = ratio.mantissa * 10 ** ratio.exponent
+    return formatPercentFromRatio(asNumber, 0)
+  })
+
+  const etaLabel = createMemo(() => formatDuration(etaHours()))
+  const etaMinutes = createMemo(() => etaHours() * 60)
 
   const premiumMultiplier = createMemo(() => {
     return calculateTotalPremiumMultiplier({
@@ -228,11 +310,11 @@ export const OgTechProvider = (props: ParentProps) => {
     }
   })
 
-  const topFive = createMemo<TopTechEntry[]>(() => {
+  const topSix = createMemo<TopTechEntry[]>(() => {
     const all = rankedRows()
     if (all.length === 0) return []
 
-    return all.slice(1, 6).map((row) => ({
+    return all.slice(0, 6).map((row) => ({
       id: row.id,
       level: row.nextLevel ?? row.currentLevel,
       score: row.score,
@@ -271,16 +353,26 @@ export const OgTechProvider = (props: ParentProps) => {
     })
   }
 
+  const incrementStatusByCost = (cost: LargeNumber) => {
+    if (!statusAutoIncrement()) return
+    const current = parseLargeNumberSafe(statusAmount())
+    setStatusAmount(current.add(cost).toString(2))
+  }
+
   const buyNextForTech = (id: number) => {
     const currentLevel = techLevels()[id] ?? 0
     const next = calculateNextThreeTechCosts(id, currentLevel)[0]
     if (!next) return
+    incrementStatusByCost(next.cost)
     setTechLevel(id, next.level)
   }
 
   const buyNextBest = () => {
     const best = bestTech()
     if (!best) return
+    const currentLevel = techLevels()[best.id] ?? 0
+    const next = calculateNextThreeTechCosts(best.id, currentLevel)[0]
+    if (next) incrementStatusByCost(next.cost)
     setTechLevel(best.id, best.level)
   }
 
@@ -350,8 +442,17 @@ export const OgTechProvider = (props: ParentProps) => {
         setGainUnit,
         junoAmount,
         setJunoAmount,
+        statusAmount,
+        setStatusAmount,
+        statusAutoIncrement,
+        setStatusAutoIncrement,
         mode,
         setMode,
+        goalCycle,
+        goalCost,
+        goalProgress,
+        etaLabel,
+        etaMinutes,
         junoOutput,
         setJunoOutput,
         junoBundle,
@@ -385,7 +486,7 @@ export const OgTechProvider = (props: ParentProps) => {
         totalExponent,
         exponentGainEntries,
         bestTech,
-        topFive,
+        topSix,
         techCardRows,
         buyNextBest,
         buyNextForTech,

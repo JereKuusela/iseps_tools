@@ -4,12 +4,12 @@ export type ToolCardItem = { href: string; label: string; description: string }
 export const ROUTES = {
   home: "/",
   ogTech: "/tech",
+  tokens: "/tokens",
   perks: "/perks",
   cruise: "/cruise",
   factory: "/factory",
   factoryProduction: "/factory-production",
   zatGuide: "/zat",
-  penrose: "/penrose",
   sc: "/sc",
   premiumCrystal: "/premium",
   premiumHauler: "/hauler",
@@ -19,11 +19,10 @@ export const ROUTES = {
 
 export const primaryTabs: TabItem[] = [
   { href: ROUTES.ogTech, label: "OG Tech" },
+  //{ href: ROUTES.tokens, label: "Tokens" },
   { href: ROUTES.perks, label: "Perks" },
   { href: ROUTES.zatGuide, label: "ZAT" },
-  { href: ROUTES.penrose, label: "Penrose" },
   { href: ROUTES.sc, label: "SC" },
-  { href: ROUTES.credits, label: "Credits" },
 ]
 
 export const eventTabs: TabItem[] = [
@@ -32,7 +31,7 @@ export const eventTabs: TabItem[] = [
   { href: ROUTES.factoryProduction, label: "Factory Production" },
 ]
 
-export const tabs: TabItem[] = [...primaryTabs.slice(0, 5), ...eventTabs, ...primaryTabs.slice(5)]
+export const tabs: TabItem[] = [...primaryTabs.slice(0, 4), ...eventTabs, ...primaryTabs.slice(4)]
 
 export const toolCards: ToolCardItem[] = [
   {
@@ -40,6 +39,13 @@ export const toolCards: ToolCardItem[] = [
     label: "OG Tech",
     description: "Plan OG tech upgrades by comparing gains, costs, and ETA based on your current output.",
   },
+  /*
+  {
+    href: ROUTES.tokens,
+    label: "Tokens",
+    description: "Rank token upgrades by projected value per token cost and track shared progression inputs.",
+  },
+  */
   {
     href: ROUTES.perks,
     label: "Perks",
@@ -49,11 +55,6 @@ export const toolCards: ToolCardItem[] = [
     href: ROUTES.zatGuide,
     label: "ZAT",
     description: "Follow cycle-based node path recommendations with run-type presets and live boost previews.",
-  },
-  {
-    href: ROUTES.penrose,
-    label: "Penrose",
-    description: "Estimate Penrose progression inputs and outcomes for faster decision making.",
   },
   {
     href: ROUTES.sc,
@@ -85,11 +86,6 @@ export const toolCards: ToolCardItem[] = [
     label: "Premium Hauler",
     description: "Evaluate Hauler mine premium choices and expected return from each option.",
   },*/
-  {
-    href: ROUTES.credits,
-    label: "Credits",
-    description: "View contributors, data origins, and acknowledgements behind these tools.",
-  },
   {
     href: ROUTES.settings,
     label: "Settings",
