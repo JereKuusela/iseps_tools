@@ -224,10 +224,9 @@ const getPriorityForOutputLevel = (resource, outputLevel, resourceTargetMap) => 
   }
 
   const tailStart = targets[stageCount - 1]
-  const previous = targets[stageCount - 2] ?? 0
-  const tailSpan = Math.max(1, tailStart - previous)
+  const tailSpan = Math.max(1, OUTPUT_MAX_LEVEL - tailStart)
   const decay = (level - tailStart) / tailSpan
-  return Math.max(0.1, 1 - decay)
+  return Math.max(0, 1 - decay)
 }
 
 const resolveSourceResources = (upgrade) => {
@@ -451,8 +450,9 @@ for (const upgrade of upgrades) {
     for (let level = 1001; level <= maxLevel; level += 1) {
       const matchLevel = findClosestMatchingLowerOutputLevelByPerCost(legacyShortTermPerCostByLevel, level)
       if (matchLevel == null) continue
-      // For post-1000 output, reuse the closest matching pre-1000 effect-per-cost profile.
-      priorityTermByLevel[level] = priorityTermByLevel[matchLevel] ?? 0
+      // Keep post-1000 output following tail decay; per-cost remap can only lower, never raise.
+      const matchedPriorityTerm = priorityTermByLevel[matchLevel] ?? 0
+      priorityTermByLevel[level] = Math.min(priorityTermByLevel[level] ?? 0, matchedPriorityTerm)
     }
   }
 
