@@ -5,12 +5,20 @@ import { PARTICLE_ORDER, useTokensContext } from "./tokensContext"
 import type { TokenId } from "./tokenTypes"
 
 const RESOURCE_ORDER = ["cash", ...PARTICLE_ORDER] as const
+const MOBILE_SPLIT_INDEX = Math.ceil(RESOURCE_ORDER.length / 2)
+const MOBILE_RESOURCE_GROUPS = [RESOURCE_ORDER.slice(0, MOBILE_SPLIT_INDEX), RESOURCE_ORDER.slice(MOBILE_SPLIT_INDEX)]
 const SPECIAL_UPGRADE_IDS = [
   "supplies.tokenBonus",
   "supplies.crystalBonus",
   "bbbot.duration",
   "bbbot.tokenBonus",
 ] as const
+
+const GROUP_LABELS = {
+  output: "Output",
+  supplies: "Supplies",
+  bbbot: "BB-Bot",
+} as const
 
 type SpecialRow = {
   id: (typeof SPECIAL_UPGRADE_IDS)[number]
@@ -19,6 +27,14 @@ type SpecialRow = {
 }
 
 const toTitle = (value: string) => value.charAt(0).toUpperCase() + value.slice(1)
+
+const borderClass = "border border-ink/15 dark:border-white/15"
+const labelCellClass = `${borderClass} px-2 py-1`
+// Outline instead of border color so the highlight is not swallowed by collapsed borders.
+const valueCellClass = `${borderClass} p-0 text-center align-middle focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-brand/40`
+const inputClass =
+  "w-full bg-transparent px-1 py-1 text-center text-xs font-medium text-ink outline-none disabled:cursor-not-allowed disabled:opacity-40 dark:text-white"
+const emptyCellClass = "block px-1 py-1 text-ink/40 dark:text-white/40"
 
 export const TokensLevelInputs = () => {
   const tokens = useTokensContext()
@@ -72,7 +88,7 @@ export const TokensLevelInputs = () => {
     if (group === "output") {
       const unlocked = isOutputUnlocked(resource)
       const outputId = getOutputUpgradeId(resource)
-      if (!outputId) return <span class="text-ink/40 dark:text-white/40">-</span>
+      if (!outputId) return <span class={emptyCellClass}>-</span>
 
       const maxLevel = upgradeMaxById().get(outputId) ?? 0
 
@@ -87,13 +103,13 @@ export const TokensLevelInputs = () => {
           onInput={(event) =>
             tokens.setOutputLevelByResource(resource, clampToRange(event.currentTarget.value, maxLevel))
           }
-          class="w-[72px] rounded border border-ink/20 bg-white px-1.5 py-0.5 text-right text-xs font-medium text-ink outline-none ring-brand/40 transition focus:ring disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+          class={inputClass}
         />
       )
     }
 
     const id = getUpgradeId(group, resource)
-    if (!id) return <span class="text-ink/40 dark:text-white/40">-</span>
+    if (!id) return <span class={emptyCellClass}>-</span>
 
     const unlocked = isSupplyOrBbBotUnlocked(resource)
     const maxLevel = upgradeMaxById().get(id) ?? 0
@@ -106,52 +122,49 @@ export const TokensLevelInputs = () => {
         step={1}
         disabled={!unlocked}
         onInput={(event) => tokens.setUpgradeLevel(id, clampToRange(event.currentTarget.value, maxLevel))}
-        class="w-[72px] rounded border border-ink/20 bg-white px-1.5 py-0.5 text-right text-xs font-medium text-ink outline-none ring-brand/40 transition focus:ring disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+        class={inputClass}
       />
     )
   }
 
+  const renderTable = (resources: readonly string[]) => (
+    <div class="overflow-x-auto">
+      <table class="w-full table-fixed border-collapse text-left text-xs sm:text-sm">
+        <thead class="bg-mist/80 text-[11px] uppercase tracking-[0.08em] text-ink/70 dark:bg-[#1a2a3f] dark:text-white/70 sm:text-xs">
+          <tr>
+            <th class={`${labelCellClass} sticky left-0 z-10 bg-mist/80 dark:bg-[#1a2a3f]`}>Track</th>
+            <For each={resources}>
+              {(resource) => <th class={`${borderClass} px-1 py-1.5 text-center`}>{toTitle(resource)}</th>}
+            </For>
+          </tr>
+        </thead>
+        <tbody>
+          <For each={["output", "supplies", "bbbot"] as const}>
+            {(group) => (
+              <tr>
+                <td
+                  class={`${labelCellClass} sticky left-0 z-10 bg-white font-semibold text-ink dark:bg-[#22344d] dark:text-white`}
+                >
+                  {GROUP_LABELS[group]}
+                </td>
+                <For each={resources}>
+                  {(resource) => <td class={valueCellClass}>{renderCell(group, resource)}</td>}
+                </For>
+              </tr>
+            )}
+          </For>
+        </tbody>
+      </table>
+    </div>
+  )
+
   return (
     <div class="grid gap-3">
       <InfoCard title="Upgrade levels">
-        <div class="overflow-x-auto">
-          <table class="w-full table-fixed border-collapse text-left text-xs sm:text-sm">
-            <thead class="bg-mist/80 text-[11px] uppercase tracking-[0.08em] text-ink/70 dark:bg-[#1a2a3f] dark:text-white/70 sm:text-xs">
-              <tr>
-                <th class="sticky left-0 z-10 bg-mist/80 px-2 py-1.5 dark:bg-[#1a2a3f]">Track</th>
-                <For each={RESOURCE_ORDER}>
-                  {(resource) => <th class="px-2 py-1.5 text-center">{toTitle(resource)}</th>}
-                </For>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="border-t border-ink/10 dark:border-white/10">
-                <td class="sticky left-0 z-10 bg-white px-2 py-1 font-semibold text-ink dark:bg-[#22344d] dark:text-white">
-                  Output
-                </td>
-                <For each={RESOURCE_ORDER}>
-                  {(resource) => <td class="px-2 py-1 text-center align-middle">{renderCell("output", resource)}</td>}
-                </For>
-              </tr>
-              <tr class="border-t border-ink/10 dark:border-white/10">
-                <td class="sticky left-0 z-10 bg-white px-2 py-1 font-semibold text-ink dark:bg-[#22344d] dark:text-white">
-                  Supplies
-                </td>
-                <For each={RESOURCE_ORDER}>
-                  {(resource) => <td class="px-2 py-1 text-center align-middle">{renderCell("supplies", resource)}</td>}
-                </For>
-              </tr>
-              <tr class="border-t border-ink/10 dark:border-white/10">
-                <td class="sticky left-0 z-10 bg-white px-2 py-1 font-semibold text-ink dark:bg-[#22344d] dark:text-white">
-                  BB-Bot
-                </td>
-                <For each={RESOURCE_ORDER}>
-                  {(resource) => <td class="px-2 py-1 text-center align-middle">{renderCell("bbbot", resource)}</td>}
-                </For>
-              </tr>
-            </tbody>
-          </table>
+        <div class="grid gap-3 lg:hidden">
+          <For each={MOBILE_RESOURCE_GROUPS}>{(resources) => renderTable(resources)}</For>
         </div>
+        <div class="hidden lg:block">{renderTable(RESOURCE_ORDER)}</div>
       </InfoCard>
 
       <InfoCard title="Special levels" class="xl:max-w-[calc((100%-0.75rem)/3)]">
