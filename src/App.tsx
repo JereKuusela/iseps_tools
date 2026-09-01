@@ -110,25 +110,27 @@ const TopNav = (props: { darkMode: boolean; onToggleDarkMode: () => void }) => {
             </button>
 
             <Show when={isEventsMenuOpen()}>
-              <div
-                id="top-events-menu"
-                class="absolute left-0 top-full z-30 mt-1.5 w-44 overflow-hidden rounded-xl border border-ink/15 bg-white shadow-lg dark:border-white/20 dark:bg-[#22344d]"
-              >
-                <div class="grid gap-1 p-1.5">
-                  <For each={eventTabs}>
-                    {(tab) => (
-                      <A
-                        href={tab.href}
-                        class="rounded-xl px-3.5 py-2 text-left text-sm font-semibold transition hover:-translate-y-0.5 hover:bg-ink hover:text-white dark:hover:bg-white/15"
-                        classList={{
-                          "bg-ink text-white": isActivePath(tab.href),
-                          "dark:bg-white/15": isActivePath(tab.href),
-                        }}
-                      >
-                        {tab.label}
-                      </A>
-                    )}
-                  </For>
+              <div class="absolute left-0 top-full z-30 w-44 pt-1.5">
+                <div
+                  id="top-events-menu"
+                  class="overflow-hidden rounded-xl border border-ink/15 bg-white shadow-lg dark:border-white/20 dark:bg-[#22344d]"
+                >
+                  <div class="grid gap-1 p-1.5">
+                    <For each={eventTabs}>
+                      {(tab) => (
+                        <A
+                          href={tab.href}
+                          class="rounded-xl px-3.5 py-2 text-left text-sm font-semibold transition hover:-translate-y-0.5 hover:bg-ink hover:text-white dark:hover:bg-white/15"
+                          classList={{
+                            "bg-ink text-white": isActivePath(tab.href),
+                            "dark:bg-white/15": isActivePath(tab.href),
+                          }}
+                        >
+                          {tab.label}
+                        </A>
+                      )}
+                    </For>
+                  </div>
                 </div>
               </div>
             </Show>
