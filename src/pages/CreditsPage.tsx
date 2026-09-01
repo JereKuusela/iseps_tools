@@ -1,4 +1,4 @@
-import { For, Show } from "solid-js"
+import { For } from "solid-js"
 import creditsJson from "../../data/credits.json"
 import { Panel } from "../components/layout/Panel"
 
@@ -13,6 +13,17 @@ export const CreditsPage = () => {
   return (
     <Panel title="Credits">
       <div class="space-y-4">
+        <p class="text-sm text-ink/80 dark:text-white/80">
+          Source code:{" "}
+          <a
+            class="font-semibold text-accent underline decoration-accent/50 underline-offset-2 hover:decoration-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 dark:focus-visible:ring-offset-[#182538]"
+            href="https://github.com/JereKuusela/iseps_tools"
+            target="_blank"
+            rel="noreferrer"
+          >
+            github.com/JereKuusela/iseps_tools
+          </a>
+        </p>
         <For each={credits}>
           {(entry) => (
             <article class="rounded-2xl border border-ink/15 bg-white/70 p-4 dark:border-white/15 dark:bg-[#182538]/75">

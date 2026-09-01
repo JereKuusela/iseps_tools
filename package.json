@@ -12,23 +12,23 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@kobalte/core": "0.13.12",
+    "@kobalte/core": "0.13.13",
     "@solidjs/router": "1.0.0",
-    "firebase": "12.17.1",
+    "firebase": "12.18.0",
     "lz-string": "1.5.0",
-    "solid-js": "1.9.14"
+    "solid-js": "1.9.15"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "4.3.3",
-    "@types/node": "26.2.0",
+    "@types/node": "26.4.0",
     "autoprefixer": "10.5.4",
     "jsdom": "30.0.1",
     "postcss": "8.5.26",
     "tailwindcss": "4.3.3",
     "typescript": "7.0.2",
-    "vite": "8.2.1",
+    "vite": "8.2.2",
     "vite-plugin-solid": "2.11.14",
-    "vitest": "4.1.10"
+    "vitest": "4.1.11"
   },
   "prettier": {
     "printWidth": 120,
