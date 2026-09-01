@@ -1,8 +1,9 @@
 import { createContext, createMemo, type ParentProps, useContext } from "solid-js"
+import { calculateChestsMultiplier } from "../../lib/boosts"
 import { LargeNumber } from "../../lib/largeNumber"
 import { formatPercentFromRatio } from "../../lib/numberFormat"
 import { createSyncedSignal } from "../../lib/persistedSignal"
-import { getTokenKey } from "../../lib/tokenSharedInputs"
+import { getTokenKey, TOKEN_SHARED_KEYS } from "../../lib/tokenSharedInputs"
 import { useZatData, type JunoExponentType } from "../../lib/zatContext"
 import {
   calculateZatCostForCycle,
@@ -73,6 +74,8 @@ type OgTechContextValue = {
   setGainValue: (next: string) => string
   gainUnit: () => GainUnit
   setGainUnit: (next: GainUnit) => GainUnit
+  onlineHoursPerDay: () => string
+  setOnlineHoursPerDay: (next: string) => string
   junoAmount: () => string
   setJunoAmount: (next: string) => string
   mode: () => ZatMode
@@ -137,6 +140,7 @@ export const OgTechProvider = (props: ParentProps) => {
   const [cycles, setCycles] = createSyncedSignal("zat.og.cycles", "0")
   const [gainValue, setGainValue] = createSyncedSignal("zat.og.gain", "1.00e1")
   const [gainUnit, setGainUnit] = createSyncedSignal<GainUnit>("zat.og.gainUnit", "hour")
+  const [onlineHoursPerDay, setOnlineHoursPerDay] = createSyncedSignal(TOKEN_SHARED_KEYS.onlineHoursPerDay, "10")
   const [junoAmount, setJunoAmount] = createSyncedSignal("zat.og.junoAmount", "")
   const [statusAmount, setStatusAmount] = createSyncedSignal("penrose.statusAmount", "0")
   const [statusAutoIncrement, setStatusAutoIncrement] = createSyncedSignal("zat.og.statusAutoIncrement", true)
@@ -166,7 +170,7 @@ export const OgTechProvider = (props: ParentProps) => {
   const gainPerSecond = createMemo(() => {
     const parsed = parseLargeNumberSafe(gainValue())
     if (parsed.compare(0) <= 0) return LargeNumber.zero()
-    return toRatePerSecond(parsed, gainUnit())
+    return toRatePerSecond(parsed, gainUnit()).multiply(calculateChestsMultiplier(parseNumberish(onlineHoursPerDay())))
   })
 
   const currentJuno = createMemo(() => parseLargeNumberSafe(junoAmount()))
@@ -440,6 +444,8 @@ export const OgTechProvider = (props: ParentProps) => {
         setGainValue,
         gainUnit,
         setGainUnit,
+        onlineHoursPerDay,
+        setOnlineHoursPerDay,
         junoAmount,
         setJunoAmount,
         statusAmount,

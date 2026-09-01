@@ -47,7 +47,7 @@ Values per item:
   - Boosted by Module #17: Chest Enhancer.
   - Boosted by Token Booster.
   - Boosted by Lucky Leaf Clover perk.
-- Rare Chest: Every 1200 seocnds, 6 tokens, 20 crystals.
+- Rare Chest: Every 1200 seconds, 6 tokens, 20 crystals.
   - Boosted by Module #17: Chest Enhancer.
   - Boosted by Token Booster.
   - Boosted by Lucky Leaf Clover perk.

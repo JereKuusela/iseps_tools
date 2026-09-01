@@ -1,13 +1,10 @@
 import { createMemo } from "solid-js"
 import {
-  blurOnEnterOrEscape,
   NumberFieldWithUnit,
   IntegerField,
-  isValidNumberishInput,
   LabelField,
   NumberField,
   PercentField,
-  sanitizeNumberishInput,
 } from "../../components/ui/formControls"
 import { SummaryInputModal } from "../../components/ui/SummaryInputModal"
 import { Tooltip } from "../../components/ui/Tooltip"
@@ -16,7 +13,7 @@ import { formatCompactMultiplier } from "../../lib/numberFormat"
 import { calculateDcReplicator, calculateSeReplicator } from "../../lib/scCalculator"
 import type { ScGainUnit } from "../../lib/scContext"
 import { useScContext } from "../../lib/scContext"
-import { calculateSuppliesMultiplier } from "../../lib/suppliesTime"
+import { calculateBoostsMultiplier } from "../../lib/boosts"
 import { formatTimeDurationFromMinutes } from "../../lib/timeFormat"
 import type { TooltipKey } from "../../lib/tooltips"
 
@@ -112,7 +109,7 @@ export const ScLeftColumn = () => {
     return small * 3 + medium * 5 + large * 12
   })
   const onlineBonusMultiplier = createMemo(() => {
-    return calculateSuppliesMultiplier(
+    return calculateBoostsMultiplier(
       parseFiniteNumber(sc.onlineHoursPerDay(), 0),
       parseFiniteNumber(sc.alphaSuppliesLevel(), 0),
     )
@@ -300,27 +297,24 @@ export const ScLeftColumn = () => {
           value={formatCompactMultiplier(onlineBonusMultiplier())}
           tooltip="sc.onlineBonus"
         >
-          <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
-            <div class="grid grid-cols-[auto_1fr] items-center gap-2">
-              <p class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/80 dark:text-white/80">Online Hrs</p>
-              <input
-                type="text"
-                value={sc.onlineHoursPerDay()}
-                onKeyDown={blurOnEnterOrEscape}
-                onInput={(event) => {
-                  const next = sanitizeNumberishInput(event.currentTarget.value)
-                  if (!isValidNumberishInput(next)) return
-                  sc.setOnlineHoursPerDay(next)
-                }}
-                class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-semibold text-ink outline-none ring-brand/40 focus:ring dark:border-white/20 dark:bg-[#1a2638] dark:text-white"
-              />
-            </div>
-            <NumberField
+          <div class="grid grid-cols-1 gap-8 sm:grid-cols-2">
+            <IntegerField
+              label="Hours"
+              value={sc.onlineHoursPerDay()}
+              onInput={sc.setOnlineHoursPerDay}
+              min={0}
+              max={24}
+              step={1}
+              align="right"
+            />
+            <IntegerField
               label="Alpha"
               value={sc.alphaSuppliesLevel()}
               onInput={sc.setAlphaSuppliesLevel}
               min={0}
+              max={95}
               step={1}
+              align="right"
             />
           </div>
         </SummaryInputModal>

@@ -19,7 +19,7 @@ export const TokensGeneralInputs = () => {
     <InfoCard>
       <div class="grid gap-1">
         <IntegerField
-          label="Active hours/day"
+          label="Online Hrs"
           value={tokens.onlineHoursPerDay()}
           onInput={tokens.setOnlineHoursPerDay}
           min={0}

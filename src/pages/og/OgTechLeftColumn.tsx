@@ -123,6 +123,15 @@ export const OgTechLeftColumn = () => {
             units={units}
           />
           <NumberField label="Current" placeholder="0.00e0" value={og.junoAmount()} onInput={og.setJunoAmount} />
+          <IntegerField
+            label="Online Hrs"
+            value={og.onlineHoursPerDay()}
+            onInput={og.setOnlineHoursPerDay}
+            min={0}
+            max={24}
+            step={1}
+            tooltip="og.onlineBonus"
+          />
           <SelectField
             label="Mode"
             value={og.mode()}

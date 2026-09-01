@@ -73,7 +73,7 @@ export type TimeToGoalInput = {
   futureDc: number
   futureSc: number
   timeSkips?: number
-  suppliesMultiplier: number
+  onlineMultiplier: number
   type: ScGoalType
   customScGoal?: LargeNumber
 }
@@ -339,7 +339,7 @@ export const iterateTimeToReachGoal = (input: TimeToGoalInput): TimeToGoalResult
   const currentAfterSkips = applyTimeSkips(currentDc, dcGainPerMinute, input.timeSkips)
 
   const preBoostCurrentDc = currentAfterSkips.multiply(input.futureDc)
-  const preBoostDcGainPerMinute = dcGainPerMinute.multiply(input.futureDc * input.suppliesMultiplier)
+  const preBoostDcGainPerMinute = dcGainPerMinute.multiply(input.futureDc * input.onlineMultiplier)
 
   const futureScScaleLog10 = input.type == "customDc" ? 0 : safeLog10(input.futureSc)
   const preBoostGoalDc =

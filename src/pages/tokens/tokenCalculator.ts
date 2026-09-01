@@ -5,7 +5,7 @@ import type {
   TokenUpgradeDefinition,
   TokenId,
 } from "./tokenTypes"
-import { getSupplyRatio } from "../../lib/suppliesTime"
+import { getSupplyRatio } from "../../lib/boosts"
 
 const parseNumberish = (value: string) => {
   const parsed = Number(value)

@@ -97,7 +97,7 @@ describe("iterateTimeToReachGoal", () => {
       retainedSc: 1,
       futureDc: 1,
       futureSc: 1,
-      suppliesMultiplier: 1,
+      onlineMultiplier: 1,
       type: "battery1",
     })
 
@@ -120,11 +120,11 @@ describe("iterateTimeToReachGoal", () => {
 
     const withoutBonus = iterateTimeToReachGoal({
       ...baseInput,
-      suppliesMultiplier: 1,
+      onlineMultiplier: 1,
     })
     const withBonus = iterateTimeToReachGoal({
       ...baseInput,
-      suppliesMultiplier: 1.5,
+      onlineMultiplier: 1.5,
     })
 
     expect(withBonus.minutes).toBeLessThan(withoutBonus.minutes)
@@ -142,7 +142,7 @@ describe("iterateTimeToReachGoal", () => {
       futureDc: 1.5,
       futureSc: 1.4,
       timeSkips: 79,
-      suppliesMultiplier: 1.18,
+      onlineMultiplier: 1.18,
       type: "battery1",
     })
 
