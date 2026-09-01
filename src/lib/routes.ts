@@ -1,3 +1,5 @@
+import { getTooltip } from "./tooltips"
+
 export type TabItem = { href: string; label: string }
 export type ToolCardItem = { href: string; label: string; description: string }
 
@@ -37,42 +39,42 @@ export const toolCards: ToolCardItem[] = [
   {
     href: ROUTES.ogTech,
     label: "OG Tech",
-    description: "Plan OG tech upgrades by comparing gains, costs, and ETA based on your current output.",
+    description: getTooltip("og.panel"),
   },
   {
     href: ROUTES.tokens,
     label: "Tokens",
-    description: "Rank token upgrades by projected value per token cost and track shared progression inputs.",
+    description: getTooltip("token.panel"),
   },
   {
     href: ROUTES.perks,
     label: "Perks",
-    description: "Follow SE-based perk recommendations, check change notes, and view mobile-friendly perk layouts.",
+    description: getTooltip("perkGuide.panel"),
   },
   {
     href: ROUTES.zatGuide,
     label: "ZAT",
-    description: "Follow cycle-based node path recommendations with run-type presets and live boost previews.",
+    description: getTooltip("zatGuide.panel"),
   },
   {
     href: ROUTES.sc,
     label: "SC",
-    description: "Calculate Super Cluster scenarios and compare setup tradeoffs before committing resources.",
+    description: getTooltip("sc.panel"),
   },
   {
     href: ROUTES.cruise,
     label: "Cruise",
-    description: "Compare cruise prestige upgrades, spend points optimally, and export notation for sharing.",
+    description: getTooltip("cruise.panel"),
   },
   {
     href: ROUTES.factory,
     label: "Factory",
-    description: "Plan factory prestige upgrades, compare weighted node value, and apply optimal builds.",
+    description: getTooltip("factory.panel"),
   },
   {
     href: ROUTES.factoryProduction,
     label: "Factory Production",
-    description: "Manually configure product mix, compare resource balance, and track production profit per second.",
+    description: getTooltip("factoryProduction.panel"),
   },
   /* {
     href: ROUTES.premiumCrystal,

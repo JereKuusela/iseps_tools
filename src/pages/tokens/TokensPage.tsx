@@ -8,7 +8,7 @@ const TokensContent = () => {
   const tokens = useTokensContext()
 
   return (
-    <Panel title="Token Calculator">
+    <Panel title="Token Calculator" tooltip="token.panel">
       {tokens.isLoading() ? (
         <p class="rounded-xl border border-ink/15 bg-white/70 px-3 py-2 text-sm text-ink/80 dark:border-white/15 dark:bg-[#1d2c42] dark:text-white/80">
           Loading token tables...
