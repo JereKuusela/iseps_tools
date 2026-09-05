@@ -44,7 +44,6 @@ const BUILD_ITERATION_LIMIT = 10000
 const HYBRID_TARGET_NODE_IDS = ["fabricatorSpeed", "particleOutput"] as const
 
 type HybridTargetNodeId = (typeof HYBRID_TARGET_NODE_IDS)[number]
-type HybridTargetLevels = Pick<FactoryNodeLevels, HybridTargetNodeId>
 
 type NodeDefinitionMap = Record<FactoryNodeId, FactoryNodeDefinition>
 
@@ -440,39 +439,18 @@ const runGreedyBuild = (input: FactoryInputState, levels: FactoryNodeLevels): Fa
   return finalizeBuild(input, levels)
 }
 
-const forceLevelsTowardTargets = (
+const buyNextLevelWithinBudget = (
   levels: FactoryNodeLevels,
-  targetLevels: HybridTargetLevels,
+  id: HybridTargetNodeId,
   totalPoints: number,
-): boolean => {
-  let spentPoints = getSpentPoints(levels)
-  let iterations = 0
+  spentPoints: number,
+): number | null => {
+  const nextCost = getNodeCostAtLevel(id, levels[id] + 1)
+  if (!Number.isFinite(nextCost) || nextCost <= 0) return null
+  if (spentPoints + nextCost > totalPoints) return null
 
-  while (iterations < BUILD_ITERATION_LIMIT) {
-    iterations += 1
-
-    const requiredUpgrades = HYBRID_TARGET_NODE_IDS.filter((id) => levels[id] < targetLevels[id])
-      .map((id) => ({
-        id,
-        cost: getNodeCostAtLevel(id, levels[id] + 1),
-      }))
-      .filter(({ cost }) => Number.isFinite(cost) && cost > 0)
-
-    if (requiredUpgrades.length === 0) return true
-
-    requiredUpgrades.sort((a, b) => {
-      if (a.cost !== b.cost) return a.cost - b.cost
-      return a.id.localeCompare(b.id)
-    })
-
-    const nextUpgrade = requiredUpgrades[0]
-    if (spentPoints + nextUpgrade.cost > totalPoints) return false
-
-    levels[nextUpgrade.id] += 1
-    spentPoints += nextUpgrade.cost
-  }
-
-  return false
+  levels[id] += 1
+  return spentPoints + nextCost
 }
 
 const calculateHybridBuild = (
@@ -485,26 +463,43 @@ const calculateHybridBuild = (
   const startParticleOutput = baseLevels.particleOutput
   const maxSpeed = NODE_MAP.fabricatorSpeed.maxLevel
   const maxParticleOutput = NODE_MAP.particleOutput.maxLevel
+  const baseSpentPoints = getSpentPoints(baseLevels)
 
   let bestBuild = greedyBaseline
+  const speedSeedLevels = cloneLevels(baseLevels)
+  let speedSeedSpentPoints = baseSpentPoints
 
   for (let speedTarget = startSpeed; speedTarget <= maxSpeed; speedTarget += 1) {
+    if (speedTarget > startSpeed) {
+      const nextSpentPoints = buyNextLevelWithinBudget(
+        speedSeedLevels,
+        "fabricatorSpeed",
+        totalPoints,
+        speedSeedSpentPoints,
+      )
+      if (nextSpentPoints === null) break
+      speedSeedSpentPoints = nextSpentPoints
+    }
+
     let rowHadCandidate = false
+    const particleSeedLevels = cloneLevels(speedSeedLevels)
+    let particleSeedSpentPoints = speedSeedSpentPoints
 
     for (let particleTarget = startParticleOutput; particleTarget <= maxParticleOutput; particleTarget += 1) {
-      const targetLevels: HybridTargetLevels = {
-        fabricatorSpeed: speedTarget,
-        particleOutput: particleTarget,
+      if (particleTarget > startParticleOutput) {
+        const nextSpentPoints = buyNextLevelWithinBudget(
+          particleSeedLevels,
+          "particleOutput",
+          totalPoints,
+          particleSeedSpentPoints,
+        )
+        if (nextSpentPoints === null) break
+        particleSeedSpentPoints = nextSpentPoints
       }
-
-      const candidateLevels = cloneLevels(baseLevels)
-      const forced = forceLevelsTowardTargets(candidateLevels, targetLevels, totalPoints)
-
-      if (!forced) break
 
       rowHadCandidate = true
 
-      const candidateBuild = runGreedyBuild(input, candidateLevels)
+      const candidateBuild = runGreedyBuild(input, cloneLevels(particleSeedLevels))
 
       if (candidateBuild.score > bestBuild.score) {
         bestBuild = candidateBuild

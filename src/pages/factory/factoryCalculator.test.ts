@@ -7,7 +7,7 @@ import {
   getSpentPoints,
   getTotalPointsFromPrestiges,
 } from "./factoryCalculator"
-import { FACTORY_NODE_DEFINITIONS, emptyFactoryNodeLevels, type FactoryInputState } from "./factoryTypes"
+import { FACTORY_NODE_DEFINITIONS, emptyFactoryNodeLevels, type FactoryInputState, type FactoryNodeLevels } from "./factoryTypes"
 
 const defaultInput = (): FactoryInputState => ({
   prestigesDone: 25,
@@ -16,8 +16,8 @@ const defaultInput = (): FactoryInputState => ({
   particleWeightMultiplier: 1,
 })
 
-const calculateGreedyOnlyBuild = (input: FactoryInputState) => {
-  const levels = emptyFactoryNodeLevels()
+const calculateGreedyOnlyBuild = (input: FactoryInputState, startingLevels: FactoryNodeLevels = emptyFactoryNodeLevels()) => {
+  const levels = { ...startingLevels }
 
   let iterations = 0
   while (iterations < 10000) {
@@ -164,5 +164,28 @@ describe("optimize", () => {
 
     expect(hybrid.score).toBeGreaterThan(greedy.score)
     expect(hybrid.levels.fabricatorSpeed).toBeGreaterThan(greedy.levels.fabricatorSpeed)
+  })
+
+  it("can still improve from non-zero starting levels without losing purchased levels", () => {
+    const input: FactoryInputState = {
+      prestigesDone: 8,
+      totalParticleLevel: 150,
+      productionWeightPercent: 0,
+      particleWeightMultiplier: 8,
+    }
+    const startingLevels: FactoryNodeLevels = {
+      ...emptyFactoryNodeLevels(),
+      fabricatorOutput: 3,
+    }
+
+    const greedy = calculateGreedyOnlyBuild(input, startingLevels)
+    const hybrid = calculateBuild(input, startingLevels)
+
+    expect(hybrid.score).toBeGreaterThan(greedy.score)
+    expect(hybrid.levels.fabricatorOutput).toBeGreaterThanOrEqual(startingLevels.fabricatorOutput)
+    expect(hybrid.levels.sellValue).toBeGreaterThanOrEqual(startingLevels.sellValue)
+    expect(hybrid.levels.particleOutput).toBeGreaterThanOrEqual(startingLevels.particleOutput)
+    expect(hybrid.levels.fabricatorSpeed).toBeGreaterThanOrEqual(startingLevels.fabricatorSpeed)
+    expect(hybrid.levels.maxOfflineTimeCap).toBeGreaterThanOrEqual(startingLevels.maxOfflineTimeCap)
   })
 })
