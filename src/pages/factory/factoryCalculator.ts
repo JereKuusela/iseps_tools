@@ -502,8 +502,8 @@ const calculateHybridBuild = (
       }
 
       rowHadCandidate = true
+      if (candidatesEvaluated >= HYBRID_CANDIDATE_LIMIT) break outer
       candidatesEvaluated += 1
-      if (candidatesEvaluated > HYBRID_CANDIDATE_LIMIT) break outer
 
       const candidateBuild = runGreedyBuild(input, cloneLevels(particleSeedLevels))
 
