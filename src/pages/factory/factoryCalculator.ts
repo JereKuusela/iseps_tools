@@ -40,6 +40,12 @@ type WeightProfile = {
 }
 
 const PARTICLE_WEIGHT_MULTIPLIERS = [0.125, 0.25, 0.5, 1, 2, 4, 8] as const
+const BUILD_ITERATION_LIMIT = 10000
+const HYBRID_PRUNE_RATIO = 0.5
+const HYBRID_TARGET_NODE_IDS = ["fabricatorSpeed", "particleOutput"] as const
+
+type HybridTargetNodeId = (typeof HYBRID_TARGET_NODE_IDS)[number]
+type HybridTargetLevels = Pick<FactoryNodeLevels, HybridTargetNodeId>
 
 type NodeDefinitionMap = Record<FactoryNodeId, FactoryNodeDefinition>
 
@@ -413,6 +419,113 @@ const calculateNext = (input: FactoryInputState, levels: FactoryNodeLevels) => {
   return true
 }
 
+const fillGreedyBuild = (input: FactoryInputState, levels: FactoryNodeLevels) => {
+  let iterations = 0
+
+  while (iterations < BUILD_ITERATION_LIMIT) {
+    iterations += 1
+    const bought = calculateNext(input, levels)
+    if (!bought) break
+  }
+}
+
+const finalizeBuild = (input: FactoryInputState, levels: FactoryNodeLevels): FactoryBuildResult => {
+  return {
+    levels,
+    score: getBuildScore(input, levels),
+  }
+}
+
+const runGreedyBuild = (input: FactoryInputState, levels: FactoryNodeLevels): FactoryBuildResult => {
+  fillGreedyBuild(input, levels)
+  return finalizeBuild(input, levels)
+}
+
+const forceLevelsTowardTargets = (
+  levels: FactoryNodeLevels,
+  targetLevels: HybridTargetLevels,
+  totalPoints: number,
+): boolean => {
+  let spentPoints = getSpentPoints(levels)
+  let iterations = 0
+
+  while (iterations < BUILD_ITERATION_LIMIT) {
+    iterations += 1
+
+    const requiredUpgrades = HYBRID_TARGET_NODE_IDS.filter((id) => levels[id] < targetLevels[id])
+      .map((id) => ({
+        id,
+        cost: getNodeCostAtLevel(id, levels[id] + 1),
+      }))
+      .filter(({ cost }) => Number.isFinite(cost) && cost > 0)
+
+    if (requiredUpgrades.length === 0) return true
+
+    requiredUpgrades.sort((a, b) => {
+      if (a.cost !== b.cost) return a.cost - b.cost
+      return a.id.localeCompare(b.id)
+    })
+
+    const nextUpgrade = requiredUpgrades[0]
+    if (spentPoints + nextUpgrade.cost > totalPoints) return false
+
+    levels[nextUpgrade.id] += 1
+    spentPoints += nextUpgrade.cost
+  }
+
+  return false
+}
+
+const calculateHybridBuild = (
+  input: FactoryInputState,
+  baseLevels: FactoryNodeLevels,
+  greedyBaseline: FactoryBuildResult,
+): FactoryBuildResult => {
+  const totalPoints = getTotalPointsFromPrestiges(input.prestigesDone)
+  const startSpeed = baseLevels.fabricatorSpeed
+  const startParticleOutput = baseLevels.particleOutput
+  const maxSpeed = NODE_MAP.fabricatorSpeed.maxLevel
+  const maxParticleOutput = NODE_MAP.particleOutput.maxLevel
+
+  let bestBuild = greedyBaseline
+
+  for (let speedTarget = startSpeed; speedTarget <= maxSpeed; speedTarget += 1) {
+    const rowBaselineScore = bestBuild.score
+    let bestRowScore = 0
+    let rowHadCandidate = false
+
+    for (let particleTarget = startParticleOutput; particleTarget <= maxParticleOutput; particleTarget += 1) {
+      const targetLevels: HybridTargetLevels = {
+        fabricatorSpeed: speedTarget,
+        particleOutput: particleTarget,
+      }
+
+      const candidateLevels = cloneLevels(baseLevels)
+      const forced = forceLevelsTowardTargets(candidateLevels, targetLevels, totalPoints)
+
+      if (!forced) break
+
+      rowHadCandidate = true
+
+      const candidateBuild = runGreedyBuild(input, candidateLevels)
+      bestRowScore = Math.max(bestRowScore, candidateBuild.score)
+
+      if (candidateBuild.score > bestBuild.score) {
+        bestBuild = candidateBuild
+      }
+
+      if (candidateBuild.score < rowBaselineScore * HYBRID_PRUNE_RATIO) {
+        break
+      }
+    }
+
+    if (!rowHadCandidate) break
+    if (bestRowScore > 0 && bestRowScore < rowBaselineScore * HYBRID_PRUNE_RATIO) break
+  }
+
+  return bestBuild
+}
+
 export const getBuildScore = (input: FactoryInputState, levels: FactoryNodeLevels) => {
   const normalizedInput = normalizeFactoryInputState(input)
   const normalizedLevels = normalizeFactoryNodeLevels(levels)
@@ -434,17 +547,7 @@ export const getBuildScore = (input: FactoryInputState, levels: FactoryNodeLevel
 
 export const calculateBuild = (input: FactoryInputState, levels: FactoryNodeLevels): FactoryBuildResult => {
   const normalizedInput = normalizeFactoryInputState(input)
-  const currentLevels = cloneLevels(normalizeFactoryNodeLevels(levels))
-
-  let iterations = 0
-  while (iterations < 10000) {
-    iterations += 1
-    const bought = calculateNext(normalizedInput, currentLevels)
-    if (!bought) break
-  }
-
-  return {
-    levels: currentLevels,
-    score: getBuildScore(normalizedInput, currentLevels),
-  }
+  const normalizedLevels = normalizeFactoryNodeLevels(levels)
+  const greedyBaseline = runGreedyBuild(normalizedInput, cloneLevels(normalizedLevels))
+  return calculateHybridBuild(normalizedInput, normalizedLevels, greedyBaseline)
 }

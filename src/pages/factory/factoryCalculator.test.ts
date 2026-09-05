@@ -16,6 +16,27 @@ const defaultInput = (): FactoryInputState => ({
   particleWeightMultiplier: 1,
 })
 
+const calculateGreedyOnlyBuild = (input: FactoryInputState) => {
+  const levels = emptyFactoryNodeLevels()
+
+  let iterations = 0
+  while (iterations < 10000) {
+    iterations += 1
+    const evaluation = evaluateNextNodeValues(input, levels)
+    if (!evaluation.bestNodeId) break
+
+    const row = evaluation.rows.find((entry) => entry.id === evaluation.bestNodeId)
+    if (!row?.nextCost || row.nextBonusPerPoint <= 0) break
+
+    levels[evaluation.bestNodeId] += 1
+  }
+
+  return {
+    levels,
+    score: getBuildScore(input, levels),
+  }
+}
+
 describe("getTotalPointsFromPrestiges", () => {
   it("uses triangular progression", () => {
     expect(getTotalPointsFromPrestiges(1)).toBe(1)
@@ -113,5 +134,35 @@ describe("optimize", () => {
 
     expect(spent).toBeLessThanOrEqual(getTotalPointsFromPrestiges(input.prestigesDone))
     expect(optimized.score).toBeGreaterThanOrEqual(baselineScore)
+  })
+
+  it("can beat the original greedy path by forcing higher particle output targets", () => {
+    const input: FactoryInputState = {
+      prestigesDone: 8,
+      totalParticleLevel: 150,
+      productionWeightPercent: 0,
+      particleWeightMultiplier: 8,
+    }
+
+    const greedy = calculateGreedyOnlyBuild(input)
+    const hybrid = calculateBuild(input, emptyFactoryNodeLevels())
+
+    expect(hybrid.score).toBeGreaterThan(greedy.score)
+    expect(hybrid.levels.particleOutput).toBeGreaterThan(greedy.levels.particleOutput)
+  })
+
+  it("can beat the original greedy path by forcing higher fabricator speed targets", () => {
+    const input: FactoryInputState = {
+      prestigesDone: 16,
+      totalParticleLevel: 100,
+      productionWeightPercent: 35,
+      particleWeightMultiplier: 0.125,
+    }
+
+    const greedy = calculateGreedyOnlyBuild(input)
+    const hybrid = calculateBuild(input, emptyFactoryNodeLevels())
+
+    expect(hybrid.score).toBeGreaterThan(greedy.score)
+    expect(hybrid.levels.fabricatorSpeed).toBeGreaterThan(greedy.levels.fabricatorSpeed)
   })
 })
