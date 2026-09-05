@@ -41,7 +41,6 @@ type WeightProfile = {
 
 const PARTICLE_WEIGHT_MULTIPLIERS = [0.125, 0.25, 0.5, 1, 2, 4, 8] as const
 const BUILD_ITERATION_LIMIT = 10000
-const HYBRID_PRUNE_RATIO = 0.5
 const HYBRID_TARGET_NODE_IDS = ["fabricatorSpeed", "particleOutput"] as const
 
 type HybridTargetNodeId = (typeof HYBRID_TARGET_NODE_IDS)[number]
@@ -490,8 +489,6 @@ const calculateHybridBuild = (
   let bestBuild = greedyBaseline
 
   for (let speedTarget = startSpeed; speedTarget <= maxSpeed; speedTarget += 1) {
-    const rowBaselineScore = bestBuild.score
-    let bestRowScore = 0
     let rowHadCandidate = false
 
     for (let particleTarget = startParticleOutput; particleTarget <= maxParticleOutput; particleTarget += 1) {
@@ -508,19 +505,13 @@ const calculateHybridBuild = (
       rowHadCandidate = true
 
       const candidateBuild = runGreedyBuild(input, candidateLevels)
-      bestRowScore = Math.max(bestRowScore, candidateBuild.score)
 
       if (candidateBuild.score > bestBuild.score) {
         bestBuild = candidateBuild
       }
-
-      if (candidateBuild.score < rowBaselineScore * HYBRID_PRUNE_RATIO) {
-        break
-      }
     }
 
     if (!rowHadCandidate) break
-    if (bestRowScore > 0 && bestRowScore < rowBaselineScore * HYBRID_PRUNE_RATIO) break
   }
 
   return bestBuild
