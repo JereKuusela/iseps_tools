@@ -42,6 +42,9 @@ type WeightProfile = {
 const PARTICLE_WEIGHT_MULTIPLIERS = [0.125, 0.25, 0.5, 1, 2, 4, 8] as const
 const BUILD_ITERATION_LIMIT = 10000
 const HYBRID_TARGET_NODE_IDS = ["fabricatorSpeed", "particleOutput"] as const
+// Current node caps fit comfortably under this limit even from zero,
+// while still bounding work if the data grows in the future.
+const HYBRID_CANDIDATE_LIMIT = 128
 
 type HybridTargetNodeId = (typeof HYBRID_TARGET_NODE_IDS)[number]
 
@@ -468,8 +471,9 @@ const calculateHybridBuild = (
   let bestBuild = greedyBaseline
   const speedSeedLevels = cloneLevels(baseLevels)
   let speedSeedSpentPoints = baseSpentPoints
+  let candidatesEvaluated = 0
 
-  for (let speedTarget = startSpeed; speedTarget <= maxSpeed; speedTarget += 1) {
+  outer: for (let speedTarget = startSpeed; speedTarget <= maxSpeed; speedTarget += 1) {
     if (speedTarget > startSpeed) {
       const nextSpentPoints = buyNextLevelWithinBudget(
         speedSeedLevels,
@@ -498,6 +502,8 @@ const calculateHybridBuild = (
       }
 
       rowHadCandidate = true
+      candidatesEvaluated += 1
+      if (candidatesEvaluated > HYBRID_CANDIDATE_LIMIT) break outer
 
       const candidateBuild = runGreedyBuild(input, cloneLevels(particleSeedLevels))
 
