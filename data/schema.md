@@ -181,7 +181,7 @@ Resource output target weights used to bias recommendations by progression stage
 - Columns: Resource-specific target weights in this fixed order:
   - `cash`, `alpha`, `beta`, `ceti`, `delta`, `epsilon`, `fenix`, `gamma`, `helion`, `ixion`, `juno`, `kappa`
 - Row order maps to fixed output breakpoints:
-  - 350, 1100, 1150, 1200, 1250, 1300, 1350, 1400
+  - 350, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1500, 1600, 1700, 1800
 
 ## techs.json
 
