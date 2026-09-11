@@ -7,7 +7,7 @@ import {
   getSpentPoints,
   getTotalPointsFromPrestiges,
 } from "./factoryCalculator"
-import { FACTORY_NODE_DEFINITIONS, emptyFactoryNodeLevels, type FactoryInputState } from "./factoryTypes"
+import { FACTORY_NODE_DEFINITIONS, emptyFactoryNodeLevels, type FactoryInputState, type FactoryNodeLevels } from "./factoryTypes"
 
 const defaultInput = (): FactoryInputState => ({
   prestigesDone: 25,
@@ -15,6 +15,27 @@ const defaultInput = (): FactoryInputState => ({
   productionWeightPercent: 10,
   particleWeightMultiplier: 1,
 })
+
+const calculateGreedyOnlyBuild = (input: FactoryInputState, startingLevels: FactoryNodeLevels = emptyFactoryNodeLevels()) => {
+  const levels = { ...startingLevels }
+
+  let iterations = 0
+  while (iterations < 10000) {
+    iterations += 1
+    const evaluation = evaluateNextNodeValues(input, levels)
+    if (!evaluation.bestNodeId) break
+
+    const row = evaluation.rows.find((entry) => entry.id === evaluation.bestNodeId)
+    if (!row?.nextCost || row.nextBonusPerPoint <= 0) break
+
+    levels[evaluation.bestNodeId] += 1
+  }
+
+  return {
+    levels,
+    score: getBuildScore(input, levels),
+  }
+}
 
 describe("getTotalPointsFromPrestiges", () => {
   it("uses triangular progression", () => {
@@ -113,5 +134,58 @@ describe("optimize", () => {
 
     expect(spent).toBeLessThanOrEqual(getTotalPointsFromPrestiges(input.prestigesDone))
     expect(optimized.score).toBeGreaterThanOrEqual(baselineScore)
+  })
+
+  it("can beat the original greedy path by forcing higher particle output targets", () => {
+    const input: FactoryInputState = {
+      prestigesDone: 8,
+      totalParticleLevel: 150,
+      productionWeightPercent: 0,
+      particleWeightMultiplier: 8,
+    }
+
+    const greedy = calculateGreedyOnlyBuild(input)
+    const hybrid = calculateBuild(input, emptyFactoryNodeLevels())
+
+    expect(hybrid.score).toBeGreaterThan(greedy.score)
+    expect(hybrid.levels.particleOutput).toBeGreaterThan(greedy.levels.particleOutput)
+  })
+
+  it("can beat the original greedy path by forcing higher fabricator speed targets", () => {
+    const input: FactoryInputState = {
+      prestigesDone: 16,
+      totalParticleLevel: 100,
+      productionWeightPercent: 35,
+      particleWeightMultiplier: 0.125,
+    }
+
+    const greedy = calculateGreedyOnlyBuild(input)
+    const hybrid = calculateBuild(input, emptyFactoryNodeLevels())
+
+    expect(hybrid.score).toBeGreaterThan(greedy.score)
+    expect(hybrid.levels.fabricatorSpeed).toBeGreaterThan(greedy.levels.fabricatorSpeed)
+  })
+
+  it("can still improve from non-zero starting levels without losing purchased levels", () => {
+    const input: FactoryInputState = {
+      prestigesDone: 8,
+      totalParticleLevel: 150,
+      productionWeightPercent: 0,
+      particleWeightMultiplier: 8,
+    }
+    const startingLevels: FactoryNodeLevels = {
+      ...emptyFactoryNodeLevels(),
+      fabricatorOutput: 3,
+    }
+
+    const greedy = calculateGreedyOnlyBuild(input, startingLevels)
+    const hybrid = calculateBuild(input, startingLevels)
+
+    expect(hybrid.score).toBeGreaterThan(greedy.score)
+    expect(hybrid.levels.fabricatorOutput).toBeGreaterThanOrEqual(startingLevels.fabricatorOutput)
+    expect(hybrid.levels.sellValue).toBeGreaterThanOrEqual(startingLevels.sellValue)
+    expect(hybrid.levels.particleOutput).toBeGreaterThanOrEqual(startingLevels.particleOutput)
+    expect(hybrid.levels.fabricatorSpeed).toBeGreaterThanOrEqual(startingLevels.fabricatorSpeed)
+    expect(hybrid.levels.maxOfflineTimeCap).toBeGreaterThanOrEqual(startingLevels.maxOfflineTimeCap)
   })
 })
