@@ -34,9 +34,9 @@ describe("getTotalPointsFromPrestiges", () => {
 describe("getNodeCostAtLevel", () => {
   it("matches prestige multiplier breakpoints", () => {
     expect(getNodeCostAtLevel("prestigeMultiplier", 1)).toBe(1)
-    expect(getNodeCostAtLevel("prestigeMultiplier", 10)).toBe(2)
-    expect(getNodeCostAtLevel("prestigeMultiplier", 11)).toBe(3)
-    expect(getNodeCostAtLevel("prestigeMultiplier", 99)).toBe(11)
+    expect(getNodeCostAtLevel("prestigeMultiplier", 10)).toBe(1)
+    expect(getNodeCostAtLevel("prestigeMultiplier", 11)).toBe(2)
+    expect(getNodeCostAtLevel("prestigeMultiplier", 99)).toBe(10)
   })
 
   it("matches ticket and guest high-level jumps", () => {
@@ -60,7 +60,7 @@ describe("getNodeCostAtLevel", () => {
 describe("point accounting", () => {
   it("calculates spent and available points", () => {
     const levels = emptyCruiseNodeLevels()
-    levels.prestigeMultiplier = 3
+    levels.prestigeMultiplier = 5
     levels.ticketPrice = 2
 
     const spent = getSpentPoints(levels)

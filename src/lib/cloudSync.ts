@@ -2,8 +2,8 @@ import { getApps, initializeApp } from "firebase/app"
 import { get, getDatabase, ref, set } from "firebase/database"
 import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from "lz-string"
 import { firebaseSyncConfig } from "./firebaseConfig"
-import { readFromStorage, writeToStorage } from "./storage"
-import { updateSignal } from "./persistedSignal"
+import { readFromStorage } from "./storage"
+import { applyRawValue, updateSignal } from "./persistedSignal"
 
 export const SYNC_HASH_KEY = "sync.hash"
 export const SYNC_ENABLED_KEY = "sync.enabled"
@@ -76,7 +76,7 @@ const applyRemoteData = (data: Record<string, string>) => {
   try {
     for (const [key, rawValue] of Object.entries(data)) {
       if (!shouldSyncKey(key)) continue
-      updateSignal(key, rawValue)
+      if (typeof rawValue === "string") applyRawValue(key, rawValue)
     }
   } finally {
     applyingRemote = false
@@ -94,8 +94,6 @@ const pushData = async () => {
     if (!hash) return
 
     const timestamp = Date.now()
-    updateSignal(SYNC_TIMESTAMP_KEY, timestamp)
-
     const data = collectSyncData()
     const payload = compressToEncodedURIComponent(JSON.stringify(data))
     const path = `${getSyncPath()}/${hash}`
@@ -104,6 +102,7 @@ const pushData = async () => {
       timestamp,
       payload,
     } satisfies SyncRecord)
+    updateSignal(SYNC_TIMESTAMP_KEY, timestamp)
   } catch (error) {
     console.error("Error during pushData:", error)
   }

@@ -165,8 +165,7 @@ export const getNodeCostAtLevel = (id: CruiseNodeId, level: number): number => {
   const nextLevel = level
 
   if (id === "prestigeMultiplier") {
-    if (nextLevel <= 1) return 1
-    return Math.floor((nextLevel - 1) / 10) + 2
+    return Math.floor((nextLevel - 1) / 10) + 1
   }
 
   if (id === "ticketPrice" || id === "guestSpending") {

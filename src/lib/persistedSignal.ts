@@ -8,6 +8,13 @@ export const updateSignal = (key: string, value: unknown) => {
 }
 
 const signals: Record<string, Setter<any>> = {}
+const reloaders: Record<string, () => void> = {}
+
+// Writes the raw stored string and re-parses it into the live signal using its original type.
+export const applyRawValue = (key: string, rawValue: string) => {
+  localStorage.setItem(key, rawValue)
+  reloaders[key]?.()
+}
 
 export const createSyncedSignal = <T>(key: string, initialValue: T): Signal<T> => {
   const [value, setValue] = createSignal(readFromStorage(key, initialValue))
@@ -20,9 +27,14 @@ export const createSyncedSignal = <T>(key: string, initialValue: T): Signal<T> =
   }) as typeof setValue
 
   signals[key] = setSyncedValue
+  reloaders[key] = () => {
+    const next = readFromStorage(key, initialValue)
+    setValue(() => next)
+  }
 
   onCleanup(() => {
     delete signals[key]
+    delete reloaders[key]
   })
 
   return [value, setSyncedValue]
@@ -38,9 +50,14 @@ export const createPersistedSignal = <T>(key: string, initialValue: T): Signal<T
   }) as typeof setValue
 
   signals[key] = setPersistedValue
+  reloaders[key] = () => {
+    const next = readFromStorage(key, initialValue)
+    setValue(() => next)
+  }
 
   onCleanup(() => {
     delete signals[key]
+    delete reloaders[key]
   })
 
   return [value, setPersistedValue]
