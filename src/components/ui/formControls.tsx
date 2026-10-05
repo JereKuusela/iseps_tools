@@ -665,7 +665,7 @@ export const DisplayField = (props: DisplayFieldProps) => {
           {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
         </div>
         <div class={"min-w-0"}>
-          <p class="rounded-xl bg-white px-2.5 py-1.5 text-sm font-medium text-ink dark:bg-[#1a2638] dark:text-white">
+          <p class="rounded-xl border border-transparent bg-white px-2.5 py-1.5 text-sm font-medium text-ink dark:bg-[#1a2638] dark:text-white">
             {props.value}
           </p>
         </div>
@@ -703,6 +703,34 @@ export const ToggleField = (props: ToggleFieldProps) => {
         onKeyDown={blurOnEnterOrEscape}
         class="mt-1 h-4 w-4 rounded border border-ink/40 accent-accent dark:border-white/40"
       />
+    </label>
+  )
+}
+
+type CheckboxFieldProps = {
+  label: string
+  checked: boolean
+  onChange: (checked: boolean) => void
+  tooltip?: TooltipKey
+}
+
+export const CheckboxField = (props: CheckboxFieldProps) => {
+  return (
+    <label class="flex min-h-[34px] cursor-pointer items-center justify-between gap-2">
+      <div class="min-w-0 flex items-center gap-2">
+        <span class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
+          {props.label}
+        </span>
+        {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
+      </div>
+      <input
+        type="checkbox"
+        checked={props.checked}
+        onChange={(event) => props.onChange(event.currentTarget.checked)}
+        onKeyDown={blurOnEnterOrEscape}
+        class="peer sr-only"
+      />
+      <span class="relative h-5 w-9 shrink-0 rounded-full bg-ink/25 transition after:absolute after:left-0.5 after:top-0.5 after:h-4 after:w-4 after:rounded-full after:bg-white after:shadow after:transition-transform after:content-[''] peer-checked:bg-accent peer-checked:after:translate-x-4 peer-focus-visible:ring peer-focus-visible:ring-brand/40 dark:bg-white/25" />
     </label>
   )
 }

@@ -16,6 +16,8 @@ const parseNumberish = (value: string) => {
 }
 
 type CruiseContextValue = {
+  advancedMode: () => boolean
+  setAdvancedMode: (next: boolean) => boolean
   prestigesDone: () => string
   setPrestigesDone: (next: string) => string
   cruiseLevel: () => string
@@ -84,6 +86,7 @@ const areLevelsEqual = (left: CruiseNodeLevels, right: CruiseNodeLevels) => {
 }
 
 export const CruiseProvider = (props: ParentProps) => {
+  const [advancedMode, setAdvancedMode] = createSyncedSignal<boolean>("cruise.advancedMode", false)
   const [prestigesDone, setPrestigesDone] = createSyncedSignal("cruise.prestigesDone", "0")
   const [cruiseLevel, setCruiseLevel] = createSyncedSignal("cruise.cruiseLevel", "1")
   const [baseTicketPrice, setBaseTicketPrice] = createSyncedSignal("cruise.baseTicketPrice", "1")
@@ -99,23 +102,24 @@ export const CruiseProvider = (props: ParentProps) => {
   const ticketMultiplier = createMemo(() => safePow(1.4, normalizedLevels().ticketPrice))
   const guestMultiplier = createMemo(() => safePow(1.35, normalizedLevels().guestSpending))
 
-  const normalizedInput = createMemo(() =>
-    toCruiseInput({
+  const normalizedInput = createMemo(() => {
+    const advanced = advancedMode()
+    const ticket = advanced ? baseTicketPrice() : "100"
+    const guestMin = advanced ? baseGuestMin() : "1"
+    const guestMax = advanced ? baseGuestMax() : "1"
+    const roomMin = advanced ? baseRoomMin() : "100"
+    const roomMax = advanced ? baseRoomMax() : "100"
+    return toCruiseInput({
       prestigesDone: prestigesDone(),
-      cruiseLevel: cruiseLevel(),
-      ticketPrice: (Math.max(1, parseNumberish(baseTicketPrice())) * ticketMultiplier()).toString(),
-      guestSpendingMin: (Math.max(0, parseNumberish(baseGuestMin())) * guestMultiplier()).toString(),
-      guestSpendingMax: (Math.max(0, parseNumberish(baseGuestMax())) * guestMultiplier()).toString(),
-      roomCapacityMin: Math.max(
-        1,
-        Math.max(1, parseNumberish(baseRoomMin())) + normalizedLevels().moreSpace,
-      ).toString(),
-      roomCapacityMax: Math.max(
-        1,
-        Math.max(1, parseNumberish(baseRoomMax())) + normalizedLevels().moreSpace,
-      ).toString(),
-    }),
-  )
+      // Cruise level defaults to prestiges done so to give better recommendations when not set.
+      cruiseLevel: advanced && cruiseLevel() ? cruiseLevel() : prestigesDone(),
+      ticketPrice: (Math.max(1, parseNumberish(ticket)) * ticketMultiplier()).toString(),
+      guestSpendingMin: (Math.max(0, parseNumberish(guestMin)) * guestMultiplier()).toString(),
+      guestSpendingMax: (Math.max(0, parseNumberish(guestMax)) * guestMultiplier()).toString(),
+      roomCapacityMin: Math.max(1, Math.max(1, parseNumberish(roomMin)) + normalizedLevels().moreSpace).toString(),
+      roomCapacityMax: Math.max(1, Math.max(1, parseNumberish(roomMax)) + normalizedLevels().moreSpace).toString(),
+    })
+  })
 
   const score = createMemo(() => getBuildScore(normalizedInput(), normalizedLevels()))
   const recommendedMode = createMemo(() => calculateBuild(normalizedInput(), normalizedLevels()).mode)
@@ -161,6 +165,8 @@ export const CruiseProvider = (props: ParentProps) => {
   return (
     <CruiseContext.Provider
       value={{
+        advancedMode,
+        setAdvancedMode,
         prestigesDone,
         setPrestigesDone,
         cruiseLevel,

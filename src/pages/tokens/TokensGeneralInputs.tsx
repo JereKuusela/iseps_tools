@@ -1,5 +1,5 @@
 import { InfoCard, MetricRow } from "../../components/layout/contentBlocks"
-import { IntegerField, SelectField, ToggleField } from "../../components/ui/formControls"
+import { CheckboxField, IntegerField, SelectField } from "../../components/ui/formControls"
 import { LargeNumber } from "../../lib/largeNumber"
 import { formatLargeNumber } from "../../lib/numberFormat"
 import { PARTICLE_ORDER, useTokensContext, type UnlockedParticle } from "./tokensContext"
@@ -40,18 +40,16 @@ export const TokensGeneralInputs = () => {
           options={unlockedParticleOptions()}
         />
 
-        <div class="grid gap-2">
-          <ToggleField
-            label="Unlock Gamma Supplies and BB-Bot"
-            checked={tokens.unlockGammaSuppliesBbBot()}
-            onChange={tokens.setUnlockGammaSuppliesBbBot}
-          />
-          <ToggleField
-            label="Unlock Helion Supplies and BB-Bot"
-            checked={tokens.unlockHelionSuppliesBbBot()}
-            onChange={tokens.setUnlockHelionSuppliesBbBot}
-          />
-        </div>
+        <CheckboxField
+          label="Unlock Gamma Supplies and BB-Bot"
+          checked={tokens.unlockGammaSuppliesBbBot()}
+          onChange={tokens.setUnlockGammaSuppliesBbBot}
+        />
+        <CheckboxField
+          label="Unlock Helion Supplies and BB-Bot"
+          checked={tokens.unlockHelionSuppliesBbBot()}
+          onChange={tokens.setUnlockHelionSuppliesBbBot}
+        />
 
         <div class="rounded border border-ink/20 bg-white dark:border-white/15 dark:bg-[#253a56] mt-1">
           <MetricRow

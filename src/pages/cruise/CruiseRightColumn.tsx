@@ -1,7 +1,7 @@
-import { For, Index, Show, createMemo } from "solid-js"
-import { InfoCard } from "../../components/layout/contentBlocks"
+import { Index, Show, createMemo } from "solid-js"
 import { formatCompactMultiplier, formatPercentFromRatio } from "../../lib/numberFormat"
 import { useCruiseContext } from "./cruiseContext"
+import { CruiseNotationField } from "./CruiseNotationField"
 
 const parseNumberish = (value: string) => {
   const parsed = Number(value)
@@ -119,6 +119,9 @@ export const CruiseRightColumn = () => {
             </Index>
           </tbody>
         </table>
+        <div class="border-t border-ink/10 px-2.5 py-2 dark:border-white/10">
+          <CruiseNotationField />
+        </div>
       </div>
     </div>
   )
