@@ -9,6 +9,7 @@ import {
 } from "./factoryCalculator"
 import { emptyFactoryNodeLevels, type FactoryInputState, type FactoryNodeLevels } from "./factoryTypes"
 import { parseNumberish } from "../../lib/parseNumber"
+import { formatOptimality } from "../../lib/numberFormat"
 
 type FactoryContextValue = {
   prestigesDone: () => string
@@ -95,18 +96,7 @@ export const FactoryProvider = (props: ParentProps) => {
 
   const isOptimal = createMemo(() => areLevelsEqual(normalizedLevels(), optimalBuild()))
 
-  const optimality = createMemo(() => {
-    const currentObjective = score()
-    const optimalObjective = optimal().score
-
-    if (optimalObjective <= Number.EPSILON) return "100%"
-
-    const rawPercent = (currentObjective / optimalObjective) * 100
-    if (!Number.isFinite(rawPercent) || rawPercent < 0.01) return "0%"
-    if (rawPercent < 1) return `${rawPercent.toFixed(2)}%`
-    if (rawPercent > 999.99) return `${(rawPercent / 100).toFixed(0)}x`
-    return `${rawPercent.toFixed(0)}%`
-  })
+  const optimality = createMemo(() => formatOptimality(score(), optimal().score))
 
   const setNodeLevel = (id: keyof FactoryNodeLevels, next: number) => {
     setNodeLevels((previous) => {

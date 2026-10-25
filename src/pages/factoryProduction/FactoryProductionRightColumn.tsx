@@ -1,5 +1,8 @@
 import { For, createMemo } from "solid-js"
 import { InfoCard, MetricRow } from "../../components/layout/contentBlocks"
+import { DataTable, TABLE_HEAD_CELL_CLASS, TABLE_ROW_CLASS, TableHead } from "../../components/layout/dataTable"
+import { formatCompactValue as formatValue, formatPercent } from "../../lib/numberFormat"
+import { toPerHour } from "../../lib/timeFormat"
 import {
   FACTORY_PRODUCTION_ITEM_BY_ID,
   FACTORY_PRODUCTION_NONE_PRODUCT_ID,
@@ -7,24 +10,6 @@ import {
   FACTORY_PRODUCTION_RESOURCES,
 } from "./factoryProductionTypes"
 import { useFactoryProductionContext } from "./factoryProductionContext"
-
-const SECONDS_PER_HOUR = 3600
-
-const toPerHour = (valuePerSecond: number) => valuePerSecond * SECONDS_PER_HOUR
-
-const formatValue = (value: number, digits = 2) => {
-  if (!Number.isFinite(value)) return "0"
-  const abs = Math.abs(value)
-  if (abs === 0) return "0"
-  if (abs >= 1e6) return value.toExponential(2)
-  if (abs >= 1000) return value.toFixed(0)
-  return value.toFixed(digits)
-}
-
-const formatPercent = (value: number) => {
-  if (!Number.isFinite(value)) return "0%"
-  return `${Math.max(0, value).toFixed(1)}%`
-}
 
 export const FactoryProductionRightColumn = () => {
   const factory = useFactoryProductionContext()
@@ -93,19 +78,19 @@ export const FactoryProductionRightColumn = () => {
 
       <InfoCard title="Manufacturer output">
         <div class="overflow-x-auto">
-          <table class="w-full table-fixed border-collapse text-left text-xs sm:text-sm">
-            <thead class="bg-mist/80 text-[11px] uppercase tracking-[0.08em] text-ink/70 dark:bg-[#1a2a3f] dark:text-white/70 sm:text-xs">
+          <DataTable>
+            <TableHead>
               <tr>
-                <th class="px-2 py-1.5">Product</th>
-                <th class="px-2 py-1.5">Output/h</th>
-                <th class="px-2 py-1.5">Sell</th>
-                <th class="px-2 py-1.5">Profit/h</th>
+                <th class={TABLE_HEAD_CELL_CLASS}>Product</th>
+                <th class={TABLE_HEAD_CELL_CLASS}>Output/h</th>
+                <th class={TABLE_HEAD_CELL_CLASS}>Sell</th>
+                <th class={TABLE_HEAD_CELL_CLASS}>Profit/h</th>
               </tr>
-            </thead>
+            </TableHead>
             <tbody>
               <For each={factory.result().manufacturers}>
                 {(row) => (
-                  <tr class="border-t border-ink/10 dark:border-white/10">
+                  <tr class={TABLE_ROW_CLASS}>
                     <td class="px-2 py-1.5">{row.productName}</td>
                     <td class="px-2 py-1.5">{formatValue(toPerHour(row.outputPerSecond))}</td>
                     <td class="px-2 py-1.5">{formatValue(row.effectiveSellPrice)}</td>
@@ -116,26 +101,26 @@ export const FactoryProductionRightColumn = () => {
                 )}
               </For>
             </tbody>
-          </table>
+          </DataTable>
         </div>
       </InfoCard>
 
       <InfoCard title="Resource balance">
         <div class="overflow-x-auto">
-          <table class="w-full table-fixed border-collapse text-left text-xs sm:text-sm">
-            <thead class="bg-mist/80 text-[11px] uppercase tracking-[0.08em] text-ink/70 dark:bg-[#1a2a3f] dark:text-white/70 sm:text-xs">
+          <DataTable>
+            <TableHead>
               <tr>
-                <th class="px-2 py-1.5">Resource</th>
-                <th class="px-2 py-1.5">Supplied/h</th>
-                <th class="px-2 py-1.5">Required/h</th>
-                <th class="px-2 py-1.5">Wasted %</th>
+                <th class={TABLE_HEAD_CELL_CLASS}>Resource</th>
+                <th class={TABLE_HEAD_CELL_CLASS}>Supplied/h</th>
+                <th class={TABLE_HEAD_CELL_CLASS}>Required/h</th>
+                <th class={TABLE_HEAD_CELL_CLASS}>Wasted %</th>
               </tr>
-            </thead>
+            </TableHead>
             <tbody>
               <For each={FACTORY_PRODUCTION_RESOURCES}>
                 {(resource) => {
                   return (
-                    <tr class="border-t border-ink/10 dark:border-white/10">
+                    <tr class={TABLE_ROW_CLASS}>
                       <td class="px-2 py-1.5">
                         <span class="inline-flex items-center gap-2">
                           <span
@@ -152,14 +137,14 @@ export const FactoryProductionRightColumn = () => {
                         {formatValue(factory.result().resourceBalances[resource].requiredPerHour)}
                       </td>
                       <td class="px-2 py-1.5 text-emerald-700 dark:text-emerald-300">
-                        {formatPercent(factory.result().resourceBalances[resource].wastedPercent)}
+                        {formatPercent(Math.max(0, factory.result().resourceBalances[resource].wastedPercent), 1)}
                       </td>
                     </tr>
                   )
                 }}
               </For>
             </tbody>
-          </table>
+          </DataTable>
         </div>
       </InfoCard>
     </div>

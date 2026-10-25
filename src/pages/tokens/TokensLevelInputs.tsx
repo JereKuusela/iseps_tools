@@ -1,5 +1,6 @@
 import { For } from "solid-js"
 import { InfoCard } from "../../components/layout/contentBlocks"
+import { DataTable, GRID_CELL_BORDER_CLASS, TableHead } from "../../components/layout/dataTable"
 import { IntegerField } from "../../components/ui/formControls"
 import { PARTICLE_ORDER, useTokensContext } from "./tokensContext"
 import type { TokenId } from "./tokenTypes"
@@ -27,7 +28,7 @@ type SpecialRow = {
 
 const toTitle = (value: string) => value.charAt(0).toUpperCase() + value.slice(1)
 
-const borderClass = "border border-ink/15 dark:border-white/15"
+const borderClass = GRID_CELL_BORDER_CLASS
 const labelCellClass = `${borderClass} px-2 py-1`
 // Outline instead of border color so the highlight is not swallowed by collapsed borders.
 const valueCellClass = `${borderClass} p-0 text-center align-middle focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-brand/40`
@@ -128,15 +129,15 @@ export const TokensLevelInputs = () => {
 
   const renderWideTable = () => (
     <div class="overflow-x-auto">
-      <table class="w-full table-fixed border-collapse text-left text-xs sm:text-sm">
-        <thead class="bg-mist/80 text-[11px] uppercase tracking-[0.08em] text-ink/70 dark:bg-[#1a2a3f] dark:text-white/70 sm:text-xs">
+      <DataTable>
+        <TableHead>
           <tr>
             <th class={`${labelCellClass} bg-mist/80 dark:bg-[#1a2a3f]`}>Track</th>
             <For each={RESOURCE_ORDER}>
               {(resource) => <th class={`${borderClass} px-1 py-1.5 text-center`}>{toTitle(resource)}</th>}
             </For>
           </tr>
-        </thead>
+        </TableHead>
         <tbody>
           <For each={GROUPS}>
             {(group) => (
@@ -151,21 +152,21 @@ export const TokensLevelInputs = () => {
             )}
           </For>
         </tbody>
-      </table>
+      </DataTable>
     </div>
   )
 
   const renderTallTable = () => (
     <div class="overflow-x-auto">
-      <table class="w-full table-fixed border-collapse text-left text-xs sm:text-sm">
-        <thead class="bg-mist/80 text-[11px] uppercase tracking-[0.04em] text-ink/70 dark:bg-[#1a2a3f] dark:text-white/70 sm:text-xs sm:tracking-[0.08em]">
+      <DataTable>
+        <TableHead tight>
           <tr>
             <th class={`${labelCellClass} bg-mist/80 dark:bg-[#1a2a3f]`}>Resource</th>
             <For each={GROUPS}>
               {(group) => <th class={`${borderClass} px-1 py-1.5 text-center`}>{GROUP_LABELS[group]}</th>}
             </For>
           </tr>
-        </thead>
+        </TableHead>
         <tbody>
           <For each={RESOURCE_ORDER}>
             {(resource) => (
@@ -178,7 +179,7 @@ export const TokensLevelInputs = () => {
             )}
           </For>
         </tbody>
-      </table>
+      </DataTable>
     </div>
   )
 

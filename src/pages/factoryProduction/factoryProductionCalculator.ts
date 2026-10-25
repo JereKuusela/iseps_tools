@@ -10,6 +10,7 @@ import {
   type FactoryProductionManufacturerInput,
   type FactoryProductionResourceId,
 } from "./factoryProductionTypes"
+import { SECONDS_PER_HOUR } from "../../lib/timeFormat"
 
 export type FactoryProductionPricingInput = {
   twentyFourHourShifts: boolean
@@ -55,7 +56,6 @@ export type FactoryProductionOptimizerResult = {
   result: FactoryProductionResult
 }
 
-const SECONDS_PER_HOUR = 3600
 const MAX_MANUFACTURERS_PER_RESOURCE = 3
 
 const sanitizeNumber = (value: number, fallback = 0) => {

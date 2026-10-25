@@ -1,8 +1,13 @@
 import { Show, createMemo, createSignal, type JSX } from "solid-js"
 import { Tooltip } from "./Tooltip"
+import { INPUT_BASE_CLASS } from "./inputStyles"
 import { TooltipKey } from "../../lib/tooltips"
-import { formatMultiplier } from "../../lib/numberFormat"
-import { blurOnEnterOrEscape, isValidNumberishInput, sanitizeNumberishInput } from "./formControls"
+import {
+  blurOnEnterOrEscape,
+  formatMultiplierValue,
+  isValidNumberishInput,
+  sanitizeNumberishInput,
+} from "./formControls"
 
 type SummaryInputModalProps = {
   label: string
@@ -20,15 +25,6 @@ export const SummaryInputModal = (props: SummaryInputModalProps) => {
 
   const valueFormat = () => props.valueFormat ?? "plain"
   const isEditable = () => !!props.onInput
-
-  const formatMultiplierValue = (value: string) => {
-    const normalized = sanitizeNumberishInput(value)
-    if (normalized === "") return "x0.00"
-    if (!isValidNumberishInput(normalized)) return normalized
-
-    const parsed = Number(normalized)
-    return formatMultiplier(parsed, 2, "x0.00")
-  }
 
   const toEditableMultiplier = (value: string) => {
     const normalized = sanitizeNumberishInput(value)
@@ -105,7 +101,7 @@ export const SummaryInputModal = (props: SummaryInputModalProps) => {
           }}
           onBlur={() => setIsInputFocused(false)}
           onClick={() => setIsOpen(true)}
-          class={`w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-semibold text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white ${isEditable() ? "" : "cursor-pointer"}`}
+          class={`w-full ${INPUT_BASE_CLASS} px-2.5 py-1.5 text-sm font-semibold ${isEditable() ? "" : "cursor-pointer"}`}
         />
       </div>
 

@@ -1,5 +1,6 @@
 import { For, Show, createMemo } from "solid-js"
 import { InfoCard } from "../../components/layout/contentBlocks"
+import { GRID_CELL_BORDER_CLASS } from "../../components/layout/dataTable"
 import { Tooltip } from "../../components/ui/Tooltip"
 import { usePerkData, type PerkExtraKey, type Perk, type PerkRowId } from "../../lib/perkContext"
 import { usePerkGuideContext } from "./perkGuideContext"
@@ -16,8 +17,7 @@ const inactiveDotStyle = {
 
 const sortPerks = (perks: Perk[]) => perks.slice().sort((a, b) => a.tier - b.tier)
 
-const tableCellClass =
-  "align-middle border border-ink/15 bg-white/70 px-2 py-1 text-center text-xs dark:border-white/15 dark:bg-[#131f31]"
+const tableCellClass = `align-middle ${GRID_CELL_BORDER_CLASS} bg-white/70 px-2 py-1 text-center text-xs dark:bg-[#131f31]`
 
 const tableUnavailableContentClass =
   "inline-flex h-5 w-5 items-center justify-center leading-none text-ink/60 dark:text-white/60"

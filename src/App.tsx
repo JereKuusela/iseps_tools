@@ -2,6 +2,7 @@ import { A, useLocation } from "@solidjs/router"
 import { For, Show, createEffect, createSignal, onCleanup, onMount, type ParentComponent } from "solid-js"
 import { useDarkModeSignal } from "./lib/darkMode"
 import { ROUTES, eventTabs, primaryTabs } from "./lib/routes"
+import { NAV_ITEM_CLASS, navItemActive } from "./components/ui/navStyles"
 
 const normalizePath = (path: string) => {
   if (!path || path === "/") {
@@ -61,11 +62,8 @@ const TopNav = (props: { darkMode: boolean; onToggleDarkMode: () => void }) => {
             {(tab) => (
               <A
                 href={tab.href}
-                class="rounded-xl px-4 py-2.5 text-left transition hover:-translate-y-0.5 hover:bg-ink hover:text-white dark:hover:bg-white/15"
-                classList={{
-                  "bg-ink text-white": isActivePath(tab.href),
-                  "dark:bg-white/15": isActivePath(tab.href),
-                }}
+                class={`${NAV_ITEM_CLASS} px-4 py-2.5`}
+                classList={navItemActive(isActivePath(tab.href))}
               >
                 <p class="text-sm font-semibold tracking-wide">{tab.label}</p>
               </A>
@@ -84,11 +82,8 @@ const TopNav = (props: { darkMode: boolean; onToggleDarkMode: () => void }) => {
           >
             <button
               type="button"
-              class="flex w-full items-center justify-between gap-2 rounded-xl px-4 py-2.5 text-left transition hover:-translate-y-0.5 hover:bg-ink hover:text-white dark:hover:bg-white/15"
-              classList={{
-                "bg-ink text-white": isEventsRouteActive(),
-                "dark:bg-white/15": isEventsRouteActive(),
-              }}
+              class={`${NAV_ITEM_CLASS} flex w-full items-center justify-between gap-2 px-4 py-2.5`}
+              classList={navItemActive(isEventsRouteActive())}
               aria-haspopup="menu"
               aria-expanded={isEventsMenuOpen()}
               aria-controls="top-events-menu"
@@ -120,11 +115,8 @@ const TopNav = (props: { darkMode: boolean; onToggleDarkMode: () => void }) => {
                       {(tab) => (
                         <A
                           href={tab.href}
-                          class="rounded-xl px-3.5 py-2 text-left text-sm font-semibold transition hover:-translate-y-0.5 hover:bg-ink hover:text-white dark:hover:bg-white/15"
-                          classList={{
-                            "bg-ink text-white": isActivePath(tab.href),
-                            "dark:bg-white/15": isActivePath(tab.href),
-                          }}
+                          class={`${NAV_ITEM_CLASS} px-3.5 py-2 text-sm font-semibold`}
+                          classList={navItemActive(isActivePath(tab.href))}
                         >
                           {tab.label}
                         </A>

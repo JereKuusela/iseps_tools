@@ -4,6 +4,8 @@ import { useDarkModeSignal } from "../../lib/darkMode"
 import { ROUTES, tabs } from "../../lib/routes"
 import type { TooltipKey } from "../../lib/tooltips"
 import { Tooltip } from "../ui/Tooltip"
+import { ActionButton } from "../ui/ActionButton"
+import { NAV_ITEM_CLASS, navItemActive } from "../ui/navStyles"
 
 type PanelWidth = "content" | "full"
 
@@ -69,9 +71,9 @@ export const Panel = (
         </div>
         <div class="relative z-30 flex shrink-0 items-center gap-2" ref={mobileMenuRef}>
           {props.titleAction ? <div class="relative z-30 shrink-0">{props.titleAction}</div> : null}
-          <button
-            type="button"
-            class="grid h-8 min-w-[78px] place-items-center rounded-lg border border-ink/25 bg-white/85 px-2.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-ink/80 transition hover:-translate-y-0.5 hover:bg-ink hover:text-white dark:border-white/30 dark:bg-[#1f3047] dark:text-white/85 dark:hover:bg-white dark:hover:text-ink sm:hidden"
+          <ActionButton
+            size="menu"
+            class="sm:hidden"
             aria-haspopup="menu"
             aria-expanded={isMobileMenuOpen()}
             aria-label={isMobileMenuOpen() ? "Close menu" : "Open menu"}
@@ -80,7 +82,7 @@ export const Panel = (
             onClick={() => setIsMobileMenuOpen((current) => !current)}
           >
             {isMobileMenuOpen() ? "Close" : "Menu"}
-          </button>
+          </ActionButton>
 
           <Show when={isMobileMenuOpen()}>
             <div
@@ -93,11 +95,8 @@ export const Panel = (
                     <A
                       href={tab.href}
                       onClick={() => setIsMobileMenuOpen(false)}
-                      class="rounded-xl px-4 py-2.5 text-left text-sm font-semibold transition hover:-translate-y-0.5 hover:bg-ink hover:text-white dark:hover:bg-white/15"
-                      classList={{
-                        "bg-ink text-white": isActivePath(tab.href),
-                        "dark:bg-white/15": isActivePath(tab.href),
-                      }}
+                      class={`${NAV_ITEM_CLASS} px-4 py-2.5 text-sm font-semibold`}
+                      classList={navItemActive(isActivePath(tab.href))}
                     >
                       {tab.label}
                     </A>
@@ -106,11 +105,8 @@ export const Panel = (
                 <A
                   href={ROUTES.settings}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  class="rounded-xl px-4 py-2.5 text-left text-sm font-semibold transition hover:-translate-y-0.5 hover:bg-ink hover:text-white dark:hover:bg-white/15"
-                  classList={{
-                    "bg-ink text-white": isActivePath(ROUTES.settings),
-                    "dark:bg-white/15": isActivePath(ROUTES.settings),
-                  }}
+                  class={`${NAV_ITEM_CLASS} px-4 py-2.5 text-sm font-semibold`}
+                  classList={navItemActive(isActivePath(ROUTES.settings))}
                 >
                   <span class="inline-flex items-center gap-2">
                     <svg
@@ -134,7 +130,7 @@ export const Panel = (
                     setDarkMode((value) => !value)
                     setIsMobileMenuOpen(false)
                   }}
-                  class="rounded-xl px-4 py-2.5 text-left text-sm font-semibold transition hover:-translate-y-0.5 hover:bg-ink hover:text-white dark:hover:bg-white/15"
+                  class={`${NAV_ITEM_CLASS} px-4 py-2.5 text-sm font-semibold`}
                 >
                   {darkMode() ? "Switch to light mode" : "Switch to dark mode"}
                 </button>

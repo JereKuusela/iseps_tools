@@ -15,6 +15,26 @@ export const formatPercent = (value: number, digits = 2, fallback = "0%") => {
   return `${value.toFixed(digits)}%`
 }
 
+// Switches to exponential from 1e6 and drops decimals from 1000.
+export const formatCompactValue = (value: number, digits = 2) => {
+  if (!Number.isFinite(value)) return "0"
+  const abs = Math.abs(value)
+  if (abs === 0) return "0"
+  if (abs >= 1e6) return value.toExponential(2)
+  if (abs >= 1000) return value.toFixed(0)
+  return value.toFixed(digits)
+}
+
+// Current-vs-optimal ratio as a label: "100%" when optimal is zero, "Nx" above 999.99%.
+export const formatOptimality = (current: number, optimal: number) => {
+  if (optimal <= Number.EPSILON) return "100%"
+  const rawPercent = (current / optimal) * 100
+  if (!Number.isFinite(rawPercent) || rawPercent < 0.01) return "0%"
+  if (rawPercent < 1) return `${rawPercent.toFixed(2)}%`
+  if (rawPercent > 999.99) return `${(rawPercent / 100).toFixed(0)}x`
+  return `${rawPercent.toFixed(0)}%`
+}
+
 export const formatPercentFromRatio = (value: number, digits?: number, fallback = "0%") => {
   if (!Number.isFinite(value)) return fallback
   const percentValue = value * 100

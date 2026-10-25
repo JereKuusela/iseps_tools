@@ -8,6 +8,7 @@ import {
   SYNC_TIMESTAMP_KEY,
 } from "../../lib/cloudSync"
 import { createEffect, Show } from "solid-js"
+import { INPUT_BASE_CLASS } from "./inputStyles"
 
 const sanitizeKey = (value: string) =>
   value
@@ -90,7 +91,7 @@ export const SyncControl = () => {
               spellcheck={false}
               autocomplete="off"
               autocapitalize="none"
-              class="min-w-0 flex-1 rounded-xl border border-ink/20 bg-white px-3 py-2 font-mono text-sm font-semibold text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/20 dark:bg-[#1a2638] dark:text-white"
+              class={`min-w-0 flex-1 ${INPUT_BASE_CLASS} px-3 py-2 font-mono text-sm font-semibold`}
             />
             <button
               type="button"

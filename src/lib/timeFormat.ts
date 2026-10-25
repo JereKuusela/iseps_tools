@@ -1,3 +1,7 @@
+export const SECONDS_PER_HOUR = 3600
+
+export const toPerHour = (valuePerSecond: number) => valuePerSecond * SECONDS_PER_HOUR
+
 const MINUTES_PER_HOUR = 60
 const MINUTES_PER_DAY = 24 * MINUTES_PER_HOUR
 const MINUTES_PER_WEEK = 7 * MINUTES_PER_DAY

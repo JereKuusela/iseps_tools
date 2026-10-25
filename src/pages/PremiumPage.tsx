@@ -5,8 +5,9 @@ import { ToggleField } from "../components/ui/formControls"
 import { isValidNumberishInput } from "../components/ui/formControls"
 import { sanitizeNumberishInput } from "../components/ui/formControls"
 import { Tooltip } from "../components/ui/Tooltip"
+import { INPUT_BASE_CLASS } from "../components/ui/inputStyles"
 import { clamp } from "../lib/mathUtils"
-import { formatFixed } from "../lib/numberFormat"
+import { formatFixed as formatValue } from "../lib/numberFormat"
 import { parseNumberish } from "../lib/parseNumber"
 import { createSyncedSignal } from "../lib/persistedSignal"
 import { TOKEN_SHARED_KEYS } from "../lib/tokenSharedInputs"
@@ -35,10 +36,6 @@ const toggleLabels: { key: HaulerToggleKey; label: string }[] = [
   { key: "layer6ExoticIncome", label: "Layer 6 #2 exotic dirt income" },
   { key: "layer9ExoticIncome", label: "Layer 9 #2 exotic dirt income" },
 ]
-
-const formatValue = (value: number, digits = 2) => {
-  return formatFixed(value, digits)
-}
 
 const styles = {
   inputSection: "space-y-4",
@@ -85,7 +82,7 @@ const NumberSelectField = (props: {
           if (!isValidNumberishInput(next)) return
           props.onInput(next)
         }}
-        class="w-full rounded-xl border border-ink/20 bg-white px-3 py-2 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+        class={`w-full ${INPUT_BASE_CLASS} px-3 py-2 text-sm font-medium`}
       />
       <datalist id={listId}>
         <For each={props.options}>{(option) => <option value={option} />}</For>

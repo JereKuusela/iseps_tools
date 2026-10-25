@@ -1,6 +1,8 @@
 import { createContext, createMemo, type ParentProps, useContext } from "solid-js"
 import { createSyncedSignal } from "../../lib/persistedSignal"
 import { LargeNumber } from "../../lib/largeNumber"
+import { SECONDS_PER_HOUR } from "../../lib/timeFormat"
+import { formatOptimality } from "../../lib/numberFormat"
 import {
   calculateFactoryProductionFillEmptyManufacturers,
   calculateFactoryProductionOptimalManufacturers,
@@ -54,7 +56,6 @@ type FactoryProductionContextValue = {
 }
 
 const FactoryProductionContext = createContext<FactoryProductionContextValue>()
-const SECONDS_PER_HOUR = 3600
 const RESOURCE_DOT_BY_ID: Record<FactoryProductionResourceId, string> = {
   orange: "🟠",
   blue: "🔵",
@@ -291,18 +292,9 @@ export const FactoryProductionProvider = (props: ParentProps) => {
 
   const isOptimal = createMemo(() => areRowsEqual(normalizedManufacturers(), optimalManufacturerRows()))
 
-  const optimality = createMemo(() => {
-    const currentProfit = result().totalProfitPerSecond
-    const optimalProfit = optimalManufacturers().result.totalProfitPerSecond
-
-    if (optimalProfit <= Number.EPSILON) return "100%"
-
-    const rawPercent = (currentProfit / optimalProfit) * 100
-    if (!Number.isFinite(rawPercent) || rawPercent < 0.01) return "0%"
-    if (rawPercent < 1) return `${rawPercent.toFixed(2)}%`
-    if (rawPercent > 999.99) return `${(rawPercent / 100).toFixed(0)}x`
-    return `${rawPercent.toFixed(0)}%`
-  })
+  const optimality = createMemo(() =>
+    formatOptimality(result().totalProfitPerSecond, optimalManufacturers().result.totalProfitPerSecond),
+  )
 
   const canFillEmptyManufacturers = createMemo(
     () =>

@@ -8,6 +8,7 @@ import {
 } from "../../lib/numberFormat"
 import { LargeNumber } from "../../lib/largeNumber"
 import type { TooltipKey } from "../../lib/tooltips"
+import { INPUT_BASE_CLASS, TEXT_INPUT_CLASS } from "./inputStyles"
 import { Tooltip } from "./Tooltip"
 
 type NumberFieldProps = {
@@ -161,7 +162,7 @@ export const NumberField = (props: NumberFieldProps) => {
               spellcheck={false}
               placeholder={props.placeholder}
               onKeyDown={blurOnEnterOrEscape}
-              class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+              class={TEXT_INPUT_CLASS}
             />
             {props.inlineAccessory}
           </div>
@@ -206,7 +207,7 @@ export const NumberRangeField = (props: NumberRangeFieldProps) => {
             autocomplete="off"
             autocorrect="off"
             spellcheck={false}
-            class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+            class={TEXT_INPUT_CLASS}
           />
           <span class="text-ink/50 dark:text-white/50">-</span>
           <input
@@ -218,7 +219,7 @@ export const NumberRangeField = (props: NumberRangeFieldProps) => {
             autocomplete="off"
             autocorrect="off"
             spellcheck={false}
-            class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+            class={TEXT_INPUT_CLASS}
           />
         </div>
       </div>
@@ -243,7 +244,7 @@ export const NumberFieldWithUnit = <T extends string = string>(props: NumberFiel
           value={props.unit}
           onChange={(event) => props.onUnitChange(event.currentTarget.value as T)}
           onKeyDown={blurOnEnterOrEscape}
-          class={`w-[3.5rem] rounded-xl border border-ink/20 bg-white px-2 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white`}
+          class={`w-[3.5rem] ${INPUT_BASE_CLASS} px-2 py-1.5 text-sm font-medium`}
         >
           <For each={props.units}>
             {(opt) => (
@@ -285,7 +286,7 @@ export const MetricField = (props: MetricFieldProps) => {
           spellcheck={false}
           value={props.value}
           onKeyDown={blurOnEnterOrEscape}
-          class="w-[10ch] min-w-[10ch] max-w-[12ch] rounded-xl border border-ink/20 bg-white px-2 py-0.5 text-right text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+          class={`w-[10ch] min-w-[10ch] max-w-[12ch] ${INPUT_BASE_CLASS} px-2 py-0.5 text-right`}
         />
       </div>
     </TextField.Root>
@@ -379,7 +380,7 @@ export const DecimalField = (props: DecimalFieldProps) => {
                 setEditingValue(sanitizeNumberishInput(props.value))
                 setIsFocused(true)
               }}
-              class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+              class={TEXT_INPUT_CLASS}
             />
             {props.inlineAccessory}
           </div>
@@ -431,7 +432,7 @@ export const IntegerField = (props: IntegerFieldProps) => {
             placeholder={props.placeholder}
             onKeyDown={blurOnEnterOrEscape}
             onBlur={(event) => onBlur(event.currentTarget.value)}
-            class={`rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white ${
+            class={`${INPUT_BASE_CLASS} px-2.5 py-1.5 text-sm font-medium ${
               isRightAligned() ? "w-[4rem] min-w-[4rem]" : "w-full"
             }`}
           />
@@ -462,7 +463,7 @@ export const TextInputField = (props: TextInputFieldProps) => {
             onKeyDown={blurOnEnterOrEscape}
             onFocus={props.onFocus}
             onBlur={(event) => props.onBlur?.(event.currentTarget.value)}
-            class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+            class={TEXT_INPUT_CLASS}
           />
         </div>
       </div>
@@ -544,7 +545,7 @@ export const PercentField = (props: PercentFieldProps) => {
             }}
             onBlur={() => setIsFocused(false)}
             placeholder={props.placeholder}
-            class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+            class={TEXT_INPUT_CLASS}
           />
         </div>
       </div>
@@ -556,7 +557,7 @@ const normalizeMultiplierInput = (value: string) => {
   return sanitizeNumberishInput(value.replace(/^x/i, ""))
 }
 
-const formatMultiplierValue = (value: string) => {
+export const formatMultiplierValue = (value: string) => {
   const normalized = sanitizeNumberishInput(value)
   if (normalized === "") return "x0.00"
   if (!isValidNumberishInput(normalized)) return normalized
@@ -626,7 +627,7 @@ export const MultiplierField = (props: MultiplierFieldProps) => {
             }}
             onBlur={() => setIsFocused(false)}
             placeholder={props.placeholder}
-            class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+            class={TEXT_INPUT_CLASS}
           />
         </div>
       </div>
@@ -763,7 +764,7 @@ export const SelectField = (props: SelectFieldProps) => {
             value={props.value}
             onChange={(event) => props.onChange(event.currentTarget.value)}
             onKeyDown={blurOnEnterOrEscape}
-            class="w-full rounded-xl border border-ink/20 bg-white px-2.5 py-1.5 text-sm font-medium text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+            class={TEXT_INPUT_CLASS}
           >
             {props.options.map((option) => (
               <option value={option.value}>{option.label}</option>
