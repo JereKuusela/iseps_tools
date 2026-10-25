@@ -7,6 +7,7 @@ import zatNodesJson from "../../data/zat_nodes.json"
 import { LargeNumber } from "./largeNumber"
 import { clamp } from "./mathUtils"
 import { buildGuideNodeAmountMap, parseGuideNodes } from "./zatGuideNodes"
+import { getPrecomputedTechCost } from "./techCostData"
 
 export type ZatMode = "juno" | "dc"
 
@@ -429,47 +430,15 @@ export const calculateSeEffect = (seAmount: number) => {
 }
 
 const techCostCurve = techs.map((tech) => tech.costCurve.sort((a, b) => a.level - b.level))
-const techCostCache = techs.map(() => [] as LargeNumber[])
 
 export const calculateNextThreeTechCosts = (id: number, currentLevel: number): TechCostEntry[] => {
-  // No point to always recalculate.
-  const cache = techCostCache[id]
-  if (cache.length > currentLevel + 2) {
-    return [
-      { level: currentLevel + 1, cost: cache[currentLevel] },
-      { level: currentLevel + 2, cost: cache[currentLevel + 1] },
-      { level: currentLevel + 3, cost: cache[currentLevel + 2] },
-    ]
+  const precomputed: TechCostEntry[] = []
+  for (let level = currentLevel + 1; level <= currentLevel + 3; level += 1) {
+    const cost = getPrecomputedTechCost(id, level)
+    if (!cost) break
+    precomputed.push({ level, cost })
   }
-
-  const tech = getTechById(id)
-  const costCurve = techCostCurve[id]
-
-  const targetLevel = currentLevel + 3
-
-  let cost = LargeNumber.from(tech.initCost)
-  let growth = new LargeNumber(1, 0)
-  let curveIndex = 0
-
-  const nextCosts: TechCostEntry[] = []
-
-  for (let level = 1; level <= targetLevel; level += 1) {
-    cache[level - 1] = cost
-    if (level > currentLevel) {
-      nextCosts.push({ level, cost })
-    }
-
-    while (curveIndex < costCurve.length && costCurve[curveIndex].level === level) {
-      const { mult, single } = costCurve[curveIndex]
-      growth = growth.multiply(mult)
-      if (single) cost = cost.multiply(single)
-
-      curveIndex += 1
-    }
-
-    cost = cost.multiply(growth)
-  }
-  return nextCosts
+  return precomputed
 }
 
 export const calculateTechBoost = (

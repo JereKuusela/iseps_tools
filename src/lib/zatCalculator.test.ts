@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest"
+import { beforeAll, describe, expect, it, vi } from "vitest"
 import {
   calculateOg0TotalBoostFromGuide,
   calculateExponentIncreaseMultipliers,
@@ -11,6 +11,12 @@ import {
   calculateZatBoostPerTech,
 } from "./zatCalculator"
 import { LargeNumber } from "./largeNumber"
+import * as techCostData from "./techCostData"
+import techs from "../../data/techs.json"
+
+beforeAll(async () => {
+  await techCostData.loadTechCostData()
+})
 
 const compareLarge = (a: LargeNumber, b: LargeNumber) => {
   expect(a.mantissa).toBeCloseTo(b.mantissa, 2)
@@ -104,7 +110,7 @@ describe("calculateNextThreeTechCosts", () => {
     compareLarge(fromLevel1.cost, new LargeNumber(1, 180))
   })
 
-  it("returns identical results when cache is already warm", () => {
+  it("returns identical results for repeated CSV lookups", () => {
     const first = calculateNextThreeTechCosts(0, 50)
     const second = calculateNextThreeTechCosts(0, 50)
 
@@ -116,6 +122,40 @@ describe("calculateNextThreeTechCosts", () => {
     expect(second[0].cost.toString()).toBe(first[0].cost.toString())
     expect(second[1].cost.toString()).toBe(first[1].cost.toString())
     expect(second[2].cost.toString()).toBe(first[2].cost.toString())
+  })
+
+  it("returns no costs when CSV data is unavailable", () => {
+    const lookup = vi.spyOn(techCostData, "getPrecomputedTechCost").mockReturnValue(null)
+    try {
+      expect(calculateNextThreeTechCosts(0, 50)).toEqual([])
+      const snapshot = calculateTechValues({
+        cycles: 10,
+        mode: "juno",
+        junoExponent: 0.5,
+        seAmount: 0,
+        currentJuno: LargeNumber.zero(),
+        gainPerSecond: LargeNumber.from(10),
+        techLevels: techs.map(() => 5),
+        exponentDeltaMultiplier: 1.01,
+      })
+      for (const row of snapshot.rows) {
+        expect(row.currentLevel).toBe(5)
+        expect(row.nextCost).toBeNull()
+        expect(row.nextLevel).toBeNull()
+        expect(row.score).toBe(Number.NEGATIVE_INFINITY)
+      }
+    } finally {
+      lookup.mockRestore()
+    }
+  })
+
+  it("stops at the maximum level of every tech", () => {
+    for (const tech of techs) {
+      expect(calculateNextThreeTechCosts(tech.id, tech.maxLevel)).toEqual([])
+      const finalPurchase = calculateNextThreeTechCosts(tech.id, tech.maxLevel - 1)
+      expect(finalPurchase).toHaveLength(1)
+      expect(finalPurchase[0].level).toBe(tech.maxLevel)
+    }
   })
 })
 

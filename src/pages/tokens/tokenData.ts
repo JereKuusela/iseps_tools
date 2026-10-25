@@ -1,3 +1,4 @@
+import tokenUpgradeDefinitions from "../../../data/token_upgrade_definitions.json"
 import type {
   TokenLevelRow,
   TokenLoadedData,
@@ -81,13 +82,12 @@ const parseUpgradeDefinitions = (document: TokenUpgradeDefinitionDocument): Toke
     .filter((upgrade) => upgrade.id.length > 0 && upgrade.label.length > 0)
 }
 
-export const loadTokenData = async (): Promise<TokenLoadedData> => {
-  const [definitionsModule, levelRowsModule] = await Promise.all([
-    import("../../../data/token_upgrade_definitions.json"),
-    import("../../../data/token_upgrade_levels.csv?raw"),
-  ])
+export const TOKEN_UPGRADES = parseUpgradeDefinitions(tokenUpgradeDefinitions as TokenUpgradeDefinitionDocument)
 
-  const upgrades = parseUpgradeDefinitions(definitionsModule.default as TokenUpgradeDefinitionDocument)
+export const loadTokenData = async (): Promise<TokenLoadedData> => {
+  const levelRowsModule = await import("../../../data/token_upgrade_levels.csv?raw")
+
+  const upgrades = TOKEN_UPGRADES
   const validUpgradeIds = new Set<TokenId>(upgrades.map((upgrade) => upgrade.id))
   const levelRows = parseLevelRowsCsv(levelRowsModule.default, validUpgradeIds)
 

@@ -1,4 +1,4 @@
-import { createContext, createMemo, type ParentProps, useContext } from "solid-js"
+import { createContext, createMemo, createResource, type ParentProps, useContext } from "solid-js"
 import { calculateChestsMultiplier } from "../../lib/boosts"
 import { LargeNumber } from "../../lib/largeNumber"
 import { formatPercentFromRatio } from "../../lib/numberFormat"
@@ -16,6 +16,7 @@ import {
 } from "../../lib/zatCalculator"
 import type { ExponentGainEntry, GainUnit, TechCardRow, TopTechEntry } from "./ogTypes"
 import { parseNumberish } from "../../lib/parseNumber"
+import { loadTechCostData } from "../../lib/techCostData"
 
 const toRatePerSecond = (value: LargeNumber, unit: GainUnit) => {
   if (unit === "min") return value.divide(60)
@@ -131,6 +132,7 @@ const OgTechContext = createContext<OgTechContextValue>()
 
 export const OgTechProvider = (props: ParentProps) => {
   const data = useZatData()
+  const [techCostData] = createResource(loadTechCostData)
 
   const [cycles, setCycles] = createSyncedSignal("zat.og.cycles", "0")
   const [gainValue, setGainValue] = createSyncedSignal("zat.og.gain", "1.00e1")
@@ -270,8 +272,9 @@ export const OgTechProvider = (props: ParentProps) => {
     return entry?.multiplier ?? 1
   })
 
-  const techValues = createMemo(() =>
-    calculateTechValues({
+  const techValues = createMemo(() => {
+    techCostData()
+    return calculateTechValues({
       cycles: parseNumberish(cycles()),
       mode: mode(),
       junoExponent: totalExponent(),
@@ -280,8 +283,8 @@ export const OgTechProvider = (props: ParentProps) => {
       gainPerSecond: gainPerSecond(),
       techLevels: techLevels(),
       exponentDeltaMultiplier: og0ExponentDeltaMultiplier(),
-    }),
-  )
+    })
+  })
 
   const exponentGainEntries = createMemo(() => {
     return calculateExponentIncreaseMultipliers(

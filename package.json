@@ -12,27 +12,34 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@kobalte/core": "0.13.13",
+    "@kobalte/core": "0.13.14",
     "@solidjs/router": "1.0.0",
-    "firebase": "12.18.0",
+    "firebase": "13.1.0",
     "lz-string": "1.5.0",
-    "solid-js": "1.9.15"
+    "solid-js": "1.9.17"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "4.3.3",
-    "@types/node": "26.4.0",
-    "autoprefixer": "10.5.4",
-    "jsdom": "30.0.1",
-    "postcss": "8.5.26",
+    "@types/node": "26.6.5",
+    "autoprefixer": "10.6.1",
+    "jsdom": "30.1.3",
+    "postcss": "8.5.31",
     "tailwindcss": "4.3.3",
     "typescript": "7.0.2",
-    "vite": "8.2.2",
+    "vite": "8.3.5",
     "vite-plugin-solid": "2.11.14",
-    "vitest": "4.1.11"
+    "vitest": "5.0.5"
+  },
+  "overrides": {
+    "@grpc/grpc-js": "1.14.6"
   },
   "prettier": {
     "printWidth": 120,
     "semi": false,
     "tabWidth": 2
+  },
+  "allowScripts": {
+    "@firebase/util@1.15.3": true,
+    "protobufjs@7.6.6": true
   }
 }

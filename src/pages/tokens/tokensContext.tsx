@@ -2,9 +2,8 @@ import { createContext, createMemo, createResource, type ParentProps, useContext
 import { createSyncedSignal } from "../../lib/persistedSignal"
 import { getTokenKey, TOKEN_SHARED_KEYS } from "../../lib/tokenSharedInputs"
 import { calculateTokenRecommendations, calculateTotalTokensSpent } from "./tokenCalculator"
-import { loadTokenData } from "./tokenData"
+import { loadTokenData, TOKEN_UPGRADES } from "./tokenData"
 import { OUTPUT_RESOURCES, type TokenLevelMap, type TokenUpgradeDefinition, type TokenId } from "./tokenTypes"
-import tokenUpgradeDefinitions from "../../../data/token_upgrade_definitions.json"
 import { parseNumberish } from "../../lib/parseNumber"
 
 const createDefaultLevelMap = (ids: string[]): TokenLevelMap => {
@@ -30,7 +29,7 @@ export const PARTICLE_ORDER = [
 export type UnlockedParticle = (typeof PARTICLE_ORDER)[number]
 
 const BLEND_STEP_TO_SHORT_TERM_PERCENT = [0, 0.5, 1] as const
-const TOKEN_UPGRADE_IDS = tokenUpgradeDefinitions.upgrades.map((upgrade) => upgrade.id as TokenId)
+const TOKEN_UPGRADE_IDS = TOKEN_UPGRADES.map((upgrade) => upgrade.id)
 
 type TokensContextValue = {
   isLoading: () => boolean
@@ -99,7 +98,7 @@ export const TokensProvider = (props: ParentProps) => {
   }
 
   const normalizedLevels = createMemo(() => {
-    const ids = tokenData()?.upgrades.map((upgrade) => upgrade.id) ?? []
+    const ids = TOKEN_UPGRADE_IDS
     const result = createDefaultLevelMap(ids)
 
     for (const id of ids as TokenId[]) {
@@ -121,7 +120,7 @@ export const TokensProvider = (props: ParentProps) => {
   })
 
   const normalizedEnabled = createMemo(() => {
-    const upgrades = tokenData()?.upgrades ?? []
+    const upgrades = TOKEN_UPGRADES
     const currentUnlocked = unlockedParticle()
     const unlockedRank = resourceRank().get(currentUnlocked) ?? Number.POSITIVE_INFINITY
     const result: Record<string, boolean> = {}
@@ -219,7 +218,7 @@ export const TokensProvider = (props: ParentProps) => {
     const best = recommendation().best
     if (!best || best.nextLevel === null) return
 
-    const upgrade = tokenData()?.upgrades.find((candidate) => candidate.id === best.id)
+    const upgrade = TOKEN_UPGRADES.find((candidate) => candidate.id === best.id)
     if (!upgrade) return
 
     const nextSingleLevel = Math.min(upgrade.maxLevel, best.currentLevel + 1)
@@ -236,7 +235,7 @@ export const TokensProvider = (props: ParentProps) => {
     recommendationRow: NonNullable<ReturnType<typeof calculateTokenRecommendations>["best"]>,
     targetLevel: number,
   ) => {
-    const upgrade = tokenData()?.upgrades.find((candidate) => candidate.id === recommendationRow.id)
+    const upgrade = TOKEN_UPGRADES.find((candidate) => candidate.id === recommendationRow.id)
     if (!upgrade) return
 
     const clampedTargetLevel = Math.max(
@@ -293,7 +292,7 @@ export const TokensProvider = (props: ParentProps) => {
         setOutputLevelByResource,
         levels: normalizedLevels,
         setUpgradeLevel,
-        upgrades: () => tokenData()?.upgrades ?? [],
+        upgrades: () => TOKEN_UPGRADES,
         recommendationRows: () => recommendation().rows,
         bestRecommendation: () => recommendation().best,
         totalTokensSpent,

@@ -32,7 +32,7 @@ export const TokensResult = () => {
           { label: "Buy 25", onClick: () => tokens.applyBestCount(25) },
         ]}
         footer={
-          <div class="p-3">
+          <div class="p-4">
             <p class="text-xs uppercase tracking-[0.12em] text-ink/65 dark:text-white/65">Valuation</p>
             <input
               type="range"
@@ -68,6 +68,7 @@ export const TokensResult = () => {
             }
           })}
         dataHeader="Cost"
+        minRows={7}
         columnRatios={[50, 25, 25]}
       />
     </div>

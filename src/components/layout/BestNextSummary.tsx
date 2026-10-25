@@ -25,6 +25,7 @@ type BestNextSummaryProps = {
   rowAction?: (id: string | number) => void
   footer: JSX.Element
   rows: BestNextRow[]
+  minRows?: number
   dataHeader: string
   columnRatios?: [number, number, number]
 }
@@ -35,6 +36,8 @@ export const BestNextSummary = (props: BestNextSummaryProps) => {
   const hasRowAction = () => !!props.rowAction
   const bestRow = () => props.rows[0]
   const tableRows = () => props.rows.slice(1)
+  const emptyRows = () =>
+    Array.from({ length: Math.max(0, (props.minRows ?? 0) - tableRows().length) }, (_, index) => index)
   const columnWidths = createMemo(() => {
     const ratios = props.columnRatios ?? [50, 25, 25]
     const sanitized = ratios.map((value) => (Number.isFinite(value) && value > 0 ? value : 1)) as [
@@ -173,6 +176,22 @@ export const BestNextSummary = (props: BestNextSummaryProps) => {
                           onClick={() => props.rowAction?.(row.id ?? row.item)}
                           aria-label={"Buy next level for " + row.item}
                         >
+                          🛒
+                        </ActionButton>
+                      </td>
+                    </Show>
+                  </tr>
+                )}
+              </For>
+              <For each={emptyRows()}>
+                {() => (
+                  <tr class={TABLE_ROW_CLASS} aria-hidden="true">
+                    <td class="px-2 py-1" colSpan={3}>
+                      {"\u00a0"}
+                    </td>
+                    <Show when={hasRowAction()}>
+                      <td class="px-2 py-1 text-center">
+                        <ActionButton size="icon" class="invisible" disabled>
                           🛒
                         </ActionButton>
                       </td>

@@ -200,6 +200,18 @@ Rules for calculating tech cost and tech value.
 - `seMultiplier`: Multiplier to the SE effect.
 - `seAdditive`: Addition to the SE effect.
 
+## tech_costs.csv
+
+Precomputed per-level tech costs, used to avoid recalculating the `costCurve` growth loop at runtime.
+
+- `id`: Tech identifier matching `techs.json`.
+- `level`: Tech level represented by this row.
+- `cost`: Cost for buying this level, stored as `mantissa e exponent` (parseable by `LargeNumber.parse`).
+
+This file is generated from `techs.json` by `scripts/generateTechCostCsv.mjs`. It is loaded asynchronously
+(via `src/lib/techCostData.ts`) and `calculateNextThreeTechCosts` in `src/lib/zatCalculator.ts` falls back to
+recomputing costs from `techs.json` until the precomputed data has finished loading.
+
 ## techs_se_effect.json
 
 Rules for calculating SE effect on tech value for Juno mode.

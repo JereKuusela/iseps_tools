@@ -35,6 +35,7 @@ export const OgTechRightColumn = () => {
         }))}
         rowAction={(id) => og.buyNextForTech(Number(id))}
         dataHeader="Remaining"
+        minRows={5}
         columnRatios={[35, 30, 35]}
       />
 
@@ -61,7 +62,9 @@ export const OgTechRightColumn = () => {
                 <span class="font-semibold uppercase tracking-[0.08em] text-ink/60 dark:text-white/60">Cost</span>
                 <span class="font-mono text-right">{tech().nextCost}</span>
                 <span class="font-semibold uppercase tracking-[0.08em] text-ink/60 dark:text-white/60">ETA</span>
-                <span class="font-mono text-right">{secondsToLabel(tech().etaSeconds)}</span>
+                <span class="font-mono text-right">
+                  {tech().nextLevel === null ? "" : secondsToLabel(tech().etaSeconds)}
+                </span>
               </div>
             </article>
           )}

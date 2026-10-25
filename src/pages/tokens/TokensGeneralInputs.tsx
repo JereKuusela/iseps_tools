@@ -51,10 +51,14 @@ export const TokensGeneralInputs = () => {
           onChange={tokens.setUnlockHelionSuppliesBbBot}
         />
 
-        <div class="rounded border border-ink/20 bg-white dark:border-white/15 dark:bg-[#253a56] mt-1">
+        <div class="rounded border border-ink/20 bg-white dark:border-white/15 dark:bg-[#253a56] mt-1.25">
           <MetricRow
             label="Tokens spent"
-            value={formatLargeNumber(LargeNumber.from(tokens.totalTokensSpent()), 2)}
+            value={
+              tokens.isLoading() || tokens.loadError()
+                ? "-"
+                : formatLargeNumber(LargeNumber.from(tokens.totalTokensSpent()), 2)
+            }
             withBorder={false}
           />
         </div>
