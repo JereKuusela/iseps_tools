@@ -5,6 +5,7 @@ import techsJson from "../../data/techs.json"
 import zatGuidesJson from "../../data/zat_guides.json"
 import zatNodesJson from "../../data/zat_nodes.json"
 import { LargeNumber } from "./largeNumber"
+import { clamp } from "./mathUtils"
 import { buildGuideNodeAmountMap, parseGuideNodes } from "./zatGuideNodes"
 
 export type ZatMode = "juno" | "dc"
@@ -150,10 +151,6 @@ export type RankedTechSnapshot = {
   seEffect: number
   zatBoost: number
   rows: RankedTechRowIntermediate[]
-}
-
-const clamp = (value: number, min: number, max: number) => {
-  return Math.min(Math.max(value, min), max)
 }
 
 const toSafeNumber = (value: number) => {

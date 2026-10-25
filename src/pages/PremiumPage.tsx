@@ -5,7 +5,9 @@ import { ToggleField } from "../components/ui/formControls"
 import { isValidNumberishInput } from "../components/ui/formControls"
 import { sanitizeNumberishInput } from "../components/ui/formControls"
 import { Tooltip } from "../components/ui/Tooltip"
+import { clamp } from "../lib/mathUtils"
 import { formatFixed } from "../lib/numberFormat"
+import { parseNumberish } from "../lib/parseNumber"
 import { createSyncedSignal } from "../lib/persistedSignal"
 import { TOKEN_SHARED_KEYS } from "../lib/tokenSharedInputs"
 import type { TooltipKey } from "../lib/tooltips"
@@ -33,16 +35,6 @@ const toggleLabels: { key: HaulerToggleKey; label: string }[] = [
   { key: "layer6ExoticIncome", label: "Layer 6 #2 exotic dirt income" },
   { key: "layer9ExoticIncome", label: "Layer 9 #2 exotic dirt income" },
 ]
-
-const parseNumberish = (value: string) => {
-  const parsed = Number(value)
-  if (!Number.isFinite(parsed)) return 0
-  return parsed
-}
-
-const clamp = (value: number, min: number, max: number) => {
-  return Math.min(max, Math.max(min, value))
-}
 
 const formatValue = (value: number, digits = 2) => {
   return formatFixed(value, digits)

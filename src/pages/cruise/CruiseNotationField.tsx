@@ -2,12 +2,7 @@ import { createEffect, createMemo, createSignal } from "solid-js"
 import { TextInputField } from "../../components/ui/formControls"
 import { useCruiseContext } from "./cruiseContext"
 import { CRUISE_NODE_DEFINITIONS, emptyCruiseNodeLevels, type CruiseNodeId, type CruiseNodeLevels } from "./cruiseTypes"
-
-const parseNumberish = (value: string) => {
-  const parsed = Number(value)
-  if (!Number.isFinite(parsed)) return 0
-  return parsed
-}
+import { parseNumberish } from "../../lib/parseNumber"
 
 const notationOrder = CRUISE_NODE_DEFINITIONS.map((node) => node.id)
 const nodeById = CRUISE_NODE_DEFINITIONS.reduce(

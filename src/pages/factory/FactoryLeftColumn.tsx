@@ -10,12 +10,7 @@ import {
   type FactoryNodeLevels,
 } from "./factoryTypes"
 import { useFactoryContext } from "./factoryContext"
-
-const parseNumberish = (value: string) => {
-  const parsed = Number(value)
-  if (!Number.isFinite(parsed)) return 0
-  return parsed
-}
+import { parseNumberish } from "../../lib/parseNumber"
 
 const notationOrder = FACTORY_NODE_DEFINITIONS.map((node) => node.id)
 const nodeById = FACTORY_NODE_DEFINITIONS.reduce(

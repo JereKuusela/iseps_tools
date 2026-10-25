@@ -7,7 +7,7 @@ Combination of various guides.
   - Supplies depends on active hours per day.
 - Some resources have supplies and BB-Bot initially disabled.
 - Calculator needs value for each resource to calculate best upgrade (per token cost).
-  - Should have input for granularity (like every 50 levels) so that recommendation doesn't change all the time.
+  - Should have input for tokens per step (cost-based buckets for all upgrades) so that recommendation doesn't change all the time.
 - There are unique upgrades that can't be directly valued.
   - Needs some reasonable estimation to balance short and long term progression.
   - These have 0 short term value and high long term value.
@@ -77,7 +77,7 @@ Combination of various guides.
 - Numeric input for supplies token boost.
 - Numeric input for BB-bot duration boost.
 - Numeric input for BB-bot token boost.
-- Numeric input for granularity.
+- Numeric input for tokens per step.
 - Numeric input for hours per day.
   - SC calculator has input for this. Same value should be used.
 

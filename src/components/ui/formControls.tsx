@@ -285,7 +285,7 @@ export const MetricField = (props: MetricFieldProps) => {
           spellcheck={false}
           value={props.value}
           onKeyDown={blurOnEnterOrEscape}
-          class="w-[9ch] min-w-[9ch] max-w-[12ch] rounded-xl border border-ink/20 bg-white px-2 py-0.5 text-right text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
+          class="w-[10ch] min-w-[10ch] max-w-[12ch] rounded-xl border border-ink/20 bg-white px-2 py-0.5 text-right text-ink outline-none ring-brand/40 transition focus:ring dark:border-white/15 dark:bg-[#1a2638] dark:text-white"
         />
       </div>
     </TextField.Root>

@@ -9,6 +9,7 @@ import {
 import { SummaryInputModal } from "../../components/ui/SummaryInputModal"
 import { Tooltip } from "../../components/ui/Tooltip"
 import { LargeNumber } from "../../lib/largeNumber"
+import { clamp } from "../../lib/mathUtils"
 import { formatCompactMultiplier } from "../../lib/numberFormat"
 import { calculateDcReplicator, calculateSeReplicator } from "../../lib/scCalculator"
 import type { ScGainUnit } from "../../lib/scContext"
@@ -68,8 +69,6 @@ export const ScLeftColumn = () => {
   }
 
   const parsePositiveInt = (value: string) => Math.max(0, Math.floor(parseFiniteNumber(value, 0)))
-  const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value))
-
   const parseLargeNumberSafe = (value: string): LargeNumber => {
     const raw = value.trim()
     if (raw === "") return LargeNumber.zero()

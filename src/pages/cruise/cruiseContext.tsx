@@ -8,12 +8,7 @@ import {
 import { createSyncedSignal } from "../../lib/persistedSignal"
 import { emptyCruiseNodeLevels, type CruiseInputState, type CruiseNodeLevels } from "./cruiseTypes"
 import { getBuildScore } from "./cruiseScore"
-
-const parseNumberish = (value: string) => {
-  const parsed = Number(value)
-  if (!Number.isFinite(parsed)) return 0
-  return parsed
-}
+import { parseNumberish } from "../../lib/parseNumber"
 
 type CruiseContextValue = {
   advancedMode: () => boolean

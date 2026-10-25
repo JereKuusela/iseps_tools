@@ -401,7 +401,7 @@ const targetRows = parseTargetRows(readFileSync(targetsPath, "utf8"))
 const resourceTargetMap = buildResourceTargetMap(targetRows)
 const outputPerCostByResource = buildOutputPerCostByResource(upgrades)
 
-const lines = ["upgradeId,level,cost,shortTerm,longTerm"]
+const lines = ["upgradeId,level,cost,accumulatedCost,shortTerm,longTerm"]
 
 for (const upgrade of upgrades) {
   const maxLevel = Math.max(1, Math.floor(asNumber(upgrade.maxLevel, 1)))
@@ -474,8 +474,12 @@ for (const upgrade of upgrades) {
     }
   }
 
+  let accumulatedCost = 0
+
   for (let level = 1; level <= maxLevel; level += 1) {
     const cost = costsByLevel[level]
+    // Sum the rounded values so the column matches what the CSV shows.
+    accumulatedCost += Number(toFixedCost(cost))
     const shortTermPerCost = priorityTermByLevel[level]
     const longTermPerCost = priorityLongTermPerCostByLevel[level]
 
@@ -487,6 +491,7 @@ for (const upgrade of upgrades) {
       upgrade.id,
       String(level),
       toFixedCost(cost),
+      toFixedCost(accumulatedCost),
       toTermPrecision(Math.max(0, scaledShortTerm)),
       longTermCell,
     ]

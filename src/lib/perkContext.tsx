@@ -1,6 +1,7 @@
 import { createContext, type Accessor, type ParentProps, useContext } from "solid-js"
 import perksJson from "../../data/perks.json"
 import perksMetaJson from "../../data/perks_meta.json"
+import { toInt } from "./parseNumber"
 
 export type PerkRunType = "se" | "grun"
 
@@ -52,12 +53,6 @@ export type PerkDataBundle = {
   definitions: PerkDefinitions
   perks: PerkGuideEntry[]
 }
-const toInt = (value: unknown) => {
-  const parsed = Number(value)
-  if (!Number.isFinite(parsed)) return 0
-  return Math.max(0, Math.floor(parsed))
-}
-
 const asText = (value: unknown) => String(value ?? "").trim()
 
 const asRowId = (value: unknown): PerkRowId | null => {

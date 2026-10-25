@@ -86,6 +86,7 @@ export type TokenLevelRow = {
   upgradeId: TokenId
   level: number
   cost: number
+  accumulatedCost: number
   shortTerm: number
   longTerm: number
 }
@@ -103,7 +104,7 @@ export type TokenInputState = {
   enabled: TokenToggleMap
   outputLevelsByResource: Record<string, string>
   blendPercent: number
-  granularity: string
+  tokensPerStep: string
   onlineHoursPerDay: string
 }
 
@@ -113,4 +114,5 @@ export type TokenRecommendationRow = {
   nextLevel: number | null
   cost: number
   score: number
+  bucketIndex: number
 }

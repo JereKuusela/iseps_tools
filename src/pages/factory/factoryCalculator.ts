@@ -6,6 +6,7 @@ import {
   type FactoryNodeId,
   type FactoryNodeLevels,
 } from "./factoryTypes"
+import { clamp } from "../../lib/mathUtils"
 
 export type FactoryEvaluationRow = {
   id: FactoryNodeId
@@ -66,10 +67,6 @@ const NODE_IDS: FactoryNodeId[] = FACTORY_NODE_DEFINITIONS.map((definition) => d
 const sanitizeNumber = (value: number, fallback = 0) => {
   if (!Number.isFinite(value)) return fallback
   return value
-}
-
-const clamp = (value: number, min: number, max: number) => {
-  return Math.min(max, Math.max(min, value))
 }
 
 const snapToParticleWeightMultiplier = (value: number) => {

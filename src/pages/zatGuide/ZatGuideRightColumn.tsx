@@ -1,4 +1,5 @@
 import { For, createSignal, onCleanup, onMount } from "solid-js"
+import { clamp } from "../../lib/mathUtils"
 import { formatLargeNumberMultiplier } from "../../lib/numberFormat"
 import type { GuideNodeView } from "./zatGuideTypes"
 import { useZatGuideContext } from "./zatGuideContext"
@@ -17,10 +18,6 @@ const TREE_HEIGHT = 620
 const toFiniteNumber = (value: unknown, fallback = 0) => {
   const parsed = typeof value === "number" ? value : Number(value)
   return Number.isFinite(parsed) ? parsed : fallback
-}
-
-const clamp = (value: number, min: number, max: number) => {
-  return Math.min(max, Math.max(min, value))
 }
 
 const nodePosition = (node: GuideNodeView): Position => {

@@ -19,7 +19,7 @@ const readOutputShortTermByKey = () => {
   const byKey = new Map<string, number>()
 
   for (const row of dataRows) {
-    const [upgradeId, levelCell, , shortTermCell] = row
+    const [upgradeId, levelCell, , , shortTermCell] = row
     const shortTerm = Number(shortTermCell)
     if (!Number.isFinite(shortTerm)) continue
     byKey.set(`${upgradeId}:${levelCell}`, shortTerm)

@@ -5,8 +5,7 @@ import { PARTICLE_ORDER, useTokensContext } from "./tokensContext"
 import type { TokenId } from "./tokenTypes"
 
 const RESOURCE_ORDER = ["cash", ...PARTICLE_ORDER] as const
-const MOBILE_SPLIT_INDEX = Math.ceil(RESOURCE_ORDER.length / 2)
-const MOBILE_RESOURCE_GROUPS = [RESOURCE_ORDER.slice(0, MOBILE_SPLIT_INDEX), RESOURCE_ORDER.slice(MOBILE_SPLIT_INDEX)]
+const GROUPS = ["output", "supplies", "bbbot"] as const
 const SPECIAL_UPGRADE_IDS = [
   "supplies.tokenBonus",
   "supplies.crystalBonus",
@@ -127,29 +126,54 @@ export const TokensLevelInputs = () => {
     )
   }
 
-  const renderTable = (resources: readonly string[]) => (
+  const renderWideTable = () => (
     <div class="overflow-x-auto">
       <table class="w-full table-fixed border-collapse text-left text-xs sm:text-sm">
         <thead class="bg-mist/80 text-[11px] uppercase tracking-[0.08em] text-ink/70 dark:bg-[#1a2a3f] dark:text-white/70 sm:text-xs">
           <tr>
-            <th class={`${labelCellClass} sticky left-0 z-10 bg-mist/80 dark:bg-[#1a2a3f]`}>Track</th>
-            <For each={resources}>
+            <th class={`${labelCellClass} bg-mist/80 dark:bg-[#1a2a3f]`}>Track</th>
+            <For each={RESOURCE_ORDER}>
               {(resource) => <th class={`${borderClass} px-1 py-1.5 text-center`}>{toTitle(resource)}</th>}
             </For>
           </tr>
         </thead>
         <tbody>
-          <For each={["output", "supplies", "bbbot"] as const}>
+          <For each={GROUPS}>
             {(group) => (
               <tr>
-                <td
-                  class={`${labelCellClass} sticky left-0 z-10 bg-white font-semibold text-ink dark:bg-[#22344d] dark:text-white`}
-                >
+                <td class={`${labelCellClass} bg-white font-semibold text-ink dark:bg-[#22344d] dark:text-white`}>
                   {GROUP_LABELS[group]}
                 </td>
-                <For each={resources}>
+                <For each={RESOURCE_ORDER}>
                   {(resource) => <td class={valueCellClass}>{renderCell(group, resource)}</td>}
                 </For>
+              </tr>
+            )}
+          </For>
+        </tbody>
+      </table>
+    </div>
+  )
+
+  const renderTallTable = () => (
+    <div class="overflow-x-auto">
+      <table class="w-full table-fixed border-collapse text-left text-xs sm:text-sm">
+        <thead class="bg-mist/80 text-[11px] uppercase tracking-[0.04em] text-ink/70 dark:bg-[#1a2a3f] dark:text-white/70 sm:text-xs sm:tracking-[0.08em]">
+          <tr>
+            <th class={`${labelCellClass} bg-mist/80 dark:bg-[#1a2a3f]`}>Resource</th>
+            <For each={GROUPS}>
+              {(group) => <th class={`${borderClass} px-1 py-1.5 text-center`}>{GROUP_LABELS[group]}</th>}
+            </For>
+          </tr>
+        </thead>
+        <tbody>
+          <For each={RESOURCE_ORDER}>
+            {(resource) => (
+              <tr>
+                <td class={`${labelCellClass} bg-white font-semibold text-ink dark:bg-[#22344d] dark:text-white`}>
+                  {toTitle(resource)}
+                </td>
+                <For each={GROUPS}>{(group) => <td class={valueCellClass}>{renderCell(group, resource)}</td>}</For>
               </tr>
             )}
           </For>
@@ -161,10 +185,8 @@ export const TokensLevelInputs = () => {
   return (
     <div class="grid gap-3">
       <InfoCard title="Upgrade levels">
-        <div class="grid gap-3 lg:hidden">
-          <For each={MOBILE_RESOURCE_GROUPS}>{(resources) => renderTable(resources)}</For>
-        </div>
-        <div class="hidden lg:block">{renderTable(RESOURCE_ORDER)}</div>
+        <div class="lg:hidden">{renderTallTable()}</div>
+        <div class="hidden lg:block">{renderWideTable()}</div>
       </InfoCard>
 
       <InfoCard title="Special levels" class="xl:max-w-[calc((100%-0.75rem)/3)]">

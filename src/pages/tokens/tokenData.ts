@@ -26,6 +26,7 @@ const parseLevelRowsCsv = (rawCsv: string, validUpgradeIds: Set<TokenId>): Token
   const upgradeIdIndex = getColumnIndex("upgradeId")
   const levelIndex = getColumnIndex("level")
   const costIndex = getColumnIndex("cost")
+  const accumulatedCostIndex = getColumnIndex("accumulatedCost")
   const shortTermIndex = getColumnIndex("shortTerm")
   const longTermIndex = getColumnIndex("longTerm")
 
@@ -49,6 +50,7 @@ const parseLevelRowsCsv = (rawCsv: string, validUpgradeIds: Set<TokenId>): Token
         upgradeId,
         level,
         cost,
+        accumulatedCost: asNumber(values[accumulatedCostIndex]),
         shortTerm,
         longTerm,
       }

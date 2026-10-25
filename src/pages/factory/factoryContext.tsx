@@ -8,12 +8,7 @@ import {
   normalizeFactoryNodeLevels,
 } from "./factoryCalculator"
 import { emptyFactoryNodeLevels, type FactoryInputState, type FactoryNodeLevels } from "./factoryTypes"
-
-const parseNumberish = (value: string) => {
-  const parsed = Number(value)
-  if (!Number.isFinite(parsed)) return 0
-  return parsed
-}
+import { parseNumberish } from "../../lib/parseNumber"
 
 type FactoryContextValue = {
   prestigesDone: () => string

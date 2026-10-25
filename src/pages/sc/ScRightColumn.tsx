@@ -11,6 +11,8 @@ import {
   type ScGoalType,
 } from "../../lib/scCalculator"
 import { useScContext } from "../../lib/scContext"
+import { clamp } from "../../lib/mathUtils"
+import { parseNumberish } from "../../lib/parseNumber"
 import { calculateBoostsMultiplier } from "../../lib/boosts"
 import { formatLocalTimestampFromMinutes, formatTimeDuration } from "../../lib/timeFormat"
 import type { PanelOutput, ScGoalOption } from "./scTypes"
@@ -26,16 +28,6 @@ const goalOptions: ScGoalOption[] = [
 ]
 
 const parsePositive = (value: string) => Math.max(0, parseNumberish(value))
-
-const parseNumberish = (value: string) => {
-  const parsed = Number(value)
-  if (!Number.isFinite(parsed)) return 0
-  return parsed
-}
-
-const clamp = (value: number, min: number, max: number) => {
-  return Math.min(max, Math.max(min, value))
-}
 
 const parseLargeNumberSafe = (value: string): LargeNumber => {
   const raw = value.trim()

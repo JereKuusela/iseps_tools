@@ -51,7 +51,7 @@ export const FactoryProductionRightColumn = () => {
   })
 
   return (
-    <div class="grid gap-3">
+    <div class="grid grid-cols-[minmax(0,1fr)] gap-3">
       <InfoCard title="Optimizer">
         <div class="space-y-2">
           <p class="text-xs font-semibold text-ink/80 dark:text-white/80">
@@ -93,7 +93,7 @@ export const FactoryProductionRightColumn = () => {
 
       <InfoCard title="Manufacturer output">
         <div class="overflow-x-auto">
-          <table class="w-full min-w-[500px] table-fixed border-collapse text-left text-xs sm:text-sm">
+          <table class="w-full table-fixed border-collapse text-left text-xs sm:text-sm">
             <thead class="bg-mist/80 text-[11px] uppercase tracking-[0.08em] text-ink/70 dark:bg-[#1a2a3f] dark:text-white/70 sm:text-xs">
               <tr>
                 <th class="px-2 py-1.5">Product</th>
@@ -122,7 +122,7 @@ export const FactoryProductionRightColumn = () => {
 
       <InfoCard title="Resource balance">
         <div class="overflow-x-auto">
-          <table class="w-full min-w-[520px] table-fixed border-collapse text-left text-xs sm:text-sm">
+          <table class="w-full table-fixed border-collapse text-left text-xs sm:text-sm">
             <thead class="bg-mist/80 text-[11px] uppercase tracking-[0.08em] text-ink/70 dark:bg-[#1a2a3f] dark:text-white/70 sm:text-xs">
               <tr>
                 <th class="px-2 py-1.5">Resource</th>

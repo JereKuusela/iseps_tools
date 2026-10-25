@@ -27,10 +27,10 @@ export const TokensGeneralInputs = () => {
           step={1}
         />
         <IntegerField
-          label="Output step"
-          value={tokens.granularity()}
-          onInput={tokens.setGranularity}
-          min={1}
+          label="Tokens per step"
+          value={tokens.tokensPerStep()}
+          onInput={tokens.setTokensPerStep}
+          min={0}
           step={1}
         />
         <SelectField

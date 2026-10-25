@@ -2,12 +2,7 @@ import { Index, Show, createMemo } from "solid-js"
 import { formatCompactMultiplier, formatPercentFromRatio } from "../../lib/numberFormat"
 import { useCruiseContext } from "./cruiseContext"
 import { CruiseNotationField } from "./CruiseNotationField"
-
-const parseNumberish = (value: string) => {
-  const parsed = Number(value)
-  if (!Number.isFinite(parsed)) return 0
-  return parsed
-}
+import { parseNumberish } from "../../lib/parseNumber"
 
 export const CruiseRightColumn = () => {
   const cruise = useCruiseContext()

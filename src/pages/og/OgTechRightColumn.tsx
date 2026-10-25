@@ -6,15 +6,11 @@ import { Tooltip } from "../../components/ui/Tooltip"
 import { formatPercentFromRatio } from "../../lib/numberFormat"
 import { formatTimeDurationFromSeconds } from "../../lib/timeFormat"
 import { useOgTechContext } from "./ogTechContext"
+import { parseNumberish } from "../../lib/parseNumber"
 
 export const OgTechRightColumn = () => {
   const og = useOgTechContext()
   const bestTech = () => og.bestTech()
-  const parseNumberish = (value: string) => {
-    const parsed = Number(value)
-    if (!Number.isFinite(parsed)) return 0
-    return parsed
-  }
 
   const secondsToLabel = (seconds: number) => formatTimeDurationFromSeconds(seconds)
 

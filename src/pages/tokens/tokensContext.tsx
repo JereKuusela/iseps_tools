@@ -5,12 +5,7 @@ import { calculateTokenRecommendations, calculateTotalTokensSpent } from "./toke
 import { loadTokenData } from "./tokenData"
 import { OUTPUT_RESOURCES, type TokenLevelMap, type TokenUpgradeDefinition, type TokenId } from "./tokenTypes"
 import tokenUpgradeDefinitions from "../../../data/token_upgrade_definitions.json"
-
-const parseNumberish = (value: string) => {
-  const parsed = Number(value)
-  if (!Number.isFinite(parsed)) return 0
-  return parsed
-}
+import { parseNumberish } from "../../lib/parseNumber"
 
 const createDefaultLevelMap = (ids: string[]): TokenLevelMap => {
   const result: TokenLevelMap = {}
@@ -43,8 +38,8 @@ type TokensContextValue = {
   blendStep: () => string
   setBlendStep: (next: string) => string
   blendPercent: () => number
-  granularity: () => string
-  setGranularity: (next: string) => string
+  tokensPerStep: () => string
+  setTokensPerStep: (next: string) => string
   onlineHoursPerDay: () => string
   setOnlineHoursPerDay: (next: string) => string
   unlockedParticle: () => UnlockedParticle
@@ -72,7 +67,7 @@ export const TokensProvider = (props: ParentProps) => {
   const [tokenData] = createResource(loadTokenData)
 
   const [blendStep, setBlendStep] = createSyncedSignal("token.blendStep", "1")
-  const [granularity, setGranularity] = createSyncedSignal("token.granularity", "25")
+  const [tokensPerStep, setTokensPerStep] = createSyncedSignal("token.tokensPerStep", "100")
 
   const [onlineHoursPerDay, setOnlineHoursPerDay] = createSyncedSignal(TOKEN_SHARED_KEYS.onlineHoursPerDay, "10")
   const [unlockedParticle, setUnlockedParticle] = createSyncedSignal<UnlockedParticle>(
@@ -189,7 +184,7 @@ export const TokensProvider = (props: ParentProps) => {
         enabled: normalizedEnabled(),
         outputLevelsByResource: normalizedOutputLevels(),
         blendPercent: blendPercent(),
-        granularity: granularity(),
+        tokensPerStep: tokensPerStep(),
         onlineHoursPerDay: onlineHoursPerDay(),
       },
       tokenData() ?? null,
@@ -203,7 +198,7 @@ export const TokensProvider = (props: ParentProps) => {
         enabled: normalizedEnabled(),
         outputLevelsByResource: normalizedOutputLevels(),
         blendPercent: blendPercent(),
-        granularity: granularity(),
+        tokensPerStep: tokensPerStep(),
         onlineHoursPerDay: onlineHoursPerDay(),
       },
       tokenData() ?? null,
@@ -284,8 +279,8 @@ export const TokensProvider = (props: ParentProps) => {
         blendStep,
         setBlendStep,
         blendPercent,
-        granularity,
-        setGranularity,
+        tokensPerStep,
+        setTokensPerStep,
         onlineHoursPerDay,
         setOnlineHoursPerDay,
         unlockedParticle,

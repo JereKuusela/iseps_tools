@@ -1,13 +1,8 @@
-import { createContext, createEffect, createMemo, type ParentProps, useContext } from "solid-js"
+import { createContext, createMemo, type ParentProps, useContext } from "solid-js"
 import { createSyncedSignal } from "../../lib/persistedSignal"
 import { type PerkGuideEntry, type PerkRowId, type PerkRunType, usePerkData } from "../../lib/perkContext"
 import type { PerkGuideRowView, PerkRowLookup, PerkRunOption } from "./perkGuideTypes"
-
-const parseNumberish = (value: string) => {
-  const parsed = Number(value)
-  if (!Number.isFinite(parsed)) return 0
-  return parsed
-}
+import { parseNumberish } from "../../lib/parseNumber"
 
 type PerkGuideContextValue = {
   se: () => string

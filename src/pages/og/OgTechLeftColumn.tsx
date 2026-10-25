@@ -15,6 +15,7 @@ import type { ZatMode } from "../../lib/zatCalculator"
 import { useZatData, type JunoExponentType } from "../../lib/zatContext"
 import type { GainUnit } from "./ogTypes"
 import { useOgTechContext } from "./ogTechContext"
+import { parseNumberish } from "../../lib/parseNumber"
 
 const units = ["hour", "min", "sec"] as const
 
@@ -31,11 +32,6 @@ type Option<T extends string> = {
 export const OgTechLeftColumn = () => {
   const og = useOgTechContext()
   const data = useZatData()
-  const parseNumberish = (value: string) => {
-    const parsed = Number(value)
-    if (!Number.isFinite(parsed)) return 0
-    return parsed
-  }
 
   const buildLevelOptions = (type: Extract<JunoExponentType, "se" | "player" | "dcm" | "research">) => {
     const expByLevel = new Map<number, number>()

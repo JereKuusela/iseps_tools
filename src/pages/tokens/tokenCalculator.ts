@@ -6,16 +6,8 @@ import type {
   TokenId,
 } from "./tokenTypes"
 import { getSupplyRatio } from "../../lib/boosts"
+import { parseNumberish, toInt } from "../../lib/parseNumber"
 
-const parseNumberish = (value: string) => {
-  const parsed = Number(value)
-  if (!Number.isFinite(parsed)) return 0
-  return parsed
-}
-
-const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value))
-
-const toInt = (value: string) => Math.max(0, Math.floor(parseNumberish(value)))
 const TERM_SCALE = 100000000
 
 const normalizePerCostTerm = (rawTerm: number) => {
@@ -23,37 +15,18 @@ const normalizePerCostTerm = (rawTerm: number) => {
   return rawTerm >= 1 ? rawTerm / TERM_SCALE : rawTerm
 }
 
-const getCostFromAnchors = (upgrade: TokenUpgradeDefinition, level: number) => {
-  const anchors = upgrade.costAnchors
-  if (anchors.length === 0) return 0
-
-  let activeAnchor = anchors[0]
-  for (const anchor of anchors) {
-    if (anchor.level > level) break
-    activeAnchor = anchor
-  }
-
-  return Math.max(0, activeAnchor.cost + (level - activeAnchor.level) * activeAnchor.step)
-}
-
-const getLevelRow = (data: TokenLoadedData, upgrade: TokenUpgradeDefinition, level: number) => {
-  const fromCsv = data.rowByKey.get(`${upgrade.id}:${level}`)
-  if (fromCsv) return fromCsv
-
-  const cost = getCostFromAnchors(upgrade, level)
-  const shortTermValue = Math.max(0, upgrade.baseValue ?? 0)
-  const longTermValue = shortTermValue
-  const shortTerm = cost <= 0 ? 0 : shortTermValue / cost
-  const longTerm = cost <= 0 ? 0 : longTermValue / cost
-
-  return {
+const getLevelRow = (data: TokenLoadedData, upgrade: TokenUpgradeDefinition, level: number) =>
+  data.rowByKey.get(`${upgrade.id}:${level}`) ?? {
     upgradeId: upgrade.id,
     level,
-    cost,
-    shortTerm,
-    longTerm,
+    cost: 0,
+    accumulatedCost: 0,
+    shortTerm: 0,
+    longTerm: 0,
   }
-}
+
+const getAccumulatedCost = (data: TokenLoadedData, upgrade: TokenUpgradeDefinition, level: number) =>
+  level <= 0 ? 0 : getLevelRow(data, upgrade, level).accumulatedCost
 
 const isUpgradeEnabled = (upgradeId: TokenId, enabledMap: TokenInputState["enabled"]) => {
   const current = enabledMap[upgradeId]
@@ -81,49 +54,54 @@ const resolveCurrentLevel = (input: TokenInputState, upgrade: TokenUpgradeDefini
   return Math.min(upgrade.maxLevel, currentLevel)
 }
 
-const resolveRankingLevel = (
-  row: TokenRecommendationRow,
-  granularity: number,
-  upgradesById: Map<TokenId, TokenUpgradeDefinition>,
-) => {
-  const upgrade = upgradesById.get(row.id)
-  if (!upgrade || upgrade.group !== "output" || granularity <= 1 || row.currentLevel > 1000) {
-    return row.currentLevel
-  }
-  return Math.floor(row.currentLevel / granularity) * granularity
-}
-
-const compareRecommendationRows = (
-  left: TokenRecommendationRow,
-  right: TokenRecommendationRow,
-  granularity: number,
-  upgradesById: Map<TokenId, TokenUpgradeDefinition>,
-) => {
+const compareRecommendationRows = (left: TokenRecommendationRow, right: TokenRecommendationRow) => {
   if (right.score !== left.score) return right.score - left.score
-  const leftRankingLevel = resolveRankingLevel(left, granularity, upgradesById)
-  const rightRankingLevel = resolveRankingLevel(right, granularity, upgradesById)
-  if (leftRankingLevel !== rightRankingLevel) return leftRankingLevel - rightRankingLevel
+  if (left.bucketIndex !== right.bucketIndex) return left.bucketIndex - right.bucketIndex
   return left.id.localeCompare(right.id)
 }
 
-const insertRankedRecommendation = (
-  rows: TokenRecommendationRow[],
-  nextRow: TokenRecommendationRow,
-  granularity: number,
-  upgradesById: Map<TokenId, TokenUpgradeDefinition>,
-) => {
-  let insertAt = rows.findIndex((row) => compareRecommendationRows(nextRow, row, granularity, upgradesById) < 0)
+const insertRankedRecommendation = (rows: TokenRecommendationRow[], nextRow: TokenRecommendationRow) => {
+  let insertAt = rows.findIndex((row) => compareRecommendationRows(nextRow, row) < 0)
   if (insertAt < 0) insertAt = rows.length
 
   rows.splice(insertAt, 0, nextRow)
   if (rows.length > 8) rows.length = 8
 }
 
-const resolveNextLevel = (upgrade: TokenUpgradeDefinition, currentLevel: number, granularity: number) => {
-  if (upgrade.group !== "output") return Math.min(upgrade.maxLevel, currentLevel + 1)
-  if (currentLevel >= 1000) return Math.min(upgrade.maxLevel, currentLevel + 1)
-  const nextBreakPoint = Math.ceil((currentLevel + 1) / granularity) * granularity
-  return Math.min(upgrade.maxLevel, nextBreakPoint)
+const COST_EPSILON = 1e-6
+
+// Levels are grouped into fixed buckets of `budget` accumulated tokens; budget <= 0 means single levels.
+const resolveBucket = (
+  data: TokenLoadedData,
+  upgrade: TokenUpgradeDefinition,
+  currentLevel: number,
+  budget: number,
+) => {
+  const firstLevel = currentLevel + 1
+  if (budget <= 0) return { bucketIndex: firstLevel, blockStartLevel: currentLevel, nextLevel: firstLevel }
+
+  const bucketIndex = Math.max(1, Math.ceil(getAccumulatedCost(data, upgrade, firstLevel) / budget - COST_EPSILON))
+  const upperCost = bucketIndex * budget + COST_EPSILON
+  const lowerCost = (bucketIndex - 1) * budget + COST_EPSILON
+
+  let low = firstLevel
+  let high = upgrade.maxLevel
+  while (low < high) {
+    const mid = Math.ceil((low + high) / 2)
+    if (getAccumulatedCost(data, upgrade, mid) <= upperCost) low = mid
+    else high = mid - 1
+  }
+  const nextLevel = low
+
+  let start = 1
+  let end = firstLevel
+  while (start < end) {
+    const mid = Math.floor((start + end) / 2)
+    if (getAccumulatedCost(data, upgrade, mid) > lowerCost) end = mid
+    else start = mid + 1
+  }
+
+  return { bucketIndex, blockStartLevel: start - 1, nextLevel }
 }
 
 const resolveSuppliesTimeMultiplier = (input: TokenInputState) =>
@@ -135,11 +113,9 @@ const buildBaseRecommendation = (
   upgrade: TokenUpgradeDefinition,
   currentLevel: number,
   blend: number,
-  granularity: number,
+  tokensPerStep: number,
 ): TokenRecommendationRow => {
-  const isChunkedOutput = upgrade.group === "output" && granularity > 1 && currentLevel < 1000
-  const blockStartLevel = isChunkedOutput ? Math.floor(currentLevel / granularity) * granularity : currentLevel
-  const nextLevel = resolveNextLevel(upgrade, currentLevel, granularity)
+  const { bucketIndex, blockStartLevel, nextLevel } = resolveBucket(data, upgrade, currentLevel, tokensPerStep)
   const valueScale = isSuppliesScaledUpgrade(upgrade) ? resolveSuppliesTimeMultiplier(input) : 1
 
   let levelCount = 0
@@ -168,6 +144,7 @@ const buildBaseRecommendation = (
     nextLevel,
     cost: remainingCost,
     score: blendedPerCost * valueScale,
+    bucketIndex,
   }
 }
 
@@ -180,7 +157,7 @@ export const calculateTokenRecommendations = (
 } => {
   if (!data) return { rows: [], best: null }
 
-  const granularity = Math.max(1, Math.floor(parseNumberish(input.granularity)))
+  const tokensPerStep = Math.max(0, parseNumberish(input.tokensPerStep))
 
   const rows = data.upgrades.flatMap((upgrade) => {
     const enabled = isUpgradeEnabled(upgrade.id, input.enabled)
@@ -189,7 +166,7 @@ export const calculateTokenRecommendations = (
 
     if (!enabled || !unlocked || currentLevel >= upgrade.maxLevel) return []
 
-    return [buildBaseRecommendation(input, data, upgrade, currentLevel, input.blendPercent, granularity)]
+    return [buildBaseRecommendation(input, data, upgrade, currentLevel, input.blendPercent, tokensPerStep)]
   })
 
   const upgradesById = new Map(data.upgrades.map((upgrade) => [upgrade.id, upgrade]))
@@ -197,7 +174,7 @@ export const calculateTokenRecommendations = (
   const ranked = rows
     .filter((row) => row.nextLevel !== null)
     .slice()
-    .sort((left, right) => compareRecommendationRows(left, right, granularity, upgradesById))
+    .sort(compareRecommendationRows)
     .slice(0, 8)
 
   if (ranked.length === 0) return { rows: [], best: null }
@@ -209,7 +186,7 @@ export const calculateTokenRecommendations = (
     if (!upgrade || row.nextLevel === null) continue
 
     while (row.nextLevel < upgrade.maxLevel) {
-      const successor = buildBaseRecommendation(input, data, upgrade, row.nextLevel, input.blendPercent, granularity)
+      const successor = buildBaseRecommendation(input, data, upgrade, row.nextLevel, input.blendPercent, tokensPerStep)
       if (successor.nextLevel === null) break
 
       const lastScore = ranked[ranked.length - 1].score
@@ -221,7 +198,7 @@ export const calculateTokenRecommendations = (
         continue
       }
 
-      insertRankedRecommendation(ranked, successor, granularity, upgradesById)
+      insertRankedRecommendation(ranked, successor)
       break
     }
   }
@@ -241,10 +218,7 @@ export const calculateTotalTokensSpent = (input: TokenInputState, data: TokenLoa
     const currentLevel = resolveCurrentLevel(input, upgrade)
     if (currentLevel <= 0) continue
 
-    for (let level = 1; level <= currentLevel; level += 1) {
-      const levelRow = getLevelRow(data, upgrade, level)
-      totalSpent += Math.max(0, levelRow.cost)
-    }
+    totalSpent += getAccumulatedCost(data, upgrade, currentLevel)
   }
 
   return totalSpent

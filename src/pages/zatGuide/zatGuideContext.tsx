@@ -3,6 +3,7 @@ import { createSyncedSignal } from "../../lib/persistedSignal"
 import { LargeNumber } from "../../lib/largeNumber"
 import { useZatData, ZatGuideEntry } from "../../lib/zatContext"
 import type { GuideNodeView, GuideRunType } from "./zatGuideTypes"
+import { parseNumberish } from "../../lib/parseNumber"
 
 const runOptions: { value: GuideRunType; label: string }[] = [
   { value: "se", label: "SE Push" },
@@ -10,12 +11,6 @@ const runOptions: { value: GuideRunType; label: string }[] = [
   { value: "jrun", label: "Juno" },
   { value: "crun", label: "Cash" },
 ]
-
-const parseNumberish = (value: string) => {
-  const parsed = Number(value)
-  if (!Number.isFinite(parsed)) return 0
-  return parsed
-}
 
 type ZatGuideContextValue = {
   cycles: () => string

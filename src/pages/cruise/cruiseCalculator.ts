@@ -1,4 +1,5 @@
 import { getBuildScore } from "./cruiseScore"
+import { clamp } from "../../lib/mathUtils"
 import {
   CRUISE_NODE_DEFINITIONS,
   CruiseNodeDefinition,
@@ -145,10 +146,6 @@ export const normalizeCruiseNodeLevels = (levels: CruiseNodeLevels): CruiseNodeL
   }
 
   return normalized
-}
-
-const clamp = (value: number, min: number, max: number) => {
-  return Math.min(max, Math.max(min, value))
 }
 
 const sanitizeNumber = (value: number, fallback = 0) => {

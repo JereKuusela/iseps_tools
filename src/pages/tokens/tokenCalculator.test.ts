@@ -17,11 +17,35 @@ const baseInput: TokenInputState = {
     alpha: "1000",
   },
   blendPercent: 0.5,
-  granularity: "1",
+  tokensPerStep: "0",
   onlineHoursPerDay: "0",
 }
 
-const testData: TokenLoadedData = {
+// Mirrors the generated CSV: one row per level with running accumulated cost; unspecified rows have zero value.
+const withFullLevelRows = (data: TokenLoadedData): TokenLoadedData => {
+  const rowByKey = new Map(data.rowByKey)
+  for (const upgrade of data.upgrades) {
+    let accumulatedCost = 0
+    for (let level = 1; level <= upgrade.maxLevel; level += 1) {
+      const key = `${upgrade.id}:${level}`
+      const existing = rowByKey.get(key)
+      const cost = existing?.cost ?? upgrade.costAnchors[0].cost
+      accumulatedCost += cost
+      rowByKey.set(key, {
+        upgradeId: upgrade.id,
+        level,
+        shortTerm: 0,
+        longTerm: 0,
+        ...existing,
+        cost,
+        accumulatedCost,
+      })
+    }
+  }
+  return { upgrades: data.upgrades, rowByKey }
+}
+
+const testData: TokenLoadedData = withFullLevelRows({
   upgrades: [
     {
       id: "bbbot.duration",
@@ -61,6 +85,7 @@ const testData: TokenLoadedData = {
         upgradeId: "bbbot.duration",
         level: 1,
         cost: 10,
+        accumulatedCost: 10,
         shortTerm: 300000,
         longTerm: 300000,
       },
@@ -71,6 +96,7 @@ const testData: TokenLoadedData = {
         upgradeId: "bbbot.duration",
         level: 2,
         cost: 10,
+        accumulatedCost: 20,
         shortTerm: 250000,
         longTerm: 250000,
       },
@@ -81,6 +107,7 @@ const testData: TokenLoadedData = {
         upgradeId: "bbbot.duration",
         level: 3,
         cost: 10,
+        accumulatedCost: 30,
         shortTerm: 50000,
         longTerm: 50000,
       },
@@ -91,6 +118,7 @@ const testData: TokenLoadedData = {
         upgradeId: "bbbot.tokenBonus",
         level: 1,
         cost: 10,
+        accumulatedCost: 10,
         shortTerm: 100000,
         longTerm: 100000,
       },
@@ -101,6 +129,7 @@ const testData: TokenLoadedData = {
         upgradeId: "output.alpha",
         level: 1001,
         cost: 2000,
+        accumulatedCost: 3000,
         shortTerm: 1000,
         longTerm: 1000,
       },
@@ -111,6 +140,7 @@ const testData: TokenLoadedData = {
         upgradeId: "output.alpha",
         level: 1050,
         cost: 140,
+        accumulatedCost: 4000,
         shortTerm: 14286,
         longTerm: 14286,
       },
@@ -121,6 +151,7 @@ const testData: TokenLoadedData = {
         upgradeId: "output.alpha",
         level: 1100,
         cost: 50,
+        accumulatedCost: 4500,
         shortTerm: 2000,
         longTerm: 2000,
       },
@@ -131,12 +162,13 @@ const testData: TokenLoadedData = {
         upgradeId: "supplies.alpha",
         level: 1,
         cost: 10,
+        accumulatedCost: 10,
         shortTerm: 50000,
         longTerm: 50000,
       },
     ],
   ]),
-}
+})
 
 describe("calculateTokenRecommendations", () => {
   it("allows non-output recommendations when values are competitive", () => {
@@ -185,6 +217,7 @@ describe("calculateTokenRecommendations", () => {
             upgradeId: "output.cash",
             level: 51,
             cost: 1,
+            accumulatedCost: 51,
             shortTerm: 100000,
             longTerm: 100000,
           },
@@ -195,6 +228,7 @@ describe("calculateTokenRecommendations", () => {
             upgradeId: "output.alpha",
             level: 51,
             cost: 1,
+            accumulatedCost: 51,
             shortTerm: 100000,
             longTerm: 100000,
           },
@@ -205,6 +239,7 @@ describe("calculateTokenRecommendations", () => {
             upgradeId: "bbbot.duration",
             level: 1,
             cost: 10,
+            accumulatedCost: 10,
             shortTerm: 999999,
             longTerm: 999999,
           },
@@ -276,6 +311,7 @@ describe("calculateTokenRecommendations", () => {
             upgradeId: "supplies.tokenBonus",
             level: 1,
             cost: 10,
+            accumulatedCost: 10,
             shortTerm: 100000,
             longTerm: 100000,
           },
@@ -301,22 +337,80 @@ describe("calculateTokenRecommendations", () => {
     expect(result.rows[0]?.score).toBeGreaterThan(result.rows[1]?.score ?? 0)
   })
 
-  it("merges later output blocks into the original recommendation", () => {
-    const result = calculateTokenRecommendations(
-      {
-        ...baseInput,
-        granularity: "50",
-      },
-      testData,
-    )
+  it("groups levels into fixed token-cost buckets", () => {
+    const input: TokenInputState = {
+      ...baseInput,
+      levels: { ...baseInput.levels, "supplies.alpha": "0" },
+      enabled: { "supplies.alpha": true },
+      outputLevelsByResource: {},
+      tokensPerStep: "25",
+    }
+    const data = withFullLevelRows({
+      upgrades: [
+        {
+          id: "supplies.alpha",
+          label: "Alpha Supplies",
+          group: "supplies",
+          resource: "alpha",
+          maxLevel: 10,
+          costAnchors: [{ level: 1, cost: 10, step: 0 }],
+        },
+      ],
+      rowByKey: new Map(),
+    })
 
-    const outputRows = result.rows.filter((row) => row.id === "output.alpha")
-    const outputRow = outputRows[0]
+    // Accumulated cost 10, 20, 30...: bucket 1 ends at level 2 (20 <= 25).
+    const first = calculateTokenRecommendations(input, data).best
+    expect(first?.nextLevel).toBe(2)
+    expect(first?.cost).toBe(20)
 
-    expect(outputRows).toHaveLength(1)
-    expect(outputRow?.currentLevel).toBe(1000)
-    expect(outputRow?.nextLevel ?? 0).toBe(1001)
-    expect(outputRow?.cost ?? 0).toBe(2000)
+    // Inside the same bucket the target stays fixed.
+    const second = calculateTokenRecommendations({ ...input, levels: { "supplies.alpha": "1" } }, data).best
+    expect(second?.nextLevel).toBe(2)
+    expect(second?.cost).toBe(10)
+
+    const third = calculateTokenRecommendations({ ...input, levels: { "supplies.alpha": "2" } }, data).best
+    expect(third?.nextLevel).toBe(5)
+  })
+
+  it("gives a level costing more than the budget its own bucket", () => {
+    const input: TokenInputState = {
+      ...baseInput,
+      levels: { "supplies.alpha": "0" },
+      enabled: { "supplies.alpha": true },
+      outputLevelsByResource: {},
+      tokensPerStep: "5",
+    }
+    const data = withFullLevelRows({
+      upgrades: [
+        {
+          id: "supplies.alpha",
+          label: "Alpha Supplies",
+          group: "supplies",
+          resource: "alpha",
+          maxLevel: 10,
+          costAnchors: [{ level: 1, cost: 10, step: 0 }],
+        },
+      ],
+      rowByKey: new Map(),
+    })
+
+    expect(calculateTokenRecommendations(input, data).best?.nextLevel).toBe(1)
+  })
+
+  it("buckets output levels above 1000 as well", () => {
+    const input: TokenInputState = {
+      ...baseInput,
+      levels: {},
+      enabled: {},
+      outputLevelsByResource: { alpha: "1000" },
+      tokensPerStep: "5000",
+    }
+    const result = calculateTokenRecommendations(input, testData)
+    const row = result.rows.find((candidate) => candidate.id === "output.alpha")
+
+    expect(row?.currentLevel).toBe(1000)
+    expect((row?.nextLevel ?? 0) > 1001).toBe(true)
   })
 
   it("merges sequential top recommendations but keeps first-step value", () => {

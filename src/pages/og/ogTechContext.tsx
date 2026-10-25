@@ -15,12 +15,7 @@ import {
   type ZatMode,
 } from "../../lib/zatCalculator"
 import type { ExponentGainEntry, GainUnit, TechCardRow, TopTechEntry } from "./ogTypes"
-
-const parseNumberish = (value: string) => {
-  const parsed = Number(value)
-  if (!Number.isFinite(parsed)) return 0
-  return parsed
-}
+import { parseNumberish } from "../../lib/parseNumber"
 
 const toRatePerSecond = (value: LargeNumber, unit: GainUnit) => {
   if (unit === "min") return value.divide(60)

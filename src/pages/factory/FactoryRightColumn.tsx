@@ -1,12 +1,7 @@
 import { Index, Show, createMemo } from "solid-js"
 import { formatCompactMultiplier, formatPercentFromRatio } from "../../lib/numberFormat"
 import { useFactoryContext } from "./factoryContext"
-
-const parseNumberish = (value: string) => {
-  const parsed = Number(value)
-  if (!Number.isFinite(parsed)) return 0
-  return parsed
-}
+import { parseNumberish } from "../../lib/parseNumber"
 
 export const FactoryRightColumn = () => {
   const factory = useFactoryContext()
