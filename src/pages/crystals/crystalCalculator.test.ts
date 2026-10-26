@@ -71,7 +71,7 @@ describe("calculateCrystalRecommendations", () => {
   it("chunks a target and skips locked upgrades", () => {
     const result = calculateCrystalRecommendations(state(), data, 1)
     expect(result.step?.id).toBe("s1")
-    expect(result.actions[0]).toMatchObject({ id: "o.a", currentLevel: 0, targetLevel: 10 })
+    expect(result.actions[0]).toMatchObject({ id: "o.a", currentLevel: 0, targetLevel: 100 })
   })
 
   it("interleaves concurrent targets by lowest progress", () => {
@@ -91,6 +91,27 @@ describe("calculateCrystalRecommendations", () => {
     }
   })
 
+  it("ranks a prerequisite by the progress of the upgrade that needs it", () => {
+    const pending: CrystalData = {
+      upgrades: [
+        upgrade("o.p", { maxLevel: 10 }),
+        upgrade("c.p", { requires: { upgrades: [{ id: "o.p", level: 5 }] } }),
+        upgrade("x"),
+      ],
+      steps: [
+        {
+          id: "s",
+          targets: [
+            { id: "c.p", level: 100 },
+            { id: "x", level: 100 },
+          ],
+        },
+      ],
+    }
+    const result = calculateCrystalRecommendations(state({ levels: { "o.p": 3 } }), pending, 1)
+    expect(result.actions[0].id).toBe("o.p")
+  })
+
   it("respects SE windows and skips locked steps", () => {
     const result = calculateCrystalRecommendations(state({ se: 10, levels: {} }), data, 1)
     expect(result.step?.id).toBe("s3")
@@ -98,7 +119,7 @@ describe("calculateCrystalRecommendations", () => {
 
   it("buys prerequisites before the target", () => {
     const result = calculateCrystalRecommendations(state({ se: 10 }), data, 1)
-    expect(result.actions[0]).toMatchObject({ id: "o.a", targetLevel: 1 })
+    expect(result.actions[0]).toMatchObject({ id: "o.a", targetLevel: 5 })
     const done = calculateCrystalRecommendations(state({ se: 10, levels: { "o.a": 5 } }), data, 1)
     expect(done.actions[0].id).toBe("c.a")
   })

@@ -21,11 +21,14 @@ export const ERM_UPGRADE_IDS = [
 // Fraction of a target's span bought per recommended action.
 const CHUNK_FRACTION = 0.1
 const MAX_PREREQUISITE_DEPTH = 5
+const MAX_SIMULATED_ACTIONS = 1000
 
 type Candidate = {
   upgrade: CrystalUpgrade
   goal: number
   base: number
+  // Set for prerequisites: they rank by the progress of the upgrade that needs them.
+  rankRatio?: number
 }
 
 export const levelOf = (levels: CrystalLevels, id: string) => levels[id] ?? 0
@@ -82,20 +85,33 @@ const resolveCandidate = (
   upgradeById: Map<string, CrystalUpgrade>,
   previousGoals: Map<string, number>,
   depth = 0,
+  rankRatio?: number,
 ): Candidate | null => {
   const upgrade = upgradeById.get(id)
   if (!upgrade || depth > MAX_PREREQUISITE_DEPTH || !isUpgradeUnlocked(upgrade, state)) return null
 
+  const goal = resolveGoal(upgrade, level)
+  const current = levelOf(state.levels, id)
+  if (current >= goal) return null
+
+  const candidate: Candidate = { upgrade, goal, base: Math.min(previousGoals.get(id) ?? 0, current), rankRatio }
+  const ownRatio = rankRatio ?? progressRatio(candidate, current)
+
   for (const prerequisite of upgrade.requires.upgrades) {
     if (levelOf(state.levels, prerequisite.id) < prerequisite.level) {
-      return resolveCandidate(prerequisite.id, prerequisite.level, state, upgradeById, previousGoals, depth + 1)
+      return resolveCandidate(
+        prerequisite.id,
+        prerequisite.level,
+        state,
+        upgradeById,
+        previousGoals,
+        depth + 1,
+        ownRatio,
+      )
     }
   }
 
-  const goal = resolveGoal(upgrade, level)
-  if (levelOf(state.levels, id) >= goal) return null
-
-  return { upgrade, goal, base: Math.min(previousGoals.get(id) ?? 0, levelOf(state.levels, id)) }
+  return candidate
 }
 
 const chunkSize = (candidate: Candidate) => Math.max(1, Math.ceil((candidate.goal - candidate.base) * CHUNK_FRACTION))
@@ -158,7 +174,7 @@ const pickNextAction = (state: CrystalInputState, data: CrystalData) => {
 
   let best: { candidate: Candidate; ratio: number } | null = null
   for (const candidate of found.candidates) {
-    const ratio = progressRatio(candidate, levelOf(state.levels, candidate.upgrade.id))
+    const ratio = candidate.rankRatio ?? progressRatio(candidate, levelOf(state.levels, candidate.upgrade.id))
     if (!best || ratio < best.ratio) best = { candidate, ratio }
   }
 
@@ -178,14 +194,22 @@ export const calculateCrystalRecommendations = (
 
   const actions: CrystalAction[] = []
   let levels = state.levels
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < MAX_SIMULATED_ACTIONS && actions.length <= count; i++) {
     const next = pickNextAction({ ...state, levels }, data)
     if (!next) break
-    actions.push(next.action)
+
+    // Consecutive chunks of the same upgrade are shown as one row.
+    const last = actions[actions.length - 1]
+    if (last && last.id === next.action.id) {
+      last.targetLevel = next.action.targetLevel
+      last.cost = addCost(last.cost, next.action.cost)
+    } else {
+      actions.push({ ...next.action })
+    }
     levels = { ...levels, [next.action.id]: next.action.targetLevel }
   }
 
-  return { actions, step: first?.step ?? null, stepIndex: first?.index ?? -1 }
+  return { actions: actions.slice(0, count), step: first?.step ?? null, stepIndex: first?.index ?? -1 }
 }
 
 // Levels after buying the next `count` actions, or the rest of the current step when count is "step".
