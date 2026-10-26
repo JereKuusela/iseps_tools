@@ -82,10 +82,22 @@ export const OgTechLeftColumn = () => {
     if (og.seLevel() !== resolved) og.setSeLevel(resolved)
   })
 
-  createEffect(() => {
-    const resolved = resolvedPlayerLevel()
-    if (og.playerLevel() !== resolved) og.setPlayerLevel(resolved)
-  })
+  // Player level is shared with the crystal page, so only the dropdown's minimal change is written.
+  const handlePlayerLevelSelect = (next: string) => {
+    const selected = Math.floor(parseNumberish(next))
+    const resolved = Math.floor(parseNumberish(resolvedPlayerLevel()))
+    if (selected === resolved) return
+    if (selected > resolved) {
+      og.setPlayerLevel(String(selected))
+      return
+    }
+
+    const nextBreakpoint = playerLevelOptions()
+      .map((option) => Math.floor(parseNumberish(option.value)))
+      .sort((a, b) => a - b)
+      .find((level) => level > selected)
+    og.setPlayerLevel(String(nextBreakpoint === undefined ? selected : nextBreakpoint - 1))
+  }
 
   createEffect(() => {
     const resolved = resolvedDcmLevel()
@@ -192,7 +204,7 @@ export const OgTechLeftColumn = () => {
               <SelectField
                 label="Player level"
                 value={resolvedPlayerLevel()}
-                onChange={og.setPlayerLevel}
+                onChange={handlePlayerLevelSelect}
                 options={playerLevelOptions()}
               />
               <SelectField

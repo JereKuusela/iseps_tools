@@ -3,7 +3,8 @@ import { calculateChestsMultiplier } from "../../lib/boosts"
 import { LargeNumber } from "../../lib/largeNumber"
 import { formatPercentFromRatio } from "../../lib/numberFormat"
 import { createSyncedSignal } from "../../lib/persistedSignal"
-import { getTokenKey, TOKEN_SHARED_KEYS } from "../../lib/tokenSharedInputs"
+import { getCrystalKey } from "../../lib/crystalSharedInputs"
+import { getTokenKey, SHARED_PLAYER_LEVEL_KEY, TOKEN_SHARED_KEYS } from "../../lib/tokenSharedInputs"
 import { useZatData, type JunoExponentType } from "../../lib/zatContext"
 import {
   calculateZatCostForCycle,
@@ -130,6 +131,12 @@ type OgTechContextValue = {
 
 const OgTechContext = createContext<OgTechContextValue>()
 
+// Crystal upgrades are stored as numeric levels; one-timers are 0/1.
+const createCrystalFlagSignal = (upgradeId: string): [() => boolean, (checked: boolean) => boolean] => {
+  const [level, setLevel] = createSyncedSignal(getCrystalKey(upgradeId), "0")
+  return [() => level() === "1", (checked) => (setLevel(checked ? "1" : "0"), checked)]
+}
+
 export const OgTechProvider = (props: ParentProps) => {
   const data = useZatData()
   const [techCostData] = createResource(loadTechCostData)
@@ -143,20 +150,20 @@ export const OgTechProvider = (props: ParentProps) => {
   const [statusAutoIncrement, setStatusAutoIncrement] = createSyncedSignal("zat.og.statusAutoIncrement", true)
   const [mode, setMode] = createSyncedSignal<ZatMode>("zat.og.mode", "juno")
 
-  const [junoOutput, setJunoOutput] = createSyncedSignal("zat.og.junoOutput", "0")
-  const [junoBundle, setJunoBundle] = createSyncedSignal("zat.og.bundle.juno", false)
-  const [ixionJunoBundle, setIxionJunoBundle] = createSyncedSignal("zat.og.bundle.ixion", false)
-  const [junoKappaBundle, setJunoKappaBundle] = createSyncedSignal("zat.og.bundle.kappa", false)
+  const [junoOutput, setJunoOutput] = createSyncedSignal(getCrystalKey("output.juno"), "0")
+  const [junoBundle, setJunoBundle] = createCrystalFlagSignal("bundle.juno")
+  const [ixionJunoBundle, setIxionJunoBundle] = createCrystalFlagSignal("bundle.ixionJuno")
+  const [junoKappaBundle, setJunoKappaBundle] = createCrystalFlagSignal("bundle.junoKappa")
   const [tokens, setTokens] = createSyncedSignal(getTokenKey("output.juno"), "0")
 
   const [sharesPercent, setSharesPercent] = createSyncedSignal("zat.guide.shares", "0")
 
   const [extraExponent, setExtraExponent] = createSyncedSignal("zat.og.extraExponent", "0.001")
   const [seLevel, setSeLevel] = createSyncedSignal("zat.og.seLevel", "0")
-  const [playerLevel, setPlayerLevel] = createSyncedSignal("zat.og.playerLevel", "0")
+  const [playerLevel, setPlayerLevel] = createSyncedSignal(SHARED_PLAYER_LEVEL_KEY, "0")
   const [dcmLevel, setDcmLevel] = createSyncedSignal("zat.og.dcmLevel", "0")
   const [researchLevel, setResearchLevel] = createSyncedSignal("zat.og.researchLevel", "0")
-  const [meltdownBundle, setMeltdownBundle] = createSyncedSignal("zat.og.meltdown", false)
+  const [meltdownBundle, setMeltdownBundle] = createCrystalFlagSignal("bundle.meltdown")
   const [quantumAddon0, setQuantumAddon0] = createSyncedSignal("zat.og.qa0", false)
 
   const [techLevels, setTechLevels] = createSyncedSignal<number[]>(

@@ -5,6 +5,9 @@ export const TOKEN_SHARED_KEYS = {
   onlineHoursPerDay: "token.onlineHoursPerDay",
 } as const
 
+export const SHARED_SE_KEY = "shared.se"
+export const SHARED_PLAYER_LEVEL_KEY = "shared.playerLevel"
+
 const LEGACY_KEYS = {
   scAlphaSuppliesLevel: "sc.alphaSuppliesLevel",
   scOnlineHoursPerDay: "sc.onlineHoursPerDay",
@@ -119,6 +122,9 @@ export const migrateTokenSharedInputs = () => {
     [LEGACY_KEYS.scOnlineHoursPerDay, LEGACY_KEYS.premiumAverageHoursPerDay],
     "10",
   )
+
+  migrateStringKey(SHARED_SE_KEY, ["sc.currentSe", "perk.guide.se"], "1")
+  migrateStringKey(SHARED_PLAYER_LEVEL_KEY, ["zat.og.playerLevel"], "0")
 
   migrateOutputLevelMap()
   migrateUpgradeLevelMap()

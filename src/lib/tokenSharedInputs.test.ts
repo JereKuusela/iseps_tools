@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest"
-import { getTokenKey, migrateTokenSharedInputs, TOKEN_SHARED_KEYS } from "./tokenSharedInputs"
+import { getTokenKey, migrateTokenSharedInputs, SHARED_PLAYER_LEVEL_KEY, SHARED_SE_KEY, TOKEN_SHARED_KEYS } from "./tokenSharedInputs"
 
 const createMockLocalStorage = () => {
   const store = new Map<string, string>()
@@ -60,6 +60,23 @@ describe("migrateTokenSharedInputs", () => {
     expect(localStorage.getItem(getTokenKey("supplies.alpha"))).toBe("8")
     expect(localStorage.getItem(getTokenKey("supplies.tokenBonus"))).toBe("2")
     expect(localStorage.getItem(getTokenKey("bbbot.duration"))).toBe("30")
+  })
+
+  it("migrates shared SE preferring sc over perk guide", () => {
+    localStorage.setItem("sc.currentSe", "110")
+    localStorage.setItem("perk.guide.se", "50")
+
+    migrateTokenSharedInputs()
+
+    expect(localStorage.getItem(SHARED_SE_KEY)).toBe("110")
+  })
+
+  it("migrates shared player level from the OG page", () => {
+    localStorage.setItem("zat.og.playerLevel", "120")
+
+    migrateTokenSharedInputs()
+
+    expect(localStorage.getItem(SHARED_PLAYER_LEVEL_KEY)).toBe("120")
   })
 
   it("does not overwrite an existing canonical flat key", () => {

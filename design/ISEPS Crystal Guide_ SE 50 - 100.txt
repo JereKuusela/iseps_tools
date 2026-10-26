@@ -1,0 +1,383 @@
+﻿ISEPS Crystal Guide: SE 50 - 100
+
+
+If you’re not at SE 50 yet, please see the Octocube Discord and follow the crystal guides in the pins in the ISEPS chats there.
+
+
+Table of Contents:
+
+
+Pre-SE 50 Catch-up
+SE 50 - 100 Upgrade Tables
+SE 55
+SE 65
+SE 75
+SE 85
+SE 95
+Upgrade Tables Explanation
+Example
+Additional Notes
+Token Booster
+Acronyms
+
+
+
+
+Pre-SE 50 Catch-up
+
+
+If you’re missing any of these, buy them immediately before anything else (in this order): 
+
+
+1. Corvus Bundle
+2. Ultima Bundle
+3. Infinity Multi Bundle
+
+
+After those, buy anything missing from this list before proceeding:
+
+
+* Alpha Bundle
+* Egetuarium Bundle
+* All Particles Bundle
+* City of Tomorrow Bundle
+* Laboratory Bundle
+* Tiberius Bundle
+* Singularity Bundle
+* Simulation Bundle
+* Alpha Output at 100
+* All Particles Output at 20
+* Data Cube Gains at 10
+* Bulk Artifacts at 3
+* G-Corp menu: G-Point Booster at x16
+
+
+SE 50 - 100 Upgrade Tables
+
+
+See explanation below the tables for detailed instructions on using these tables. 
+
+
+Click the links in the headings for definitions of acronyms used.
+SE 55
+Juno Output
+	Bulk EMs
+	ERM
+	Infinity Amp
+	Infinity Max Lv Special
+	Juno Bundle
+	IJ Duo Bundle
+	5
+	0
+	0
+	0
+	0
+	No
+	No
+	50
+	8
+	10
+	0
+	0
+	Yes
+	No
+	100
+	16
+	40
+	5
+	5
+	Yes
+	Yes
+	125
+	20
+	50
+	45
+	5
+	Yes
+	Yes
+	SE 65
+Juno Output
+	Bulk EMs
+	ERM
+	Infinity Amp
+	Infinity Max Lv Special
+	Juno Bundle
+	IJ Duo Bundle
+	0
+	3
+	0
+	0
+	0
+	No
+	No
+	50
+	12
+	5
+	0
+	0
+	Yes
+	No
+	100
+	20
+	35
+	0
+	5
+	Yes
+	Yes
+	140
+	27
+	50
+	50
+	5
+	Yes
+	Yes
+	SE 75
+Juno Output
+	Bulk EMs
+	ERM
+	Infinity Amp
+	Infinity Max Lv Special
+	Juno Bundle
+	IJ Duo Bundle
+	0
+	3
+	0
+	0
+	0
+	No
+	No
+	50
+	12
+	0
+	0
+	0
+	Yes
+	No
+	100
+	21
+	5
+	0
+	0
+	Yes
+	Yes
+	130
+	26
+	20
+	0
+	5
+	Yes
+	Yes
+	200
+	33
+	50
+	10
+	5
+	Yes
+	Yes
+	250
+	40
+	50
+	50
+	5
+	Yes
+	Yes
+	300
+	45
+	50
+	100
+	5
+	Yes
+	Yes
+	SE 85
+Juno Output
+	Bulk EMs
+	ERM
+	Infinity Amp
+	Infinity Max Lv Special
+	Juno Bundle
+	IJ Duo Bundle
+	50
+	9
+	0
+	0
+	0
+	Yes
+	No
+	100
+	17
+	0
+	0
+	0
+	Yes
+	Yes
+	200
+	29
+	20
+	0
+	5
+	Yes
+	Yes
+	275
+	36
+	45
+	10
+	5
+	Yes
+	Yes
+	350
+	43
+	50
+	55
+	5
+	Yes
+	Yes
+	400
+	47
+	50
+	90
+	5
+	Yes
+	Yes
+	425
+	50
+	50
+	100
+	5
+	Yes
+	Yes
+	SE 95
+Juno Output
+	Bulk EMs
+	ERM
+	Infinity Amp
+	Infinity Max Lv Special
+	Juno Bundle
+	IJ Duo Bundle
+	100
+	14
+	0
+	0
+	0
+	Yes
+	Yes
+	200
+	25
+	10
+	0
+	0
+	Yes
+	Yes
+	250
+	30
+	20
+	0
+	5
+	Yes
+	Yes
+	350
+	39
+	45
+	5
+	5
+	Yes
+	Yes
+	450
+	45
+	50
+	55
+	5
+	Yes
+	Yes
+	525
+	50
+	50
+	90
+	5
+	Yes
+	Yes
+	
+
+Upgrade Tables Explanation
+
+
+The tables above indicate equivalent levels in different upgrades (for value per crystal spent). These rows cover from 30K to 300K crystals spent across a variety of SEs. 
+
+
+To use the tables, first choose the table nearest to your SE, then pick the first row from that table where you don’t meet all of the levels, and then work on meeting those levels.  Since the crystal value is equivalent for each upgrade, there is no precedence for the upgrades, and they should be upgraded "concurrently" to reach the goals in the row you're working on.
+
+
+If you are in between SEs in the chart, you should pick the nearest SE, but with a tendency to go higher (so if SE 70, better to use the SE 75 chart). Once you reach a "threshold SE" to use the next SE table, it is best to move straight to the next SE table.
+
+
+Note that Juno boosts and Bulk EMs get better with progression while everything else listed keeps the same power, so it can be better to get slightly "ahead" for these (especially if you're using a table for an SE lower than your current SE).
+
+
+Don’t worry if you've already "overspent" in one aspect (ERM often has a few levels by SE 50 for example), just focus on the other upgrades in that case. 
+Example
+
+
+If you're SE 65 and have 5 Bulk EMs, 50 Juno Output, and 20:15:15 ERM; you should look at the 2nd row for SE 65 and aim to get 7 more Bulk EMs and the Juno Bundle. After that, work on the 3rd row and level Juno Output to 100, Bulk EMs to 20, ERM to 35:35:35, Infinity Max Lv Special to 5, and IJ Duo Bundle concurrently.
+
+
+An example "plan" for concurrent leveling here for 3rd row of SE 65 is:
+
+
+Juno Output to 60
+ERM to 11:11:11
+Bulk EMs to 14
+Juno Output to 70
+ERM to 17:17:17
+Bulk EMs to 16
+Juno Output to 75
+ERM to 20:20:20
+Infinity Max Lv Special to 5
+Juno Output to 80
+ERM to 23:23:23
+Bulk EMs to 17
+IJ Duo Bundle
+….
+
+
+Players can choose to do more or less different "steps" in their concurrent leveling based on personal preference.
+Additional Notes
+
+
+These 3 upgrades are commonly referred to together as ERM:
+
+
+* Bulk Extractions (unlocks player level 120)
+* Bulk Researches (unlocks player level 130)
+* Bulk DC Milestones (unlocks player level 140)
+
+
+The levels of these upgrades should ideally be equal. The value of ERM in the table represents the target value for each of these 3 upgrades. If some are much higher, then the target value only applies to the ones below the target.  For example, if you’re at 20:5:5 and working on a line with 10 for ERM, your target is 20:10:10.
+
+
+The effect of Juno boosts and Bulk Emblem Milestones (EMs) improve with progression, whereas the other important upgrades stay roughly the same in power.
+
+
+Juno "base" output is reduced by an exponent (less than 1).  This can be increased by OG Tech #0 levels and late-game researches, DCMs, level rewards, etc..  Juno crystal and token upgrades are applied outside of the exponent which is why they are so valuable.  All other boosts to Juno are applied with the exponent, so the effect is reduced.  This includes any All Particle upgrades (including those bought with crystals), Juno output Infinity Multipliers and Infinity Upgrades, G-Corp Companion 35 (and any other companion boosts), Juno SC milestones, Juno ZAT node, etc.  For example, if you boost AP by 100% (x2), and your Juno exponent is 0.1, then the boost you will see to the Juno output is 2^0.1 = x1.072. 
+
+
+All upgrades with multiple levels (except Infinity Max Lv Special) are subject to diminishing returns in that the next level is always slightly weaker than the previous in terms of real percentage boost applied.
+
+
+Anything not listed in this is not worth buying post SE 50 until you finish all of the upgrades listed here.
+
+
+Token Booster
+
+
+You can consider “interrupting” this guide at any point to upgrade/max Token Booster (level 300 Special upgrade).  This is important in the long-term as the Juno output token upgrade becomes important SE 100+, so the sooner you maximize your token output, the better off you’ll be in the long-run.  
+
+
+However, Token Booster provides no immediate boost, so it will stop/slow your progression while you upgrade this.  Given the significant impact of the upgrades in this guide (Bulk EMs, Juno crystal output, ERM, Infinity Amp, etc.), the guide recommendation is to keep upgrading these before upgrading Token Booster (which is listed in the SE 100+ crystal guide).  But it is a judgement call for each player to make when to stop/slow their progress to upgrade Token Booster, so it’s not a bad idea to do this before the SE 50-100 guide is completed.
+
+
+Acronyms
+
+
+SE - Singularity Event
+ERM - Bulk Extractions, Bulk Researches, Bulk DC Milestones (under Special tab)
+EMs - Emblem Milestones
+IJ - Ixion-Juno

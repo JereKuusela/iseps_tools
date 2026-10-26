@@ -59,6 +59,7 @@
   "cruise.panel": "Calculates the most valuable prestige upgrades.",
   "factory.panel": "Calculates the most valuable prestige upgrades.",
   "token.panel": "Calculates the most valuable token upgrades.",
+  "crystal.panel": "Follows the community crystal guide and shows the next crystal purchases based on your levels, SE and player level.",
   "factoryProduction.panel": "Calculates the most valuable produicts.\nShows various output related stats.",
   "og.panel": "Calculates the most valuable tech upgrades.\nTracks progression towards next cycle.\nShows various Juno related stats.",
   "perkGuide.panel": "Shows recommended perks for different SE levels and runs.",

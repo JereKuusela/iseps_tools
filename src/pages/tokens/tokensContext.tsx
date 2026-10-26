@@ -5,28 +5,13 @@ import { calculateTokenRecommendations, calculateTotalTokensSpent } from "./toke
 import { loadTokenData, TOKEN_UPGRADES } from "./tokenData"
 import { OUTPUT_RESOURCES, type TokenLevelMap, type TokenUpgradeDefinition, type TokenId } from "./tokenTypes"
 import { parseNumberish } from "../../lib/parseNumber"
+import { PARTICLE_ORDER, type UnlockedParticle } from "../../lib/particles"
 
 const createDefaultLevelMap = (ids: string[]): TokenLevelMap => {
   const result: TokenLevelMap = {}
   for (const id of ids) result[id] = "0"
   return result
 }
-
-export const PARTICLE_ORDER = [
-  "alpha",
-  "beta",
-  "ceti",
-  "delta",
-  "epsilon",
-  "fenix",
-  "gamma",
-  "helion",
-  "ixion",
-  "juno",
-  "kappa",
-] as const
-
-export type UnlockedParticle = (typeof PARTICLE_ORDER)[number]
 
 const BLEND_STEP_TO_SHORT_TERM_PERCENT = [0, 0.5, 1] as const
 const TOKEN_UPGRADE_IDS = TOKEN_UPGRADES.map((upgrade) => upgrade.id)

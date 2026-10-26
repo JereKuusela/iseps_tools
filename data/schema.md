@@ -249,3 +249,28 @@ Entries for the ZAT guide.
 - `title`: Optional guide title shown when there are multiple guides for the same cycle and run.
 - `nodes`: Array of nodes.
 - `note`: Optional note.
+
+## crystal_upgrades.json
+
+All crystal shop upgrades. The id doubles as the storage key suffix (`crystal.<id>`); every upgrade is stored as a numeric level (one-timers are 0 or 1).
+
+- `id`: `<group>.<name>`.
+- `name`: Display name.
+- `group`: `output`, `cost`, `special` or `oneTimer`.
+- `particle`: Optional. Puts the upgrade in that particle's row of the input table (outputs, costs and single-particle bundles only).
+- `baseCost`: Crystals per level. `null` when unknown.
+- `costStep`: Optional. Extra crystals added per owned level. Default is 0.
+- `maxLevel`: Maximum level.
+- `requires`: Optional.
+  - `particle`: Unlocked particle needed (locks the upgrade).
+  - `se`: SE needed (locks the upgrade).
+  - `playerLevel`: Player level needed (locks the upgrade).
+  - `upgrades`: `{ id, level }` prerequisites. Not a lock; the guide buys these first.
+
+## crystal_guide.json
+
+Ordered list of guide steps. The first step with an unmet, unlocked target is the current step.
+
+- `id`: Unique step id.
+- `minSe`, `maxSe`: Optional SE window where the step applies.
+- `targets`: Array of `[upgradeId, level]`. Level is a number or `"max"`. The id `"erm"` stands for Bulk Extractions, Bulk Researches and Bulk DC Milestones.

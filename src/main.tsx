@@ -4,6 +4,7 @@ import App from "./App"
 import { ROUTES } from "./lib/routes"
 import { ScProvider } from "./lib/scContext"
 import { CreditsPage } from "./pages/CreditsPage"
+import { CrystalsPage } from "./pages/crystals/CrystalsPage"
 import { CruisePage } from "./pages/cruise/CruisePage"
 import { FactoryPage } from "./pages/factory/FactoryPage"
 import { FactoryProductionPage } from "./pages/factoryProduction/FactoryProductionPage"
@@ -16,10 +17,12 @@ import { SettingsPage } from "./pages/SettingsPage"
 import { TokensPage } from "./pages/tokens/TokensPage"
 import { ZatGuidePage } from "./pages/zatGuide/ZatGuidePage"
 import { initCloudSync } from "./lib/cloudSync"
+import { migrateCrystalSharedInputs } from "./lib/crystalSharedInputs"
 import { migrateTokenSharedInputs } from "./lib/tokenSharedInputs"
 import "./index.css"
 
 migrateTokenSharedInputs()
+migrateCrystalSharedInputs()
 initCloudSync()
 
 const HomeRoute = () => (
@@ -43,6 +46,12 @@ const PerkGuideRoute = () => (
 const TokensRoute = () => (
   <App>
     <TokensPage />
+  </App>
+)
+
+const CrystalsRoute = () => (
+  <App>
+    <CrystalsPage />
   </App>
 )
 
@@ -107,6 +116,7 @@ render(
         <Route path={ROUTES.home} component={HomeRoute} />
         <Route path={ROUTES.ogTech} component={OgTechRoute} />
         <Route path={ROUTES.tokens} component={TokensRoute} />
+        <Route path={ROUTES.crystals} component={CrystalsRoute} />
         <Route path={ROUTES.perks} component={PerkGuideRoute} />
         <Route path={ROUTES.cruise} component={CruiseRoute} />
         <Route path={ROUTES.factory} component={FactoryRoute} />

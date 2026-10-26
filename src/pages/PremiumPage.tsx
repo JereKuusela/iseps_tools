@@ -10,6 +10,7 @@ import { clamp } from "../lib/mathUtils"
 import { formatFixed as formatValue } from "../lib/numberFormat"
 import { parseNumberish } from "../lib/parseNumber"
 import { createSyncedSignal } from "../lib/persistedSignal"
+import { getCrystalKey } from "../lib/crystalSharedInputs"
 import { TOKEN_SHARED_KEYS } from "../lib/tokenSharedInputs"
 import type { TooltipKey } from "../lib/tooltips"
 import { useZatData, type PremiumCrystalTokenMethod, type PremiumHaulerLayer } from "../lib/zatContext"
@@ -94,7 +95,7 @@ const NumberSelectField = (props: {
 const CrystalAndTokenTab = () => {
   const data = useZatData()
   const premium = data().premium.crystalToken
-  const [tokenBooster, setTokenBooster] = createSyncedSignal("premium.tokenBooster", "0")
+  const [tokenBooster, setTokenBooster] = createSyncedSignal(getCrystalKey("special.tokenBooster"), "0")
 
   const [supplyBotTokenUpgrade, setSupplyBotTokenUpgrade] = createSyncedSignal("premium.supplyBotTokenUpgrade", "0")
   const [supplyBotCrystalUpgrade, setSupplyBotCrystalUpgrade] = createSyncedSignal(
@@ -401,7 +402,7 @@ const CrystalAndTokenTab = () => {
 const HaulerMineTab = () => {
   const data = useZatData()
   const premium = data().premium.haulerMine
-  const [tokenBooster, setTokenBooster] = createSyncedSignal("premium.tokenBooster", "0")
+  const [tokenBooster, setTokenBooster] = createSyncedSignal(getCrystalKey("special.tokenBooster"), "0")
 
   const [unlockedLayers, setUnlockedLayers] = createSyncedSignal("premium.hauler.unlockedLayers", "11")
   const [layer1TokenIncome, setLayer1TokenIncome] = createSyncedSignal("premium.hauler.layer1TokenIncome", false)

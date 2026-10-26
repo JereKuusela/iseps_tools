@@ -2,7 +2,14 @@ import { For } from "solid-js"
 import { InfoCard } from "../../components/layout/contentBlocks"
 import { DataTable, GRID_CELL_BORDER_CLASS, TableHead } from "../../components/layout/dataTable"
 import { IntegerField } from "../../components/ui/formControls"
-import { PARTICLE_ORDER, useTokensContext } from "./tokensContext"
+import {
+  GRID_LABEL_CELL_CLASS as labelCellClass,
+  GRID_VALUE_CELL_CLASS as valueCellClass,
+  GridEmptyCell,
+  GridNumberInput,
+} from "../../components/ui/GridCellInputs"
+import { PARTICLE_ORDER } from "../../lib/particles"
+import { useTokensContext } from "./tokensContext"
 import type { TokenId } from "./tokenTypes"
 
 const RESOURCE_ORDER = ["cash", ...PARTICLE_ORDER] as const
@@ -29,12 +36,6 @@ type SpecialRow = {
 const toTitle = (value: string) => value.charAt(0).toUpperCase() + value.slice(1)
 
 const borderClass = GRID_CELL_BORDER_CLASS
-const labelCellClass = `${borderClass} px-2 py-1`
-// Outline instead of border color so the highlight is not swallowed by collapsed borders.
-const valueCellClass = `${borderClass} p-0 text-center align-middle focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-brand/40`
-const inputClass =
-  "w-full bg-transparent px-1 py-1 text-center text-xs font-medium text-ink outline-none disabled:cursor-not-allowed disabled:opacity-40 dark:text-white"
-const emptyCellClass = "block px-1 py-1 text-ink/40 dark:text-white/40"
 
 export const TokensLevelInputs = () => {
   const tokens = useTokensContext()
@@ -88,41 +89,31 @@ export const TokensLevelInputs = () => {
     if (group === "output") {
       const unlocked = isOutputUnlocked(resource)
       const outputId = getOutputUpgradeId(resource)
-      if (!outputId) return <span class={emptyCellClass}>-</span>
+      if (!outputId) return <GridEmptyCell />
 
       const maxLevel = upgradeMaxById().get(outputId) ?? 0
 
       return (
-        <input
-          type="number"
+        <GridNumberInput
           value={tokens.outputLevelsByResource()[resource] ?? "0"}
-          min={0}
           max={maxLevel}
-          step={1}
           disabled={!unlocked}
-          onInput={(event) =>
-            tokens.setOutputLevelByResource(resource, clampToRange(event.currentTarget.value, maxLevel))
-          }
-          class={inputClass}
+          onInput={(next) => tokens.setOutputLevelByResource(resource, clampToRange(next, maxLevel))}
         />
       )
     }
 
     const id = getUpgradeId(group, resource)
-    if (!id) return <span class={emptyCellClass}>-</span>
+    if (!id) return <GridEmptyCell />
 
     const unlocked = isSupplyOrBbBotUnlocked(resource)
     const maxLevel = upgradeMaxById().get(id) ?? 0
     return (
-      <input
-        type="number"
+      <GridNumberInput
         value={tokens.levels()[id] ?? "0"}
-        min={0}
         max={maxLevel}
-        step={1}
         disabled={!unlocked}
-        onInput={(event) => tokens.setUpgradeLevel(id, clampToRange(event.currentTarget.value, maxLevel))}
-        class={inputClass}
+        onInput={(next) => tokens.setUpgradeLevel(id, clampToRange(next, maxLevel))}
       />
     )
   }

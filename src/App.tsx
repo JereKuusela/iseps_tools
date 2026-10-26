@@ -1,7 +1,7 @@
 import { A, useLocation } from "@solidjs/router"
 import { For, Show, createEffect, createSignal, onCleanup, onMount, type ParentComponent } from "solid-js"
 import { useDarkModeSignal } from "./lib/darkMode"
-import { ROUTES, eventTabs, primaryTabs } from "./lib/routes"
+import { ROUTES, eventTabs, premiumTabs, primaryTabs, type TabItem } from "./lib/routes"
 import { NAV_ITEM_CLASS, navItemActive } from "./components/ui/navStyles"
 
 const normalizePath = (path: string) => {
@@ -12,31 +12,35 @@ const normalizePath = (path: string) => {
   return path.endsWith("/") ? path.slice(0, -1) : path
 }
 
-const TopNav = (props: { darkMode: boolean; onToggleDarkMode: () => void }) => {
+const NavDropdown = (props: {
+  id: string
+  defaultLabel: string
+  tabs: TabItem[]
+  isActivePath: (href: string) => boolean
+}) => {
   const location = useLocation()
-  const [isEventsMenuOpen, setIsEventsMenuOpen] = createSignal(false)
+  const [isOpen, setIsOpen] = createSignal(false)
   const canUseHover = () => window.matchMedia("(hover: hover) and (pointer: fine)").matches
-  let eventsMenuRef: HTMLDivElement | undefined
-  const isActivePath = (href: string) => normalizePath(location.pathname) === href
-  const isEventsRouteActive = () => eventTabs.some((tab) => isActivePath(tab.href))
-  const activeEventLabel = () => eventTabs.find((tab) => isActivePath(tab.href))?.label ?? "Events"
+  let menuRef: HTMLDivElement | undefined
+  const isRouteActive = () => props.tabs.some((tab) => props.isActivePath(tab.href))
+  const activeLabel = () => props.tabs.find((tab) => props.isActivePath(tab.href))?.label ?? props.defaultLabel
 
-  const closeEventsMenu = () => setIsEventsMenuOpen(false)
-  const openEventsMenu = () => setIsEventsMenuOpen(true)
+  const closeMenu = () => setIsOpen(false)
+  const openMenu = () => setIsOpen(true)
 
   onMount(() => {
     const onDocumentPointerDown = (event: PointerEvent) => {
-      if (!eventsMenuRef) return
+      if (!menuRef) return
       const target = event.target
       if (!(target instanceof Node)) return
-      if (!eventsMenuRef.contains(target)) {
-        closeEventsMenu()
+      if (!menuRef.contains(target)) {
+        closeMenu()
       }
     }
 
     const onDocumentKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        closeEventsMenu()
+        closeMenu()
       }
     }
 
@@ -51,8 +55,73 @@ const TopNav = (props: { darkMode: boolean; onToggleDarkMode: () => void }) => {
 
   createEffect(() => {
     location.pathname
-    closeEventsMenu()
+    closeMenu()
   })
+
+  return (
+    <div
+      ref={menuRef}
+      class="relative"
+      onMouseEnter={() => {
+        if (canUseHover()) openMenu()
+      }}
+      onMouseLeave={() => {
+        if (canUseHover()) closeMenu()
+      }}
+    >
+      <button
+        type="button"
+        class={`${NAV_ITEM_CLASS} flex w-full items-center justify-between gap-2 px-4 py-2.5`}
+        classList={navItemActive(isRouteActive())}
+        aria-haspopup="menu"
+        aria-expanded={isOpen()}
+        aria-controls={props.id}
+        onClick={() => setIsOpen((current) => !current)}
+      >
+        <span class="text-sm font-semibold tracking-wide">{activeLabel()}</span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          class="h-4 w-4 transition-transform"
+          classList={{ "rotate-180": isOpen() }}
+          aria-hidden="true"
+        >
+          <path d="m6 9 6 6 6-6" />
+        </svg>
+      </button>
+
+      <Show when={isOpen()}>
+        <div class="absolute left-0 top-full z-30 w-44 pt-1.5">
+          <div
+            id={props.id}
+            class="overflow-hidden rounded-xl border border-ink/15 bg-white shadow-lg dark:border-white/20 dark:bg-[#22344d]"
+          >
+            <div class="grid gap-1 p-1.5">
+              <For each={props.tabs}>
+                {(tab) => (
+                  <A
+                    href={tab.href}
+                    class={`${NAV_ITEM_CLASS} px-3.5 py-2 text-sm font-semibold`}
+                    classList={navItemActive(props.isActivePath(tab.href))}
+                  >
+                    {tab.label}
+                  </A>
+                )}
+              </For>
+            </div>
+          </div>
+        </div>
+      </Show>
+    </div>
+  )
+}
+
+const TopNav = (props: { darkMode: boolean; onToggleDarkMode: () => void }) => {
+  const location = useLocation()
+  const isActivePath = (href: string) => normalizePath(location.pathname) === href
 
   return (
     <header class="relative z-10 hidden px-4 pt-5 sm:block sm:px-8 sm:pt-8 lg:px-10">
@@ -70,63 +139,8 @@ const TopNav = (props: { darkMode: boolean; onToggleDarkMode: () => void }) => {
             )}
           </For>
 
-          <div
-            ref={eventsMenuRef}
-            class="relative"
-            onMouseEnter={() => {
-              if (canUseHover()) openEventsMenu()
-            }}
-            onMouseLeave={() => {
-              if (canUseHover()) closeEventsMenu()
-            }}
-          >
-            <button
-              type="button"
-              class={`${NAV_ITEM_CLASS} flex w-full items-center justify-between gap-2 px-4 py-2.5`}
-              classList={navItemActive(isEventsRouteActive())}
-              aria-haspopup="menu"
-              aria-expanded={isEventsMenuOpen()}
-              aria-controls="top-events-menu"
-              onClick={() => setIsEventsMenuOpen((current) => !current)}
-            >
-              <span class="text-sm font-semibold tracking-wide">{activeEventLabel()}</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-                class="h-4 w-4 transition-transform"
-                classList={{ "rotate-180": isEventsMenuOpen() }}
-                aria-hidden="true"
-              >
-                <path d="m6 9 6 6 6-6" />
-              </svg>
-            </button>
-
-            <Show when={isEventsMenuOpen()}>
-              <div class="absolute left-0 top-full z-30 w-44 pt-1.5">
-                <div
-                  id="top-events-menu"
-                  class="overflow-hidden rounded-xl border border-ink/15 bg-white shadow-lg dark:border-white/20 dark:bg-[#22344d]"
-                >
-                  <div class="grid gap-1 p-1.5">
-                    <For each={eventTabs}>
-                      {(tab) => (
-                        <A
-                          href={tab.href}
-                          class={`${NAV_ITEM_CLASS} px-3.5 py-2 text-sm font-semibold`}
-                          classList={navItemActive(isActivePath(tab.href))}
-                        >
-                          {tab.label}
-                        </A>
-                      )}
-                    </For>
-                  </div>
-                </div>
-              </div>
-            </Show>
-          </div>
+          <NavDropdown id="top-premium-menu" defaultLabel="Premium" tabs={premiumTabs} isActivePath={isActivePath} />
+          <NavDropdown id="top-events-menu" defaultLabel="Events" tabs={eventTabs} isActivePath={isActivePath} />
         </div>
 
         <A

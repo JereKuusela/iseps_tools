@@ -1,0 +1,981 @@
+[
+  {
+    "id": "output.all",
+    "name": "All Particles Output",
+    "group": "output",
+    "baseCost": 100,
+    "maxLevel": 500
+  },
+  {
+    "id": "output.energyPrice",
+    "name": "Energy Price Output",
+    "group": "output",
+    "baseCost": 15,
+    "maxLevel": 1000
+  },
+  {
+    "id": "output.alpha",
+    "name": "Alpha Output",
+    "group": "output",
+    "particle": "alpha",
+    "baseCost": 20,
+    "maxLevel": 300
+  },
+  {
+    "id": "output.beta",
+    "name": "Beta Output",
+    "group": "output",
+    "particle": "beta",
+    "baseCost": 20,
+    "maxLevel": 350,
+    "requires": {
+      "particle": "beta"
+    }
+  },
+  {
+    "id": "output.ceti",
+    "name": "Ceti Output",
+    "group": "output",
+    "particle": "ceti",
+    "baseCost": 25,
+    "maxLevel": 400,
+    "requires": {
+      "particle": "ceti"
+    }
+  },
+  {
+    "id": "output.delta",
+    "name": "Delta Output",
+    "group": "output",
+    "particle": "delta",
+    "baseCost": 25,
+    "maxLevel": 450,
+    "requires": {
+      "particle": "delta"
+    }
+  },
+  {
+    "id": "output.epsilon",
+    "name": "Epsilon Output",
+    "group": "output",
+    "particle": "epsilon",
+    "baseCost": 30,
+    "maxLevel": 500,
+    "requires": {
+      "particle": "epsilon"
+    }
+  },
+  {
+    "id": "output.fenix",
+    "name": "Fenix Output",
+    "group": "output",
+    "particle": "fenix",
+    "baseCost": 30,
+    "maxLevel": 550,
+    "requires": {
+      "particle": "fenix"
+    }
+  },
+  {
+    "id": "output.gamma",
+    "name": "Gamma Output",
+    "group": "output",
+    "particle": "gamma",
+    "baseCost": 35,
+    "maxLevel": 600,
+    "requires": {
+      "particle": "gamma"
+    }
+  },
+  {
+    "id": "output.helion",
+    "name": "Helion Output",
+    "group": "output",
+    "particle": "helion",
+    "baseCost": 35,
+    "maxLevel": 650,
+    "requires": {
+      "particle": "helion"
+    }
+  },
+  {
+    "id": "output.ixion",
+    "name": "Ixion Output",
+    "group": "output",
+    "particle": "ixion",
+    "baseCost": 40,
+    "maxLevel": 700,
+    "requires": {
+      "particle": "ixion"
+    }
+  },
+  {
+    "id": "output.juno",
+    "name": "Juno Output",
+    "group": "output",
+    "particle": "juno",
+    "baseCost": 40,
+    "maxLevel": 750,
+    "requires": {
+      "particle": "juno"
+    }
+  },
+  {
+    "id": "output.kappa",
+    "name": "Kappa Output",
+    "group": "output",
+    "particle": "kappa",
+    "baseCost": 40,
+    "maxLevel": 800,
+    "requires": {
+      "particle": "kappa"
+    }
+  },
+  {
+    "id": "cost.alpha",
+    "name": "Alpha Cost",
+    "group": "cost",
+    "particle": "alpha",
+    "baseCost": 40,
+    "maxLevel": 500,
+    "requires": {
+      "particle": "alpha",
+      "upgrades": [
+        {
+          "id": "output.alpha",
+          "level": 50
+        }
+      ]
+    }
+  },
+  {
+    "id": "cost.beta",
+    "name": "Beta Cost",
+    "group": "cost",
+    "particle": "beta",
+    "baseCost": 40,
+    "maxLevel": 500,
+    "requires": {
+      "particle": "beta",
+      "upgrades": [
+        {
+          "id": "output.beta",
+          "level": 50
+        }
+      ]
+    }
+  },
+  {
+    "id": "cost.ceti",
+    "name": "Ceti Cost",
+    "group": "cost",
+    "particle": "ceti",
+    "baseCost": 60,
+    "maxLevel": 500,
+    "requires": {
+      "particle": "ceti",
+      "upgrades": [
+        {
+          "id": "output.ceti",
+          "level": 50
+        }
+      ]
+    }
+  },
+  {
+    "id": "cost.delta",
+    "name": "Delta Cost",
+    "group": "cost",
+    "particle": "delta",
+    "baseCost": 60,
+    "maxLevel": 500,
+    "requires": {
+      "particle": "delta",
+      "upgrades": [
+        {
+          "id": "output.delta",
+          "level": 50
+        }
+      ]
+    }
+  },
+  {
+    "id": "cost.epsilon",
+    "name": "Epsilon Cost",
+    "group": "cost",
+    "particle": "epsilon",
+    "baseCost": 80,
+    "maxLevel": 500,
+    "requires": {
+      "particle": "epsilon",
+      "upgrades": [
+        {
+          "id": "output.epsilon",
+          "level": 50
+        }
+      ]
+    }
+  },
+  {
+    "id": "cost.fenix",
+    "name": "Fenix Cost",
+    "group": "cost",
+    "particle": "fenix",
+    "baseCost": 80,
+    "maxLevel": 500,
+    "requires": {
+      "particle": "fenix",
+      "upgrades": [
+        {
+          "id": "output.fenix",
+          "level": 50
+        }
+      ]
+    }
+  },
+  {
+    "id": "cost.gamma",
+    "name": "Gamma Cost",
+    "group": "cost",
+    "particle": "gamma",
+    "baseCost": 100,
+    "maxLevel": 500,
+    "requires": {
+      "particle": "gamma",
+      "upgrades": [
+        {
+          "id": "output.gamma",
+          "level": 50
+        }
+      ]
+    }
+  },
+  {
+    "id": "cost.helion",
+    "name": "Helion Cost",
+    "group": "cost",
+    "particle": "helion",
+    "baseCost": 100,
+    "maxLevel": 500,
+    "requires": {
+      "particle": "helion",
+      "upgrades": [
+        {
+          "id": "output.helion",
+          "level": 50
+        }
+      ]
+    }
+  },
+  {
+    "id": "cost.ixion",
+    "name": "Ixion Cost",
+    "group": "cost",
+    "particle": "ixion",
+    "baseCost": 100,
+    "maxLevel": 500,
+    "requires": {
+      "particle": "ixion",
+      "upgrades": [
+        {
+          "id": "output.ixion",
+          "level": 50
+        }
+      ]
+    }
+  },
+  {
+    "id": "cost.juno",
+    "name": "Juno Cost",
+    "group": "cost",
+    "particle": "juno",
+    "baseCost": 100,
+    "maxLevel": 500,
+    "requires": {
+      "particle": "juno",
+      "upgrades": [
+        {
+          "id": "output.juno",
+          "level": 50
+        }
+      ]
+    }
+  },
+  {
+    "id": "cost.kappa",
+    "name": "Kappa Cost",
+    "group": "cost",
+    "particle": "kappa",
+    "baseCost": 100,
+    "maxLevel": 500,
+    "requires": {
+      "particle": "kappa",
+      "upgrades": [
+        {
+          "id": "output.kappa",
+          "level": 50
+        }
+      ]
+    }
+  },
+  {
+    "id": "special.dcGains",
+    "name": "Data Cube Gains",
+    "group": "special",
+    "baseCost": 100,
+    "maxLevel": 500
+  },
+  {
+    "id": "special.bulkScientists",
+    "name": "Bulk Scientists",
+    "group": "special",
+    "baseCost": 300,
+    "maxLevel": 100,
+    "requires": {
+      "particle": "beta"
+    }
+  },
+  {
+    "id": "special.bulkArtifacts",
+    "name": "Bulk Artifacts",
+    "group": "special",
+    "baseCost": null,
+    "maxLevel": 25
+  },
+  {
+    "id": "special.bulkArchBots",
+    "name": "Bulk Arch-Bots",
+    "group": "special",
+    "baseCost": 300,
+    "maxLevel": 100,
+    "requires": {
+      "particle": "ceti"
+    }
+  },
+  {
+    "id": "special.bulkSolutions",
+    "name": "Bulk Solutions",
+    "group": "special",
+    "baseCost": 500,
+    "maxLevel": 50,
+    "requires": {
+      "particle": "epsilon"
+    }
+  },
+  {
+    "id": "special.bulkRebirthologists",
+    "name": "Bulk Rebirthologists",
+    "group": "special",
+    "baseCost": 100,
+    "maxLevel": 50,
+    "requires": {
+      "particle": "fenix"
+    }
+  },
+  {
+    "id": "special.bulkGp",
+    "name": "Bulk G-points",
+    "group": "special",
+    "baseCost": 500,
+    "maxLevel": 500,
+    "requires": {
+      "particle": "gamma"
+    }
+  },
+  {
+    "id": "special.bulkExtractions",
+    "name": "Bulk Extractions",
+    "group": "special",
+    "baseCost": 500,
+    "maxLevel": 50,
+    "requires": {
+      "particle": "helion",
+      "playerLevel": 120
+    }
+  },
+  {
+    "id": "special.bulkResearches",
+    "name": "Bulk Researches",
+    "group": "special",
+    "baseCost": 500,
+    "maxLevel": 50,
+    "requires": {
+      "playerLevel": 130
+    }
+  },
+  {
+    "id": "special.bulkDcMilestones",
+    "name": "Bulk DC Milestones",
+    "group": "special",
+    "baseCost": 500,
+    "maxLevel": 50,
+    "requires": {
+      "playerLevel": 140
+    }
+  },
+  {
+    "id": "special.scBooster",
+    "name": "SC Booster",
+    "group": "special",
+    "baseCost": 500,
+    "maxLevel": 500
+  },
+  {
+    "id": "special.bulkBuyers",
+    "name": "Bulk Buyers",
+    "group": "special",
+    "baseCost": 300,
+    "maxLevel": 100
+  },
+  {
+    "id": "special.bulkEmblems",
+    "name": "Bulk Emblems",
+    "group": "special",
+    "baseCost": 750,
+    "maxLevel": 100
+  },
+  {
+    "id": "special.infinityAmp",
+    "name": "Infinity Amp",
+    "group": "special",
+    "baseCost": 750,
+    "maxLevel": 100
+  },
+  {
+    "id": "special.infinityMaxLv",
+    "name": "Infinity Max Lv",
+    "group": "special",
+    "baseCost": 3000,
+    "maxLevel": 5,
+    "requires": {
+      "playerLevel": 190
+    }
+  },
+  {
+    "id": "special.extraLp",
+    "name": "Extra LP",
+    "group": "special",
+    "baseCost": 1000,
+    "costStep": 5,
+    "maxLevel": 250
+  },
+  {
+    "id": "special.bulkEmblemMilestones",
+    "name": "Bulk Emblem Milestones",
+    "group": "special",
+    "baseCost": 500,
+    "costStep": 50,
+    "maxLevel": 50,
+    "requires": {
+      "playerLevel": 225
+    }
+  },
+  {
+    "id": "special.tokenBooster",
+    "name": "Token Booster",
+    "group": "special",
+    "baseCost": null,
+    "maxLevel": 100,
+    "requires": {
+      "playerLevel": 300
+    }
+  },
+  {
+    "id": "special.ampCounter",
+    "name": "Amp Counter",
+    "group": "special",
+    "baseCost": 5000,
+    "maxLevel": 5,
+    "requires": {
+      "particle": "kappa"
+    }
+  },
+  {
+    "id": "special.gpBooster",
+    "name": "G-point Booster",
+    "group": "special",
+    "baseCost": null,
+    "maxLevel": 10,
+    "requires": {
+      "particle": "gamma"
+    }
+  },
+  {
+    "id": "bundle.energyPrice",
+    "name": "Energy Price bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1
+  },
+  {
+    "id": "bundle.buyers",
+    "name": "Buyers bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1
+  },
+  {
+    "id": "bundle.allParticles",
+    "name": "All Particles bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1
+  },
+  {
+    "id": "bundle.allParticlesMk2",
+    "name": "All Particles bundle MK2",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1,
+    "requires": {
+      "se": 125
+    }
+  },
+  {
+    "id": "bundle.simulation",
+    "name": "Simulation bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1
+  },
+  {
+    "id": "bundle.laboratory",
+    "name": "Laboratory bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1
+  },
+  {
+    "id": "bundle.egetarium",
+    "name": "Egetarium bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1
+  },
+  {
+    "id": "bundle.archive",
+    "name": "Archive bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1
+  },
+  {
+    "id": "bundle.cot",
+    "name": "CoT bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1
+  },
+  {
+    "id": "bundle.institute",
+    "name": "Fenix institute bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1
+  },
+  {
+    "id": "bundle.singularity",
+    "name": "Singularity bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1
+  },
+  {
+    "id": "bundle.gcorp",
+    "name": "G-corp bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1
+  },
+  {
+    "id": "bundle.corvus",
+    "name": "Corvus bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1,
+    "requires": {
+      "se": 7
+    }
+  },
+  {
+    "id": "bundle.tiberius",
+    "name": "Tiberius bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1,
+    "requires": {
+      "particle": "ixion"
+    }
+  },
+  {
+    "id": "bundle.leveling",
+    "name": "Leveling bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1
+  },
+  {
+    "id": "bundle.taskmaster",
+    "name": "Taskmaster bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1
+  },
+  {
+    "id": "bundle.ultima",
+    "name": "Ultima bundle",
+    "group": "oneTimer",
+    "baseCost": 3000,
+    "maxLevel": 1,
+    "requires": {
+      "playerLevel": 180
+    }
+  },
+  {
+    "id": "bundle.infinityMulti",
+    "name": "Infinity Multi bundle",
+    "group": "oneTimer",
+    "baseCost": 3000,
+    "maxLevel": 1,
+    "requires": {
+      "playerLevel": 200
+    }
+  },
+  {
+    "id": "bundle.tycoon",
+    "name": "Tycoon bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1
+  },
+  {
+    "id": "bundle.meltdown",
+    "name": "Meltdown bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1,
+    "requires": {
+      "particle": "kappa"
+    }
+  },
+  {
+    "id": "bundle.sequencing",
+    "name": "Sequencing bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1,
+    "requires": {
+      "particle": "kappa"
+    }
+  },
+  {
+    "id": "oneTimer.costScalerDc",
+    "name": "Cost upg scaler: DC",
+    "group": "oneTimer",
+    "baseCost": 5000,
+    "maxLevel": 1
+  },
+  {
+    "id": "oneTimer.costScalerSc",
+    "name": "Cost upg scaler: SC",
+    "group": "oneTimer",
+    "baseCost": 5000,
+    "maxLevel": 1
+  },
+  {
+    "id": "bundle.alpha",
+    "name": "Alpha bundle",
+    "group": "oneTimer",
+    "particle": "alpha",
+    "baseCost": null,
+    "maxLevel": 1
+  },
+  {
+    "id": "bundle.beta",
+    "name": "Beta bundle",
+    "group": "oneTimer",
+    "particle": "beta",
+    "baseCost": null,
+    "maxLevel": 1,
+    "requires": {
+      "particle": "beta"
+    }
+  },
+  {
+    "id": "bundle.ceti",
+    "name": "Ceti bundle",
+    "group": "oneTimer",
+    "particle": "ceti",
+    "baseCost": null,
+    "maxLevel": 1,
+    "requires": {
+      "particle": "ceti"
+    }
+  },
+  {
+    "id": "bundle.delta",
+    "name": "Delta bundle",
+    "group": "oneTimer",
+    "particle": "delta",
+    "baseCost": null,
+    "maxLevel": 1,
+    "requires": {
+      "particle": "delta",
+      "se": 8
+    }
+  },
+  {
+    "id": "bundle.epsilon",
+    "name": "Epsilon bundle",
+    "group": "oneTimer",
+    "particle": "epsilon",
+    "baseCost": null,
+    "maxLevel": 1,
+    "requires": {
+      "particle": "epsilon"
+    }
+  },
+  {
+    "id": "bundle.fenix",
+    "name": "Fenix bundle",
+    "group": "oneTimer",
+    "particle": "fenix",
+    "baseCost": null,
+    "maxLevel": 1,
+    "requires": {
+      "particle": "fenix"
+    }
+  },
+  {
+    "id": "bundle.gamma",
+    "name": "Gamma bundle",
+    "group": "oneTimer",
+    "particle": "gamma",
+    "baseCost": null,
+    "maxLevel": 1,
+    "requires": {
+      "particle": "gamma"
+    }
+  },
+  {
+    "id": "bundle.helion",
+    "name": "Helion bundle",
+    "group": "oneTimer",
+    "particle": "helion",
+    "baseCost": null,
+    "maxLevel": 1,
+    "requires": {
+      "particle": "helion"
+    }
+  },
+  {
+    "id": "bundle.ixion",
+    "name": "Ixion bundle",
+    "group": "oneTimer",
+    "particle": "ixion",
+    "baseCost": null,
+    "maxLevel": 1,
+    "requires": {
+      "particle": "ixion"
+    }
+  },
+  {
+    "id": "bundle.juno",
+    "name": "Juno bundle",
+    "group": "oneTimer",
+    "particle": "juno",
+    "baseCost": null,
+    "maxLevel": 1,
+    "requires": {
+      "particle": "juno"
+    }
+  },
+  {
+    "id": "bundle.kappa",
+    "name": "Kappa bundle",
+    "group": "oneTimer",
+    "particle": "kappa",
+    "baseCost": null,
+    "maxLevel": 1,
+    "requires": {
+      "particle": "kappa"
+    }
+  },
+  {
+    "id": "bundle.alphaBeta",
+    "name": "Alpha-Beta bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1,
+    "requires": {
+      "particle": "beta"
+    }
+  },
+  {
+    "id": "bundle.betaCeti",
+    "name": "Beta-Ceti bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1,
+    "requires": {
+      "particle": "ceti"
+    }
+  },
+  {
+    "id": "bundle.cetiDelta",
+    "name": "Ceti-Delta bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1,
+    "requires": {
+      "particle": "delta"
+    }
+  },
+  {
+    "id": "bundle.deltaEpsilon",
+    "name": "Delta-Epsilon bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1,
+    "requires": {
+      "particle": "epsilon"
+    }
+  },
+  {
+    "id": "bundle.epsilonFenix",
+    "name": "Epsilon-Fenix bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1,
+    "requires": {
+      "particle": "fenix"
+    }
+  },
+  {
+    "id": "bundle.fenixGamma",
+    "name": "Fenix-Gamma bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1,
+    "requires": {
+      "particle": "gamma"
+    }
+  },
+  {
+    "id": "bundle.gammaHelion",
+    "name": "Gamma-Helion bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1,
+    "requires": {
+      "particle": "helion"
+    }
+  },
+  {
+    "id": "bundle.helionIxion",
+    "name": "Helion-Ixion bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1,
+    "requires": {
+      "particle": "ixion"
+    }
+  },
+  {
+    "id": "bundle.ixionJuno",
+    "name": "Ixion-Juno bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1,
+    "requires": {
+      "particle": "juno"
+    }
+  },
+  {
+    "id": "bundle.junoKappa",
+    "name": "Juno-Kappa bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1,
+    "requires": {
+      "particle": "kappa"
+    }
+  },
+  {
+    "id": "bundle.abc",
+    "name": "A-B-C bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1,
+    "requires": {
+      "upgrades": [
+        {
+          "id": "bundle.beta",
+          "level": 1
+        },
+        {
+          "id": "bundle.ceti",
+          "level": 1
+        },
+        {
+          "id": "bundle.alphaBeta",
+          "level": 1
+        },
+        {
+          "id": "bundle.betaCeti",
+          "level": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "bundle.def",
+    "name": "D-E-F bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1,
+    "requires": {
+      "upgrades": [
+        {
+          "id": "bundle.epsilon",
+          "level": 1
+        },
+        {
+          "id": "bundle.fenix",
+          "level": 1
+        },
+        {
+          "id": "bundle.deltaEpsilon",
+          "level": 1
+        },
+        {
+          "id": "bundle.epsilonFenix",
+          "level": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": "bundle.ghi",
+    "name": "G-H-I bundle",
+    "group": "oneTimer",
+    "baseCost": null,
+    "maxLevel": 1,
+    "requires": {
+      "upgrades": [
+        {
+          "id": "bundle.helion",
+          "level": 1
+        },
+        {
+          "id": "bundle.gammaHelion",
+          "level": 1
+        },
+        {
+          "id": "bundle.helionIxion",
+          "level": 1
+        }
+      ]
+    }
+  }
+]

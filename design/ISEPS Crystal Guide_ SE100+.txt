@@ -1,0 +1,288 @@
+﻿ISEPS Crystal Guide: SE100+ (Pre-Kappa)
+Intro:
+Make sure you have finished up to the last line for SE95 in SE50-100 guide at https://docs.google.com/document/d/1ZKxj-HHQNNdjVnlyEvEmy-kuo8g7eniO0uSZbQ8D0Es 
+
+
+This means ERM, Bulk EMs, Infinity Amp should all be maxed. 
+
+
+When there are multiple goals in one step, level these concurrently.
+
+
+Crystals Spent listed is an approximate guideline for the start of the step if you have been following the guides without extra spending.
+Step index 
+Intro:
+Step index
+1 - AP Output to 50 (Crystals Spent: 310k)
+2 - One-Timer: Taskmaster Bundle
+3 - Alpha Output to 150, AP Output to 70
+4 - Max Juno Output, Alpha Output
+5 - Token Booster (Crystals Spent: 370k)
+6 - Cost Upg Scalers (Expected SE range: 105 - 113; Crystals Spent: 400k)
+7 - Max Juno cost upgrades (Expected SE range: 112 - 124; Crystals Spent: 430k)
+8 - Max Alpha cost upgrades (Expected SE range: 120 - 125; Crystals Spent: 500k)
+Optional - ZAT 8 push upgrades (Expected SE range: 124 - 125)
+9 - Max Delta cost upgrades (Expected SE range: 125 - 128; Crystals Spent: 530k)
+10 - Max Ceti cost upgrades (Expected SE range: 127 - 130; Crystals Spent: 600k)
+11 - Max AP Output (Expected SE range: 130 - 133; Crystals Spent: 700k)
+12 - Max Bulk Solutions (Expected SE range: 132 - 134; Crystals Spent: 800k)
+13 - Max GP Booster (Expected SE range: 133 - 137; Crystals Spent: 900k)
+14 - Max Helion cost upgrades (Expected SE range: 136+; Crystals Spent: 1m)
+16 - Max SC Booster, Ixion cost upgrades
+17 - DC Gains to 370
+18 - Max DC Gains
+19 - Max Delta Output
+20 - Max Bulk Scientists, Bulk Emblems
+21 - Max Gamma Output
+22 - The Rest
+
+
+1 - AP Output to 50 (Crystals Spent: 310k)
+2 - One-Timer: Taskmaster Bundle 
+3 - Alpha Output to 150, AP Output to 70
+Alpha Output to 150
+AP Output to 70
+DC Gains to 20
+Bulk Artifacts to 7 
+4 - Max Juno Output, Alpha Output
+Juno Output to 750 (Maxed)
+Alpha Output to 300 (Maxed)
+AP Output to 150
+DC Gains to 45
+Bulk Artifacts to 18
+SC Booster to 30
+Bulk Solutions to 3
+One-Timer: ABC Bundle (Trio) 
+5 - Token Booster (Crystals Spent: 370k)
+At this point, it is a good time to consider maxing Token Booster. This does not directly help your progression, but helps you gain tokens quicker for the Juno output token upgrade. Crystal upgrades at this point are getting weaker and weaker, so boosting tokens is not a bad investment. 
+6 - Cost Upg Scalers (Expected SE range: 105 - 113; Crystals Spent: 400k)
+Also, at this point, it is worth it to invest in Cost Upg Scalers, but it is a large crystal investment to get started (10K crystals) without immediate return (because you have to then buy cost upgrades).
+
+
+If you have no cost upgrades, buy ~10 levels in Alpha cost first. 
+
+
+One-Timer: SC Cost Upg Scaler
+One-Timer: DC Cost Upg Scaler
+(Note you will have to also buy 50 Beta output to unlock Beta cost upgrades.)
+Beta (?) cost upgrades up to 500 (Maxed)
+7 - Max Juno cost upgrades (Expected SE range: 112 - 124; Crystals Spent: 430k)
+Note: When you get to DCMs 82 - 84 (after ZAT 5 at ~SE 112 - 118), the Juno Cost upgrades give a significant boost to these DCMs from extra Juno stability levels. So, it is better to buy Juno cost upgrades to 500 before any other cost upgrades once you have ZAT 5 and have bought the Cost Upg Scalers.  Also, once you can reach Juno stability level 100 in all run types, then Juno cost upgrades are no longer very valuable, so if you aren’t finished with them at that point, you can continue with other cost upgrades and finish Juno cost upgrades after Ixion cost upgrades are done.
+
+
+Juno cost upgrades to 500 (Maxed)
+AP Output to 180
+DC Gains to 55
+Bulk Artifacts to 22
+SC Booster to 50
+Bulk Solutions to 6
+One-Timer: Institute Bundle
+8 - Max Alpha cost upgrades (Expected SE range: 120 - 125; Crystals Spent: 500k)
+Alpha cost upgrades to 500 (Maxed)
+AP Output to 200
+DC Gains to 60
+Bulk Artifacts to 25 (Maxed)
+SC Booster to 65
+Bulk Solutions to 9
+GP booster to x32 (in case this was not bought earlier) 
+One-Timer: G-Corp Bundle (in case this was not bought earlier)
+Optional - ZAT 8 push upgrades (Expected SE range: 124 - 125)
+Note: When you get to SE 124-125 and are pushing for ZAT 8, there are some additional cost upgrades to buy early for boosting Juno/AP (via talent PP 6-1 due to extra levels in Spawn Rate) instead of continuing to follow the rest of the guide.  You need to have both Cost Upg Scalers and then the precedence for Juno/AP boost for any cost upgrades you don’t have maxed is Juno, Delta, Ceti, Beta, Alpha, Gamma, and Fenix.
+
+
+Optimal strategy here is to buy cost upgrades until the spawn rate level reaches the next level divisible by 100 (e.g. level 2000), and then there is a cost increase gap.  After that, follow the precedence of Juno, Delta, Ceti, Beta, Alpha, Gamma, Fenix for those that are most efficient to get through the cost increase gap.
+
+
+Juno cost upgrades to 500 (Maxed) (If not already done) 
+Beta cost upgrades (Maxed) (If not already done)
+Alpha cost upgrades to 500 (Maxed) (If not already done)
+Delta cost upgrades to 500 (Maxed) (If not already done)
+Ceti cost upgrades to 500 (Maxed) (if not already done)
+Gamma cost upgrades to 500 (Maxed)
+Fenix cost upgrades to 500 (Maxed) (If not already done)
+
+
+When you get ZAT 8 or finish these cost upgrades, you should continue on whatever step in the guide you were on. 
+9 - Max Delta cost upgrades (Expected SE range: 125 - 128; Crystals Spent: 530k)
+Delta cost upgrades to 500 (Maxed)
+AP Output to 250
+DC Gains to 75
+SC Booster to 90
+Bulk Solutions to 14
+GP booster to x64 
+10 - Max Ceti cost upgrades (Expected SE range: 127 - 130; Crystals Spent: 600k)
+Ceti cost upgrades to 500 (Maxed)
+AP Output to 375
+DC Gains to 120
+SC Booster to 175
+Bulk Solutions to 30
+Bulk Emblems to 5
+GP booster to x128 
+One-Timer: Delta Bundle
+One-Timer: DEF Bundle (Trio)
+One-Timer: Archive Bundle
+One-Timer: Gamma Bundle
+11 - Max AP Output (Expected SE range: 130 - 133; Crystals Spent: 700k)
+Fenix cost upgrades to 500 (Maxed)
+AP Output to 500 (Maxed)
+DC Gains to 145
+SC Booster to 230
+Delta Output to 60
+Bulk Solutions to 40
+Bulk Emblems to 8
+Gamma Output to 10
+GP booster to x512
+One-Timer: GHI Bundle (Trio) 
+12 - Max Bulk Solutions (Expected SE range: 132 - 134; Crystals Spent: 800k)
+Epsilon cost upgrades to 500 (Maxed)
+DC Gains to 200
+SC Booster to 330
+Delta Output to 90
+Bulk Solutions to 50 (Maxed)
+Bulk Emblems to 12
+Gamma Output to 30
+Ixion Output to 20
+One-Timer: Buyers Bundle 
+13 - Max GP Booster (Expected SE range: 133 - 137; Crystals Spent: 900k)
+Gamma cost upgrades to 500 (Maxed)
+DC Gains to 220
+SC Booster to 375
+Delta Output to 105
+Bulk Emblems to 15
+Ixion Output to 25
+Bulk GP to 4
+GP Booster to x1024 (Maxed)
+One-Timer: CD Bundle (Duo)
+One-Timer: FG Bundle (Duo)
+14 - Max Helion cost upgrades (Expected SE range: 136+; Crystals Spent: 1m)
+Helion cost upgrades to 500 (Maxed)
+DC Gains to 280
+SC Booster to 475
+Delta Output to 150
+Gamma Output to 60
+Ixion Output to 40
+Energy Price Output to 10
+Bulk Emblems to 21
+Bulk GP to 7
+
+
+15 - Save for Kappa
+Note: Once you reach ZAT 12+, you should save about 100k crystals for the Kappa release (and new items in the crystal shop).  Once you have that amount saved, you can continue following this guide. 
+16 - Max SC Booster, Ixion cost upgrades
+Ixion cost upgrades to 500 (Maxed)
+DC Gains to 330
+SC Booster to 500 (Maxed)
+Delta Output to 180
+Gamma Output to 80
+Ixion Output to 60
+Energy Price Output to 12
+Bulk Emblems to 27
+Bulk GP to 10
+17 - DC Gains to 370
+DC Gains to 370
+Delta Output to 210
+Gamma Output to 90
+Ixion Output to 70
+Energy Price Output to 14
+Bulk Emblems to 32
+Bulk GP to 12 
+18 - Max DC Gains
+DC Gains to 500 (Maxed)
+Delta Output to 300
+Fenix Output to 70
+Gamma Output to 145
+Ixion Output to 110
+Energy Price Output to 30
+Bulk Emblems to 47
+Bulk GP to 21
+One-Timer: Energy Price Bundle
+One-Timer: Tycoon Bundle  
+19 - Max Delta Output
+Delta Output to 450 (Maxed)
+Fenix Output to 125
+Gamma Output to 230
+Ixion Output to 180
+Energy Price Output to 65
+Bulk Emblems to 73
+Bulk GP to 35
+Bulk Buyers to 2 
+20 - Max Bulk Scientists, Bulk Emblems
+Fenix Output to 225
+Gamma Output to 390
+Ixion Output to 310
+Energy Price Output to 135
+Bulk Emblems to 100 (Maxed)
+Bulk GP to 60
+Bulk Buyers to 8 
+Bulk Scientists to 100 (Maxed)
+One-Timer: Leveling Bundle
+21 - Max Gamma Output
+Fenix Output to 415
+Gamma Output to 600 (Maxed)
+Helion Output to 120
+Ixion Output to 560
+Energy Price Output to 260
+Bulk GP to 110
+Bulk Buyers to 21 
+Extra LP to 20
+22 - The Rest 
+This is just a rough idea of the order to start and finish what’s left in the shop. Concurrent leveling is still ideal, but I’m not calculating exact level equivalences here.
+
+
+Start Beta Output
+Finish Fenix Output
+Finish Ixion Output
+Extra LP to ~50 (and stop there)
+Start Ceti Output
+Finish Energy Price Output
+Finish Bulk Buyers
+Finish Helion Output
+Finish Bulk GP
+Finish Beta Output
+Start Epsilon Output
+Finish Ceti Output
+Finish Epsilon Output
+Start and Finish Bulk Rebirthologists
+Start and Finish Bulk Archbots
+
+
+Cost upgrades notes:
+
+
+Beta cost upgrades need 50 levels in Beta output first
+
+
+Note: Beta cost upgrades are better than Alpha cost upgrades because they have more attributes with smaller cost increases per level and include Attraction which boosts Talent PP6-3 (DC).  The actual direct boost to Beta or Alpha output from more attribute levels is a very small factor compared to the boost to row 6 talents.
+
+
+Ceti cost upgrades need 50 levels in Ceti output first
+
+
+Delta cost upgrades need 50 levels in Delta output first
+
+
+Fenix cost upgrades need 50 levels in Fenix output first
+
+
+Epsilon cost upgrades need 50 levels in Epsilon output first
+
+
+Gamma cost upgrades need 50 levels in Gamma output first
+
+
+Helion cost upgrades need 50 levels in Helion output first
+
+
+Ixion cost upgrades need 50 levels in Ixion output first
+
+
+ABC Bundle (Trio) notes:
+As needed, buy Beta, Ceti, AB Duo, BC Duo bundles first
+
+
+DEF Bundle (Trio) notes:
+As needed, buy Epsilon, Fenix, DE Duo, EF Duo bundles first
+
+
+GHI Bundle (Trio) notes:
+As needed, buy Helion, GH Duo, HI Duo bundles first

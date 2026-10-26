@@ -23,11 +23,12 @@ type BestNextSummaryProps = {
   buyLabel?: string
   bulkActions?: BulkActionOption[]
   rowAction?: (id: string | number) => void
-  footer: JSX.Element
+  footer?: JSX.Element
   rows: BestNextRow[]
   minRows?: number
   dataHeader: string
   columnRatios?: [number, number, number]
+  hideValue?: boolean
 }
 
 export const BestNextSummary = (props: BestNextSummaryProps) => {
@@ -45,7 +46,7 @@ export const BestNextSummary = (props: BestNextSummaryProps) => {
       number,
       number,
     ]
-    const total = sanitized[0] + sanitized[1] + sanitized[2]
+    const total = sanitized[0] + sanitized[2] + (props.hideValue ? 0 : sanitized[1])
     return sanitized.map((value) => `${(value / total) * 100}%`) as [string, string, string]
   })
 
@@ -140,13 +141,17 @@ export const BestNextSummary = (props: BestNextSummaryProps) => {
           </div>
         </div>
 
-        <div class={`${TABLE_FRAME_CLASS} lg:col-start-1 lg:row-start-2`}>{props.footer}</div>
+        <Show when={props.footer}>
+          <div class={`${TABLE_FRAME_CLASS} lg:col-start-1 lg:row-start-2`}>{props.footer}</div>
+        </Show>
 
         <div class={`${TABLE_FRAME_CLASS} lg:col-start-2 lg:row-span-2`}>
           <DataTable>
             <colgroup>
               <col style={{ width: columnWidths()[0] }} />
-              <col style={{ width: columnWidths()[1] }} />
+              <Show when={!props.hideValue}>
+                <col style={{ width: columnWidths()[1] }} />
+              </Show>
               <col style={{ width: columnWidths()[2] }} />
               <Show when={hasRowAction()}>
                 <col style={{ width: "2.5rem" }} />
@@ -155,7 +160,9 @@ export const BestNextSummary = (props: BestNextSummaryProps) => {
             <TableHead>
               <tr>
                 <th class={TABLE_HEAD_CELL_CLASS}>Item</th>
-                <th class={TABLE_HEAD_CELL_CLASS}>Value</th>
+                <Show when={!props.hideValue}>
+                  <th class={TABLE_HEAD_CELL_CLASS}>Value</th>
+                </Show>
                 <th class={TABLE_HEAD_CELL_CLASS}>{props.dataHeader}</th>
                 <Show when={hasRowAction()}>
                   <th class={`${TABLE_HEAD_CELL_CLASS} text-center`}></th>
@@ -167,7 +174,9 @@ export const BestNextSummary = (props: BestNextSummaryProps) => {
                 {(row) => (
                   <tr class={TABLE_ROW_CLASS}>
                     <td class="truncate px-2 py-1 font-semibold text-ink dark:text-white">{row.item}</td>
-                    <td class="whitespace-nowrap px-2 py-1 text-ink/80 dark:text-white/80">{row.value}</td>
+                    <Show when={!props.hideValue}>
+                      <td class="whitespace-nowrap px-2 py-1 text-ink/80 dark:text-white/80">{row.value}</td>
+                    </Show>
                     <td class="whitespace-nowrap px-2 py-1 text-ink/80 dark:text-white/80">{row.data}</td>
                     <Show when={hasRowAction()}>
                       <td class="px-2 py-1 text-center">
@@ -186,7 +195,7 @@ export const BestNextSummary = (props: BestNextSummaryProps) => {
               <For each={emptyRows()}>
                 {() => (
                   <tr class={TABLE_ROW_CLASS} aria-hidden="true">
-                    <td class="px-2 py-1" colSpan={3}>
+                    <td class="px-2 py-1" colSpan={props.hideValue ? 2 : 3}>
                       {"\u00a0"}
                     </td>
                     <Show when={hasRowAction()}>

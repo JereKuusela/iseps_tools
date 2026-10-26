@@ -3,6 +3,7 @@ import { createSyncedSignal } from "../../lib/persistedSignal"
 import { type PerkGuideEntry, type PerkRowId, type PerkRunType, usePerkData } from "../../lib/perkContext"
 import type { PerkGuideRowView, PerkRowLookup, PerkRunOption } from "./perkGuideTypes"
 import { parseNumberish } from "../../lib/parseNumber"
+import { SHARED_SE_KEY } from "../../lib/tokenSharedInputs"
 
 type PerkGuideContextValue = {
   se: () => string
@@ -84,7 +85,7 @@ const derivePerkChangesText = (entry: PerkGuideEntry, previousEntry?: PerkGuideE
 export const PerkGuideProvider = (props: ParentProps) => {
   const data = usePerkData()
 
-  const [se, setSe] = createSyncedSignal("perk.guide.se", "1")
+  const [se, setSe] = createSyncedSignal(SHARED_SE_KEY, "1")
   const [runType, setRunType] = createSyncedSignal<PerkRunType>("perk.guide.runType", "se")
 
   const normalizedSe = createMemo(() => {

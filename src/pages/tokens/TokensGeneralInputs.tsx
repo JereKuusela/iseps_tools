@@ -2,7 +2,8 @@ import { InfoCard, MetricRow } from "../../components/layout/contentBlocks"
 import { CheckboxField, IntegerField, SelectField } from "../../components/ui/formControls"
 import { LargeNumber } from "../../lib/largeNumber"
 import { formatLargeNumber } from "../../lib/numberFormat"
-import { PARTICLE_ORDER, useTokensContext, type UnlockedParticle } from "./tokensContext"
+import { PARTICLE_ORDER, type UnlockedParticle } from "../../lib/particles"
+import { useTokensContext } from "./tokensContext"
 
 const formatSpent = (value: number) => {
   const rounded = Math.round(value * 100) / 100

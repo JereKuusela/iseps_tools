@@ -1,6 +1,6 @@
 import { createContext, type ParentProps, useContext } from "solid-js"
 import { createSyncedSignal } from "./persistedSignal"
-import { getTokenKey, TOKEN_SHARED_KEYS } from "./tokenSharedInputs"
+import { getTokenKey, SHARED_SE_KEY, TOKEN_SHARED_KEYS } from "./tokenSharedInputs"
 import type { ScGoalType } from "./scCalculator"
 
 export type ScGainUnit = "min" | "hour" | "day"
@@ -70,7 +70,7 @@ const normalizePanels = (panels: ScGoalPanel[]): ScGoalPanel[] => {
 }
 
 export const ScProvider = (props: ParentProps) => {
-  const [currentSe, setCurrentSe] = createSyncedSignal("sc.currentSe", "102")
+  const [currentSe, setCurrentSe] = createSyncedSignal(SHARED_SE_KEY, "1")
   const [battery1DcCost, setBattery1DcCost] = createSyncedSignal("sc.battery1DcCost", "2.7e204")
   const [currentDc, setCurrentDc] = createSyncedSignal("sc.currentDc", "1e204")
   const [dcGainValue, setDcGainValue] = createSyncedSignal("sc.dcGainValue", "1e203")
