@@ -1,84 +1,1874 @@
 [
-  {"id":"early-alpha","maxSe":49,"targets":[["output.alpha",50]]},
-  {"id":"early-bundles","maxSe":49,"targets":[["bundle.alpha",1],["bundle.egetarium",1],["bundle.cot",1],["output.all",10]]},
-  {"id":"early-lab","maxSe":49,"targets":[["output.alpha",100],["output.all",20],["bundle.laboratory",1],["special.bulkArtifacts",1],["bundle.singularity",1]]},
-  {"id":"se4-gp16","minSe":4,"maxSe":49,"targets":[["special.gpBooster",4]]},
-  {"id":"se5-gp32","minSe":5,"maxSe":49,"targets":[["special.gpBooster",5],["bundle.gcorp",1]]},
-  {"id":"se6-core","minSe":6,"maxSe":49,"targets":[["bundle.allParticles",1],["special.bulkArtifacts",3],["bundle.simulation",1],["special.dcGains",10],["bundle.corvus",1]]},
-  {"id":"se10-tiberius","minSe":10,"maxSe":49,"targets":[["bundle.tiberius",1]]},
-  {"id":"se10-erm","minSe":10,"maxSe":24,"targets":[["erm","max"]]},
-  {"id":"se25-ultima","minSe":25,"maxSe":49,"targets":[["bundle.ultima",1]]},
-  {"id":"se25-infmulti","minSe":25,"maxSe":49,"targets":[["bundle.infinityMulti",1]]},
-  {"id":"se25-erm20","minSe":25,"maxSe":49,"targets":[["erm",20]]},
-  {"id":"se25-infmax","minSe":25,"maxSe":49,"targets":[["special.infinityMaxLv","max"]]},
-  {"id":"se25-ermall","minSe":25,"maxSe":49,"targets":[["erm","max"]]},
-  {"id":"se25-emm","minSe":25,"maxSe":49,"targets":[["special.bulkEmblemMilestones","max"]]},
-  {"id":"catchup-bundles","minSe":50,"targets":[["bundle.corvus",1],["bundle.ultima",1],["bundle.infinityMulti",1]]},
-  {"id":"catchup-rest","minSe":50,"targets":[["bundle.alpha",1],["bundle.egetarium",1],["bundle.allParticles",1],["bundle.cot",1],["bundle.laboratory",1],["bundle.tiberius",1],["bundle.singularity",1],["bundle.simulation",1],["output.alpha",100],["output.all",20],["special.dcGains",10],["special.bulkArtifacts",3],["special.gpBooster",4]]},
-  {"id":"t55-1","minSe":50,"maxSe":64,"targets":[["output.juno",5]]},
-  {"id":"t55-2","minSe":50,"maxSe":64,"targets":[["output.juno",50],["special.bulkEmblemMilestones",8],["erm",10],["bundle.juno",1]]},
-  {"id":"t55-3","minSe":50,"maxSe":64,"targets":[["output.juno",100],["special.bulkEmblemMilestones",16],["erm",40],["special.infinityAmp",5],["special.infinityMaxLv",5],["bundle.juno",1],["bundle.ixionJuno",1]]},
-  {"id":"t55-4","minSe":50,"maxSe":64,"targets":[["output.juno",125],["special.bulkEmblemMilestones",20],["erm",50],["special.infinityAmp",45],["special.infinityMaxLv",5],["bundle.juno",1],["bundle.ixionJuno",1]]},
-  {"id":"t65-1","minSe":65,"maxSe":74,"targets":[["special.bulkEmblemMilestones",3]]},
-  {"id":"t65-2","minSe":65,"maxSe":74,"targets":[["output.juno",50],["special.bulkEmblemMilestones",12],["erm",5],["bundle.juno",1]]},
-  {"id":"t65-3","minSe":65,"maxSe":74,"targets":[["output.juno",100],["special.bulkEmblemMilestones",20],["erm",35],["special.infinityMaxLv",5],["bundle.juno",1],["bundle.ixionJuno",1]]},
-  {"id":"t65-4","minSe":65,"maxSe":74,"targets":[["output.juno",140],["special.bulkEmblemMilestones",27],["erm",50],["special.infinityAmp",50],["special.infinityMaxLv",5],["bundle.juno",1],["bundle.ixionJuno",1]]},
-  {"id":"t75-1","minSe":75,"maxSe":84,"targets":[["special.bulkEmblemMilestones",3]]},
-  {"id":"t75-2","minSe":75,"maxSe":84,"targets":[["output.juno",50],["special.bulkEmblemMilestones",12],["bundle.juno",1]]},
-  {"id":"t75-3","minSe":75,"maxSe":84,"targets":[["output.juno",100],["special.bulkEmblemMilestones",21],["erm",5],["bundle.juno",1],["bundle.ixionJuno",1]]},
-  {"id":"t75-4","minSe":75,"maxSe":84,"targets":[["output.juno",130],["special.bulkEmblemMilestones",26],["erm",20],["special.infinityMaxLv",5],["bundle.juno",1],["bundle.ixionJuno",1]]},
-  {"id":"t75-5","minSe":75,"maxSe":84,"targets":[["output.juno",200],["special.bulkEmblemMilestones",33],["erm",50],["special.infinityAmp",10],["special.infinityMaxLv",5]]},
-  {"id":"t75-6","minSe":75,"maxSe":84,"targets":[["output.juno",250],["special.bulkEmblemMilestones",40],["erm",50],["special.infinityAmp",50],["special.infinityMaxLv",5]]},
-  {"id":"t75-7","minSe":75,"maxSe":84,"targets":[["output.juno",300],["special.bulkEmblemMilestones",45],["erm",50],["special.infinityAmp",100],["special.infinityMaxLv",5]]},
-  {"id":"t85-1","minSe":85,"maxSe":94,"targets":[["output.juno",50],["special.bulkEmblemMilestones",9],["bundle.juno",1]]},
-  {"id":"t85-2","minSe":85,"maxSe":94,"targets":[["output.juno",100],["special.bulkEmblemMilestones",17],["bundle.juno",1],["bundle.ixionJuno",1]]},
-  {"id":"t85-3","minSe":85,"maxSe":94,"targets":[["output.juno",200],["special.bulkEmblemMilestones",29],["erm",20],["special.infinityMaxLv",5]]},
-  {"id":"t85-4","minSe":85,"maxSe":94,"targets":[["output.juno",275],["special.bulkEmblemMilestones",36],["erm",45],["special.infinityAmp",10],["special.infinityMaxLv",5]]},
-  {"id":"t85-5","minSe":85,"maxSe":94,"targets":[["output.juno",350],["special.bulkEmblemMilestones",43],["erm",50],["special.infinityAmp",55],["special.infinityMaxLv",5]]},
-  {"id":"t85-6","minSe":85,"maxSe":94,"targets":[["output.juno",400],["special.bulkEmblemMilestones",47],["erm",50],["special.infinityAmp",90],["special.infinityMaxLv",5]]},
-  {"id":"t85-7","minSe":85,"maxSe":94,"targets":[["output.juno",425],["special.bulkEmblemMilestones",50],["erm",50],["special.infinityAmp",100],["special.infinityMaxLv",5]]},
-  {"id":"t95-1","minSe":95,"targets":[["output.juno",100],["special.bulkEmblemMilestones",14],["bundle.juno",1],["bundle.ixionJuno",1]]},
-  {"id":"t95-2","minSe":95,"targets":[["output.juno",200],["special.bulkEmblemMilestones",25],["erm",10],["bundle.juno",1],["bundle.ixionJuno",1]]},
-  {"id":"t95-3","minSe":95,"targets":[["output.juno",250],["special.bulkEmblemMilestones",30],["erm",20],["special.infinityMaxLv",5]]},
-  {"id":"t95-4","minSe":95,"targets":[["output.juno",350],["special.bulkEmblemMilestones",39],["erm",45],["special.infinityAmp",5],["special.infinityMaxLv",5]]},
-  {"id":"t95-5","minSe":95,"targets":[["output.juno",450],["special.bulkEmblemMilestones",45],["erm",50],["special.infinityAmp",55],["special.infinityMaxLv",5]]},
-  {"id":"t95-6","minSe":95,"targets":[["output.juno",525],["special.bulkEmblemMilestones",50],["erm",50],["special.infinityAmp",90],["special.infinityMaxLv",5]]},
-  {"id":"se100-finish","minSe":100,"targets":[["erm","max"],["special.bulkEmblemMilestones","max"],["special.infinityAmp","max"]]},
-  {"id":"se125-mk2","minSe":125,"targets":[["bundle.allParticlesMk2",1]]},
-  {"id":"se125-kappa","minSe":125,"targets":[["bundle.meltdown",1],["bundle.kappa",1],["bundle.junoKappa",1],["bundle.sequencing",1],["output.kappa",50],["special.ampCounter",5]]},
-  {"id":"s100-01","minSe":100,"targets":[["output.all",50]]},
-  {"id":"s100-02","minSe":100,"targets":[["bundle.taskmaster",1]]},
-  {"id":"s100-03","minSe":100,"targets":[["output.alpha",150],["output.all",70],["special.dcGains",20],["special.bulkArtifacts",7]]},
-  {"id":"s100-04","minSe":100,"targets":[["output.juno","max"],["output.alpha","max"],["output.all",150],["special.dcGains",45],["special.bulkArtifacts",18],["special.scBooster",30],["special.bulkSolutions",3],["bundle.abc",1]]},
-  {"id":"s100-05","minSe":100,"targets":[["special.tokenBooster","max"]]},
-  {"id":"s100-06","minSe":100,"targets":[["oneTimer.costScalerSc",1],["oneTimer.costScalerDc",1],["cost.beta","max"]]},
-  {"id":"s100-07","minSe":100,"targets":[["cost.juno","max"],["output.all",180],["special.dcGains",55],["special.bulkArtifacts",22],["special.scBooster",50],["special.bulkSolutions",6],["bundle.institute",1]]},
-  {"id":"s100-08","minSe":100,"targets":[["cost.alpha","max"],["output.all",200],["special.dcGains",60],["special.bulkArtifacts",25],["special.scBooster",65],["special.bulkSolutions",9],["special.gpBooster",5],["bundle.gcorp",1]]},
-  {"id":"s100-09","minSe":100,"targets":[["cost.delta","max"],["output.all",250],["special.dcGains",75],["special.scBooster",90],["special.bulkSolutions",14],["special.gpBooster",6]]},
-  {"id":"s100-10","minSe":100,"targets":[["cost.ceti","max"],["output.all",375],["special.dcGains",120],["special.scBooster",175],["special.bulkSolutions",30],["special.bulkEmblems",5],["special.gpBooster",7],["output.kappa",375],["bundle.delta",1],["bundle.def",1],["bundle.archive",1],["bundle.gamma",1]]},
-  {"id":"s100-11","minSe":100,"targets":[["cost.fenix","max"],["output.all","max"],["special.dcGains",145],["special.scBooster",230],["output.delta",60],["special.bulkSolutions",40],["special.bulkEmblems",8],["output.gamma",10],["special.gpBooster",9],["output.kappa",440],["bundle.ghi",1]]},
-  {"id":"s100-12","minSe":100,"targets":[["cost.epsilon","max"],["special.dcGains",200],["special.scBooster",330],["output.delta",90],["special.bulkSolutions","max"],["special.bulkEmblems",12],["output.gamma",30],["output.ixion",20],["output.kappa",610],["bundle.buyers",1]]},
-  {"id":"s100-13","minSe":100,"targets":[["cost.gamma","max"],["special.dcGains",220],["special.scBooster",375],["output.delta",105],["special.bulkEmblems",15],["output.ixion",25],["special.bulkGp",4],["special.gpBooster","max"],["output.kappa",670],["bundle.cetiDelta",1],["bundle.fenixGamma",1]]},
-  {"id":"s100-14","minSe":100,"targets":[["cost.helion","max"],["special.dcGains",280],["special.scBooster",475],["output.delta",150],["output.gamma",60],["output.ixion",40],["output.energyPrice",10],["special.bulkEmblems",21],["special.bulkGp",7],["output.kappa","max"]]},
-  {"id":"s100-16","minSe":100,"targets":[["cost.ixion","max"],["special.dcGains",330],["special.scBooster","max"],["output.delta",180],["output.gamma",80],["output.ixion",60],["output.energyPrice",12],["special.bulkEmblems",27],["special.bulkGp",10],["cost.kappa","max"]]},
-  {"id":"s100-17","minSe":100,"targets":[["special.dcGains",370],["output.delta",210],["output.gamma",90],["output.ixion",70],["output.energyPrice",14],["special.bulkEmblems",32],["special.bulkGp",12]]},
-  {"id":"s100-18","minSe":100,"targets":[["special.dcGains","max"],["output.delta",300],["output.fenix",70],["output.gamma",145],["output.ixion",110],["output.energyPrice",30],["special.bulkEmblems",47],["special.bulkGp",21],["bundle.energyPrice",1],["bundle.tycoon",1]]},
-  {"id":"s100-19","minSe":100,"targets":[["output.delta","max"],["output.fenix",125],["output.gamma",230],["output.ixion",180],["output.energyPrice",65],["special.bulkEmblems",73],["special.bulkGp",35],["special.bulkBuyers",2]]},
-  {"id":"s100-20","minSe":100,"targets":[["output.fenix",225],["output.gamma",390],["output.ixion",310],["output.energyPrice",135],["special.bulkEmblems","max"],["special.bulkGp",60],["special.bulkBuyers",8],["special.bulkScientists","max"],["bundle.leveling",1]]},
-  {"id":"s100-21","minSe":100,"targets":[["output.fenix",415],["output.gamma","max"],["output.helion",120],["output.ixion",560],["output.energyPrice",260],["special.bulkGp",110],["special.bulkBuyers",21],["special.extraLp",20]]},
-  {"id":"s100-22a","minSe":100,"targets":[["output.beta",1]]},
-  {"id":"s100-22b","minSe":100,"targets":[["output.fenix","max"]]},
-  {"id":"s100-22c","minSe":100,"targets":[["output.ixion","max"]]},
-  {"id":"s100-22d","minSe":100,"targets":[["special.extraLp",50]]},
-  {"id":"s100-22e","minSe":100,"targets":[["output.ceti",1]]},
-  {"id":"s100-22f","minSe":100,"targets":[["output.energyPrice","max"]]},
-  {"id":"s100-22g","minSe":100,"targets":[["special.bulkBuyers","max"]]},
-  {"id":"s100-22h","minSe":100,"targets":[["output.helion","max"]]},
-  {"id":"s100-22i","minSe":100,"targets":[["special.bulkGp","max"]]},
-  {"id":"s100-22j","minSe":100,"targets":[["output.beta","max"]]},
-  {"id":"s100-22k","minSe":100,"targets":[["output.epsilon",1]]},
-  {"id":"s100-22l","minSe":100,"targets":[["output.ceti","max"]]},
-  {"id":"s100-22m","minSe":100,"targets":[["output.epsilon","max"]]},
-  {"id":"s100-22n","minSe":100,"targets":[["special.bulkRebirthologists","max"]]},
-  {"id":"s100-22o","minSe":100,"targets":[["special.bulkArchBots","max"]]}
+  {
+    "id": "early-alpha",
+    "maxSe": 49,
+    "targets": [
+      [
+        "output.alpha",
+        50
+      ]
+    ]
+  },
+  {
+    "id": "early-bundles",
+    "maxSe": 49,
+    "targets": [
+      [
+        "bundle.alpha",
+        1
+      ],
+      [
+        "bundle.egetarium",
+        1
+      ],
+      [
+        "bundle.cot",
+        1
+      ],
+      [
+        "output.all",
+        10
+      ]
+    ]
+  },
+  {
+    "id": "early-lab",
+    "maxSe": 49,
+    "targets": [
+      [
+        "output.alpha",
+        100
+      ],
+      [
+        "output.all",
+        20
+      ],
+      [
+        "bundle.laboratory",
+        1
+      ],
+      [
+        "special.bulkArtifacts",
+        1
+      ],
+      [
+        "bundle.singularity",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "se4-gp16",
+    "minSe": 4,
+    "maxSe": 49,
+    "targets": [
+      [
+        "special.gpBooster",
+        4
+      ]
+    ]
+  },
+  {
+    "id": "se5-gp32",
+    "minSe": 5,
+    "maxSe": 49,
+    "targets": [
+      [
+        "special.gpBooster",
+        5
+      ],
+      [
+        "bundle.gcorp",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "se6-core",
+    "minSe": 6,
+    "maxSe": 49,
+    "targets": [
+      [
+        "bundle.allParticles",
+        1
+      ],
+      [
+        "special.bulkArtifacts",
+        3
+      ],
+      [
+        "bundle.simulation",
+        1
+      ],
+      [
+        "special.dcGains",
+        10
+      ],
+      [
+        "bundle.corvus",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "se10-tiberius",
+    "minSe": 10,
+    "maxSe": 49,
+    "targets": [
+      [
+        "bundle.tiberius",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "se10-erm",
+    "minSe": 10,
+    "maxSe": 24,
+    "targets": [
+      [
+        "erm",
+        "max"
+      ]
+    ]
+  },
+  {
+    "id": "se25-ultima",
+    "minSe": 25,
+    "maxSe": 49,
+    "targets": [
+      [
+        "bundle.ultima",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "se25-infmulti",
+    "minSe": 25,
+    "maxSe": 49,
+    "targets": [
+      [
+        "bundle.infinityMulti",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "se25-erm20",
+    "minSe": 25,
+    "maxSe": 49,
+    "targets": [
+      [
+        "erm",
+        20
+      ]
+    ]
+  },
+  {
+    "id": "se25-infmax",
+    "minSe": 25,
+    "maxSe": 49,
+    "targets": [
+      [
+        "special.infinityMaxLv",
+        "max"
+      ]
+    ]
+  },
+  {
+    "id": "se25-ermall",
+    "minSe": 25,
+    "maxSe": 49,
+    "targets": [
+      [
+        "erm",
+        "max"
+      ]
+    ]
+  },
+  {
+    "id": "se25-emm",
+    "minSe": 25,
+    "maxSe": 49,
+    "targets": [
+      [
+        "special.bulkEmblemMilestones",
+        "max"
+      ]
+    ]
+  },
+  {
+    "id": "catchup-bundles",
+    "minSe": 50,
+    "targets": [
+      [
+        "bundle.corvus",
+        1
+      ],
+      [
+        "bundle.ultima",
+        1
+      ],
+      [
+        "bundle.infinityMulti",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "catchup-rest",
+    "minSe": 50,
+    "targets": [
+      [
+        "bundle.alpha",
+        1
+      ],
+      [
+        "bundle.egetarium",
+        1
+      ],
+      [
+        "bundle.allParticles",
+        1
+      ],
+      [
+        "bundle.cot",
+        1
+      ],
+      [
+        "bundle.laboratory",
+        1
+      ],
+      [
+        "bundle.tiberius",
+        1
+      ],
+      [
+        "bundle.singularity",
+        1
+      ],
+      [
+        "bundle.simulation",
+        1
+      ],
+      [
+        "output.alpha",
+        100
+      ],
+      [
+        "output.all",
+        20
+      ],
+      [
+        "special.dcGains",
+        10
+      ],
+      [
+        "special.bulkArtifacts",
+        3
+      ],
+      [
+        "special.gpBooster",
+        4
+      ]
+    ]
+  },
+  {
+    "id": "t55-1",
+    "minSe": 50,
+    "maxSe": 64,
+    "targets": [
+      [
+        "output.juno",
+        5
+      ]
+    ]
+  },
+  {
+    "id": "t55-2",
+    "minSe": 50,
+    "maxSe": 64,
+    "targets": [
+      [
+        "output.juno",
+        50
+      ],
+      [
+        "special.bulkEmblemMilestones",
+        8
+      ],
+      [
+        "erm",
+        10
+      ],
+      [
+        "bundle.juno",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "t55-3",
+    "minSe": 50,
+    "maxSe": 64,
+    "targets": [
+      [
+        "output.juno",
+        100
+      ],
+      [
+        "special.bulkEmblemMilestones",
+        16
+      ],
+      [
+        "erm",
+        40
+      ],
+      [
+        "special.infinityAmp",
+        5
+      ],
+      [
+        "special.infinityMaxLv",
+        5
+      ],
+      [
+        "bundle.juno",
+        1
+      ],
+      [
+        "bundle.ixionJuno",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "t55-4",
+    "minSe": 50,
+    "maxSe": 64,
+    "targets": [
+      [
+        "output.juno",
+        125
+      ],
+      [
+        "special.bulkEmblemMilestones",
+        20
+      ],
+      [
+        "erm",
+        50
+      ],
+      [
+        "special.infinityAmp",
+        45
+      ],
+      [
+        "special.infinityMaxLv",
+        5
+      ],
+      [
+        "bundle.juno",
+        1
+      ],
+      [
+        "bundle.ixionJuno",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "t65-1",
+    "minSe": 65,
+    "maxSe": 74,
+    "targets": [
+      [
+        "special.bulkEmblemMilestones",
+        3
+      ]
+    ]
+  },
+  {
+    "id": "t65-2",
+    "minSe": 65,
+    "maxSe": 74,
+    "targets": [
+      [
+        "output.juno",
+        50
+      ],
+      [
+        "special.bulkEmblemMilestones",
+        12
+      ],
+      [
+        "erm",
+        5
+      ],
+      [
+        "bundle.juno",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "t65-3",
+    "minSe": 65,
+    "maxSe": 74,
+    "targets": [
+      [
+        "output.juno",
+        100
+      ],
+      [
+        "special.bulkEmblemMilestones",
+        20
+      ],
+      [
+        "erm",
+        35
+      ],
+      [
+        "special.infinityMaxLv",
+        5
+      ],
+      [
+        "bundle.juno",
+        1
+      ],
+      [
+        "bundle.ixionJuno",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "t65-4",
+    "minSe": 65,
+    "maxSe": 74,
+    "targets": [
+      [
+        "output.juno",
+        140
+      ],
+      [
+        "special.bulkEmblemMilestones",
+        27
+      ],
+      [
+        "erm",
+        50
+      ],
+      [
+        "special.infinityAmp",
+        50
+      ],
+      [
+        "special.infinityMaxLv",
+        5
+      ],
+      [
+        "bundle.juno",
+        1
+      ],
+      [
+        "bundle.ixionJuno",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "t75-1",
+    "minSe": 75,
+    "maxSe": 84,
+    "targets": [
+      [
+        "special.bulkEmblemMilestones",
+        3
+      ]
+    ]
+  },
+  {
+    "id": "t75-2",
+    "minSe": 75,
+    "maxSe": 84,
+    "targets": [
+      [
+        "output.juno",
+        50
+      ],
+      [
+        "special.bulkEmblemMilestones",
+        12
+      ],
+      [
+        "bundle.juno",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "t75-3",
+    "minSe": 75,
+    "maxSe": 84,
+    "targets": [
+      [
+        "output.juno",
+        100
+      ],
+      [
+        "special.bulkEmblemMilestones",
+        21
+      ],
+      [
+        "erm",
+        5
+      ],
+      [
+        "bundle.juno",
+        1
+      ],
+      [
+        "bundle.ixionJuno",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "t75-4",
+    "minSe": 75,
+    "maxSe": 84,
+    "targets": [
+      [
+        "output.juno",
+        130
+      ],
+      [
+        "special.bulkEmblemMilestones",
+        26
+      ],
+      [
+        "erm",
+        20
+      ],
+      [
+        "special.infinityMaxLv",
+        5
+      ],
+      [
+        "bundle.juno",
+        1
+      ],
+      [
+        "bundle.ixionJuno",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "t75-5",
+    "minSe": 75,
+    "maxSe": 84,
+    "targets": [
+      [
+        "output.juno",
+        200
+      ],
+      [
+        "special.bulkEmblemMilestones",
+        33
+      ],
+      [
+        "erm",
+        50
+      ],
+      [
+        "special.infinityAmp",
+        10
+      ],
+      [
+        "special.infinityMaxLv",
+        5
+      ]
+    ]
+  },
+  {
+    "id": "t75-6",
+    "minSe": 75,
+    "maxSe": 84,
+    "targets": [
+      [
+        "output.juno",
+        250
+      ],
+      [
+        "special.bulkEmblemMilestones",
+        40
+      ],
+      [
+        "erm",
+        50
+      ],
+      [
+        "special.infinityAmp",
+        50
+      ],
+      [
+        "special.infinityMaxLv",
+        5
+      ]
+    ]
+  },
+  {
+    "id": "t75-7",
+    "minSe": 75,
+    "maxSe": 84,
+    "targets": [
+      [
+        "output.juno",
+        300
+      ],
+      [
+        "special.bulkEmblemMilestones",
+        45
+      ],
+      [
+        "erm",
+        50
+      ],
+      [
+        "special.infinityAmp",
+        100
+      ],
+      [
+        "special.infinityMaxLv",
+        5
+      ]
+    ]
+  },
+  {
+    "id": "t85-1",
+    "minSe": 85,
+    "maxSe": 94,
+    "targets": [
+      [
+        "output.juno",
+        50
+      ],
+      [
+        "special.bulkEmblemMilestones",
+        9
+      ],
+      [
+        "bundle.juno",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "t85-2",
+    "minSe": 85,
+    "maxSe": 94,
+    "targets": [
+      [
+        "output.juno",
+        100
+      ],
+      [
+        "special.bulkEmblemMilestones",
+        17
+      ],
+      [
+        "bundle.juno",
+        1
+      ],
+      [
+        "bundle.ixionJuno",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "t85-3",
+    "minSe": 85,
+    "maxSe": 94,
+    "targets": [
+      [
+        "output.juno",
+        200
+      ],
+      [
+        "special.bulkEmblemMilestones",
+        29
+      ],
+      [
+        "erm",
+        20
+      ],
+      [
+        "special.infinityMaxLv",
+        5
+      ]
+    ]
+  },
+  {
+    "id": "t85-4",
+    "minSe": 85,
+    "maxSe": 94,
+    "targets": [
+      [
+        "output.juno",
+        275
+      ],
+      [
+        "special.bulkEmblemMilestones",
+        36
+      ],
+      [
+        "erm",
+        45
+      ],
+      [
+        "special.infinityAmp",
+        10
+      ],
+      [
+        "special.infinityMaxLv",
+        5
+      ]
+    ]
+  },
+  {
+    "id": "t85-5",
+    "minSe": 85,
+    "maxSe": 94,
+    "targets": [
+      [
+        "output.juno",
+        350
+      ],
+      [
+        "special.bulkEmblemMilestones",
+        43
+      ],
+      [
+        "erm",
+        50
+      ],
+      [
+        "special.infinityAmp",
+        55
+      ],
+      [
+        "special.infinityMaxLv",
+        5
+      ]
+    ]
+  },
+  {
+    "id": "t85-6",
+    "minSe": 85,
+    "maxSe": 94,
+    "targets": [
+      [
+        "output.juno",
+        400
+      ],
+      [
+        "special.bulkEmblemMilestones",
+        47
+      ],
+      [
+        "erm",
+        50
+      ],
+      [
+        "special.infinityAmp",
+        90
+      ],
+      [
+        "special.infinityMaxLv",
+        5
+      ]
+    ]
+  },
+  {
+    "id": "t85-7",
+    "minSe": 85,
+    "maxSe": 94,
+    "targets": [
+      [
+        "output.juno",
+        425
+      ],
+      [
+        "special.bulkEmblemMilestones",
+        50
+      ],
+      [
+        "erm",
+        50
+      ],
+      [
+        "special.infinityAmp",
+        100
+      ],
+      [
+        "special.infinityMaxLv",
+        5
+      ]
+    ]
+  },
+  {
+    "id": "t95-1",
+    "minSe": 95,
+    "targets": [
+      [
+        "output.juno",
+        100
+      ],
+      [
+        "special.bulkEmblemMilestones",
+        14
+      ],
+      [
+        "bundle.juno",
+        1
+      ],
+      [
+        "bundle.ixionJuno",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "t95-2",
+    "minSe": 95,
+    "targets": [
+      [
+        "output.juno",
+        200
+      ],
+      [
+        "special.bulkEmblemMilestones",
+        25
+      ],
+      [
+        "erm",
+        10
+      ],
+      [
+        "bundle.juno",
+        1
+      ],
+      [
+        "bundle.ixionJuno",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "t95-3",
+    "minSe": 95,
+    "targets": [
+      [
+        "output.juno",
+        250
+      ],
+      [
+        "special.bulkEmblemMilestones",
+        30
+      ],
+      [
+        "erm",
+        20
+      ],
+      [
+        "special.infinityMaxLv",
+        5
+      ]
+    ]
+  },
+  {
+    "id": "t95-4",
+    "minSe": 95,
+    "targets": [
+      [
+        "output.juno",
+        350
+      ],
+      [
+        "special.bulkEmblemMilestones",
+        39
+      ],
+      [
+        "erm",
+        45
+      ],
+      [
+        "special.infinityAmp",
+        5
+      ],
+      [
+        "special.infinityMaxLv",
+        5
+      ]
+    ]
+  },
+  {
+    "id": "t95-5",
+    "minSe": 95,
+    "targets": [
+      [
+        "output.juno",
+        450
+      ],
+      [
+        "special.bulkEmblemMilestones",
+        45
+      ],
+      [
+        "erm",
+        50
+      ],
+      [
+        "special.infinityAmp",
+        55
+      ],
+      [
+        "special.infinityMaxLv",
+        5
+      ]
+    ]
+  },
+  {
+    "id": "t95-6",
+    "minSe": 95,
+    "targets": [
+      [
+        "output.juno",
+        525
+      ],
+      [
+        "special.bulkEmblemMilestones",
+        50
+      ],
+      [
+        "erm",
+        50
+      ],
+      [
+        "special.infinityAmp",
+        90
+      ],
+      [
+        "special.infinityMaxLv",
+        5
+      ]
+    ]
+  },
+  {
+    "id": "se100-finish",
+    "minSe": 100,
+    "targets": [
+      [
+        "erm",
+        "max"
+      ],
+      [
+        "special.bulkEmblemMilestones",
+        "max"
+      ],
+      [
+        "special.infinityAmp",
+        "max"
+      ]
+    ]
+  },
+  {
+    "id": "se125-kappa",
+    "minSe": 125,
+    "doneNote": "Convert 1000 crystals per day to tokens.",
+    "targets": [
+      [
+        "bundle.meltdown",
+        1
+      ],
+      [
+        "bundle.kappa",
+        1
+      ],
+      [
+        "bundle.junoKappa",
+        1
+      ],
+      [
+        "bundle.allParticlesMk2",
+        1
+      ],
+      [
+        "bundle.sequencing",
+        1
+      ],
+      [
+        "output.kappa",
+        50
+      ],
+      [
+        "special.ampCounter",
+        5
+      ]
+    ]
+  },
+  {
+    "id": "s100-01",
+    "minSe": 100,
+    "targets": [
+      [
+        "output.all",
+        50
+      ]
+    ]
+  },
+  {
+    "id": "s100-02",
+    "minSe": 100,
+    "targets": [
+      [
+        "bundle.taskmaster",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "s100-03",
+    "minSe": 100,
+    "targets": [
+      [
+        "output.alpha",
+        150
+      ],
+      [
+        "output.all",
+        70
+      ],
+      [
+        "special.dcGains",
+        20
+      ],
+      [
+        "special.bulkArtifacts",
+        7
+      ]
+    ]
+  },
+  {
+    "id": "s100-04",
+    "minSe": 100,
+    "targets": [
+      [
+        "output.juno",
+        "max"
+      ],
+      [
+        "output.alpha",
+        "max"
+      ],
+      [
+        "output.all",
+        150
+      ],
+      [
+        "special.dcGains",
+        45
+      ],
+      [
+        "special.bulkArtifacts",
+        18
+      ],
+      [
+        "special.scBooster",
+        30
+      ],
+      [
+        "special.bulkSolutions",
+        3
+      ],
+      [
+        "bundle.abc",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "s100-05",
+    "minSe": 100,
+    "targets": [
+      [
+        "special.tokenBooster",
+        "max"
+      ]
+    ]
+  },
+  {
+    "id": "s100-06",
+    "minSe": 100,
+    "targets": [
+      [
+        "oneTimer.costScalerSc",
+        1
+      ],
+      [
+        "oneTimer.costScalerDc",
+        1
+      ],
+      [
+        "cost.beta",
+        "max"
+      ]
+    ]
+  },
+  {
+    "id": "s100-07",
+    "minSe": 100,
+    "targets": [
+      [
+        "cost.juno",
+        "max"
+      ],
+      [
+        "output.all",
+        180
+      ],
+      [
+        "special.dcGains",
+        55
+      ],
+      [
+        "special.bulkArtifacts",
+        22
+      ],
+      [
+        "special.scBooster",
+        50
+      ],
+      [
+        "special.bulkSolutions",
+        6
+      ],
+      [
+        "bundle.institute",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "s100-08",
+    "minSe": 100,
+    "targets": [
+      [
+        "cost.alpha",
+        "max"
+      ],
+      [
+        "output.all",
+        200
+      ],
+      [
+        "special.dcGains",
+        60
+      ],
+      [
+        "special.bulkArtifacts",
+        25
+      ],
+      [
+        "special.scBooster",
+        65
+      ],
+      [
+        "special.bulkSolutions",
+        9
+      ],
+      [
+        "special.gpBooster",
+        5
+      ],
+      [
+        "bundle.gcorp",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "s100-09",
+    "minSe": 100,
+    "targets": [
+      [
+        "cost.delta",
+        "max"
+      ],
+      [
+        "output.all",
+        250
+      ],
+      [
+        "special.dcGains",
+        75
+      ],
+      [
+        "special.scBooster",
+        90
+      ],
+      [
+        "special.bulkSolutions",
+        14
+      ],
+      [
+        "special.gpBooster",
+        6
+      ]
+    ]
+  },
+  {
+    "id": "s100-10",
+    "minSe": 100,
+    "targets": [
+      [
+        "cost.ceti",
+        "max"
+      ],
+      [
+        "output.all",
+        375
+      ],
+      [
+        "special.dcGains",
+        120
+      ],
+      [
+        "special.scBooster",
+        175
+      ],
+      [
+        "special.bulkSolutions",
+        30
+      ],
+      [
+        "special.bulkEmblems",
+        5
+      ],
+      [
+        "special.gpBooster",
+        7
+      ],
+      [
+        "output.kappa",
+        375
+      ],
+      [
+        "bundle.delta",
+        1
+      ],
+      [
+        "bundle.def",
+        1
+      ],
+      [
+        "bundle.archive",
+        1
+      ],
+      [
+        "bundle.gamma",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "s100-11",
+    "minSe": 100,
+    "targets": [
+      [
+        "cost.fenix",
+        "max"
+      ],
+      [
+        "output.all",
+        "max"
+      ],
+      [
+        "special.dcGains",
+        145
+      ],
+      [
+        "special.scBooster",
+        230
+      ],
+      [
+        "output.delta",
+        60
+      ],
+      [
+        "special.bulkSolutions",
+        40
+      ],
+      [
+        "special.bulkEmblems",
+        8
+      ],
+      [
+        "output.gamma",
+        10
+      ],
+      [
+        "special.gpBooster",
+        9
+      ],
+      [
+        "output.kappa",
+        440
+      ],
+      [
+        "bundle.ghi",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "s100-12",
+    "minSe": 100,
+    "targets": [
+      [
+        "cost.epsilon",
+        "max"
+      ],
+      [
+        "special.dcGains",
+        200
+      ],
+      [
+        "special.scBooster",
+        330
+      ],
+      [
+        "output.delta",
+        90
+      ],
+      [
+        "special.bulkSolutions",
+        "max"
+      ],
+      [
+        "special.bulkEmblems",
+        12
+      ],
+      [
+        "output.gamma",
+        30
+      ],
+      [
+        "output.ixion",
+        20
+      ],
+      [
+        "output.kappa",
+        610
+      ],
+      [
+        "bundle.buyers",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "s100-13",
+    "minSe": 100,
+    "targets": [
+      [
+        "cost.gamma",
+        "max"
+      ],
+      [
+        "special.dcGains",
+        220
+      ],
+      [
+        "special.scBooster",
+        375
+      ],
+      [
+        "output.delta",
+        105
+      ],
+      [
+        "special.bulkEmblems",
+        15
+      ],
+      [
+        "output.ixion",
+        25
+      ],
+      [
+        "special.bulkGp",
+        4
+      ],
+      [
+        "special.gpBooster",
+        "max"
+      ],
+      [
+        "output.kappa",
+        670
+      ],
+      [
+        "bundle.cetiDelta",
+        1
+      ],
+      [
+        "bundle.fenixGamma",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "s100-14",
+    "minSe": 100,
+    "targets": [
+      [
+        "cost.helion",
+        "max"
+      ],
+      [
+        "special.dcGains",
+        280
+      ],
+      [
+        "special.scBooster",
+        475
+      ],
+      [
+        "output.delta",
+        150
+      ],
+      [
+        "output.gamma",
+        60
+      ],
+      [
+        "output.ixion",
+        40
+      ],
+      [
+        "output.energyPrice",
+        10
+      ],
+      [
+        "special.bulkEmblems",
+        21
+      ],
+      [
+        "special.bulkGp",
+        7
+      ],
+      [
+        "output.kappa",
+        "max"
+      ]
+    ]
+  },
+  {
+    "id": "s100-16",
+    "minSe": 100,
+    "targets": [
+      [
+        "cost.ixion",
+        "max"
+      ],
+      [
+        "special.dcGains",
+        330
+      ],
+      [
+        "special.scBooster",
+        "max"
+      ],
+      [
+        "output.delta",
+        180
+      ],
+      [
+        "output.gamma",
+        80
+      ],
+      [
+        "output.ixion",
+        60
+      ],
+      [
+        "output.energyPrice",
+        12
+      ],
+      [
+        "special.bulkEmblems",
+        27
+      ],
+      [
+        "special.bulkGp",
+        10
+      ],
+      [
+        "cost.kappa",
+        "max"
+      ]
+    ]
+  },
+  {
+    "id": "s100-17",
+    "minSe": 100,
+    "targets": [
+      [
+        "special.dcGains",
+        370
+      ],
+      [
+        "output.delta",
+        210
+      ],
+      [
+        "output.gamma",
+        90
+      ],
+      [
+        "output.ixion",
+        70
+      ],
+      [
+        "output.energyPrice",
+        14
+      ],
+      [
+        "special.bulkEmblems",
+        32
+      ],
+      [
+        "special.bulkGp",
+        12
+      ]
+    ]
+  },
+  {
+    "id": "s100-18",
+    "minSe": 100,
+    "targets": [
+      [
+        "special.dcGains",
+        "max"
+      ],
+      [
+        "output.delta",
+        300
+      ],
+      [
+        "output.fenix",
+        70
+      ],
+      [
+        "output.gamma",
+        145
+      ],
+      [
+        "output.ixion",
+        110
+      ],
+      [
+        "output.energyPrice",
+        30
+      ],
+      [
+        "special.bulkEmblems",
+        47
+      ],
+      [
+        "special.bulkGp",
+        21
+      ],
+      [
+        "bundle.energyPrice",
+        1
+      ],
+      [
+        "bundle.tycoon",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "s100-19",
+    "minSe": 100,
+    "targets": [
+      [
+        "output.delta",
+        "max"
+      ],
+      [
+        "output.fenix",
+        125
+      ],
+      [
+        "output.gamma",
+        230
+      ],
+      [
+        "output.ixion",
+        180
+      ],
+      [
+        "output.energyPrice",
+        65
+      ],
+      [
+        "special.bulkEmblems",
+        73
+      ],
+      [
+        "special.bulkGp",
+        35
+      ],
+      [
+        "special.bulkBuyers",
+        2
+      ]
+    ]
+  },
+  {
+    "id": "s100-20",
+    "minSe": 100,
+    "targets": [
+      [
+        "output.fenix",
+        225
+      ],
+      [
+        "output.gamma",
+        390
+      ],
+      [
+        "output.ixion",
+        310
+      ],
+      [
+        "output.energyPrice",
+        135
+      ],
+      [
+        "special.bulkEmblems",
+        "max"
+      ],
+      [
+        "special.bulkGp",
+        60
+      ],
+      [
+        "special.bulkBuyers",
+        8
+      ],
+      [
+        "special.bulkScientists",
+        "max"
+      ],
+      [
+        "bundle.leveling",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "s100-21",
+    "minSe": 100,
+    "targets": [
+      [
+        "output.fenix",
+        415
+      ],
+      [
+        "output.gamma",
+        "max"
+      ],
+      [
+        "output.helion",
+        120
+      ],
+      [
+        "output.ixion",
+        560
+      ],
+      [
+        "output.energyPrice",
+        260
+      ],
+      [
+        "special.bulkGp",
+        110
+      ],
+      [
+        "special.bulkBuyers",
+        21
+      ],
+      [
+        "special.extraLp",
+        20
+      ]
+    ]
+  },
+  {
+    "id": "s100-22a",
+    "minSe": 100,
+    "targets": [
+      [
+        "output.beta",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "s100-22b",
+    "minSe": 100,
+    "targets": [
+      [
+        "output.fenix",
+        "max"
+      ]
+    ]
+  },
+  {
+    "id": "s100-22c",
+    "minSe": 100,
+    "targets": [
+      [
+        "output.ixion",
+        "max"
+      ]
+    ]
+  },
+  {
+    "id": "s100-22d",
+    "minSe": 100,
+    "targets": [
+      [
+        "special.extraLp",
+        50
+      ]
+    ]
+  },
+  {
+    "id": "s100-22e",
+    "minSe": 100,
+    "targets": [
+      [
+        "output.ceti",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "s100-22f",
+    "minSe": 100,
+    "targets": [
+      [
+        "output.energyPrice",
+        "max"
+      ]
+    ]
+  },
+  {
+    "id": "s100-22g",
+    "minSe": 100,
+    "targets": [
+      [
+        "special.bulkBuyers",
+        "max"
+      ]
+    ]
+  },
+  {
+    "id": "s100-22h",
+    "minSe": 100,
+    "targets": [
+      [
+        "output.helion",
+        "max"
+      ]
+    ]
+  },
+  {
+    "id": "s100-22i",
+    "minSe": 100,
+    "targets": [
+      [
+        "special.bulkGp",
+        "max"
+      ]
+    ]
+  },
+  {
+    "id": "s100-22j",
+    "minSe": 100,
+    "targets": [
+      [
+        "output.beta",
+        "max"
+      ]
+    ]
+  },
+  {
+    "id": "s100-22k",
+    "minSe": 100,
+    "targets": [
+      [
+        "output.epsilon",
+        1
+      ]
+    ]
+  },
+  {
+    "id": "s100-22l",
+    "minSe": 100,
+    "targets": [
+      [
+        "output.ceti",
+        "max"
+      ]
+    ]
+  },
+  {
+    "id": "s100-22m",
+    "minSe": 100,
+    "targets": [
+      [
+        "output.epsilon",
+        "max"
+      ]
+    ]
+  },
+  {
+    "id": "s100-22n",
+    "minSe": 100,
+    "targets": [
+      [
+        "special.bulkRebirthologists",
+        "max"
+      ]
+    ]
+  },
+  {
+    "id": "s100-22o",
+    "minSe": 100,
+    "targets": [
+      [
+        "special.bulkArchBots",
+        "max"
+      ]
+    ]
+  }
 ]

@@ -71,6 +71,7 @@ export const parseCrystalGuide = (raw: unknown): CrystalGuideStep[] => {
         id: entry.id,
         minSe: toOptionalNumber(entry.minSe),
         maxSe: toOptionalNumber(entry.maxSe),
+        doneNote: typeof entry.doneNote === "string" ? entry.doneNote : undefined,
         targets,
       },
     ]

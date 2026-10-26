@@ -273,4 +273,5 @@ Ordered list of guide steps. The first step with an unmet, unlocked target is th
 
 - `id`: Unique step id.
 - `minSe`, `maxSe`: Optional SE window where the step applies.
+- `doneNote`: Optional text shown once every target of the step is met.
 - `targets`: Array of `[upgradeId, level]`. Level is a number or `"max"`. The id `"erm"` stands for Bulk Extractions, Bulk Researches and Bulk DC Milestones.

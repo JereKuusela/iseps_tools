@@ -185,6 +185,59 @@ const pickNextAction = (state: CrystalInputState, data: CrystalData) => {
   }
 }
 
+// Locked upgrades the user should save for: those in or before the current step, plus the next fully blocked step.
+const findSavingGoals = (state: CrystalInputState, data: CrystalData, currentIndex: number) => {
+  const upgradeById = new Map(data.upgrades.map((upgrade) => [upgrade.id, upgrade] as const))
+  const lockedGoals = new Map<string, number>()
+
+  for (let index = 0; index < data.steps.length; index++) {
+    const step = data.steps[index]
+    if (!isStepActive(step, state.se)) continue
+
+    let hasActionable = false
+    const stepLocked: [string, number][] = []
+    for (const target of expandTargets(step)) {
+      const upgrade = upgradeById.get(target.id)
+      if (!upgrade) continue
+      const goal = resolveGoal(upgrade, target.level)
+      if (levelOf(state.levels, target.id) >= goal) continue
+
+      if (resolveCandidate(target.id, target.level, state, upgradeById, new Map())) hasActionable = true
+      else stepLocked.push([target.id, goal])
+    }
+
+    const fullyBlocked = !hasActionable && stepLocked.length > 0
+    if (index > currentIndex && !fullyBlocked) continue
+
+    for (const [id, goal] of stepLocked) lockedGoals.set(id, Math.max(lockedGoals.get(id) ?? 0, goal))
+    if (index > currentIndex) break
+  }
+
+  const names: string[] = []
+  let cost = NO_COST
+  for (const [id, goal] of lockedGoals) {
+    const upgrade = upgradeById.get(id)
+    if (!upgrade) continue
+    names.push(upgrade.name)
+    cost = addCost(cost, calculateUpgradeCost(upgrade, levelOf(state.levels, id), goal))
+  }
+
+  return { names, cost }
+}
+
+const findDoneNotes = (state: CrystalInputState, data: CrystalData) => {
+  const upgradeById = new Map(data.upgrades.map((upgrade) => [upgrade.id, upgrade] as const))
+
+  return data.steps.flatMap((step) => {
+    if (!step.doneNote || !isStepActive(step, state.se)) return []
+    const isDone = expandTargets(step).every((target) => {
+      const upgrade = upgradeById.get(target.id)
+      return !upgrade || levelOf(state.levels, target.id) >= resolveGoal(upgrade, target.level)
+    })
+    return isDone ? [step.doneNote] : []
+  })
+}
+
 export const calculateCrystalRecommendations = (
   state: CrystalInputState,
   data: CrystalData,
@@ -209,7 +262,13 @@ export const calculateCrystalRecommendations = (
     levels = { ...levels, [next.action.id]: next.action.targetLevel }
   }
 
-  return { actions: actions.slice(0, count), step: first?.step ?? null, stepIndex: first?.index ?? -1 }
+  return {
+    actions: actions.slice(0, count),
+    step: first?.step ?? null,
+    stepIndex: first?.index ?? -1,
+    savingFor: findSavingGoals(state, data, first?.index ?? data.steps.length),
+    doneNotes: findDoneNotes(state, data),
+  }
 }
 
 // Levels after buying the next `count` actions, or the rest of the current step when count is "step".

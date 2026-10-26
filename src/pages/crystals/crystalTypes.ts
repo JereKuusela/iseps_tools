@@ -26,6 +26,7 @@ export type CrystalGuideStep = {
   id: string
   minSe?: number
   maxSe?: number
+  doneNote?: string
   targets: { id: string; level: CrystalTargetLevel }[]
 }
 
@@ -63,4 +64,7 @@ export type CrystalRecommendation = {
   actions: CrystalAction[]
   step: CrystalGuideStep | null
   stepIndex: number
+  // Locked upgrades the user should save crystals for.
+  savingFor: { names: string[]; cost: CrystalCost }
+  doneNotes: string[]
 }

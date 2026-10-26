@@ -136,6 +136,41 @@ describe("calculateCrystalRecommendations", () => {
   })
 })
 
+describe("notes", () => {
+  const data: CrystalData = {
+    upgrades: [
+      upgrade("a", { maxLevel: 10 }),
+      upgrade("late", { maxLevel: 10, requires: { playerLevel: 50, upgrades: [] } }),
+      upgrade("later", { maxLevel: 5, baseCost: null, requires: { playerLevel: 80, upgrades: [] } }),
+    ],
+    steps: [
+      { id: "s1", doneNote: "Convert crystals to tokens.", targets: [{ id: "a", level: 10 }] },
+      { id: "s2", targets: [{ id: "late", level: 10 }] },
+      { id: "s3", targets: [{ id: "later", level: 5 }] },
+    ],
+  }
+
+  it("shows a done note only once the step is complete", () => {
+    expect(calculateCrystalRecommendations(state(), data, 1).doneNotes).toEqual([])
+    expect(calculateCrystalRecommendations(state({ levels: { a: 10 } }), data, 1).doneNotes).toEqual([
+      "Convert crystals to tokens.",
+    ])
+  })
+
+  it("lists locked upgrades up to the next fully blocked step", () => {
+    const { savingFor } = calculateCrystalRecommendations(state({ levels: { a: 10 } }), data, 1)
+    expect(savingFor.names).toEqual(["late"])
+    expect(savingFor.cost).toEqual({ cost: 100, unknown: false })
+  })
+
+  it("flags unknown costs and includes everything when no step is actionable", () => {
+    const { savingFor } = calculateCrystalRecommendations(state({ levels: { a: 10 } }), data, 1)
+    expect(savingFor.cost.unknown).toBe(false)
+    const all = calculateCrystalRecommendations(state({ playerLevel: 10, levels: { a: 10 } }), data, 1)
+    expect(all.savingFor.names).toEqual(["late"])
+  })
+})
+
 describe("bundled guide data", () => {
   it("references only known upgrades", () => {
     const ids = new Set(CRYSTAL_DATA.upgrades.map((entry) => entry.id))

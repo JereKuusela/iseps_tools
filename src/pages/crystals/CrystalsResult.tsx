@@ -1,10 +1,20 @@
+import { For, Show } from "solid-js"
 import { BestNextSummary } from "../../components/layout/BestNextSummary"
 import { formatCrystalCost } from "./crystalFormat"
 import { useCrystalsContext } from "./crystalsContext"
 
+const MAX_LISTED_NAMES = 4
+
 export const CrystalsResult = () => {
   const crystals = useCrystalsContext()
   const recommendation = () => crystals.recommendation()
+  const savingFor = () => recommendation().savingFor
+  const savingNames = () => {
+    const names = savingFor().names
+    const extra = names.length - MAX_LISTED_NAMES
+    return extra > 0 ? `${names.slice(0, MAX_LISTED_NAMES).join(", ")} and ${extra} more` : names.join(", ")
+  }
+  const hasNotes = () => savingFor().names.length > 0 || recommendation().doneNotes.length > 0
 
   return (
     <div class="grid gap-3">
@@ -33,6 +43,18 @@ export const CrystalsResult = () => {
         minRows={7}
         columnRatios={[75, 0, 25]}
         hideValue
+        footer={
+          <Show when={hasNotes()}>
+            <div class="grid gap-2 p-3 text-sm text-ink/85 dark:text-white/85">
+              <For each={recommendation().doneNotes}>{(note) => <p>{note}</p>}</For>
+              <Show when={savingFor().names.length > 0}>
+                <p>
+                  Save up {formatCrystalCost(savingFor().cost)} crystals for: {savingNames()}.
+                </p>
+              </Show>
+            </div>
+          </Show>
+        }
       />
     </div>
   )
