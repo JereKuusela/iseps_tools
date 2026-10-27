@@ -380,8 +380,8 @@
     "id": "special.bulkRebirthologists",
     "name": "Bulk Rebirthologists",
     "group": "special",
-    "baseCost": 100,
-    "maxLevel": 50,
+    "baseCost": 300,
+    "maxLevel": 100,
     "requires": {
       "particle": "fenix",
       "upgrades": [
