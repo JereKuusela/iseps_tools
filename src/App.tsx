@@ -3,6 +3,7 @@ import { For, Show, createEffect, createSignal, onCleanup, onMount, type ParentC
 import { useDarkModeSignal } from "./lib/darkMode"
 import { ROUTES, eventTabs, premiumTabs, primaryTabs, type TabItem } from "./lib/routes"
 import { NAV_ITEM_CLASS, navItemActive } from "./components/ui/navStyles"
+import { startVersionCheck, updateAvailable } from "./lib/versionCheck"
 
 const normalizePath = (path: string) => {
   if (!path || path === "/") {
@@ -197,11 +198,28 @@ const TopNav = (props: { darkMode: boolean; onToggleDarkMode: () => void }) => {
 const App: ParentComponent = (props) => {
   const [darkMode, setDarkMode] = useDarkModeSignal()
 
+  onMount(() => onCleanup(startVersionCheck()))
+
   return (
     <div class="relative min-h-screen overflow-x-auto overflow-y-visible bg-mist text-ink transition-colors dark:bg-[#070d16] dark:text-[#e8f0ff]">
       <div class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_10%_20%,rgba(255,107,53,0.2),transparent_50%),radial-gradient(circle_at_90%_10%,rgba(10,143,148,0.25),transparent_45%),radial-gradient(circle_at_40%_85%,rgba(12,28,48,0.18),transparent_40%)] dark:bg-[radial-gradient(circle_at_12%_20%,rgba(255,107,53,0.22),transparent_46%),radial-gradient(circle_at_84%_16%,rgba(10,143,148,0.24),transparent_42%),radial-gradient(circle_at_50%_82%,rgba(143,182,255,0.2),transparent_40%)]" />
       <TopNav darkMode={darkMode()} onToggleDarkMode={() => setDarkMode((value) => !value)} />
       <main class="w-full px-4 pb-10 pt-4 sm:px-8 sm:pb-12 sm:pt-6 lg:px-10 lg:pb-14 lg:pt-8">{props.children}</main>
+      <Show when={updateAvailable()}>
+        <div
+          role="status"
+          class="fixed bottom-4 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-xl border border-ink/15 bg-white px-4 py-2.5 text-sm shadow-lg dark:border-white/20 dark:bg-[#22344d]"
+        >
+          <span>A new version is available.</span>
+          <button
+            type="button"
+            class="rounded-lg bg-ink px-3 py-1 font-semibold text-white dark:bg-white/20"
+            onClick={() => window.location.reload()}
+          >
+            Reload
+          </button>
+        </div>
+      </Show>
     </div>
   )
 }
