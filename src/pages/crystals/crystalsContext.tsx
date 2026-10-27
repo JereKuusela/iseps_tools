@@ -77,6 +77,13 @@ export const CrystalsProvider = (props: ParentProps) => {
   const recommendation = createMemo(() => calculateCrystalRecommendations(state(), CRYSTAL_DATA, UPCOMING_ACTION_COUNT))
   const crystalsSpent = createMemo(() => calculateCrystalsSpent(levels(), CRYSTAL_DATA))
 
+  // Per-id memos so a level change only re-renders rows whose unlock state actually flipped.
+  const unlockedById = new Map(
+    CRYSTAL_DATA.upgrades.map(
+      (upgrade) => [upgrade.id, createMemo(() => isUpgradeUnlocked(upgrade, state(), upgradeById))] as const,
+    ),
+  )
+
   const setLevel = (id: string, next: string) => {
     levelSignals.get(id)?.[1](String(clampLevel(id, next)))
   }
@@ -99,10 +106,7 @@ export const CrystalsProvider = (props: ParentProps) => {
         upgrades: () => CRYSTAL_DATA.upgrades,
         levelText: (id) => String(levels()[id] ?? 0),
         setLevel,
-        isUnlocked: (id) => {
-          const upgrade = upgradeById.get(id)
-          return upgrade ? isUpgradeUnlocked(upgrade, state()) : false
-        },
+        isUnlocked: (id) => unlockedById.get(id)?.() ?? false,
         recommendation,
         crystalsSpent,
         applyBest: () => {

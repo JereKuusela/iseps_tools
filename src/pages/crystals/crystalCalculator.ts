@@ -35,12 +35,24 @@ export const levelOf = (levels: CrystalLevels, id: string) => levels[id] ?? 0
 
 const particleRank = (particle: string) => PARTICLE_ORDER.indexOf(particle as (typeof PARTICLE_ORDER)[number])
 
-export const isUpgradeUnlocked = (upgrade: CrystalUpgrade, state: CrystalInputState) => {
+export const isUpgradeUnlocked = (
+  upgrade: CrystalUpgrade,
+  state: CrystalInputState,
+  upgradeById: Map<string, CrystalUpgrade>,
+  depth = 0,
+): boolean => {
   const { particle, se, playerLevel } = upgrade.requires
+  if (depth > MAX_PREREQUISITE_DEPTH) return false
   if (particle && particleRank(particle) > particleRank(state.unlockedParticle)) return false
   if (se !== undefined && state.se < se) return false
   if (playerLevel !== undefined && state.playerLevel < playerLevel) return false
-  return true
+
+  // Unmet prerequisites must themselves be unlocked, since they have to be bought first.
+  return upgrade.requires.upgrades.every((prerequisite) => {
+    if (levelOf(state.levels, prerequisite.id) >= prerequisite.level) return true
+    const required = upgradeById.get(prerequisite.id)
+    return !!required && isUpgradeUnlocked(required, state, upgradeById, depth + 1)
+  })
 }
 
 export const isStepActive = (step: CrystalGuideStep, se: number) =>
@@ -49,6 +61,7 @@ export const isStepActive = (step: CrystalGuideStep, se: number) =>
 export const calculateUpgradeCost = (upgrade: CrystalUpgrade, from: number, to: number): CrystalCost => {
   const count = Math.max(0, to - from)
   if (count === 0) return { cost: 0, unknown: false }
+  if (upgrade.costs) return { cost: upgrade.costs.slice(from, to).reduce((sum, cost) => sum + cost, 0), unknown: false }
   if (upgrade.baseCost === null) return { cost: 0, unknown: true }
 
   const stepTotal = (upgrade.costStep * (from + to - 1) * count) / 2
@@ -88,7 +101,7 @@ const resolveCandidate = (
   rankRatio?: number,
 ): Candidate | null => {
   const upgrade = upgradeById.get(id)
-  if (!upgrade || depth > MAX_PREREQUISITE_DEPTH || !isUpgradeUnlocked(upgrade, state)) return null
+  if (!upgrade || depth > MAX_PREREQUISITE_DEPTH || !isUpgradeUnlocked(upgrade, state, upgradeById)) return null
 
   const goal = resolveGoal(upgrade, level)
   const current = levelOf(state.levels, id)
@@ -266,7 +279,7 @@ export const calculateCrystalRecommendations = (
     actions: actions.slice(0, count),
     step: first?.step ?? null,
     stepIndex: first?.index ?? -1,
-    savingFor: findSavingGoals(state, data, first?.index ?? data.steps.length),
+    savingFor: findSavingGoals(state, data, first?.index ?? -1),
     doneNotes: findDoneNotes(state, data),
   }
 }

@@ -260,12 +260,13 @@ All crystal shop upgrades. The id doubles as the storage key suffix (`crystal.<i
 - `particle`: Optional. Puts the upgrade in that particle's row of the input table (outputs, costs and single-particle bundles only).
 - `baseCost`: Crystals per level. `null` when unknown.
 - `costStep`: Optional. Extra crystals added per owned level. Default is 0.
-- `maxLevel`: Maximum level.
+- `costs`: Optional. Explicit crystals per level (first entry is level 1); overrides `baseCost` and `costStep`.
+- `maxLevel`: Optional. Maximum level. Default is 1.
 - `requires`: Optional.
   - `particle`: Unlocked particle needed (locks the upgrade).
   - `se`: SE needed (locks the upgrade).
   - `playerLevel`: Player level needed (locks the upgrade).
-  - `upgrades`: `{ id, level }` prerequisites. Not a lock; the guide buys these first.
+  - `upgrades`: `{ id, level }` prerequisites. `level` defaults to 1, and a plain id string is shorthand for level 1. Not a lock; the guide buys these first.
 
 ## crystal_guide.json
 

@@ -33,16 +33,21 @@ export const parseCrystalUpgrades = (raw: unknown): CrystalUpgrade[] => {
         particle: toParticle(entry.particle),
         baseCost: toOptionalNumber(entry.baseCost) ?? null,
         costStep: toOptionalNumber(entry.costStep) ?? 0,
+        costs:
+          Array.isArray(entry.costs) && entry.costs.every((cost) => typeof cost === "number")
+            ? (entry.costs as number[])
+            : undefined,
         maxLevel: Math.max(1, toOptionalNumber(entry.maxLevel) ?? 1),
         requires: {
           particle: toParticle(requires.particle),
           se: toOptionalNumber(requires.se),
           playerLevel: toOptionalNumber(requires.playerLevel),
-          upgrades: prerequisites.flatMap((item) =>
-            isRecord(item) && typeof item.id === "string" && typeof item.level === "number"
-              ? [{ id: item.id, level: item.level }]
-              : [],
-          ),
+          upgrades: prerequisites.flatMap((item) => {
+            if (typeof item === "string") return [{ id: item, level: 1 }]
+            return isRecord(item) && typeof item.id === "string"
+              ? [{ id: item.id, level: toOptionalNumber(item.level) ?? 1 }]
+              : []
+          }),
         },
       },
     ]

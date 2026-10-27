@@ -16,6 +16,8 @@ export type CrystalUpgrade = {
   particle?: UnlockedParticle
   baseCost: number | null
   costStep: number
+  // Explicit cost per level (index 0 = level 1); overrides baseCost/costStep.
+  costs?: number[]
   maxLevel: number
   requires: CrystalRequirements
 }

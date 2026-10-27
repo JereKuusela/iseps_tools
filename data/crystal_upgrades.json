@@ -332,15 +332,23 @@
     "baseCost": 300,
     "maxLevel": 100,
     "requires": {
-      "particle": "beta"
+      "particle": "beta",
+      "upgrades": [
+        "bundle.laboratory"
+      ]
     }
   },
   {
     "id": "special.bulkArtifacts",
     "name": "Bulk Artifacts",
     "group": "special",
-    "baseCost": null,
-    "maxLevel": 25
+    "baseCost": 500,
+    "maxLevel": 25,
+    "requires": {
+      "upgrades": [
+        "bundle.egetarium"
+      ]
+    }
   },
   {
     "id": "special.bulkArchBots",
@@ -349,7 +357,10 @@
     "baseCost": 300,
     "maxLevel": 100,
     "requires": {
-      "particle": "ceti"
+      "particle": "ceti",
+      "upgrades": [
+        "bundle.archive"
+      ]
     }
   },
   {
@@ -359,7 +370,10 @@
     "baseCost": 500,
     "maxLevel": 50,
     "requires": {
-      "particle": "epsilon"
+      "particle": "epsilon",
+      "upgrades": [
+        "bundle.cot"
+      ]
     }
   },
   {
@@ -369,7 +383,10 @@
     "baseCost": 100,
     "maxLevel": 50,
     "requires": {
-      "particle": "fenix"
+      "particle": "fenix",
+      "upgrades": [
+        "bundle.institute"
+      ]
     }
   },
   {
@@ -418,28 +435,40 @@
     "name": "SC Booster",
     "group": "special",
     "baseCost": 500,
-    "maxLevel": 500
+    "maxLevel": 500,
+    "requires": {
+      "playerLevel": 150
+    }
   },
   {
     "id": "special.bulkBuyers",
     "name": "Bulk Buyers",
     "group": "special",
     "baseCost": 300,
-    "maxLevel": 100
+    "maxLevel": 100,
+    "requires": {
+      "playerLevel": 160
+    }
   },
   {
     "id": "special.bulkEmblems",
     "name": "Bulk Emblems",
     "group": "special",
     "baseCost": 750,
-    "maxLevel": 100
+    "maxLevel": 100,
+    "requires": {
+      "playerLevel": 170
+    }
   },
   {
     "id": "special.infinityAmp",
     "name": "Infinity Amp",
     "group": "special",
     "baseCost": 750,
-    "maxLevel": 100
+    "maxLevel": 100,
+    "requires": {
+      "playerLevel": 180
+    }
   },
   {
     "id": "special.infinityMaxLv",
@@ -474,7 +503,7 @@
     "id": "special.tokenBooster",
     "name": "Token Booster",
     "group": "special",
-    "baseCost": null,
+    "baseCost": 300,
     "maxLevel": 100,
     "requires": {
       "playerLevel": 300
@@ -494,7 +523,19 @@
     "id": "special.gpBooster",
     "name": "G-point Booster",
     "group": "special",
-    "baseCost": null,
+    "baseCost": 250,
+    "costs": [
+      250,
+      500,
+      750,
+      1000,
+      1500,
+      2000,
+      2500,
+      3000,
+      3500,
+      4000
+    ],
     "maxLevel": 10,
     "requires": {
       "particle": "gamma"
@@ -504,105 +545,104 @@
     "id": "bundle.energyPrice",
     "name": "Energy Price bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1
+    "baseCost": 750
   },
   {
     "id": "bundle.buyers",
     "name": "Buyers bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1
+    "baseCost": 1250
   },
   {
     "id": "bundle.allParticles",
     "name": "All Particles bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1
-  },
-  {
-    "id": "bundle.allParticlesMk2",
-    "name": "All Particles bundle MK2",
-    "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1,
-    "requires": {
-      "se": 125
-    }
+    "baseCost": 1500
   },
   {
     "id": "bundle.simulation",
     "name": "Simulation bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1
+    "baseCost": 1500
   },
   {
     "id": "bundle.laboratory",
     "name": "Laboratory bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1
+    "baseCost": 1500,
+    "requires": {
+      "particle": "beta"
+    }
   },
   {
     "id": "bundle.egetarium",
     "name": "Egetarium bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1
+    "baseCost": 1500,
+    "requires": {
+      "particle": "beta"
+    }
   },
   {
     "id": "bundle.archive",
     "name": "Archive bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1
+    "baseCost": 1250,
+    "requires": {
+      "particle": "ceti"
+    }
   },
   {
     "id": "bundle.cot",
     "name": "CoT bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1
+    "baseCost": 1500,
+    "requires": {
+      "particle": "epsilon"
+    }
   },
   {
     "id": "bundle.institute",
     "name": "Fenix institute bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1
+    "baseCost": 1250,
+    "requires": {
+      "particle": "fenix"
+    }
   },
   {
     "id": "bundle.singularity",
     "name": "Singularity bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1
+    "baseCost": 1500,
+    "requires": {
+      "playerLevel": 22
+    }
   },
   {
     "id": "bundle.gcorp",
     "name": "G-corp bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1
+    "baseCost": 1500,
+    "requires": {
+      "particle": "gamma"
+    }
   },
   {
     "id": "bundle.corvus",
     "name": "Corvus bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1,
+    "baseCost": 2000,
     "requires": {
-      "se": 7
+      "se": 7,
+      "particle": "helion"
     }
   },
   {
     "id": "bundle.tiberius",
     "name": "Tiberius bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1,
+    "baseCost": 2000,
     "requires": {
       "particle": "ixion"
     }
@@ -611,22 +651,19 @@
     "id": "bundle.leveling",
     "name": "Leveling bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1
+    "baseCost": 2000
   },
   {
     "id": "bundle.taskmaster",
     "name": "Taskmaster bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1
+    "baseCost": 2000
   },
   {
     "id": "bundle.ultima",
     "name": "Ultima bundle",
     "group": "oneTimer",
     "baseCost": 3000,
-    "maxLevel": 1,
     "requires": {
       "playerLevel": 180
     }
@@ -636,7 +673,6 @@
     "name": "Infinity Multi bundle",
     "group": "oneTimer",
     "baseCost": 3000,
-    "maxLevel": 1,
     "requires": {
       "playerLevel": 200
     }
@@ -645,15 +681,43 @@
     "id": "bundle.tycoon",
     "name": "Tycoon bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1
+    "baseCost": 3000,
+    "requires": {
+      "playerLevel": 220
+    }
+  },
+  {
+    "id": "oneTimer.costScalerDc",
+    "name": "Cost upg scaler: DC",
+    "group": "oneTimer",
+    "baseCost": 5000,
+    "requires": {
+      "playerLevel": 250
+    }
+  },
+  {
+    "id": "oneTimer.costScalerSc",
+    "name": "Cost upg scaler: SC",
+    "group": "oneTimer",
+    "baseCost": 5000,
+    "requires": {
+      "playerLevel": 300
+    }
+  },
+  {
+    "id": "bundle.allParticlesMk2",
+    "name": "All Particles bundle MK2",
+    "group": "oneTimer",
+    "baseCost": 3000,
+    "requires": {
+      "se": 125
+    }
   },
   {
     "id": "bundle.meltdown",
     "name": "Meltdown bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1,
+    "baseCost": 3000,
     "requires": {
       "particle": "kappa"
     }
@@ -662,41 +726,24 @@
     "id": "bundle.sequencing",
     "name": "Sequencing bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1,
+    "baseCost": 4000,
     "requires": {
       "particle": "kappa"
     }
-  },
-  {
-    "id": "oneTimer.costScalerDc",
-    "name": "Cost upg scaler: DC",
-    "group": "oneTimer",
-    "baseCost": 5000,
-    "maxLevel": 1
-  },
-  {
-    "id": "oneTimer.costScalerSc",
-    "name": "Cost upg scaler: SC",
-    "group": "oneTimer",
-    "baseCost": 5000,
-    "maxLevel": 1
   },
   {
     "id": "bundle.alpha",
     "name": "Alpha bundle",
     "group": "oneTimer",
     "particle": "alpha",
-    "baseCost": null,
-    "maxLevel": 1
+    "baseCost": 1000
   },
   {
     "id": "bundle.beta",
     "name": "Beta bundle",
     "group": "oneTimer",
     "particle": "beta",
-    "baseCost": null,
-    "maxLevel": 1,
+    "baseCost": 750,
     "requires": {
       "particle": "beta"
     }
@@ -706,8 +753,7 @@
     "name": "Ceti bundle",
     "group": "oneTimer",
     "particle": "ceti",
-    "baseCost": null,
-    "maxLevel": 1,
+    "baseCost": 750,
     "requires": {
       "particle": "ceti"
     }
@@ -717,8 +763,7 @@
     "name": "Delta bundle",
     "group": "oneTimer",
     "particle": "delta",
-    "baseCost": null,
-    "maxLevel": 1,
+    "baseCost": 750,
     "requires": {
       "particle": "delta",
       "se": 8
@@ -729,8 +774,7 @@
     "name": "Epsilon bundle",
     "group": "oneTimer",
     "particle": "epsilon",
-    "baseCost": null,
-    "maxLevel": 1,
+    "baseCost": 500,
     "requires": {
       "particle": "epsilon"
     }
@@ -740,8 +784,7 @@
     "name": "Fenix bundle",
     "group": "oneTimer",
     "particle": "fenix",
-    "baseCost": null,
-    "maxLevel": 1,
+    "baseCost": 500,
     "requires": {
       "particle": "fenix"
     }
@@ -751,8 +794,7 @@
     "name": "Gamma bundle",
     "group": "oneTimer",
     "particle": "gamma",
-    "baseCost": null,
-    "maxLevel": 1,
+    "baseCost": 750,
     "requires": {
       "particle": "gamma"
     }
@@ -762,8 +804,7 @@
     "name": "Helion bundle",
     "group": "oneTimer",
     "particle": "helion",
-    "baseCost": null,
-    "maxLevel": 1,
+    "baseCost": 1000,
     "requires": {
       "particle": "helion"
     }
@@ -773,8 +814,7 @@
     "name": "Ixion bundle",
     "group": "oneTimer",
     "particle": "ixion",
-    "baseCost": null,
-    "maxLevel": 1,
+    "baseCost": 1000,
     "requires": {
       "particle": "ixion"
     }
@@ -784,8 +824,7 @@
     "name": "Juno bundle",
     "group": "oneTimer",
     "particle": "juno",
-    "baseCost": null,
-    "maxLevel": 1,
+    "baseCost": 1000,
     "requires": {
       "particle": "juno"
     }
@@ -795,8 +834,7 @@
     "name": "Kappa bundle",
     "group": "oneTimer",
     "particle": "kappa",
-    "baseCost": null,
-    "maxLevel": 1,
+    "baseCost": 1000,
     "requires": {
       "particle": "kappa"
     }
@@ -805,126 +843,136 @@
     "id": "bundle.alphaBeta",
     "name": "Alpha-Beta bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1,
+    "baseCost": 2000,
     "requires": {
-      "particle": "beta"
+      "particle": "beta",
+      "upgrades": [
+        "bundle.alpha",
+        "bundle.beta"
+      ]
     }
   },
   {
     "id": "bundle.betaCeti",
     "name": "Beta-Ceti bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1,
+    "baseCost": 2000,
     "requires": {
-      "particle": "ceti"
+      "particle": "ceti",
+      "upgrades": [
+        "bundle.beta",
+        "bundle.ceti"
+      ]
     }
   },
   {
     "id": "bundle.cetiDelta",
     "name": "Ceti-Delta bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1,
+    "baseCost": 2000,
     "requires": {
-      "particle": "delta"
+      "particle": "delta",
+      "upgrades": [
+        "bundle.ceti",
+        "bundle.delta"
+      ]
     }
   },
   {
     "id": "bundle.deltaEpsilon",
     "name": "Delta-Epsilon bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1,
+    "baseCost": 2000,
     "requires": {
-      "particle": "epsilon"
+      "particle": "epsilon",
+      "upgrades": [
+        "bundle.delta",
+        "bundle.epsilon"
+      ]
     }
   },
   {
     "id": "bundle.epsilonFenix",
     "name": "Epsilon-Fenix bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1,
+    "baseCost": 2000,
     "requires": {
-      "particle": "fenix"
+      "particle": "fenix",
+      "upgrades": [
+        "bundle.epsilon",
+        "bundle.fenix"
+      ]
     }
   },
   {
     "id": "bundle.fenixGamma",
     "name": "Fenix-Gamma bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1,
+    "baseCost": 2000,
     "requires": {
-      "particle": "gamma"
+      "upgrades": [
+        "bundle.fenix",
+        "bundle.gamma"
+      ]
     }
   },
   {
     "id": "bundle.gammaHelion",
     "name": "Gamma-Helion bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1,
+    "baseCost": 2000,
     "requires": {
-      "particle": "helion"
+      "upgrades": [
+        "bundle.gamma",
+        "bundle.helion"
+      ]
     }
   },
   {
     "id": "bundle.helionIxion",
     "name": "Helion-Ixion bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1,
+    "baseCost": 2000,
     "requires": {
-      "particle": "ixion"
+      "upgrades": [
+        "bundle.helion",
+        "bundle.ixion"
+      ]
     }
   },
   {
     "id": "bundle.ixionJuno",
     "name": "Ixion-Juno bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1,
+    "baseCost": 2000,
     "requires": {
-      "particle": "juno"
+      "upgrades": [
+        "bundle.ixion",
+        "bundle.juno"
+      ]
     }
   },
   {
     "id": "bundle.junoKappa",
     "name": "Juno-Kappa bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1,
+    "baseCost": 2000,
     "requires": {
-      "particle": "kappa"
+      "upgrades": [
+        "bundle.juno",
+        "bundle.kappa"
+      ]
     }
   },
   {
     "id": "bundle.abc",
     "name": "A-B-C bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1,
+    "baseCost": 3000,
     "requires": {
       "upgrades": [
-        {
-          "id": "bundle.beta",
-          "level": 1
-        },
-        {
-          "id": "bundle.ceti",
-          "level": 1
-        },
-        {
-          "id": "bundle.alphaBeta",
-          "level": 1
-        },
-        {
-          "id": "bundle.betaCeti",
-          "level": 1
-        }
+        "bundle.alphaBeta",
+        "bundle.betaCeti"
       ]
     }
   },
@@ -932,26 +980,11 @@
     "id": "bundle.def",
     "name": "D-E-F bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1,
+    "baseCost": 3000,
     "requires": {
       "upgrades": [
-        {
-          "id": "bundle.epsilon",
-          "level": 1
-        },
-        {
-          "id": "bundle.fenix",
-          "level": 1
-        },
-        {
-          "id": "bundle.deltaEpsilon",
-          "level": 1
-        },
-        {
-          "id": "bundle.epsilonFenix",
-          "level": 1
-        }
+        "bundle.deltaEpsilon",
+        "bundle.epsilonFenix"
       ]
     }
   },
@@ -959,22 +992,11 @@
     "id": "bundle.ghi",
     "name": "G-H-I bundle",
     "group": "oneTimer",
-    "baseCost": null,
-    "maxLevel": 1,
+    "baseCost": 3000,
     "requires": {
       "upgrades": [
-        {
-          "id": "bundle.helion",
-          "level": 1
-        },
-        {
-          "id": "bundle.gammaHelion",
-          "level": 1
-        },
-        {
-          "id": "bundle.helionIxion",
-          "level": 1
-        }
+        "bundle.gammaHelion",
+        "bundle.helionIxion"
       ]
     }
   }
