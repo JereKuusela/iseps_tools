@@ -26,6 +26,8 @@ npm run dev
 
 ## Build
 
+The build also emits `version.json`; open tabs poll it and prompt users to reload after a deploy.
+
 ```bash
 npm run build
 ```
