@@ -1,13 +1,19 @@
 import { A } from "@solidjs/router"
 import { For } from "solid-js"
 import { toolCards } from "../lib/routes"
+import { UpdateButton } from "../components/ui/UpdateButton"
 
 export const HomePage = () => {
   return (
     <section class="mx-auto w-full max-w-6xl">
       <div class="rounded-3xl border border-white/60 bg-white/75 p-6 shadow-glow backdrop-blur dark:border-white/10 dark:bg-[#101a2a]/75 sm:p-8 lg:p-10">
         <div class="max-w-3xl">
-          <p class="text-xs font-semibold uppercase tracking-[0.22em] text-teal-700 dark:text-teal-300">ISEPS Tools</p>
+          <div class="flex flex-wrap items-center gap-3">
+            <p class="text-xs font-semibold uppercase tracking-[0.22em] text-teal-700 dark:text-teal-300">
+              ISEPS Tools
+            </p>
+            <UpdateButton />
+          </div>
           <h1 class="mt-2 text-3xl font-black tracking-tight text-ink dark:text-white sm:text-4xl">
             Pick a tool to get started
           </h1>

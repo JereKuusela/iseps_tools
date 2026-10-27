@@ -5,6 +5,7 @@ import { ROUTES, tabs } from "../../lib/routes"
 import type { TooltipKey } from "../../lib/tooltips"
 import { Tooltip } from "../ui/Tooltip"
 import { ActionButton } from "../ui/ActionButton"
+import { UpdateButton } from "../ui/UpdateButton"
 import { NAV_ITEM_CLASS, navItemActive } from "../ui/navStyles"
 
 type PanelWidth = "content" | "full"
@@ -70,6 +71,7 @@ export const Panel = (
           {props.tooltip ? <Tooltip content={props.tooltip}>i</Tooltip> : null}
         </div>
         <div class="relative z-30 flex shrink-0 items-center gap-2" ref={mobileMenuRef}>
+          <UpdateButton />
           {props.titleAction ? <div class="relative z-30 shrink-0">{props.titleAction}</div> : null}
           <ActionButton
             size="menu"
