@@ -1,4 +1,4 @@
-import { For, createMemo } from "solid-js"
+import { For, Show, createMemo } from "solid-js"
 import { InfoCard, MetricRow } from "../../components/layout/contentBlocks"
 import { DataTable, TABLE_HEAD_CELL_CLASS, TABLE_ROW_CLASS, TableHead } from "../../components/layout/dataTable"
 import { formatCompactValue as formatValue, formatPercent } from "../../lib/numberFormat"
@@ -48,19 +48,18 @@ export const FactoryProductionRightColumn = () => {
             value={formatValue(toPerHour(factory.optimalResult().totalProfitPerSecond))}
             withBorder={false}
           />
-          <div class="rounded-lg border border-ink/10 bg-white/60 px-2.5 py-2 text-xs text-ink/80 dark:border-white/15 dark:bg-[#182336]/70 dark:text-white/80">
-            <p class="mb-1 font-semibold uppercase tracking-[0.08em] text-ink/70 dark:text-white/70">Optimal mix</p>
-            <For each={optimalProductSummary()}>
-              {(entry) => (
-                <p>
-                  {entry.count}x {entry.name}
-                </p>
-              )}
-            </For>
-            <p class="text-ink/60 dark:text-white/60" classList={{ hidden: optimalProductSummary().length > 0 }}>
-              No profitable assignment with current resources.
-            </p>
-          </div>
+          <Show when={optimalProductSummary().length > 0}>
+            <div class="rounded-lg border border-ink/10 bg-white/60 px-2.5 py-2 text-xs text-ink/80 dark:border-white/15 dark:bg-[#182336]/70 dark:text-white/80">
+              <p class="mb-1 font-semibold uppercase tracking-[0.08em] text-ink/70 dark:text-white/70">Optimal mix</p>
+              <For each={optimalProductSummary()}>
+                {(entry) => (
+                  <p>
+                    {entry.count}x {entry.name}
+                  </p>
+                )}
+              </For>
+            </div>
+          </Show>
         </div>
       </InfoCard>
 

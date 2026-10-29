@@ -1,7 +1,7 @@
 import { createMemo, For, Show } from "solid-js"
 import { Panel } from "../components/layout/Panel"
 import { blurOnEnterOrEscape } from "../components/ui/formControls"
-import { ToggleField } from "../components/ui/formControls"
+import { CheckboxField } from "../components/ui/formControls"
 import { isValidNumberishInput } from "../components/ui/formControls"
 import { sanitizeNumberishInput } from "../components/ui/formControls"
 import { Tooltip } from "../components/ui/Tooltip"
@@ -310,13 +310,13 @@ const CrystalAndTokenTab = () => {
             />
           </div>
           <div class="mt-3 space-y-2">
-            <ToggleField
+            <CheckboxField
               label="Total includes daily rewards"
               checked={includeDailyRewards()}
               onChange={setIncludeDailyRewards}
               tooltip="premium.includeDailyRewards"
             />
-            <ToggleField
+            <CheckboxField
               label="Lucky Leaf Clover perk (L4)"
               checked={luckyLeafClover()}
               onChange={setLuckyLeafClover}
@@ -522,7 +522,11 @@ const HaulerMineTab = () => {
           <div class="mt-3 space-y-2">
             <For each={toggleLabels}>
               {(entry) => (
-                <ToggleField label={entry.label} checked={toggleMap()[entry.key]} onChange={setToggleMap[entry.key]} />
+                <CheckboxField
+                  label={entry.label}
+                  checked={toggleMap()[entry.key]}
+                  onChange={setToggleMap[entry.key]}
+                />
               )}
             </For>
           </div>

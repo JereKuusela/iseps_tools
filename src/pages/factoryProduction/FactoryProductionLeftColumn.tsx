@@ -1,7 +1,13 @@
 import { For } from "solid-js"
 import { InfoCard } from "../../components/layout/contentBlocks"
 import { ActionButton } from "../../components/ui/ActionButton"
-import { IntegerField, MultiplierField, NumberField, SelectField, ToggleField } from "../../components/ui/formControls"
+import {
+  CheckboxField,
+  IntegerField,
+  MultiplierField,
+  NumberField,
+  SelectField,
+} from "../../components/ui/formControls"
 import { FACTORY_PRODUCTION_RESOURCE_BY_ID, FACTORY_PRODUCTION_RESOURCES } from "./factoryProductionTypes"
 import { useFactoryProductionContext } from "./factoryProductionContext"
 
@@ -25,7 +31,7 @@ export const FactoryProductionLeftColumn = () => {
       </InfoCard>
       <InfoCard title="Pricing" tooltip="factoryProduction.pricing">
         <div class="grid gap-3">
-          <ToggleField
+          <CheckboxField
             label="24 hour shifts"
             checked={factory.twentyFourHourShifts()}
             onChange={factory.setTwentyFourHourShifts}

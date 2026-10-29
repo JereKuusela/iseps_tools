@@ -64,6 +64,7 @@ export const CruiseNotationField = () => {
     <TextInputField
       tooltip="cruise.notation"
       label="Build"
+      wide
       value={notationInput()}
       onInput={setNotationInput}
       onFocus={() => setIsNotationEditing(true)}

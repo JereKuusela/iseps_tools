@@ -15,6 +15,7 @@ type SummaryInputModalProps = {
   tooltip?: TooltipKey
   onInput?: (next: string) => void
   valueFormat?: "plain" | "multiplier"
+  wide?: boolean
   children: JSX.Element
 }
 
@@ -76,7 +77,13 @@ export const SummaryInputModal = (props: SummaryInputModalProps) => {
       }}
       onKeyDown={(event) => event.key === "Escape" && setIsOpen(false)}
     >
-      <div class="grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-start gap-2">
+      <div
+        class={`grid items-start gap-2 ${
+          props.wide
+            ? "grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
+            : "grid-cols-[minmax(0,3fr)_minmax(0,2fr)] sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
+        }`}
+      >
         <div class="min-w-0 flex items-center gap-1.5 pt-1.5">
           <label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
             {props.label}

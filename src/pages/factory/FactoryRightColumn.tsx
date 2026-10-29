@@ -1,5 +1,6 @@
 import { LevelTablePanel } from "../../components/layout/LevelTablePanel"
 import { useFactoryContext } from "./factoryContext"
+import { FactoryNotationField } from "./FactoryNotationField"
 
 export const FactoryRightColumn = () => {
   const factory = useFactoryContext()
@@ -15,6 +16,7 @@ export const FactoryRightColumn = () => {
       onApplyOptimal={factory.applyOptimal}
       onReset={factory.resetAll}
       onSetLevel={factory.setNodeLevel}
+      footer={<FactoryNotationField />}
     />
   )
 }

@@ -500,7 +500,7 @@
     },
     {
       "id": "supplies.tokenBonus",
-      "label": "Supplies Extra Tokens",
+      "label": "Supplies Tokens",
       "group": "special",
       "maxLevel": 25,
       "baseValue": 0.025,
@@ -514,7 +514,7 @@
     },
     {
       "id": "supplies.crystalBonus",
-      "label": "Supplies Extra Crystals",
+      "label": "Supplies Crystals",
       "group": "special",
       "maxLevel": 8,
       "baseValue": 0.05,
@@ -542,7 +542,7 @@
     },
     {
       "id": "bbbot.tokenBonus",
-      "label": "BB-Bot Extra Tokens",
+      "label": "BB-Bot Tokens",
       "group": "special",
       "maxLevel": 20,
       "baseValue": 0.04,

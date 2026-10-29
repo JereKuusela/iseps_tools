@@ -21,6 +21,7 @@ export const TokensGeneralInputs = () => {
       <div class="grid gap-1">
         <IntegerField
           label="Online Hrs"
+          tooltip="token.onlineHours"
           value={tokens.onlineHoursPerDay()}
           onInput={tokens.setOnlineHoursPerDay}
           min={0}
@@ -29,6 +30,7 @@ export const TokensGeneralInputs = () => {
         />
         <IntegerField
           label="Tokens per step"
+          tooltip="token.tokensPerStep"
           value={tokens.tokensPerStep()}
           onInput={tokens.setTokensPerStep}
           min={0}
@@ -42,12 +44,12 @@ export const TokensGeneralInputs = () => {
         />
 
         <CheckboxField
-          label="Unlock Gamma Supplies and BB-Bot"
+          label="Gamma Supplies and BB-Bot"
           checked={tokens.unlockGammaSuppliesBbBot()}
           onChange={tokens.setUnlockGammaSuppliesBbBot}
         />
         <CheckboxField
-          label="Unlock Helion Supplies and BB-Bot"
+          label="Helion Supplies and BB-Bot"
           checked={tokens.unlockHelionSuppliesBbBot()}
           onChange={tokens.setUnlockHelionSuppliesBbBot}
         />

@@ -1,7 +1,8 @@
 import { A } from "@solidjs/router"
-import { For } from "solid-js"
+import { For, Show } from "solid-js"
 import { toolCards } from "../lib/routes"
 import { UpdateButton } from "../components/ui/UpdateButton"
+import { updateAvailable } from "../lib/versionCheck"
 
 export const HomePage = () => {
   return (
@@ -12,7 +13,9 @@ export const HomePage = () => {
             <p class="text-xs font-semibold uppercase tracking-[0.22em] text-teal-700 dark:text-teal-300">
               ISEPS Tools
             </p>
-            <UpdateButton />
+            <Show when={updateAvailable()}>
+              <UpdateButton />
+            </Show>
           </div>
           <h1 class="mt-2 text-3xl font-black tracking-tight text-ink dark:text-white sm:text-4xl">
             Pick a tool to get started

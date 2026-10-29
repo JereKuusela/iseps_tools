@@ -1,52 +1,10 @@
-import { createEffect, createMemo, createSignal, Show, type Accessor } from "solid-js"
+import { createMemo, Show, type Accessor } from "solid-js"
 import { InfoCard } from "../../components/layout/contentBlocks"
-import { DisplayField, IntegerField, TextInputField } from "../../components/ui/formControls"
+import { CheckboxField, DisplayField, IntegerField } from "../../components/ui/formControls"
 import type { TooltipKey } from "../../lib/tooltips"
 import { Tooltip } from "../../components/ui/Tooltip"
-import {
-  FACTORY_NODE_DEFINITIONS,
-  emptyFactoryNodeLevels,
-  type FactoryNodeId,
-  type FactoryNodeLevels,
-} from "./factoryTypes"
 import { useFactoryContext } from "./factoryContext"
 import { parseNumberish } from "../../lib/parseNumber"
-
-const notationOrder = FACTORY_NODE_DEFINITIONS.map((node) => node.id)
-const nodeById = FACTORY_NODE_DEFINITIONS.reduce(
-  (lookup, node) => {
-    lookup[node.id] = node
-    return lookup
-  },
-  {} as Record<FactoryNodeId, (typeof FACTORY_NODE_DEFINITIONS)[number]>,
-)
-
-const toShortNotation = (levels: FactoryNodeLevels) => {
-  const values = notationOrder.map((id) => levels[id])
-
-  while (values.length > 1 && values[values.length - 1] === 0) {
-    values.pop()
-  }
-
-  return values.join("/")
-}
-
-const parseNotation = (raw: string): FactoryNodeLevels => {
-  const next = emptyFactoryNodeLevels()
-  const chunks = raw
-    .split("/")
-    .map((entry) => entry.trim())
-    .filter((entry, index, all) => entry.length > 0 || index < all.length - 1)
-
-  for (let index = 0; index < notationOrder.length; index += 1) {
-    const id = notationOrder[index]
-    const rawLevel = chunks[index] ?? "0"
-    const parsed = Math.max(0, Math.floor(parseNumberish(rawLevel)))
-    next[id] = Math.min(nodeById[id].maxLevel, parsed)
-  }
-
-  return next
-}
 
 const particleWeightOptions = [
   { value: "0.125", label: "1/8x" },
@@ -170,23 +128,6 @@ const ParticleWeightSlider = (props: ParticleWeightSliderProps) => {
 
 export const FactoryLeftColumn = () => {
   const factory = useFactoryContext()
-  const [notationInput, setNotationInput] = createSignal("")
-  const [isNotationEditing, setIsNotationEditing] = createSignal(false)
-
-  const shortNotation = createMemo(() => toShortNotation(factory.nodeLevels()))
-
-  const applyNotation = (raw: string) => {
-    const parsedLevels = parseNotation(raw)
-    factory.setNodeLevels(parsedLevels)
-    setNotationInput(toShortNotation(parsedLevels))
-  }
-
-  createEffect(() => {
-    const nextShortNotation = shortNotation()
-    if (!isNotationEditing()) {
-      setNotationInput(nextShortNotation)
-    }
-  })
 
   return (
     <>
@@ -213,37 +154,29 @@ export const FactoryLeftColumn = () => {
             tooltip="factory.points"
             value={`${factory.availablePoints()} / ${factory.totalPoints()}`}
           />
-          <TextInputField
-            tooltip="factory.notation"
-            label="Build"
-            value={notationInput()}
-            onInput={setNotationInput}
-            onFocus={() => setIsNotationEditing(true)}
-            onBlur={(next) => {
-              applyNotation(next)
-              setIsNotationEditing(false)
-            }}
-          />
+          <CheckboxField label="Advanced mode" checked={factory.advancedMode()} onChange={factory.setAdvancedMode} />
         </div>
       </InfoCard>
 
-      <InfoCard title="Evaluation weights" tooltip="factory.weights">
-        <div class="grid gap-3">
-          <SliderField
-            label="Fabricator output"
-            value={factory.productionWeightPercent}
-            onInput={factory.setProductionWeightPercent}
-            min={0}
-            max={50}
-            step={10}
-          />
-          <ParticleWeightSlider
-            label="Particle output"
-            value={factory.particleWeightMultiplier}
-            onInput={factory.setParticleWeightMultiplier}
-          />
-        </div>
-      </InfoCard>
+      <Show when={factory.advancedMode()}>
+        <InfoCard title="Evaluation weights" tooltip="factory.weights">
+          <div class="grid gap-3">
+            <SliderField
+              label="Fabricator output"
+              value={factory.productionWeightPercent}
+              onInput={factory.setProductionWeightPercent}
+              min={0}
+              max={50}
+              step={10}
+            />
+            <ParticleWeightSlider
+              label="Particle output"
+              value={factory.particleWeightMultiplier}
+              onInput={factory.setParticleWeightMultiplier}
+            />
+          </div>
+        </InfoCard>
+      </Show>
     </>
   )
 }

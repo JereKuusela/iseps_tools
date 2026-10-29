@@ -21,6 +21,7 @@ type NumberFieldProps = {
   step?: number
   tooltip?: TooltipKey
   inlineAccessory?: JSX.Element
+  wide?: boolean
 }
 
 type NumberFieldWithUnitProps<T extends string = string> = Omit<NumberFieldProps, "inlineAccessory"> & {
@@ -44,6 +45,7 @@ type IntegerFieldProps = {
   step?: number
   tooltip?: TooltipKey
   align?: "left" | "right"
+  wide?: boolean
 }
 
 type TextInputFieldProps = {
@@ -54,6 +56,7 @@ type TextInputFieldProps = {
   tooltip?: TooltipKey
   onFocus?: () => void
   onBlur?: (next: string) => void
+  wide?: boolean
 }
 
 type PercentFieldProps = {
@@ -62,6 +65,7 @@ type PercentFieldProps = {
   onInput: (next: string) => void
   placeholder?: string
   tooltip?: TooltipKey
+  wide?: boolean
 }
 
 type MultiplierFieldProps = {
@@ -70,6 +74,7 @@ type MultiplierFieldProps = {
   onInput: (next: string) => void
   placeholder?: string
   tooltip?: TooltipKey
+  wide?: boolean
 }
 
 type LabelFieldProps = {
@@ -82,6 +87,7 @@ type DisplayFieldProps = {
   label: string
   value: string
   tooltip?: TooltipKey
+  wide?: boolean
 }
 
 type MetricFieldProps = {
@@ -145,7 +151,13 @@ export const NumberField = (props: NumberFieldProps) => {
 
   return (
     <TextField.Root value={props.value} onChange={onChange} class="grid gap-1.5">
-      <div class={"grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2"}>
+      <div
+        class={`grid items-center gap-2 ${
+          props.wide
+            ? "grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
+            : "grid-cols-[minmax(0,3fr)_minmax(0,2fr)] sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
+        }`}
+      >
         <div class={"min-w-0 flex items-center gap-2"}>
           <TextField.Label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
             {props.label}
@@ -237,6 +249,7 @@ export const NumberFieldWithUnit = <T extends string = string>(props: NumberFiel
     max={props.max}
     step={props.step}
     tooltip={props.tooltip}
+    wide={props.wide}
     inlineAccessory={
       <div class="flex items-center gap-1">
         <span class="text-xs font-semibold uppercase tracking-[0.1em] text-ink/70 dark:text-white/70">/</span>
@@ -353,7 +366,13 @@ export const DecimalField = (props: DecimalFieldProps) => {
 
   return (
     <TextField.Root value={displayedValue()} class="grid gap-1.5">
-      <div class={"grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2"}>
+      <div
+        class={`grid items-center gap-2 ${
+          props.wide
+            ? "grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
+            : "grid-cols-[minmax(0,3fr)_minmax(0,2fr)] sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
+        }`}
+      >
         <div class={"min-w-0 flex items-center gap-2"}>
           <TextField.Label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
             {props.label}
@@ -411,7 +430,13 @@ export const IntegerField = (props: IntegerFieldProps) => {
 
   return (
     <TextField.Root value={props.value} onChange={onChange} class="grid gap-1.5">
-      <div class={"grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2"}>
+      <div
+        class={`grid items-center gap-2 ${
+          props.wide
+            ? "grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
+            : "grid-cols-[minmax(0,3fr)_minmax(0,2fr)] sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
+        }`}
+      >
         <div class={"min-w-0 flex items-center gap-2"}>
           <TextField.Label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
             {props.label}
@@ -445,7 +470,13 @@ export const IntegerField = (props: IntegerFieldProps) => {
 export const TextInputField = (props: TextInputFieldProps) => {
   return (
     <TextField.Root value={props.value} onChange={props.onInput} class="grid gap-1.5">
-      <div class={"grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2"}>
+      <div
+        class={`grid items-center gap-2 ${
+          props.wide
+            ? "grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
+            : "grid-cols-[minmax(0,3fr)_minmax(0,2fr)] sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
+        }`}
+      >
         <div class={"min-w-0 flex items-center gap-2"}>
           <TextField.Label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
             {props.label}
@@ -522,7 +553,13 @@ export const PercentField = (props: PercentFieldProps) => {
 
   return (
     <TextField.Root value={displayedValue()} class="grid gap-1.5">
-      <div class={"grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2"}>
+      <div
+        class={`grid items-center gap-2 ${
+          props.wide
+            ? "grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
+            : "grid-cols-[minmax(0,3fr)_minmax(0,2fr)] sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
+        }`}
+      >
         <div class={"min-w-0 flex items-center gap-2"}>
           <TextField.Label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
             {props.label}
@@ -604,7 +641,13 @@ export const MultiplierField = (props: MultiplierFieldProps) => {
 
   return (
     <TextField.Root value={displayedValue()} class="grid gap-1.5">
-      <div class={"grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2"}>
+      <div
+        class={`grid items-center gap-2 ${
+          props.wide
+            ? "grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
+            : "grid-cols-[minmax(0,3fr)_minmax(0,2fr)] sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
+        }`}
+      >
         <div class={"min-w-0 flex items-center gap-2"}>
           <TextField.Label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
             {props.label}
@@ -658,7 +701,13 @@ export const LabelField = (props: LabelFieldProps) => {
 export const DisplayField = (props: DisplayFieldProps) => {
   return (
     <div class="grid gap-1.5">
-      <div class={"grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2"}>
+      <div
+        class={`grid items-center gap-2 ${
+          props.wide
+            ? "grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
+            : "grid-cols-[minmax(0,3fr)_minmax(0,2fr)] sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
+        }`}
+      >
         <div class={"min-w-0 flex items-center gap-2"}>
           <label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
             {props.label}
@@ -672,39 +721,6 @@ export const DisplayField = (props: DisplayFieldProps) => {
         </div>
       </div>
     </div>
-  )
-}
-
-type ToggleFieldProps = {
-  label: string
-  checked: boolean
-  onChange: (checked: boolean) => void
-  hint?: string
-  tooltip?: TooltipKey
-  disabled?: boolean
-}
-
-export const ToggleField = (props: ToggleFieldProps) => {
-  return (
-    <label
-      class={`flex items-start justify-between gap-3 rounded-xl border border-ink/15 bg-white/70 px-3 py-2.5 transition dark:border-white/15 dark:bg-[#182336]/75 ${props.disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer hover:border-ink/30 dark:hover:border-white/30"}`}
-    >
-      <div>
-        <div class="flex items-center gap-2">
-          <span class="text-sm font-semibold text-ink/90 dark:text-white/90">{props.label}</span>
-          {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
-        </div>
-        {props.hint ? <p class="mt-0.5 text-xs text-ink/60 dark:text-white/60">{props.hint}</p> : null}
-      </div>
-      <input
-        type="checkbox"
-        checked={props.checked}
-        disabled={props.disabled}
-        onChange={(event) => props.onChange(event.currentTarget.checked)}
-        onKeyDown={blurOnEnterOrEscape}
-        class="mt-1 h-4 w-4 rounded border border-ink/40 accent-accent dark:border-white/40"
-      />
-    </label>
   )
 }
 
@@ -747,12 +763,19 @@ type SelectFieldProps = {
   onChange: (next: string) => void
   options: SelectOption[]
   tooltip?: TooltipKey
+  wide?: boolean
 }
 
 export const SelectField = (props: SelectFieldProps) => {
   return (
     <div class="grid gap-1.5">
-      <div class={"grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2"}>
+      <div
+        class={`grid items-center gap-2 ${
+          props.wide
+            ? "grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
+            : "grid-cols-[minmax(0,3fr)_minmax(0,2fr)] sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
+        }`}
+      >
         <div class={"min-w-0 flex items-center gap-2"}>
           <label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
             {props.label}

@@ -12,6 +12,8 @@ import { parseNumberish } from "../../lib/parseNumber"
 import { formatOptimality } from "../../lib/numberFormat"
 
 type FactoryContextValue = {
+  advancedMode: () => boolean
+  setAdvancedMode: (next: boolean) => boolean
   prestigesDone: () => string
   setPrestigesDone: (next: string) => string
   totalParticleLevel: () => string
@@ -62,6 +64,7 @@ const toFactoryInput = (raw: {
 }
 
 export const FactoryProvider = (props: ParentProps) => {
+  const [advancedMode, setAdvancedMode] = createSyncedSignal<boolean>("factory.advancedMode", false)
   const [prestigesDone, setPrestigesDone] = createSyncedSignal("factory.prestigesDone", "0")
   const [totalParticleLevel, setTotalParticleLevel] = createSyncedSignal("factory.totalParticleLevel", "0")
   const [productionWeightPercent, setProductionWeightPercent] = createSyncedSignal(
@@ -84,8 +87,8 @@ export const FactoryProvider = (props: ParentProps) => {
     toFactoryInput({
       prestigesDone: prestigesDone(),
       totalParticleLevel: totalParticleLevel(),
-      productionWeightPercent: productionWeightPercent(),
-      particleWeightMultiplier: particleWeightMultiplier(),
+      productionWeightPercent: advancedMode() ? productionWeightPercent() : "10",
+      particleWeightMultiplier: advancedMode() ? particleWeightMultiplier() : "1",
     }),
   )
 
@@ -121,6 +124,8 @@ export const FactoryProvider = (props: ParentProps) => {
   return (
     <FactoryContext.Provider
       value={{
+        advancedMode,
+        setAdvancedMode,
         prestigesDone,
         setPrestigesDone,
         totalParticleLevel,

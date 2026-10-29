@@ -1,12 +1,12 @@
 import { createEffect, For, Show } from "solid-js"
 import { InfoCard, MetricRow } from "../../components/layout/contentBlocks"
 import {
+  CheckboxField,
   DecimalField,
   IntegerField,
   NumberField,
   NumberFieldWithUnit,
   SelectField,
-  ToggleField,
 } from "../../components/ui/formControls"
 import { SummaryInputModal } from "../../components/ui/SummaryInputModal"
 import { formatCompactMultiplier, formatFixed, formatMultiplier } from "../../lib/numberFormat"
@@ -129,6 +129,7 @@ export const OgTechLeftColumn = () => {
             unit={og.gainUnit()}
             onUnitChange={(next) => og.setGainUnit(next as GainUnit)}
             units={units}
+            wide
           />
           <NumberField label="Current" placeholder="0.00e0" value={og.junoAmount()} onInput={og.setJunoAmount} />
           <IntegerField
@@ -171,9 +172,17 @@ export const OgTechLeftColumn = () => {
                 max={750}
                 step={1}
               />
-              <ToggleField label="Juno bundle" checked={og.junoBundle()} onChange={og.setJunoBundle} />
-              <ToggleField label="Ixion-Juno bundle" checked={og.ixionJunoBundle()} onChange={og.setIxionJunoBundle} />
-              <ToggleField label="Juno-Kappa bundle" checked={og.junoKappaBundle()} onChange={og.setJunoKappaBundle} />
+              <CheckboxField label="Juno bundle" checked={og.junoBundle()} onChange={og.setJunoBundle} />
+              <CheckboxField
+                label="Ixion-Juno bundle"
+                checked={og.ixionJunoBundle()}
+                onChange={og.setIxionJunoBundle}
+              />
+              <CheckboxField
+                label="Juno-Kappa bundle"
+                checked={og.junoKappaBundle()}
+                onChange={og.setJunoKappaBundle}
+              />
               <NumberField label="Juno tokens" value={og.tokens()} onInput={og.setTokens} min={0} max={1800} step={1} />
             </div>
           </SummaryInputModal>
@@ -219,12 +228,12 @@ export const OgTechLeftColumn = () => {
                 onChange={og.setResearchLevel}
                 options={researchLevelOptions()}
               />
-              <ToggleField
+              <CheckboxField
                 label="Meltdown bundle (+0.005)"
                 checked={og.meltdownBundle()}
                 onChange={og.setMeltdownBundle}
               />
-              <ToggleField
+              <CheckboxField
                 label="Quantum Addon 0 (+0.01)"
                 checked={og.quantumAddon0()}
                 onChange={og.setQuantumAddon0}
@@ -250,7 +259,7 @@ export const OgTechLeftColumn = () => {
       <InfoCard title={cycleTitle()} closable>
         <div class="grid gap-1">
           <NumberField label="Progression" value={og.statusAmount()} onInput={og.setStatusAmount} min={0} step={0.01} />
-          <ToggleField
+          <CheckboxField
             label="Automatically progress from buys"
             checked={og.statusAutoIncrement()}
             onChange={og.setStatusAutoIncrement}

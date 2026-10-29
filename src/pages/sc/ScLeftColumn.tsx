@@ -9,7 +9,6 @@ import {
 import { SummaryInputModal } from "../../components/ui/SummaryInputModal"
 import { Tooltip } from "../../components/ui/Tooltip"
 import { LargeNumber } from "../../lib/largeNumber"
-import { clamp } from "../../lib/mathUtils"
 import { formatCompactMultiplier } from "../../lib/numberFormat"
 import { calculateDcReplicator, calculateSeReplicator } from "../../lib/scCalculator"
 import type { ScGainUnit } from "../../lib/scContext"
@@ -224,6 +223,7 @@ export const ScLeftColumn = () => {
             unit={sc.dcGainUnit()}
             onUnitChange={(next) => sc.setDcGainUnit(next as ScGainUnit)}
             units={units}
+            wide
           />
         </div>
       </div>
