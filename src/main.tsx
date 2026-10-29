@@ -3,7 +3,6 @@ import { Router, Route } from "@solidjs/router"
 import App from "./App"
 import { ROUTES } from "./lib/routes"
 import { ScProvider } from "./lib/scContext"
-import { CreditsPage } from "./pages/CreditsPage"
 import { CrystalsPage } from "./pages/crystals/CrystalsPage"
 import { CruisePage } from "./pages/cruise/CruisePage"
 import { FactoryPage } from "./pages/factory/FactoryPage"
@@ -85,12 +84,6 @@ const FactoryProductionRoute = () => (
   </App>
 )
 
-const CreditsRoute = () => (
-  <App>
-    <CreditsPage />
-  </App>
-)
-
 const SettingsRoute = () => (
   <App>
     <SettingsPage />
@@ -123,7 +116,6 @@ render(
         <Route path={ROUTES.factoryProduction} component={FactoryProductionRoute} />
         <Route path={ROUTES.zatGuide} component={ZatGuideRoute} />
         <Route path={ROUTES.sc} component={ScRoute} />
-        <Route path={ROUTES.credits} component={CreditsRoute} />
         <Route path={ROUTES.settings} component={SettingsRoute} />
         <Route path={ROUTES.premiumCrystal} component={PremiumCrystalRoute} />
         <Route path={ROUTES.premiumHauler} component={PremiumHaulerRoute} />

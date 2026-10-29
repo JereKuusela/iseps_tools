@@ -80,8 +80,8 @@ export const SyncControl = () => {
       </p>
       <p class="mt-2 text-sm leading-relaxed text-ink/75 dark:text-white/75">Use a key that is hard to guess.</p>
 
-      <div class="mt-4 grid gap-3">
-        <div>
+      <div class="mt-4 grid grid-cols-[minmax(0,1fr)] gap-3">
+        <div class="min-w-0">
           <div class="mt-1 flex gap-2">
             <input
               id="sync-key"
@@ -91,12 +91,12 @@ export const SyncControl = () => {
               spellcheck={false}
               autocomplete="off"
               autocapitalize="none"
-              class={`min-w-0 flex-1 ${INPUT_BASE_CLASS} px-3 py-2 font-mono text-sm font-semibold`}
+              class={`w-0 min-w-0 flex-1 ${INPUT_BASE_CLASS} px-3 py-2 font-mono text-sm font-semibold`}
             />
             <button
               type="button"
               onClick={randomizeKey}
-              class="rounded-xl border border-ink/20 bg-white px-3 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-ink/80 transition hover:border-ink/35 hover:text-ink dark:border-white/20 dark:bg-[#1a2638] dark:text-white/80 dark:hover:border-white/40 dark:hover:text-white"
+              class="shrink-0 rounded-xl border border-ink/20 bg-white px-3 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-ink/80 transition hover:border-ink/35 hover:text-ink dark:border-white/20 dark:bg-[#1a2638] dark:text-white/80 dark:hover:border-white/40 dark:hover:text-white"
             >
               Random
             </button>

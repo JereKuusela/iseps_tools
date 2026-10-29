@@ -16,7 +16,6 @@ export const ROUTES = {
   sc: "/sc",
   premiumCrystal: "/premium",
   premiumHauler: "/hauler",
-  credits: "/credits",
   settings: "/settings",
 } as const
 
