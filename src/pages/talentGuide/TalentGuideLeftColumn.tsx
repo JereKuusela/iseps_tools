@@ -5,8 +5,21 @@ import type { TalentRunType } from "./talentCalculator"
 import { useTalentGuideContext } from "./talentGuideContext"
 
 export const TalentGuideLeftColumn = () => {
-  const { runType, setRunType, runOptions, se, setSe, lp, setLp, gCorpMaxed, setGCorpMaxed, allocation } =
-    useTalentGuideContext()
+  const {
+    runType,
+    setRunType,
+    runOptions,
+    se,
+    setSe,
+    lp,
+    setLp,
+    gCorpMaxed,
+    setGCorpMaxed,
+    allocation,
+    previousLp,
+    changes,
+    changeNotes,
+  } = useTalentGuideContext()
 
   return (
     <>
@@ -26,16 +39,20 @@ export const TalentGuideLeftColumn = () => {
             onChange={setGCorpMaxed}
             tooltip="talentGuide.gCorp"
           />
-          <Show when={allocation().unallocated > 0}>
-            <DisplayField label="Unallocated LP" value={String(allocation().unallocated)} />
-          </Show>
         </div>
       </InfoCard>
 
-      <Show when={allocation().notes.length > 0}>
-        <InfoCard title="Useful notes">
+      <Show when={previousLp() !== undefined || allocation().notes.length > 0}>
+        <InfoCard title={previousLp() !== undefined ? `Changes from ${previousLp()} LP` : "Changes"}>
           <div class="space-y-2 whitespace-pre-wrap text-sm leading-6 text-ink/80 dark:text-white/80">
-            <For each={allocation().notes}>{(note) => <p>{note}</p>}</For>
+            <Show when={previousLp() !== undefined}>
+              <div>
+                <For each={changes()} fallback={<p>- No talent changes for this LP.</p>}>
+                  {(line) => <p>{line}</p>}
+                </For>
+              </div>
+            </Show>
+            <For each={[...changeNotes(), ...allocation().notes]}>{(note) => <p>{note}</p>}</For>
           </div>
         </InfoCard>
       </Show>

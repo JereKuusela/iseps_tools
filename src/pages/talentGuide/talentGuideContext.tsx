@@ -4,6 +4,7 @@ import { parseNumberish } from "../../lib/parseNumber"
 import { perkDataBundle } from "../../shared/perkContext"
 import { computeTalentAllocation, type TalentAllocation, type TalentRunType } from "./talentCalculator"
 import { SHARED_SE_KEY } from "../../shared/tokenSharedInputs"
+import { talentDefs } from "./talentData"
 
 const runOptions: { value: TalentRunType; label: string }[] = [
   { value: "se", label: "SE Push" },
@@ -22,6 +23,9 @@ type TalentGuideContextValue = {
   gCorpMaxed: () => boolean
   setGCorpMaxed: (next: boolean) => boolean
   allocation: () => TalentAllocation
+  previousLp: () => number | undefined
+  changes: () => string[]
+  changeNotes: () => string[]
 }
 
 const TalentGuideContext = createContext<TalentGuideContextValue>()
@@ -44,6 +48,9 @@ const perksForSe = (run: TalentRunType, se: number) => {
   return new Set(match?.perks ?? [])
 }
 
+// Talents whose boost only applies to what is earned after buying them.
+const NON_RETROACTIVE: Record<string, string> = { "IC1-1": "Artifact", "IC2-1": "Solution", "IC5-2": "Emblem" }
+
 export const TalentGuideProvider = (props: ParentProps) => {
   const [se, setSe] = createSyncedSignal(SHARED_SE_KEY, "1")
   const [runType, setRunType] = createSyncedSignal<TalentRunType>("talent.guide.runType", "se")
@@ -62,6 +69,44 @@ export const TalentGuideProvider = (props: ParentProps) => {
     })
   })
 
+  const previousLp = createMemo(() => {
+    const lpValue = Math.max(0, Math.floor(parseNumberish(lp())) || 0)
+    return lpValue > 0 ? lpValue - 1 : undefined
+  })
+
+  const changeSummary = createMemo(() => {
+    const before = previousLp()
+    if (before === undefined) return { lines: [] as string[], notes: [] as string[] }
+    const seValue = Math.max(1, Math.floor(parseNumberish(se())) || 1)
+    const previous = computeTalentAllocation({
+      run: runType(),
+      se: seValue,
+      lp: before,
+      gCorpMaxed: gCorpMaxed(),
+      perks: perksForSe(runType(), seValue),
+    }).levels
+    const current = allocation().levels
+    const added: string[] = []
+    const removed: string[] = []
+    const boosted: string[] = []
+    for (const def of talentDefs) {
+      const delta = (current[def.id] ?? 0) - (previous[def.id] ?? 0)
+      if (delta === 0) continue
+      const amount = Math.abs(delta)
+      const token = amount > 1 ? `${amount} ${def.id}` : def.id
+      ;(delta > 0 ? added : removed).push(token)
+      if (delta > 0 && NON_RETROACTIVE[def.id]) boosted.push(NON_RETROACTIVE[def.id])
+    }
+    const lines: string[] = []
+    if (removed.length > 0) lines.push(`- Remove ${removed.join(", ")}`)
+    if (added.length > 0) lines.push(`- Add ${added.join(", ")}`)
+    const notes =
+      boosted.length > 0
+        ? [`${boosted.join(", ")} boosts are not retroactive.\nSimulation reset is needed for the bonus.`]
+        : []
+    return { lines, notes }
+  })
+
   return (
     <TalentGuideContext.Provider
       value={{
@@ -75,6 +120,9 @@ export const TalentGuideProvider = (props: ParentProps) => {
         gCorpMaxed,
         setGCorpMaxed,
         allocation,
+        previousLp,
+        changes: () => changeSummary().lines,
+        changeNotes: () => changeSummary().notes,
       }}
     >
       {props.children}

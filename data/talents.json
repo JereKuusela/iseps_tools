@@ -924,21 +924,6 @@
       "from": 0,
       "to": 0,
       "text": "Talents unlock at player level 50 (around SE5)."
-    },
-    {
-      "from": 1,
-      "to": 5,
-      "text": "IC1-1 boosts Artifacts.\n\nThis is not retroactive, so remember to do a simulation reset."
-    },
-    {
-      "from": 48,
-      "to": 50,
-      "text": "Row 5 unlocked. Start with 1 point in IC5-2."
-    },
-    {
-      "from": 350,
-      "to": 649,
-      "text": "Row 6 costs 10 LP per level.\n\nYou can spend in row 5 but have to respec at each interval."
     }
   ]
 }

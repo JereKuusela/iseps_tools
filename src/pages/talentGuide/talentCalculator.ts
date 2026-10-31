@@ -172,14 +172,6 @@ const computeLevels = (input: TalentInput, se: number, lp: number): TalentLevels
   return levels
 }
 
-// Lists talents that lose levels compared to one LP earlier, which means a respec is needed.
-const describeRespec = (before: TalentLevels, after: TalentLevels) => {
-  const drops = talentDefs
-    .filter((def) => def.row !== 6 && (after[def.id] ?? 0) < (before[def.id] ?? 0))
-    .map((def) => `${def.id} ${before[def.id]} → ${after[def.id] ?? 0}`)
-  return drops.length > 0 ? `Respec needed: ${drops.join(", ")}.` : null
-}
-
 export const computeTalentAllocation = (input: TalentInput): TalentAllocation => {
   const se = Math.max(1, Math.floor(input.se) || 1)
   const lp = Math.max(0, Math.floor(input.lp) || 0)
@@ -190,13 +182,15 @@ export const computeTalentAllocation = (input: TalentInput): TalentAllocation =>
   const notes: string[] = []
   const nonSeRun = input.run !== undefined && input.run !== "se"
   if (nonSeRun) notes.push("Use SE Push during the build up.\n\nRespec after the last simulation reset.")
-  const respec = lp > 0 ? describeRespec(computeLevels(input, se, lp - 1), levels) : null
-  if (respec) notes.push(respec)
   if (nonSeRun && lp >= TALENT_ROW6_START_LP) {
     notes.push("PP 6-3 and IC 6-3 are skipped in this run.")
   }
   for (const note of talentLpNotes) {
     if (lp >= note.from && (note.to === undefined || lp <= note.to)) notes.push(note.text)
+  }
+  const row6Leftover = (lp - TALENT_ROW6_START_LP) % TALENT_ROW6_LP_PER_LEVEL
+  if (lp > TALENT_ROW6_START_LP && lp < TALENT_ROW6_START_LP + ROW6_MAX_LP && row6Leftover > 0) {
+    notes.push(`${row6Leftover} unallocated LP are saved for row 6.\nIf spent, must respec later.`)
   }
 
   return { levels, spentPP, spentIC, unallocated: lp - spentPP - spentIC, notes }
