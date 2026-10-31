@@ -111,13 +111,21 @@ const sumSide = (levels: TalentLevels, side: "PP" | "IC") => {
   return total
 }
 
+// Skipped talents in non-SE runs shrink the row 6 budget, so rows 1-5 take that LP instead.
+const row6MaxLp = (run?: TalentRunType) => {
+  if (!run || run === "se") return ROW6_MAX_LP
+  const skipped = [...SKIPPED_ROW6_NON_SE].reduce((sum, id) => sum + (talentDefById.get(id)?.max ?? 0), 0)
+  return ROW6_MAX_LP - skipped * TALENT_ROW6_LP_PER_LEVEL
+}
+
 const computeLevels = (input: TalentInput, se: number, lp: number): TalentLevels => {
   const extras = getTalentSeExtras(se)
+  const row6Max = row6MaxLp(input.run)
 
   if (lp <= TALENT_ROW5_UNLOCK_LP) return { ...(talentPathByLp[String(lp)] ?? {}) }
 
   const levels: TalentLevels = { ...talentBase }
-  const rows1to5Budget = lp > 650 ? lp - 300 : Math.min(lp, TALENT_ROW6_START_LP)
+  const rows1to5Budget = lp > TALENT_ROW6_START_LP + row6Max ? lp - row6Max : Math.min(lp, TALENT_ROW6_START_LP)
   let pool = rows1to5Budget - Object.values(levels).reduce((sum, level) => sum + level, 0)
   const weights = getRow5Weights({ ...input, se, lp })
   const row5Defs = talentDefs.filter((def) => def.row === 5)
@@ -153,10 +161,7 @@ const computeLevels = (input: TalentInput, se: number, lp: number): TalentLevels
 
   let row6Left =
     lp >= TALENT_ROW6_START_LP
-      ? Math.min(
-          Math.floor((lp - TALENT_ROW6_START_LP) / TALENT_ROW6_LP_PER_LEVEL) * TALENT_ROW6_LP_PER_LEVEL,
-          ROW6_MAX_LP,
-        )
+      ? Math.min(Math.floor((lp - TALENT_ROW6_START_LP) / TALENT_ROW6_LP_PER_LEVEL) * TALENT_ROW6_LP_PER_LEVEL, row6Max)
       : 0
   for (const id of ROW6_ORDER) {
     if (input.run && input.run !== "se" && SKIPPED_ROW6_NON_SE.has(id)) {
@@ -181,15 +186,13 @@ export const computeTalentAllocation = (input: TalentInput): TalentAllocation =>
 
   const notes: string[] = []
   const nonSeRun = input.run !== undefined && input.run !== "se"
-  if (nonSeRun) notes.push("Use SE Push during the build up.\n\nRespec after the last simulation reset.")
-  if (nonSeRun && lp >= TALENT_ROW6_START_LP) {
-    notes.push("PP 6-3 and IC 6-3 are skipped in this run.")
-  }
+  if (nonSeRun) notes.push("Use SE Push during the build up.\nRespec after the last simulation reset.")
+
   for (const note of talentLpNotes) {
     if (lp >= note.from && (note.to === undefined || lp <= note.to)) notes.push(note.text)
   }
   const row6Leftover = (lp - TALENT_ROW6_START_LP) % TALENT_ROW6_LP_PER_LEVEL
-  if (lp > TALENT_ROW6_START_LP && lp < TALENT_ROW6_START_LP + ROW6_MAX_LP && row6Leftover > 0) {
+  if (lp > TALENT_ROW6_START_LP && lp < TALENT_ROW6_START_LP + row6MaxLp(input.run) && row6Leftover > 0) {
     notes.push(`${row6Leftover} unallocated LP are saved for row 6.\nIf spent, must respec later.`)
   }
 
