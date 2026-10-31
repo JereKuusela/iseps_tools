@@ -30,6 +30,8 @@ export const TokensResult = () => {
           { label: "Buy 5", onClick: () => tokens.applyBestCount(5) },
           { label: "Buy 10", onClick: () => tokens.applyBestCount(10) },
           { label: "Buy 25", onClick: () => tokens.applyBestCount(25) },
+          { label: "Buy 50", onClick: () => tokens.applyBestCount(50) },
+          { label: "Buy 100", onClick: () => tokens.applyBestCount(100) },
         ]}
         footer={
           <div class="p-4">

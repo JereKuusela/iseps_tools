@@ -251,8 +251,7 @@ export const TokensProvider = (props: ParentProps) => {
     const requestedLevels = Math.max(0, Math.floor(count))
     if (requestedLevels <= 0) return
 
-    const cappedTargetLevel = Math.min(best.nextLevel, best.currentLevel + requestedLevels)
-    applyRecommendationToLevel(best, cappedTargetLevel)
+    applyRecommendationToLevel(best, best.currentLevel + requestedLevels)
   }
 
   return (
