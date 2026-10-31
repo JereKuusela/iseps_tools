@@ -1,4 +1,4 @@
-import { createContext, createMemo, type ParentProps, useContext } from "solid-js"
+import { createContext, createMemo, createSignal, type ParentProps, useContext } from "solid-js"
 import { createSyncedSignal } from "../../lib/persistedSignal"
 import { parseNumberish } from "../../lib/parseNumber"
 import { perkDataBundle } from "../../shared/perkContext"
@@ -23,7 +23,7 @@ type TalentGuideContextValue = {
   gCorpMaxed: () => boolean
   setGCorpMaxed: (next: boolean) => boolean
   allocation: () => TalentAllocation
-  previousLp: () => number | undefined
+  previousLabel: () => string | undefined
   changes: () => string[]
   changeNotes: () => string[]
 }
@@ -52,10 +52,20 @@ const perksForSe = (run: TalentRunType, se: number) => {
 const NON_RETROACTIVE: Record<string, string> = { "IC1-1": "Artifact", "IC2-1": "Solution", "IC5-2": "Emblem" }
 
 export const TalentGuideProvider = (props: ParentProps) => {
-  const [se, setSe] = createSyncedSignal(SHARED_SE_KEY, "1")
+  const [se, setSeRaw] = createSyncedSignal(SHARED_SE_KEY, "1")
   const [runType, setRunType] = createSyncedSignal<TalentRunType>("talent.guide.runType", "se")
-  const [lp, setLp] = createSyncedSignal("talent.guide.lp", "100")
+  const [lp, setLpRaw] = createSyncedSignal("talent.guide.lp", "100")
   const [gCorpMaxed, setGCorpMaxed] = createSyncedSignal("talent.guide.gCorpMaxed", false)
+  const [lastEdited, setLastEdited] = createSignal<"se" | "lp">("lp")
+
+  const setSe = (next: string) => {
+    setLastEdited("se")
+    return setSeRaw(next)
+  }
+  const setLp = (next: string) => {
+    setLastEdited("lp")
+    return setLpRaw(next)
+  }
 
   const allocation = createMemo(() => {
     const seValue = Math.max(1, Math.floor(parseNumberish(se())) || 1)
@@ -69,16 +79,24 @@ export const TalentGuideProvider = (props: ParentProps) => {
     })
   })
 
-  const previousLp = createMemo(() => {
+  // Compares against one step back on whichever input was edited last.
+  const previous = createMemo(() => {
+    const seValue = Math.max(1, Math.floor(parseNumberish(se())) || 1)
     const lpValue = Math.max(0, Math.floor(parseNumberish(lp())) || 0)
-    return lpValue > 0 ? lpValue - 1 : undefined
+    if (lastEdited() === "se") {
+      return seValue > 1
+        ? { se: seValue - 1, lp: lpValue, label: `SE${String(seValue - 1).padStart(2, "0")}` }
+        : undefined
+    }
+    return lpValue > 0 ? { se: seValue, lp: lpValue - 1, label: `${lpValue - 1} LP` } : undefined
   })
 
   const changeSummary = createMemo(() => {
-    const before = previousLp()
-    if (before === undefined) return { lines: [] as string[], notes: [] as string[] }
-    const seValue = Math.max(1, Math.floor(parseNumberish(se())) || 1)
-    const previous = computeTalentAllocation({
+    const target = previous()
+    if (!target) return { lines: [] as string[], notes: [] as string[] }
+    const before = target.lp
+    const seValue = target.se
+    const previousLevels = computeTalentAllocation({
       run: runType(),
       se: seValue,
       lp: before,
@@ -90,7 +108,7 @@ export const TalentGuideProvider = (props: ParentProps) => {
     const removed: string[] = []
     const boosted: string[] = []
     for (const def of talentDefs) {
-      const delta = (current[def.id] ?? 0) - (previous[def.id] ?? 0)
+      const delta = (current[def.id] ?? 0) - (previousLevels[def.id] ?? 0)
       if (delta === 0) continue
       const amount = Math.abs(delta)
       const token = amount > 1 ? `${amount} ${def.id}` : def.id
@@ -120,7 +138,7 @@ export const TalentGuideProvider = (props: ParentProps) => {
         gCorpMaxed,
         setGCorpMaxed,
         allocation,
-        previousLp,
+        previousLabel: () => previous()?.label,
         changes: () => changeSummary().lines,
         changeNotes: () => changeSummary().notes,
       }}

@@ -16,7 +16,7 @@ export const TalentGuideLeftColumn = () => {
     gCorpMaxed,
     setGCorpMaxed,
     allocation,
-    previousLp,
+    previousLabel,
     changes,
     changeNotes,
   } = useTalentGuideContext()
@@ -42,12 +42,12 @@ export const TalentGuideLeftColumn = () => {
         </div>
       </InfoCard>
 
-      <Show when={previousLp() !== undefined || allocation().notes.length > 0}>
-        <InfoCard title={previousLp() !== undefined ? `Changes from ${previousLp()} LP` : "Changes"}>
+      <Show when={previousLabel() !== undefined || allocation().notes.length > 0}>
+        <InfoCard title={previousLabel() !== undefined ? `Changes from ${previousLabel()}` : "Changes"}>
           <div class="space-y-2 whitespace-pre-wrap text-sm leading-6 text-ink/80 dark:text-white/80">
-            <Show when={previousLp() !== undefined}>
+            <Show when={previousLabel() !== undefined}>
               <div>
-                <For each={changes()} fallback={<p>- No talent changes for this LP.</p>}>
+                <For each={changes()} fallback={<p>- No talent changes.</p>}>
                   {(line) => <p>{line}</p>}
                 </For>
               </div>
