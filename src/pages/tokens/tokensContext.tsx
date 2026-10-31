@@ -1,6 +1,6 @@
 import { createContext, createMemo, createResource, type ParentProps, useContext } from "solid-js"
 import { createSyncedSignal } from "../../lib/persistedSignal"
-import { getTokenKey, TOKEN_SHARED_KEYS } from "../../lib/tokenSharedInputs"
+import { getTokenKey, TOKEN_SHARED_KEYS } from "../../shared/tokenSharedInputs"
 import { calculateTokenRecommendations, calculateTotalTokensSpent } from "./tokenCalculator"
 import { loadTokenData, TOKEN_UPGRADES } from "./tokenData"
 import { OUTPUT_RESOURCES, type TokenLevelMap, type TokenUpgradeDefinition, type TokenId } from "./tokenTypes"

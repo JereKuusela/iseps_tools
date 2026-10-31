@@ -127,7 +127,7 @@ const TopNav = (props: { darkMode: boolean; onToggleDarkMode: () => void }) => {
   return (
     <header class="relative z-10 hidden px-4 pt-5 sm:block sm:px-8 sm:pt-8 lg:px-10">
       <div class="mx-auto flex w-full max-w-6xl items-center gap-2.5 rounded-2xl border border-white/60 bg-white/70 p-2.5 shadow-glow backdrop-blur dark:border-white/10 dark:bg-[#111a28]/75 sm:gap-3 sm:p-3">
-        <div class="min-w-[240px] flex-1 gap-2.5 sm:grid sm:grid-cols-2 lg:grid-cols-6">
+        <div class="min-w-[240px] flex-1 gap-2.5 sm:grid sm:grid-cols-2 lg:grid-cols-7">
           <For each={primaryTabs}>
             {(tab) => (
               <A

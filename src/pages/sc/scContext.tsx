@@ -1,6 +1,6 @@
 import { createContext, type ParentProps, useContext } from "solid-js"
-import { createSyncedSignal } from "./persistedSignal"
-import { getTokenKey, SHARED_SE_KEY, TOKEN_SHARED_KEYS } from "./tokenSharedInputs"
+import { createSyncedSignal } from "../../lib/persistedSignal"
+import { getTokenKey, SHARED_SE_KEY, TOKEN_SHARED_KEYS } from "../../shared/tokenSharedInputs"
 import type { ScGoalType } from "./scCalculator"
 
 export type ScGainUnit = "min" | "hour" | "day"

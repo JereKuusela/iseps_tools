@@ -1,6 +1,6 @@
 import { Panel } from "../../components/layout/Panel"
 import { SplitColumns } from "../../components/layout/SplitColumns"
-import { PerkDataProvider } from "../../lib/perkContext"
+import { PerkDataProvider } from "../../shared/perkContext"
 import { PerkGuideLeftColumn } from "./PerkGuideLeftColumn"
 import { PerkGuideRightColumn } from "./PerkGuideRightColumn"
 import { PerkGuideProvider } from "./perkGuideContext"

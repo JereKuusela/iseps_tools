@@ -1,5 +1,5 @@
 import type { LargeNumber } from "../../lib/largeNumber"
-import type { ScGoalType } from "../../lib/scCalculator"
+import type { ScGoalType } from "./scCalculator"
 
 export type PanelOutput = {
   id: number

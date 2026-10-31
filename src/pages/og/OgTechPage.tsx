@@ -1,6 +1,6 @@
 import { Panel } from "../../components/layout/Panel"
 import { SplitColumns } from "../../components/layout/SplitColumns"
-import { ZatDataProvider } from "../../lib/zatContext"
+import { ZatDataProvider } from "../../shared/zatContext"
 import { OgTechLeftColumn } from "./OgTechLeftColumn"
 import { OgTechRightColumn } from "./OgTechRightColumn"
 import { OgTechProvider } from "./ogTechContext"

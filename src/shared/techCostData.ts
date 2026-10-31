@@ -1,4 +1,4 @@
-import { LargeNumber } from "./largeNumber"
+import { LargeNumber } from "../lib/largeNumber"
 
 const parseCostCell = (raw: string): LargeNumber => {
   try {

@@ -1,7 +1,7 @@
 import { createContext, createEffect, createMemo, createSignal, type ParentProps, useContext } from "solid-js"
 import { createSyncedSignal } from "../../lib/persistedSignal"
 import { LargeNumber } from "../../lib/largeNumber"
-import { useZatData, ZatGuideEntry } from "../../lib/zatContext"
+import { useZatData, ZatGuideEntry } from "../../shared/zatContext"
 import type { GuideNodeView, GuideRunType } from "./zatGuideTypes"
 import { parseNumberish } from "../../lib/parseNumber"
 

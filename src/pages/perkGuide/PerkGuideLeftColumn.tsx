@@ -1,7 +1,7 @@
 import { For, Show } from "solid-js"
 import { InfoCard } from "../../components/layout/contentBlocks"
 import { IntegerField, SelectField } from "../../components/ui/formControls"
-import type { PerkRunType } from "../../lib/perkContext"
+import type { PerkRunType } from "../../shared/perkContext"
 import { usePerkGuideContext } from "./perkGuideContext"
 
 const formatSe = (se: number) => `SE${String(se).padStart(2, "0")}`

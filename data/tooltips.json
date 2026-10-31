@@ -65,5 +65,7 @@
   "factoryProduction.panel": "Calculates the most valuable produicts.\nShows various output related stats.",
   "og.panel": "Calculates the most valuable tech upgrades.\nTracks progression towards next cycle.\nShows various Juno related stats.",
   "perkGuide.panel": "Shows recommended perks for different SE levels and runs.",
-  "zatGuide.panel": "Shows recommended nodes for different cycles and runs."
+  "zatGuide.panel": "Shows recommended nodes for different cycles and runs.",
+  "talentGuide.panel": "Shows recommended talents for different SE and LP.",
+  "talentGuide.gCorp": "Tick if you expect to max the G-Corp Conversion Multiplier this Simulation.\nMoves LP out of PP1-1 and PP2-1 and lowers PP5-2."
 }

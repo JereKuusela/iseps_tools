@@ -1,4 +1,4 @@
-import { readFromStorage, writeToStorage } from "./storage"
+import { readFromStorage, writeToStorage } from "../lib/storage"
 
 export const getCrystalKey = (upgradeId: string) => `crystal.${upgradeId}`
 

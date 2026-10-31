@@ -40,7 +40,7 @@ Connections (two-sided but just one side listed):
 
 ## Right side
 
-- IC1-1, EMPTY, IC2-2
+- IC1-1, EMPTY, IC1-2
 - IC2-1, IC2-2, IC2-3
 - IC3-1, IC3-2, IC3-3
 - EMPTY, IC4-1, EMPTY
@@ -63,4 +63,11 @@ Connections (two-sided but just one side listed):
 
 ## Calculator
 
-If g-corp maxed, should deprioritize PP1-1, PP2-1 and PP5-2 (but take if other filled).
+Based on the community guide spreadsheet, see `src/pages/talentGuide/talentCalculator.ts`.
+
+- Up to 47 LP: fixed path (`pathByLp`).
+- From 48 LP: base build, then SE extras (PP1-1, PP2-1, PP3-1, IC2-2, IC2-3, IC3-3), then row 5 gets the rest.
+- Rows 1-5 budget is `min(LP, 350)`, or `LP - 300` above 650 LP.
+- Row 5 split by weights (PP5-1 needs an Orange perk, PP5-2 Yellow, PP5-3 Purple, IC weights grow with SE), max 100 each.
+- Row 6: from 350 LP, 10 LP per level in order IC6-1, PP6-1, IC6-3, PP6-3, IC6-2, PP6-2. Remainders stay unallocated.
+- If g-corp maxed: PP1-1 and PP2-1 get no extras and PP5-2 weight is divided by 4 (1.3 from 610 LP).

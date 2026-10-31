@@ -1,5 +1,5 @@
-import scJson from "../../data/sc.json"
-import { LargeNumber } from "./largeNumber"
+import scJson from "../../../data/sc.json"
+import { LargeNumber } from "../../lib/largeNumber"
 
 export type ScGoalType = "battery1" | "battery2" | "battery3" | "customSc" | "customDc"
 

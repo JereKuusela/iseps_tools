@@ -2,7 +2,7 @@ import { render } from "solid-js/web"
 import { Router, Route } from "@solidjs/router"
 import App from "./App"
 import { ROUTES } from "./lib/routes"
-import { ScProvider } from "./lib/scContext"
+import { ScProvider } from "./pages/sc/scContext"
 import { CrystalsPage } from "./pages/crystals/CrystalsPage"
 import { CruisePage } from "./pages/cruise/CruisePage"
 import { FactoryPage } from "./pages/factory/FactoryPage"
@@ -13,11 +13,12 @@ import { PerkGuidePage } from "./pages/perkGuide/PerkGuidePage"
 import { PremiumCrystalTokenPage, PremiumHaulerMinePage } from "./pages/PremiumPage"
 import { ScPage } from "./pages/sc/ScPage"
 import { SettingsPage } from "./pages/SettingsPage"
+import { TalentGuidePage } from "./pages/talentGuide/TalentGuidePage"
 import { TokensPage } from "./pages/tokens/TokensPage"
 import { ZatGuidePage } from "./pages/zatGuide/ZatGuidePage"
 import { initCloudSync } from "./lib/cloudSync"
-import { migrateCrystalSharedInputs } from "./lib/crystalSharedInputs"
-import { migrateTokenSharedInputs } from "./lib/tokenSharedInputs"
+import { migrateCrystalSharedInputs } from "./shared/crystalSharedInputs"
+import { migrateTokenSharedInputs } from "./shared/tokenSharedInputs"
 import "./index.css"
 
 migrateTokenSharedInputs()
@@ -39,6 +40,12 @@ const OgTechRoute = () => (
 const PerkGuideRoute = () => (
   <App>
     <PerkGuidePage />
+  </App>
+)
+
+const TalentGuideRoute = () => (
+  <App>
+    <TalentGuidePage />
   </App>
 )
 
@@ -111,6 +118,7 @@ render(
         <Route path={ROUTES.tokens} component={TokensRoute} />
         <Route path={ROUTES.crystals} component={CrystalsRoute} />
         <Route path={ROUTES.perks} component={PerkGuideRoute} />
+        <Route path={ROUTES.talents} component={TalentGuideRoute} />
         <Route path={ROUTES.cruise} component={CruiseRoute} />
         <Route path={ROUTES.factory} component={FactoryRoute} />
         <Route path={ROUTES.factoryProduction} component={FactoryProductionRoute} />

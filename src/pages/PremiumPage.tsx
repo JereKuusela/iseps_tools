@@ -10,10 +10,10 @@ import { clamp } from "../lib/mathUtils"
 import { formatFixed as formatValue } from "../lib/numberFormat"
 import { parseNumberish } from "../lib/parseNumber"
 import { createSyncedSignal } from "../lib/persistedSignal"
-import { getCrystalKey } from "../lib/crystalSharedInputs"
-import { TOKEN_SHARED_KEYS } from "../lib/tokenSharedInputs"
+import { getCrystalKey } from "../shared/crystalSharedInputs"
+import { TOKEN_SHARED_KEYS } from "../shared/tokenSharedInputs"
 import type { TooltipKey } from "../lib/tooltips"
-import { useZatData, type PremiumCrystalTokenMethod, type PremiumHaulerLayer } from "../lib/zatContext"
+import { useZatData, type PremiumCrystalTokenMethod, type PremiumHaulerLayer } from "../shared/zatContext"
 
 type HaulerToggleKey =
   | "layer1TokenIncome"

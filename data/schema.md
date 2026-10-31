@@ -11,6 +11,21 @@ Rules for calculating ZAT cycle cost.
 
 Base cost is 1, so level 1 costs 1e5, level 2 costs 1e10, level 3 costs 1e20 and so on.
 
+## talents.json
+
+Talent guide definitions.
+
+- `grid`: Per side (`PP`, `IC`), 6 rows x 3 columns of talent ids (`null` for empty cells).
+- `talents`: `id`, `side`, `row`, `col`, `name`, `max` level and `tooltip` (name and effect).
+- `connections`: Linked talent pairs, used for drawing lines.
+- `pathByLp`: Non-zero talent levels for each total LP from 0 to 47 (fixed path).
+- `base`: Levels at 48 LP. Used as the minimum from 48 LP; PP1-1 and PP2-1 are replaced by SE extras.
+- `extrasBySe`: Per-SE changes to the extra target levels for PP1-1, PP2-1, PP3-1, IC2-2, IC2-3 and IC3-3 (used from 48 LP). The target at an SE is the sum of all `add` values up to it.
+  - `se`: SE number.
+  - `add`: Talent token or list of tokens. `"PP1-1"` adds 1 level, `"3 PP1-1"` adds 3 (amount can be negative).
+- `lpTargets`: Minimum levels for a talent once total LP reaches `lp` (`lp`, `id`, `level`). Applied on top of the SE extras.
+- `lpNotes`: Notes shown for a total LP range (`from`, optional `to`, `text`).
+
 ## credits.json
 
 Entries for the Credits tab.
@@ -209,7 +224,7 @@ Precomputed per-level tech costs, used to avoid recalculating the `costCurve` gr
 - `cost`: Cost for buying this level, stored as `mantissa e exponent` (parseable by `LargeNumber.parse`).
 
 This file is generated from `techs.json` by `scripts/generateTechCostCsv.mjs`. It is loaded asynchronously
-(via `src/lib/techCostData.ts`) and `calculateNextThreeTechCosts` in `src/lib/zatCalculator.ts` falls back to
+(via `src/shared/techCostData.ts`) and `calculateNextThreeTechCosts` in `src/shared/zatCalculator.ts` falls back to
 recomputing costs from `techs.json` until the precomputed data has finished loading.
 
 ## techs_se_effect.json

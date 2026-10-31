@@ -2,7 +2,7 @@ import { For, Show, createMemo } from "solid-js"
 import { InfoCard } from "../../components/layout/contentBlocks"
 import { GRID_CELL_BORDER_CLASS } from "../../components/layout/dataTable"
 import { Tooltip } from "../../components/ui/Tooltip"
-import { usePerkData, type PerkExtraKey, type Perk, type PerkRowId } from "../../lib/perkContext"
+import { usePerkData, type PerkExtraKey, type Perk, type PerkRowId } from "../../shared/perkContext"
 import { usePerkGuideContext } from "./perkGuideContext"
 
 const colorDotStyle = (hex: string) => ({

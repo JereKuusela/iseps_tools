@@ -1,4 +1,4 @@
-import type { PerkGuideEntry, Perk, PerkRowId, Perkrow, PerkRunType } from "../../lib/perkContext"
+import type { PerkGuideEntry, Perk, PerkRowId, Perkrow, PerkRunType } from "../../shared/perkContext"
 
 export type PerkRunOption = {
   value: PerkRunType

@@ -9,6 +9,7 @@ export const ROUTES = {
   tokens: "/tokens",
   crystals: "/crystals",
   perks: "/perks",
+  talents: "/talents",
   cruise: "/cruise",
   factory: "/factory",
   factoryProduction: "/factory-production",
@@ -22,6 +23,7 @@ export const ROUTES = {
 export const primaryTabs: TabItem[] = [
   { href: ROUTES.ogTech, label: "OG Tech" },
   { href: ROUTES.perks, label: "Perks" },
+  { href: ROUTES.talents, label: "Talents" },
   { href: ROUTES.zatGuide, label: "ZAT" },
   { href: ROUTES.sc, label: "SC" },
 ]
@@ -37,7 +39,14 @@ export const eventTabs: TabItem[] = [
   { href: ROUTES.factoryProduction, label: "Factory Production" },
 ]
 
-export const tabs: TabItem[] = [primaryTabs[0], ...premiumTabs, primaryTabs[1], ...eventTabs, ...primaryTabs.slice(2)]
+export const tabs: TabItem[] = [
+  primaryTabs[0],
+  ...premiumTabs,
+  primaryTabs[1],
+  primaryTabs[2],
+  ...eventTabs,
+  ...primaryTabs.slice(3),
+]
 
 export const toolCards: ToolCardItem[] = [
   {
@@ -59,6 +68,11 @@ export const toolCards: ToolCardItem[] = [
     href: ROUTES.perks,
     label: "Perks",
     description: getTooltip("perkGuide.panel"),
+  },
+  {
+    href: ROUTES.talents,
+    label: "Talents",
+    description: getTooltip("talentGuide.panel"),
   },
   {
     href: ROUTES.zatGuide,

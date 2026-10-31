@@ -1,7 +1,7 @@
 import { createContext, type Accessor, type ParentProps, useContext } from "solid-js"
 import perksJson from "../../data/perks.json"
 import perksMetaJson from "../../data/perks_meta.json"
-import { toInt } from "./parseNumber"
+import { toInt } from "../lib/parseNumber"
 
 export type PerkRunType = "se" | "grun"
 

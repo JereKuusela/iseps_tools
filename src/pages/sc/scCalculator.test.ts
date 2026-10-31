@@ -8,7 +8,7 @@ import {
   findCustomScGoal,
   iterateTimeToReachGoal,
 } from "./scCalculator"
-import { LargeNumber } from "./largeNumber"
+import { LargeNumber } from "../../lib/largeNumber"
 
 const compareLarge = (a: LargeNumber, b: LargeNumber) => {
   expect(a.mantissa).toBeCloseTo(b.mantissa, 2)

@@ -1,0 +1,944 @@
+{
+  "grid": {
+    "PP": [
+      [
+        "PP1-1",
+        "PP1-2",
+        null
+      ],
+      [
+        "PP2-1",
+        "PP2-2",
+        "PP2-3"
+      ],
+      [
+        "PP3-1",
+        "PP3-2",
+        "PP3-3"
+      ],
+      [
+        null,
+        "PP4-1",
+        null
+      ],
+      [
+        "PP5-1",
+        "PP5-2",
+        "PP5-3"
+      ],
+      [
+        "PP6-1",
+        "PP6-2",
+        "PP6-3"
+      ]
+    ],
+    "IC": [
+      [
+        "IC1-1",
+        null,
+        "IC1-2"
+      ],
+      [
+        "IC2-1",
+        "IC2-2",
+        "IC2-3"
+      ],
+      [
+        "IC3-1",
+        "IC3-2",
+        "IC3-3"
+      ],
+      [
+        null,
+        "IC4-1",
+        null
+      ],
+      [
+        "IC5-1",
+        "IC5-2",
+        "IC5-3"
+      ],
+      [
+        "IC6-1",
+        "IC6-2",
+        "IC6-3"
+      ]
+    ]
+  },
+  "talents": [
+    {
+      "id": "PP1-1",
+      "side": "PP",
+      "row": 1,
+      "col": 1,
+      "name": "BANNER CONSULTANTS",
+      "max": 5,
+      "tooltip": "BANNER CONSULTANTS\n+0.5% Gamma per Player Level"
+    },
+    {
+      "id": "PP1-2",
+      "side": "PP",
+      "row": 1,
+      "col": 2,
+      "name": "QUANTUM CONNECTIONS",
+      "max": 5,
+      "tooltip": "QUANTUM CONNECTIONS\n+0.4% Beta, Ceti and Delta per Alpha Velocity level"
+    },
+    {
+      "id": "PP2-1",
+      "side": "PP",
+      "row": 2,
+      "col": 1,
+      "name": "THINKIN' WITH GAMMA",
+      "max": 5,
+      "tooltip": "THINKIN' WITH GAMMA\n+1% Gamma per Gamma Volatility level"
+    },
+    {
+      "id": "PP2-2",
+      "side": "PP",
+      "row": 2,
+      "col": 2,
+      "name": "QUANTUM CONNECTIONS MK.2",
+      "max": 5,
+      "tooltip": "QUANTUM CONNECTIONS MK.2\n+0.2% Epsilon, Fenix and Gamma per Beta Sphere Size level"
+    },
+    {
+      "id": "PP2-3",
+      "side": "PP",
+      "row": 2,
+      "col": 3,
+      "name": "SINGULARITY SYCOPHANT",
+      "max": 5,
+      "tooltip": "SINGULARITY SYCOPHANT\n+1% All Particles per perk (excluding IP)"
+    },
+    {
+      "id": "PP3-1",
+      "side": "PP",
+      "row": 3,
+      "col": 1,
+      "name": "BEST BETA BUDS",
+      "max": 5,
+      "tooltip": "BEST BETA BUDS\n+5% Beta per Player Level"
+    },
+    {
+      "id": "PP3-2",
+      "side": "PP",
+      "row": 3,
+      "col": 2,
+      "name": "QUANTUM CONNECTIONS MK.3",
+      "max": 5,
+      "tooltip": "QUANTUM CONNECTIONS MK.3\n+0.2% Helion and Ixion per Fenix Horizon level"
+    },
+    {
+      "id": "PP3-3",
+      "side": "PP",
+      "row": 3,
+      "col": 3,
+      "name": "SINGULARITY PERFECTIONIST",
+      "max": 2,
+      "tooltip": "SINGULARITY PERFECTIONIST\n+5% AP per White perk"
+    },
+    {
+      "id": "PP4-1",
+      "side": "PP",
+      "row": 4,
+      "col": 2,
+      "name": "PARTICLE MASTERY",
+      "max": 1,
+      "tooltip": "PARTICLE MASTERY\n+5% AP per Player Level"
+    },
+    {
+      "id": "PP5-1",
+      "side": "PP",
+      "row": 5,
+      "col": 1,
+      "name": "ASHES OF THE FENIX",
+      "max": 100,
+      "tooltip": "ASHES OF THE FENIX\n+10% Alpha, Beta and Fenix per Orange perk"
+    },
+    {
+      "id": "PP5-2",
+      "side": "PP",
+      "row": 5,
+      "col": 2,
+      "name": "THE STRANGE CONNECTION",
+      "max": 100,
+      "tooltip": "THE STRANGE CONNECTION\n+30% Ceti, Gamma and Helion per Yellow perk"
+    },
+    {
+      "id": "PP5-3",
+      "side": "PP",
+      "row": 5,
+      "col": 3,
+      "name": "PLANET OF THE FUTURE",
+      "max": 100,
+      "tooltip": "PLANET OF THE FUTURE\n+30% Delta, Epsilon and Ixion per Purple perk"
+    },
+    {
+      "id": "PP6-1",
+      "side": "PP",
+      "row": 6,
+      "col": 1,
+      "name": "SPAWN RATE COMPOUNDER",
+      "max": 5,
+      "tooltip": "SPAWN RATE COMPOUNDER\nx1.000178 AP per Spawn Rate level"
+    },
+    {
+      "id": "PP6-2",
+      "side": "PP",
+      "row": 6,
+      "col": 2,
+      "name": "LIFE TIME COMPOUNDER",
+      "max": 5,
+      "tooltip": "LIFE TIME COMPOUNDER\nx1.00048 Cash per Lifetime level"
+    },
+    {
+      "id": "PP6-3",
+      "side": "PP",
+      "row": 6,
+      "col": 3,
+      "name": "ATTRACTION COMPOUNDER",
+      "max": 5,
+      "tooltip": "ATTRACTION COMPOUNDER\nx1.0007 DC per Attraction level"
+    },
+    {
+      "id": "IC1-1",
+      "side": "IC",
+      "row": 1,
+      "col": 1,
+      "name": "EGETUARIAN REGULAR",
+      "max": 5,
+      "tooltip": "EGETUARIAN REGULAR\n+0.2% Artifacts per Player Level"
+    },
+    {
+      "id": "IC1-2",
+      "side": "IC",
+      "row": 1,
+      "col": 3,
+      "name": "QUALITY AND QUANTITY",
+      "max": 5,
+      "tooltip": "QUALITY AND QUANTITY\n+0.02% Equipment and Morale bonuses per Scientist round"
+    },
+    {
+      "id": "IC2-1",
+      "side": "IC",
+      "row": 2,
+      "col": 1,
+      "name": "SOLUTIONIZATION",
+      "max": 2,
+      "tooltip": "SOLUTIONIZATION\n+1% Solutions per Player Level"
+    },
+    {
+      "id": "IC2-2",
+      "side": "IC",
+      "row": 2,
+      "col": 2,
+      "name": "REFLECTION IS PERFECTION",
+      "max": 1,
+      "tooltip": "REFLECTION IS PERFECTION\n+0.0000000006% GP and Gamma per Solution"
+    },
+    {
+      "id": "IC2-3",
+      "side": "IC",
+      "row": 2,
+      "col": 3,
+      "name": "QUALITY AND QUANTITY 2",
+      "max": 5,
+      "tooltip": "QUALITY AND QUANTITY 2\n+0.03% Trinket and Outpost bonuses per Arch-Bot round"
+    },
+    {
+      "id": "IC3-1",
+      "side": "IC",
+      "row": 3,
+      "col": 1,
+      "name": "THE MISSING LINK",
+      "max": 5,
+      "tooltip": "THE MISSING LINK\n+0.2% Cash per Outpost"
+    },
+    {
+      "id": "IC3-2",
+      "side": "IC",
+      "row": 3,
+      "col": 2,
+      "name": "QUANTITY AND QUALITY 4",
+      "max": 5,
+      "tooltip": "QUANTITY AND QUALITY 4\n+1 base Scientist, Arch-Bot and Rebirthologist per Blue, Yellow and Orange perk"
+    },
+    {
+      "id": "IC3-3",
+      "side": "IC",
+      "row": 3,
+      "col": 3,
+      "name": "QUALITY AND QUANTITY 3",
+      "max": 5,
+      "tooltip": "QUALITY AND QUANTITY 3\n+0.04% DNA Infusion and Foundation bonuses per Rebirthologist round"
+    },
+    {
+      "id": "IC4-1",
+      "side": "IC",
+      "row": 4,
+      "col": 2,
+      "name": "EGETUARIAN SECRETS",
+      "max": 1,
+      "tooltip": "EGETUARIAN SECRETS\n+25% Morale, Outpost and Foundation bonuses per Lime perk"
+    },
+    {
+      "id": "IC5-1",
+      "side": "IC",
+      "row": 5,
+      "col": 1,
+      "name": "G-CORP OPTIMIZATION",
+      "max": 100,
+      "tooltip": "G-CORP OPTIMIZATION\n+0.1% GP per Player Level"
+    },
+    {
+      "id": "IC5-2",
+      "side": "IC",
+      "row": 5,
+      "col": 2,
+      "name": "TIPS FROM THE BOTS",
+      "max": 100,
+      "tooltip": "TIPS FROM THE BOTS\n/100 Corvus Extraction and Tiberius Emblem costs\n+0.15% Tiberius Emblems per perk (excluding IP)"
+    },
+    {
+      "id": "IC5-3",
+      "side": "IC",
+      "row": 5,
+      "col": 3,
+      "name": "IMPROVED COMMUNICATION",
+      "max": 100,
+      "tooltip": "IMPROVED COMMUNICATION\n+0.1% Beta Lab, Archive Initiative and Fenix Institute per Player Level"
+    },
+    {
+      "id": "IC6-1",
+      "side": "IC",
+      "row": 6,
+      "col": 1,
+      "name": "SCIENTIST COMPOUNDER",
+      "max": 5,
+      "tooltip": "SCIENTIST COMPOUNDER\nx1.00076 AP per Scientist round"
+    },
+    {
+      "id": "IC6-2",
+      "side": "IC",
+      "row": 6,
+      "col": 2,
+      "name": "ARCH-BOT COMPOUNDER",
+      "max": 5,
+      "tooltip": "ARCH-BOT COMPOUNDER\nx1.00032 Cash per Arch-Bot round"
+    },
+    {
+      "id": "IC6-3",
+      "side": "IC",
+      "row": 6,
+      "col": 3,
+      "name": "REBIRTHOLOGIST COMPOUNDER",
+      "max": 5,
+      "tooltip": "REBIRTHOLOGIST COMPOUNDER\nx1.00061 DC per Rebirthologist round"
+    }
+  ],
+  "connections": [
+    [
+      "PP1-1",
+      "PP2-1"
+    ],
+    [
+      "PP1-2",
+      "PP2-2"
+    ],
+    [
+      "PP2-2",
+      "PP2-3"
+    ],
+    [
+      "PP2-2",
+      "PP3-2"
+    ],
+    [
+      "PP2-3",
+      "PP3-3"
+    ],
+    [
+      "PP3-1",
+      "PP3-2"
+    ],
+    [
+      "PP3-2",
+      "PP4-1"
+    ],
+    [
+      "PP4-1",
+      "PP5-1"
+    ],
+    [
+      "PP4-1",
+      "PP5-2"
+    ],
+    [
+      "PP4-1",
+      "PP5-3"
+    ],
+    [
+      "PP5-1",
+      "PP6-1"
+    ],
+    [
+      "PP5-2",
+      "PP6-2"
+    ],
+    [
+      "PP5-3",
+      "PP6-3"
+    ],
+    [
+      "IC1-1",
+      "IC2-1"
+    ],
+    [
+      "IC1-2",
+      "IC2-3"
+    ],
+    [
+      "IC2-1",
+      "IC3-1"
+    ],
+    [
+      "IC2-2",
+      "IC3-2"
+    ],
+    [
+      "IC2-3",
+      "IC3-3"
+    ],
+    [
+      "IC3-1",
+      "IC3-2"
+    ],
+    [
+      "IC3-2",
+      "IC3-3"
+    ],
+    [
+      "IC3-2",
+      "IC4-1"
+    ],
+    [
+      "IC4-1",
+      "IC5-1"
+    ],
+    [
+      "IC4-1",
+      "IC5-2"
+    ],
+    [
+      "IC4-1",
+      "IC5-3"
+    ],
+    [
+      "IC5-1",
+      "IC6-1"
+    ],
+    [
+      "IC5-2",
+      "IC6-2"
+    ],
+    [
+      "IC5-3",
+      "IC6-3"
+    ]
+  ],
+  "pathByLp": {
+    "1": {
+      "IC1-1": 1
+    },
+    "2": {
+      "IC1-1": 2
+    },
+    "3": {
+      "IC1-1": 3
+    },
+    "4": {
+      "IC1-1": 4
+    },
+    "5": {
+      "IC1-1": 5
+    },
+    "6": {
+      "IC1-1": 5,
+      "IC2-1": 1
+    },
+    "7": {
+      "IC1-1": 5,
+      "IC2-1": 2
+    },
+    "8": {
+      "IC1-1": 5,
+      "IC1-2": 1,
+      "IC2-1": 2
+    },
+    "9": {
+      "IC1-1": 5,
+      "IC1-2": 2,
+      "IC2-1": 2
+    },
+    "10": {
+      "IC1-1": 5,
+      "IC1-2": 3,
+      "IC2-1": 2
+    },
+    "11": {
+      "IC1-1": 5,
+      "IC1-2": 4,
+      "IC2-1": 2
+    },
+    "12": {
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2
+    },
+    "13": {
+      "PP1-1": 1,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2
+    },
+    "14": {
+      "PP1-1": 2,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2
+    },
+    "15": {
+      "PP1-1": 3,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2
+    },
+    "16": {
+      "PP1-1": 4,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2
+    },
+    "17": {
+      "PP1-1": 5,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2
+    },
+    "18": {
+      "PP1-1": 5,
+      "PP2-1": 1,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2
+    },
+    "19": {
+      "PP1-1": 5,
+      "PP2-1": 2,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2
+    },
+    "20": {
+      "PP1-1": 5,
+      "PP2-1": 3,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2
+    },
+    "21": {
+      "PP1-1": 5,
+      "PP2-1": 4,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2
+    },
+    "22": {
+      "PP1-1": 5,
+      "PP2-1": 5,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2
+    },
+    "23": {
+      "PP1-2": 5,
+      "PP2-2": 5,
+      "PP2-3": 1,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2
+    },
+    "24": {
+      "PP1-2": 5,
+      "PP2-2": 5,
+      "PP2-3": 2,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2
+    },
+    "25": {
+      "PP1-2": 5,
+      "PP2-2": 5,
+      "PP2-3": 3,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2
+    },
+    "26": {
+      "PP1-2": 5,
+      "PP2-2": 5,
+      "PP2-3": 4,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2
+    },
+    "27": {
+      "PP1-2": 5,
+      "PP2-2": 5,
+      "PP2-3": 5,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2
+    },
+    "28": {
+      "PP1-2": 5,
+      "PP2-2": 5,
+      "PP2-3": 5,
+      "PP3-3": 1,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2
+    },
+    "29": {
+      "PP1-2": 5,
+      "PP2-2": 5,
+      "PP2-3": 5,
+      "PP3-3": 2,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2
+    },
+    "30": {
+      "PP1-2": 5,
+      "PP2-2": 5,
+      "PP2-3": 5,
+      "PP3-3": 2,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2,
+      "IC3-1": 1
+    },
+    "31": {
+      "PP1-2": 5,
+      "PP2-2": 5,
+      "PP2-3": 3,
+      "PP3-2": 5,
+      "PP4-1": 1,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2
+    },
+    "32": {
+      "PP1-2": 5,
+      "PP2-2": 5,
+      "PP2-3": 4,
+      "PP3-2": 5,
+      "PP4-1": 1,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2
+    },
+    "33": {
+      "PP1-2": 5,
+      "PP2-2": 5,
+      "PP2-3": 5,
+      "PP3-2": 5,
+      "PP4-1": 1,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2
+    },
+    "34": {
+      "PP1-2": 5,
+      "PP2-2": 5,
+      "PP2-3": 5,
+      "PP3-2": 5,
+      "PP3-3": 1,
+      "PP4-1": 1,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2
+    },
+    "35": {
+      "PP1-2": 5,
+      "PP2-2": 5,
+      "PP2-3": 5,
+      "PP3-2": 5,
+      "PP3-3": 2,
+      "PP4-1": 1,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2
+    },
+    "36": {
+      "PP1-2": 5,
+      "PP2-2": 5,
+      "PP2-3": 5,
+      "PP3-2": 5,
+      "PP3-3": 2,
+      "PP4-1": 1,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2,
+      "IC3-1": 1
+    },
+    "37": {
+      "PP1-1": 1,
+      "PP1-2": 5,
+      "PP2-2": 5,
+      "PP2-3": 5,
+      "PP3-2": 5,
+      "PP3-3": 2,
+      "PP4-1": 1,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2,
+      "IC3-1": 1
+    },
+    "38": {
+      "PP1-1": 1,
+      "PP1-2": 5,
+      "PP2-2": 5,
+      "PP2-3": 5,
+      "PP3-2": 5,
+      "PP3-3": 2,
+      "PP4-1": 1,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2,
+      "IC3-1": 2
+    },
+    "39": {
+      "PP1-1": 1,
+      "PP1-2": 5,
+      "PP2-2": 5,
+      "PP2-3": 5,
+      "PP3-2": 5,
+      "PP3-3": 2,
+      "PP4-1": 1,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2,
+      "IC3-1": 3
+    },
+    "40": {
+      "PP1-1": 1,
+      "PP1-2": 5,
+      "PP2-2": 5,
+      "PP2-3": 5,
+      "PP3-2": 5,
+      "PP3-3": 2,
+      "PP4-1": 1,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2,
+      "IC3-1": 4
+    },
+    "41": {
+      "PP1-1": 1,
+      "PP1-2": 5,
+      "PP2-2": 5,
+      "PP2-3": 5,
+      "PP3-2": 5,
+      "PP3-3": 2,
+      "PP4-1": 1,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2,
+      "IC3-1": 5
+    },
+    "42": {
+      "PP1-1": 2,
+      "PP1-2": 5,
+      "PP2-2": 5,
+      "PP2-3": 5,
+      "PP3-2": 5,
+      "PP3-3": 2,
+      "PP4-1": 1,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2,
+      "IC3-1": 5
+    },
+    "43": {
+      "PP1-1": 3,
+      "PP1-2": 5,
+      "PP2-2": 5,
+      "PP2-3": 5,
+      "PP3-2": 5,
+      "PP3-3": 2,
+      "PP4-1": 1,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2,
+      "IC3-1": 5
+    },
+    "44": {
+      "PP1-1": 4,
+      "PP1-2": 5,
+      "PP2-2": 5,
+      "PP2-3": 5,
+      "PP3-2": 5,
+      "PP3-3": 2,
+      "PP4-1": 1,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2,
+      "IC3-1": 5
+    },
+    "45": {
+      "PP1-1": 5,
+      "PP1-2": 5,
+      "PP2-2": 5,
+      "PP2-3": 5,
+      "PP3-2": 5,
+      "PP3-3": 2,
+      "PP4-1": 1,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2,
+      "IC3-1": 5
+    },
+    "46": {
+      "PP1-1": 5,
+      "PP1-2": 5,
+      "PP2-1": 1,
+      "PP2-2": 5,
+      "PP2-3": 5,
+      "PP3-2": 5,
+      "PP3-3": 2,
+      "PP4-1": 1,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2,
+      "IC3-1": 5
+    },
+    "47": {
+      "PP1-1": 5,
+      "PP1-2": 5,
+      "PP2-1": 2,
+      "PP2-2": 5,
+      "PP2-3": 5,
+      "PP3-2": 5,
+      "PP3-3": 2,
+      "PP4-1": 1,
+      "IC1-1": 5,
+      "IC1-2": 5,
+      "IC2-1": 2,
+      "IC3-1": 5
+    }
+  },
+  "base": {
+    "PP1-2": 5,
+    "PP2-2": 5,
+    "PP2-3": 5,
+    "PP3-2": 5,
+    "PP3-3": 2,
+    "PP4-1": 1,
+    "IC1-1": 5,
+    "IC1-2": 5,
+    "IC2-2": 1,
+    "IC2-1": 2,
+    "IC3-1": 5,
+    "IC3-2": 5,
+    "IC4-1": 1,
+    "IC5-2": 1
+  },
+  "extrasBySe": [
+    {
+      "se": 1,
+      "add": "PP1-1"
+    },
+    {
+      "se": 15,
+      "add": "IC2-2"
+    },
+    {
+      "se": 17,
+      "add": "PP1-1"
+    },
+    {
+      "se": 20,
+      "add": [
+        "3 PP1-1",
+        "2 PP2-1"
+      ]
+    },
+    {
+      "se": 24,
+      "add": "IC2-3"
+    },
+    {
+      "se": 25,
+      "add": "IC2-3"
+    },
+    {
+      "se": 26,
+      "add": "IC2-3"
+    },
+    {
+      "se": 28,
+      "add": "IC2-3"
+    },
+    {
+      "se": 29,
+      "add": "PP2-1"
+    },
+    {
+      "se": 30,
+      "add": [
+        "IC2-3",
+        "5 IC3-3"
+      ]
+    },
+    {
+      "se": 44,
+      "add": "PP2-1"
+    },
+    {
+      "se": 53,
+      "add": "PP2-1"
+    },
+    {
+      "se": 64,
+      "add": "2 PP3-1"
+    },
+    {
+      "se": 150,
+      "add": "3 PP3-1"
+    }
+  ],
+  "lpNotes": [
+    {
+      "from": 0,
+      "to": 0,
+      "text": "Talents unlock at player level 50 (around SE5)."
+    },
+    {
+      "from": 1,
+      "to": 5,
+      "text": "IC1-1 boosts Artifacts.\n\nThis is not retroactive, so remember to do a simulation reset."
+    },
+    {
+      "from": 48,
+      "to": 50,
+      "text": "Row 5 unlocked. Start with 1 point in IC5-2."
+    },
+    {
+      "from": 350,
+      "to": 649,
+      "text": "Row 6 costs 10 LP per level.\n\nYou can spend in row 5 but have to respec at each interval."
+    }
+  ]
+}

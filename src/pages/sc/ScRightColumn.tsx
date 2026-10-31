@@ -9,8 +9,8 @@ import {
   calculateScMultiplierFromGoal,
   iterateTimeToReachGoal,
   type ScGoalType,
-} from "../../lib/scCalculator"
-import { useScContext } from "../../lib/scContext"
+} from "./scCalculator"
+import { useScContext } from "./scContext"
 import { clamp } from "../../lib/mathUtils"
 import { parseNumberish } from "../../lib/parseNumber"
 import { calculateBoostsMultiplier } from "../../lib/boosts"

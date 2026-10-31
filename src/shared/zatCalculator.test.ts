@@ -10,7 +10,7 @@ import {
   calculateTotalPremiumMultiplier,
   calculateZatBoostPerTech,
 } from "./zatCalculator"
-import { LargeNumber } from "./largeNumber"
+import { LargeNumber } from "../lib/largeNumber"
 import * as techCostData from "./techCostData"
 import techs from "../../data/techs.json"
 

@@ -1,9 +1,9 @@
 import { createContext, createMemo, type ParentProps, useContext } from "solid-js"
 import { createSyncedSignal } from "../../lib/persistedSignal"
-import { type PerkGuideEntry, type PerkRowId, type PerkRunType, usePerkData } from "../../lib/perkContext"
+import { type PerkGuideEntry, type PerkRowId, type PerkRunType, usePerkData } from "../../shared/perkContext"
 import type { PerkGuideRowView, PerkRowLookup, PerkRunOption } from "./perkGuideTypes"
 import { parseNumberish } from "../../lib/parseNumber"
-import { SHARED_SE_KEY } from "../../lib/tokenSharedInputs"
+import { SHARED_SE_KEY } from "../../shared/tokenSharedInputs"
 
 type PerkGuideContextValue = {
   se: () => string

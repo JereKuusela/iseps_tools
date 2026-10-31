@@ -3,9 +3,9 @@ import { calculateChestsMultiplier } from "../../lib/boosts"
 import { LargeNumber } from "../../lib/largeNumber"
 import { formatPercentFromRatio } from "../../lib/numberFormat"
 import { createSyncedSignal } from "../../lib/persistedSignal"
-import { getCrystalKey } from "../../lib/crystalSharedInputs"
-import { getTokenKey, SHARED_PLAYER_LEVEL_KEY, TOKEN_SHARED_KEYS } from "../../lib/tokenSharedInputs"
-import { useZatData, type JunoExponentType } from "../../lib/zatContext"
+import { getCrystalKey } from "../../shared/crystalSharedInputs"
+import { getTokenKey, SHARED_PLAYER_LEVEL_KEY, TOKEN_SHARED_KEYS } from "../../shared/tokenSharedInputs"
+import { useZatData, type JunoExponentType } from "../../shared/zatContext"
 import {
   calculateZatCostForCycle,
   calculateNextZatCost,
@@ -14,10 +14,10 @@ import {
   calculateNextThreeTechCosts,
   calculateTotalPremiumMultiplier,
   type ZatMode,
-} from "../../lib/zatCalculator"
+} from "../../shared/zatCalculator"
 import type { ExponentGainEntry, GainUnit, TechCardRow, TopTechEntry } from "./ogTypes"
 import { parseNumberish } from "../../lib/parseNumber"
-import { loadTechCostData } from "../../lib/techCostData"
+import { loadTechCostData } from "../../shared/techCostData"
 
 const toRatePerSecond = (value: LargeNumber, unit: GainUnit) => {
   if (unit === "min") return value.divide(60)

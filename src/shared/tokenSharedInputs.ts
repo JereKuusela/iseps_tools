@@ -1,5 +1,5 @@
 import { TokenId } from "../pages/tokens/tokenTypes"
-import { readFromStorage, writeToStorage } from "./storage"
+import { readFromStorage, writeToStorage } from "../lib/storage"
 
 export const TOKEN_SHARED_KEYS = {
   onlineHoursPerDay: "token.onlineHoursPerDay",

@@ -734,12 +734,7 @@ type CheckboxFieldProps = {
 export const CheckboxField = (props: CheckboxFieldProps) => {
   return (
     <label class="flex min-h-[34px] cursor-pointer items-center justify-between gap-2">
-      <div class="min-w-0 flex items-center gap-2">
-        <span class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
-          {props.label}
-        </span>
-        {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
-      </div>
+      {/* Input must come first: a label activates its first labelable descendant, and the tooltip trigger is a button. */}
       <input
         type="checkbox"
         checked={props.checked}
@@ -747,6 +742,12 @@ export const CheckboxField = (props: CheckboxFieldProps) => {
         onKeyDown={blurOnEnterOrEscape}
         class="peer sr-only"
       />
+      <div class="min-w-0 flex items-center gap-2">
+        <span class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
+          {props.label}
+        </span>
+        {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
+      </div>
       <span class="relative h-5 w-9 shrink-0 rounded-full bg-ink/25 transition after:absolute after:left-0.5 after:top-0.5 after:h-4 after:w-4 after:rounded-full after:bg-white after:shadow after:transition-transform after:content-[''] peer-checked:bg-accent peer-checked:after:translate-x-4 peer-focus-visible:ring peer-focus-visible:ring-brand/40 dark:bg-white/25" />
     </label>
   )
