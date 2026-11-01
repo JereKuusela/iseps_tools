@@ -27,6 +27,8 @@ export const CrystalsResult = () => {
           { label: "Buy 5", onClick: () => crystals.applyCount(5) },
           { label: "Buy 10", onClick: () => crystals.applyCount(10) },
           { label: "Buy 25", onClick: () => crystals.applyCount(25) },
+          { label: "Buy 50", onClick: () => crystals.applyCount(50) },
+          { label: "Buy 100", onClick: () => crystals.applyCount(100) },
         ]}
         rows={recommendation().actions.map((action, index) => ({
           item:

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 import {
-  applyCrystalActions,
+  completeCurrentStep,
   calculateCrystalRecommendations,
   calculateCrystalsSpent,
   calculateUpgradeCost,
@@ -125,7 +125,7 @@ describe("calculateCrystalRecommendations", () => {
   })
 
   it("completes a whole step", () => {
-    const levels = applyCrystalActions(state({ unlockedParticle: "beta" }), data, "step")
+    const levels = completeCurrentStep(state({ unlockedParticle: "beta" }), data)
     expect(levels).toEqual({ "o.a": 100, "o.b": 100 })
   })
 

@@ -194,6 +194,7 @@ const pickNextAction = (state: CrystalInputState, data: CrystalData) => {
   if (!best) return null
   return {
     found,
+    goal: best.candidate.goal,
     action: toAction(best.candidate, levelOf(state.levels, best.candidate.upgrade.id), found.step.id),
   }
 }
@@ -284,17 +285,20 @@ export const calculateCrystalRecommendations = (
   }
 }
 
-// Levels after buying the next `count` actions, or the rest of the current step when count is "step".
-export const applyCrystalActions = (
-  state: CrystalInputState,
-  data: CrystalData,
-  count: number | "step",
-): CrystalLevels => {
-  let levels = state.levels
-  const stepId = count === "step" ? calculateCrystalRecommendations(state, data, 1).step?.id : null
-  const limit = count === "step" ? 100000 : count
+// Levels after buying exactly `count` levels of the best next upgrade (capped at its goal).
+export const buyUpgradeLevels = (state: CrystalInputState, data: CrystalData, count: number): CrystalLevels => {
+  const next = pickNextAction(state, data)
+  if (!next) return state.levels
+  const { id, currentLevel } = next.action
+  return { ...state.levels, [id]: Math.min(next.goal, currentLevel + count) }
+}
 
-  for (let i = 0; i < limit; i++) {
+// Levels after completing the rest of the current step.
+export const completeCurrentStep = (state: CrystalInputState, data: CrystalData): CrystalLevels => {
+  let levels = state.levels
+  const stepId = calculateCrystalRecommendations(state, data, 1).step?.id
+
+  for (let i = 0; i < 100000; i++) {
     const next = pickNextAction({ ...state, levels }, data)
     if (!next) break
     if (stepId && next.action.stepId !== stepId) break

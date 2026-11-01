@@ -5,7 +5,8 @@ import { PARTICLE_ORDER, type UnlockedParticle } from "../../lib/particles"
 import { createSyncedSignal } from "../../lib/persistedSignal"
 import { SHARED_PLAYER_LEVEL_KEY, SHARED_SE_KEY } from "../../shared/tokenSharedInputs"
 import {
-  applyCrystalActions,
+  completeCurrentStep,
+  buyUpgradeLevels,
   calculateCrystalRecommendations,
   calculateCrystalsSpent,
   isUpgradeUnlocked,
@@ -113,8 +114,8 @@ export const CrystalsProvider = (props: ParentProps) => {
           const best = recommendation().actions[0]
           if (best) setLevel(best.id, String(best.currentLevel + 1))
         },
-        applyCount: (count) => writeLevels(applyCrystalActions(state(), CRYSTAL_DATA, count)),
-        applyStep: () => writeLevels(applyCrystalActions(state(), CRYSTAL_DATA, "step")),
+        applyCount: (count) => writeLevels(buyUpgradeLevels(state(), CRYSTAL_DATA, count)),
+        applyStep: () => writeLevels(completeCurrentStep(state(), CRYSTAL_DATA)),
       }}
     >
       {props.children}

@@ -29,8 +29,8 @@ export const primaryTabs: TabItem[] = [
 ]
 
 export const premiumTabs: TabItem[] = [
-  { href: ROUTES.tokens, label: "Tokens" },
   { href: ROUTES.crystals, label: "Crystals" },
+  { href: ROUTES.tokens, label: "Tokens" },
 ]
 
 export const eventTabs: TabItem[] = [
