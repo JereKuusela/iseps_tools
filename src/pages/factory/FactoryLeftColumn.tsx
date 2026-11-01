@@ -134,14 +134,6 @@ export const FactoryLeftColumn = () => {
       <InfoCard>
         <div class="grid gap-1">
           <IntegerField
-            label="Particle levels"
-            value={factory.totalParticleLevel()}
-            onInput={factory.setTotalParticleLevel}
-            min={0}
-            step={1}
-            tooltip="factory.particleLevel"
-          />
-          <IntegerField
             label="Prestige fills"
             value={factory.prestigesDone()}
             onInput={factory.setPrestigesDone}
@@ -161,6 +153,14 @@ export const FactoryLeftColumn = () => {
       <Show when={factory.advancedMode()}>
         <InfoCard title="Evaluation weights" tooltip="factory.weights">
           <div class="grid gap-3">
+            <IntegerField
+              label="Particle levels"
+              value={factory.totalParticleLevel()}
+              onInput={factory.setTotalParticleLevel}
+              min={0}
+              step={1}
+              tooltip="factory.particleLevel"
+            />
             <SliderField
               label="Fabricator output"
               value={factory.productionWeightPercent}

@@ -175,6 +175,49 @@ export const getTotalPointsFromPrestiges = (prestigesDone: number) => {
   return (prestiges * (prestiges + 1)) / 2
 }
 
+// Measured particle levels by fill number; gaps are linearly interpolated.
+const PARTICLE_LEVEL_SAMPLES: [number, number][] = [
+  [0, 0],
+  [5, 180],
+  [6, 230],
+  [7, 270],
+  [8, 313],
+  [9, 434],
+  [10, 507],
+  [11, 636],
+  [12, 660],
+  [13, 706],
+  [15, 792],
+  [17, 831],
+  [18, 873],
+  [20, 969],
+  [24, 1226],
+]
+
+const getParticleLevelAtFill = (fill: number): number => {
+  const last = PARTICLE_LEVEL_SAMPLES.length - 1
+  if (fill >= PARTICLE_LEVEL_SAMPLES[last][0]) {
+    // Slope from a least-squares line over all samples (~54/fill), less noisy than the last two points.
+    const [x2, y2] = PARTICLE_LEVEL_SAMPLES[last]
+    return y2 + (fill - x2) * 54
+  }
+  for (let i = 1; i <= last; i += 1) {
+    const [x2, y2] = PARTICLE_LEVEL_SAMPLES[i]
+    if (fill <= x2) {
+      const [x1, y1] = PARTICLE_LEVEL_SAMPLES[i - 1]
+      return y1 + ((fill - x1) * (y2 - y1)) / (x2 - x1)
+    }
+  }
+  return 0
+}
+
+// Particle output typically caps around 24 fills; stop growing the estimate at fill 30.
+const MAX_ESTIMATE_FILL = 30
+
+// Players buy upgrades expecting to reach the next fill, so estimate for fill + 1.
+export const estimateParticleLevels = (prestigesDone: number): number =>
+  Math.round(getParticleLevelAtFill(Math.min(MAX_ESTIMATE_FILL, Math.max(0, Math.floor(prestigesDone)) + 1)))
+
 export const getNodeCostAtLevel = (id: FactoryNodeId, level: number): number => {
   if (level <= 0) return Number.POSITIVE_INFINITY
 

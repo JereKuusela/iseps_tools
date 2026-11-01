@@ -2,6 +2,7 @@ import { createContext, createMemo, type ParentProps, useContext } from "solid-j
 import { createSyncedSignal } from "../../lib/persistedSignal"
 import {
   calculateBuild,
+  estimateParticleLevels,
   evaluateNextNodeValues,
   getBuildScore,
   normalizeFactoryInputState,
@@ -86,7 +87,9 @@ export const FactoryProvider = (props: ParentProps) => {
   const normalizedInput = createMemo(() =>
     toFactoryInput({
       prestigesDone: prestigesDone(),
-      totalParticleLevel: totalParticleLevel(),
+      totalParticleLevel: advancedMode()
+        ? totalParticleLevel()
+        : String(estimateParticleLevels(parseNumberish(prestigesDone()))),
       productionWeightPercent: advancedMode() ? productionWeightPercent() : "10",
       particleWeightMultiplier: advancedMode() ? particleWeightMultiplier() : "1",
     }),
