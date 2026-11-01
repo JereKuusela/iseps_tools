@@ -726,7 +726,7 @@
     "id": "bundle.sequencing",
     "name": "Sequencing bundle",
     "group": "oneTimer",
-    "baseCost": 4000,
+    "baseCost": 3000,
     "requires": {
       "particle": "kappa"
     }
