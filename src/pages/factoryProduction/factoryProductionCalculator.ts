@@ -113,7 +113,13 @@ export const getAdditiveBaseSell = (twentyFourHourShifts: boolean, qualityContro
 
 export const getEffectiveSellPrice = (item: FactoryProductionItem, pricing: FactoryProductionPricingInput) => {
   const additiveBase = getAdditiveBaseSell(pricing.twentyFourHourShifts, pricing.qualityControlLevel)
-  return (item.baseSellPrice + additiveBase) * pricing.globalSellMultiplier * pricing.categoryMultipliers[item.category]
+  const rarityMultiplier = Math.max(1, (item.ingredientCount + 1) / 2)
+  return (
+    (item.baseSellPrice + additiveBase) *
+    pricing.globalSellMultiplier *
+    pricing.categoryMultipliers[item.category] *
+    rarityMultiplier
+  )
 }
 
 const emptyDemand = (): Record<FactoryProductionResourceId, number> => ({

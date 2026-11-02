@@ -53,13 +53,14 @@ There are lots of different items with different costs and sell prices (order by
 - Burger: Consumables, 10 grey, 1e6 purple, 5.63e9 sell price.
 - Flex Box360: Electronics, 10000 grey, 1000 purple, 1e6 green, 5.63e12 sell price.
 
-Final sell price is affected 3 things:
+Final sell price is affected by 4 things:
 
 - Additive base sell price. Not listed any where.
   - "24 hour shifts" upgrade increases by 1.
   - "Quality Control" upgrade increases by 10 per level (up to 20 levels).
 - Global sell multiplier.
 - Product category specific multiplier (Household, Electronics, Industrial, Consumables).
+- Product rarity multiplier, derived from ingredient types with positive costs (1: Common 1x, 2: Uncommon 1.5x, 3: Rare 2x, 4: Exotic 2.5x, 5: Legendary assumed 3x), applied after additive base sell bonuses.
 
 ## UI
 

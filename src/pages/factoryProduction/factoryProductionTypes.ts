@@ -19,6 +19,7 @@ export type FactoryProductionItem = {
   category: FactoryProductionCategoryId
   baseSellPrice: number
   costs: Record<FactoryProductionResourceId, number>
+  ingredientCount: number
 }
 
 export type FactoryProductionManufacturerInput = {
@@ -123,6 +124,7 @@ const normalizeItem = (raw: {
     category,
     baseSellPrice: toNonNegative(raw.baseSellPrice ?? 0),
     costs,
+    ingredientCount: FACTORY_PRODUCTION_RESOURCES.filter((resource) => costs[resource] > 0).length,
   }
 }
 

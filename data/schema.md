@@ -48,6 +48,8 @@ Product catalog used by the Factory Production planner.
   - `purple`: Nanofoam cost per unit.
   - `gray`: Netherstar cost per unit.
 
+Rarity is derived from the number of ingredient types with positive costs: 1 = Common (1x), 2 = Uncommon (1.5x), 3 = Rare (2x), 4 = Exotic (2.5x), 5 = Legendary (assumed 3x). This sell value multiplier is applied after additive base bonuses, along with global and category multipliers.
+
 ## cruise.json
 
 Cruise node definitions used by the Cruise optimizer.

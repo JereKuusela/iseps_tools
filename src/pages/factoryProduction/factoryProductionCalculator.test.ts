@@ -22,8 +22,14 @@ describe("factoryProduction pricing", () => {
     expect(getAdditiveBaseSell(true, 3)).toBe(31)
   })
 
-  it("computes effective sell price with global and category multipliers", () => {
-    const battery = FACTORY_PRODUCTION_ITEM_BY_ID.battery
+  it.each([
+    ["battery", 1],
+    ["bucket", 1.5],
+    ["shocklate_bar", 2],
+    ["metal_pipe", 2.5],
+    ["smart_toilet", 3],
+  ] as const)("derives %s rarity multiplier from ingredient types alongside other bonuses", (productId, multiplier) => {
+    const item = FACTORY_PRODUCTION_ITEM_BY_ID[productId]
     const pricing = normalizePricingInput({
       twentyFourHourShifts: true,
       qualityControlLevel: 2,
@@ -36,7 +42,10 @@ describe("factoryProduction pricing", () => {
       },
     })
 
-    expect(getEffectiveSellPrice(battery, pricing)).toBe((5 + 21) * 3 * 1.5)
+    expect(item.ingredientCount).toBe(multiplier * 2 - 1)
+    expect(getEffectiveSellPrice(item, pricing)).toBe(
+      (item.baseSellPrice + 21) * 3 * pricing.categoryMultipliers[item.category] * multiplier,
+    )
   })
 })
 
@@ -210,7 +219,7 @@ describe("factoryProduction optimizer", () => {
     })
 
     expect(optimized.manufacturers).toHaveLength(2)
-    expect(optimized.result.totalProfitPerSecond).toBeCloseTo(60)
+    expect(optimized.result.totalProfitPerSecond).toBeCloseTo(90)
     expect(optimized.manufacturers.map((entry) => entry.productId).sort()).toEqual([
       "bucket",
       FACTORY_PRODUCTION_NONE_PRODUCT_ID,
@@ -237,7 +246,7 @@ describe("factoryProduction optimizer", () => {
       { id: "1", productId: "battery" },
       { id: "2", productId: "bucket" },
     ])
-    expect(optimized.result.totalProfitPerSecond).toBeCloseTo(35)
+    expect(optimized.result.totalProfitPerSecond).toBeCloseTo(50)
   })
 
   it("returns none when no profitable assignment can run", () => {
