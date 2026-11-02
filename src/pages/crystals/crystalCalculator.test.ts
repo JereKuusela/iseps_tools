@@ -1,23 +1,28 @@
 import { describe, expect, it } from "vitest"
 import {
-  completeCurrentStep,
   calculateCrystalRecommendations,
   calculateCrystalsSpent,
   calculateUpgradeCost,
+  isUpgradeUnlocked,
+  levelsAfterBuying,
+  levelsAfterCompletingFirst,
 } from "./crystalCalculator"
-import { CRYSTAL_DATA } from "./crystalData"
-import type { CrystalData, CrystalInputState, CrystalUpgrade } from "./crystalTypes"
+import { CRYSTAL_DATA, parseCrystalUpgrades } from "./crystalData"
+import type { CrystalAction, CrystalData, CrystalInputState, CrystalUpgrade } from "./crystalTypes"
 
-const upgrade = (id: string, overrides: Partial<CrystalUpgrade> = {}): CrystalUpgrade => ({
-  id,
-  name: id,
-  group: "output",
-  baseCost: 10,
-  costStep: 0,
-  maxLevel: 100,
-  requires: { upgrades: [] },
-  ...overrides,
-})
+const upgrade = (id: string, overrides: Partial<CrystalUpgrade> = {}): CrystalUpgrade =>
+  parseCrystalUpgrades([
+    {
+      id,
+      name: id,
+      group: "output",
+      baseCost: 10,
+      costStep: 0,
+      maxLevel: 100,
+      requires: { upgrades: [] },
+      ...overrides,
+    },
+  ])[0]
 
 const state = (overrides: Partial<CrystalInputState> = {}): CrystalInputState => ({
   se: 1,
@@ -43,9 +48,60 @@ describe("calculateUpgradeCost", () => {
   })
 })
 
+describe("cached full requirements", () => {
+  it("builds flat requirements at load time and checks live state without rediscovery", () => {
+    const upgrades = parseCrystalUpgrades([
+      upgrade("root", { requires: { upgrades: [{ id: "middle", level: 1 }] } }),
+      upgrade("middle", { requires: { upgrades: [{ id: "leaf", level: 1 }] } }),
+      upgrade("leaf", { requires: { particle: "beta", se: 5, playerLevel: 50, upgrades: [] } }),
+      upgrade("other", { requires: { upgrades: [{ id: "middle", level: 1 }] } }),
+    ])
+    const [root, middle, leaf, other] = upgrades
+    expect(root.fullRequires).toEqual([leaf.requires, middle.requires, root.requires])
+    expect(other.fullRequires).toEqual([leaf.requires, middle.requires, other.requires])
+    expect(leaf.fullRequires).toEqual([leaf.requires])
+
+    const unlocked = state({ se: 5, playerLevel: 50, unlockedParticle: "beta" })
+    expect(isUpgradeUnlocked(root, state())).toBe(false)
+    expect(isUpgradeUnlocked(root, unlocked)).toBe(true)
+    expect(isUpgradeUnlocked(root, { ...unlocked, se: 4 })).toBe(false)
+    expect(isUpgradeUnlocked(root, { ...unlocked, playerLevel: 49 })).toBe(false)
+    expect(isUpgradeUnlocked(root, { ...unlocked, unlockedParticle: "alpha" })).toBe(false)
+    expect(isUpgradeUnlocked(root, state({ levels: { middle: 1 } }))).toBe(false)
+  })
+
+  it("includes shared prerequisites only once", () => {
+    const upgrades = parseCrystalUpgrades([
+      upgrade("root", {
+        requires: {
+          upgrades: [
+            { id: "a", level: 1 },
+            { id: "b", level: 1 },
+          ],
+        },
+      }),
+      upgrade("a", { requires: { upgrades: [{ id: "leaf", level: 1 }] } }),
+      upgrade("b", { requires: { upgrades: [{ id: "leaf", level: 1 }] } }),
+      upgrade("leaf"),
+    ])
+    expect(upgrades[0].fullRequires).toEqual([
+      upgrades[3].requires,
+      upgrades[1].requires,
+      upgrades[2].requires,
+      upgrades[0].requires,
+    ])
+  })
+
+  it("returns ready-to-check upgrades without prerequisites", () => {
+    const parsed = upgrade("parsed")
+    expect(parsed.fullRequires).toEqual([parsed.requires])
+    expect(isUpgradeUnlocked(parsed, state())).toBe(true)
+  })
+})
+
 describe("calculateCrystalRecommendations", () => {
   const data: CrystalData = {
-    upgrades: [
+    upgrades: parseCrystalUpgrades([
       upgrade("o.a", { maxLevel: 100 }),
       upgrade("o.b", { maxLevel: 100, requires: { particle: "beta", upgrades: [] } }),
       upgrade("c.a", {
@@ -53,7 +109,7 @@ describe("calculateCrystalRecommendations", () => {
         requires: { upgrades: [{ id: "o.a", level: 5 }] },
       }),
       upgrade("late", { requires: { playerLevel: 50, upgrades: [] } }),
-    ],
+    ]),
     steps: [
       {
         id: "s1",
@@ -93,11 +149,11 @@ describe("calculateCrystalRecommendations", () => {
 
   it("ranks a prerequisite by the progress of the upgrade that needs it", () => {
     const pending: CrystalData = {
-      upgrades: [
+      upgrades: parseCrystalUpgrades([
         upgrade("o.p", { maxLevel: 10 }),
         upgrade("c.p", { requires: { upgrades: [{ id: "o.p", level: 5 }] } }),
         upgrade("x"),
-      ],
+      ]),
       steps: [
         {
           id: "s",
@@ -124,9 +180,55 @@ describe("calculateCrystalRecommendations", () => {
     expect(done.actions[0].id).toBe("c.a")
   })
 
-  it("completes a whole step", () => {
-    const levels = completeCurrentStep(state({ unlockedParticle: "beta" }), data)
-    expect(levels).toEqual({ "o.a": 100, "o.b": 100 })
+  it("checks the full prerequisite chain even when an intermediate upgrade is owned", () => {
+    const nested: CrystalData = {
+      upgrades: parseCrystalUpgrades([
+        upgrade("root", { requires: { upgrades: [{ id: "middle", level: 1 }] } }),
+        upgrade("middle", { requires: { upgrades: [{ id: "leaf", level: 1 }] } }),
+        upgrade("leaf", { requires: { playerLevel: 50, upgrades: [] } }),
+      ]),
+      steps: [{ id: "nested", targets: [{ id: "root", level: 1 }] }],
+    }
+
+    expect(calculateCrystalRecommendations(state(), nested, 3).actions).toEqual([])
+    expect(
+      calculateCrystalRecommendations(state({ playerLevel: 50 }), nested, 3).actions.map((action) => action.id),
+    ).toEqual(["leaf", "middle", "root"])
+    expect(calculateCrystalRecommendations(state({ levels: { middle: 1 } }), nested, 1).actions).toEqual([])
+  })
+
+  it("resolves prerequisite chains beyond the former depth limit", () => {
+    const chain: CrystalData = {
+      upgrades: parseCrystalUpgrades(
+        Array.from({ length: 8 }, (_, index) =>
+          upgrade(String(index), {
+            maxLevel: 1,
+            requires: { upgrades: index < 7 ? [{ id: String(index + 1), level: 1 }] : [] },
+          }),
+        ),
+      ),
+      steps: [{ id: "chain", targets: [{ id: "0", level: 1 }] }],
+    }
+    expect(calculateCrystalRecommendations(state(), chain, 8).actions.map((action) => action.id)).toEqual([
+      "7",
+      "6",
+      "5",
+      "4",
+      "3",
+      "2",
+      "1",
+      "0",
+    ])
+  })
+
+  it("keeps input levels unchanged and returns the original guide step", () => {
+    const levels = Object.freeze({ "o.a": 5 })
+    const result = calculateCrystalRecommendations(state({ levels, unlockedParticle: "beta" }), data, 3)
+
+    expect(levels).toEqual({ "o.a": 5 })
+    expect(result.actions).toHaveLength(3)
+    expect(result.actions[0].currentLevel).toBe(5)
+    expect(result.step).toBe(data.steps[0])
   })
 
   it("returns nothing when everything is done", () => {
@@ -136,13 +238,38 @@ describe("calculateCrystalRecommendations", () => {
   })
 })
 
+describe("applying listed actions", () => {
+  const action = (id: string, currentLevel: number, targetLevel: number, stepId: string): CrystalAction => ({
+    id,
+    name: id,
+    currentLevel,
+    targetLevel,
+    maxLevel: 100,
+    cost: { cost: 0, unknown: false },
+    stepId,
+  })
+
+  it("adds the count to the first listed upgrade only", () => {
+    const actions = [action("a", 20, 23, "s1"), action("b", 20, 23, "s1")]
+    expect(levelsAfterBuying(actions, 100)).toEqual({ a: 120 })
+    expect(levelsAfterBuying(actions, 1)).toEqual({ a: 21 })
+    expect(levelsAfterBuying([], 5)).toEqual({})
+  })
+
+  it("completes only the first listed row when upgrades alternate", () => {
+    const actions = [action("a", 20, 23, "s1"), action("b", 20, 23, "s1"), action("a", 23, 26, "s1")]
+    expect(levelsAfterCompletingFirst(actions)).toEqual({ a: 23 })
+    expect(levelsAfterCompletingFirst([])).toEqual({})
+  })
+})
+
 describe("notes", () => {
   const data: CrystalData = {
-    upgrades: [
+    upgrades: parseCrystalUpgrades([
       upgrade("a", { maxLevel: 10 }),
       upgrade("late", { maxLevel: 10, requires: { playerLevel: 50, upgrades: [] } }),
       upgrade("later", { maxLevel: 5, baseCost: null, requires: { playerLevel: 80, upgrades: [] } }),
-    ],
+    ]),
     steps: [
       { id: "s1", doneNote: "Convert crystals to tokens.", targets: [{ id: "a", level: 10 }] },
       { id: "s2", targets: [{ id: "late", level: 10 }] },

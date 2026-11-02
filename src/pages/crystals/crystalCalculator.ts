@@ -20,7 +20,6 @@ export const ERM_UPGRADE_IDS = [
 
 // Fraction of a target's span bought per recommended action.
 const CHUNK_FRACTION = 0.1
-const MAX_PREREQUISITE_DEPTH = 5
 const MAX_SIMULATED_ACTIONS = 1000
 
 type Candidate = {
@@ -31,29 +30,22 @@ type Candidate = {
   rankRatio?: number
 }
 
+type PreparedCrystalData = {
+  steps: CrystalGuideStep[]
+  upgradeById: Map<string, CrystalUpgrade>
+}
+
 export const levelOf = (levels: CrystalLevels, id: string) => levels[id] ?? 0
 
 const particleRank = (particle: string) => PARTICLE_ORDER.indexOf(particle as (typeof PARTICLE_ORDER)[number])
 
-export const isUpgradeUnlocked = (
-  upgrade: CrystalUpgrade,
-  state: CrystalInputState,
-  upgradeById: Map<string, CrystalUpgrade>,
-  depth = 0,
-): boolean => {
-  const { particle, se, playerLevel } = upgrade.requires
-  if (depth > MAX_PREREQUISITE_DEPTH) return false
-  if (particle && particleRank(particle) > particleRank(state.unlockedParticle)) return false
-  if (se !== undefined && state.se < se) return false
-  if (playerLevel !== undefined && state.playerLevel < playerLevel) return false
-
-  // Unmet prerequisites must themselves be unlocked, since they have to be bought first.
-  return upgrade.requires.upgrades.every((prerequisite) => {
-    if (levelOf(state.levels, prerequisite.id) >= prerequisite.level) return true
-    const required = upgradeById.get(prerequisite.id)
-    return !!required && isUpgradeUnlocked(required, state, upgradeById, depth + 1)
-  })
-}
+export const isUpgradeUnlocked = (upgrade: CrystalUpgrade, state: CrystalInputState): boolean =>
+  upgrade.fullRequires.every(
+    ({ particle, se, playerLevel }) =>
+      (!particle || particleRank(particle) <= particleRank(state.unlockedParticle)) &&
+      (se === undefined || state.se >= se) &&
+      (playerLevel === undefined || state.playerLevel >= playerLevel),
+  )
 
 export const isStepActive = (step: CrystalGuideStep, se: number) =>
   (step.minSe === undefined || se >= step.minSe) && (step.maxSe === undefined || se <= step.maxSe)
@@ -90,37 +82,37 @@ const expandTargets = (step: CrystalGuideStep) =>
     target.id === ERM_GROUP_ID ? ERM_UPGRADE_IDS.map((id) => ({ id, level: target.level })) : [target],
   )
 
-// Follows unmet prerequisites to the upgrade that actually has to be bought next; null when locked.
+// Finds the first unmet prerequisite in dependency order; null when locked or complete.
 const resolveCandidate = (
   id: string,
   level: CrystalTargetLevel,
   state: CrystalInputState,
   upgradeById: Map<string, CrystalUpgrade>,
   previousGoals: Map<string, number>,
-  depth = 0,
-  rankRatio?: number,
 ): Candidate | null => {
   const upgrade = upgradeById.get(id)
-  if (!upgrade || depth > MAX_PREREQUISITE_DEPTH || !isUpgradeUnlocked(upgrade, state, upgradeById)) return null
+  if (!upgrade || !isUpgradeUnlocked(upgrade, state)) return null
 
   const goal = resolveGoal(upgrade, level)
   const current = levelOf(state.levels, id)
   if (current >= goal) return null
 
-  const candidate: Candidate = { upgrade, goal, base: Math.min(previousGoals.get(id) ?? 0, current), rankRatio }
-  const ownRatio = rankRatio ?? progressRatio(candidate, current)
+  const candidate: Candidate = { upgrade, goal, base: Math.min(previousGoals.get(id) ?? 0, current) }
 
-  for (const prerequisite of upgrade.requires.upgrades) {
-    if (levelOf(state.levels, prerequisite.id) < prerequisite.level) {
-      return resolveCandidate(
-        prerequisite.id,
-        prerequisite.level,
-        state,
-        upgradeById,
-        previousGoals,
-        depth + 1,
-        ownRatio,
-      )
+  for (const requirements of upgrade.fullRequires) {
+    for (const prerequisite of requirements.upgrades) {
+      const prerequisiteLevel = levelOf(state.levels, prerequisite.id)
+      if (prerequisiteLevel >= prerequisite.level) continue
+      const required = upgradeById.get(prerequisite.id)
+      if (!required) return null
+      const prerequisiteGoal = resolveGoal(required, prerequisite.level)
+      if (prerequisiteLevel >= prerequisiteGoal) return null
+      return {
+        upgrade: required,
+        goal: prerequisiteGoal,
+        base: Math.min(previousGoals.get(prerequisite.id) ?? 0, prerequisiteLevel),
+        rankRatio: progressRatio(candidate, current),
+      }
     }
   }
 
@@ -140,22 +132,22 @@ const progressRatio = (candidate: Candidate, current: number) => {
   return span <= 0 ? 0 : (chunkStart(candidate, current) - candidate.base) / span
 }
 
-const findCurrentStep = (state: CrystalInputState, data: CrystalData) => {
-  const upgradeById = new Map(data.upgrades.map((upgrade) => [upgrade.id, upgrade] as const))
+const findCurrentStep = (state: CrystalInputState, data: PreparedCrystalData) => {
+  const { upgradeById } = data
   const previousGoals = new Map<string, number>()
 
   for (let index = 0; index < data.steps.length; index++) {
     const step = data.steps[index]
     if (!isStepActive(step, state.se)) continue
 
-    const targets = expandTargets(step)
+    const targets = step.targets
     const candidates = new Map<string, Candidate>()
     for (const target of targets) {
       const candidate = resolveCandidate(target.id, target.level, state, upgradeById, previousGoals)
       if (candidate && !candidates.has(candidate.upgrade.id)) candidates.set(candidate.upgrade.id, candidate)
     }
 
-    if (candidates.size > 0) return { step, index, candidates: [...candidates.values()], upgradeById }
+    if (candidates.size > 0) return { step, index, candidates: [...candidates.values()] }
 
     for (const target of targets) {
       const upgrade = upgradeById.get(target.id)
@@ -181,8 +173,7 @@ const toAction = (candidate: Candidate, current: number, stepId: string): Crysta
   }
 }
 
-const pickNextAction = (state: CrystalInputState, data: CrystalData) => {
-  const found = findCurrentStep(state, data)
+const pickNextAction = (state: CrystalInputState, found: ReturnType<typeof findCurrentStep>) => {
   if (!found) return null
 
   let best: { candidate: Candidate; ratio: number } | null = null
@@ -192,16 +183,12 @@ const pickNextAction = (state: CrystalInputState, data: CrystalData) => {
   }
 
   if (!best) return null
-  return {
-    found,
-    goal: best.candidate.goal,
-    action: toAction(best.candidate, levelOf(state.levels, best.candidate.upgrade.id), found.step.id),
-  }
+  return toAction(best.candidate, levelOf(state.levels, best.candidate.upgrade.id), found.step.id)
 }
 
 // Locked upgrades the user should save for: those in or before the current step, plus the next fully blocked step.
-const findSavingGoals = (state: CrystalInputState, data: CrystalData, currentIndex: number) => {
-  const upgradeById = new Map(data.upgrades.map((upgrade) => [upgrade.id, upgrade] as const))
+const findSavingGoals = (state: CrystalInputState, data: PreparedCrystalData, currentIndex: number) => {
+  const { upgradeById } = data
   const lockedGoals = new Map<string, number>()
 
   for (let index = 0; index < data.steps.length; index++) {
@@ -210,7 +197,7 @@ const findSavingGoals = (state: CrystalInputState, data: CrystalData, currentInd
 
     let hasActionable = false
     const stepLocked: [string, number][] = []
-    for (const target of expandTargets(step)) {
+    for (const target of step.targets) {
       const upgrade = upgradeById.get(target.id)
       if (!upgrade) continue
       const goal = resolveGoal(upgrade, target.level)
@@ -239,12 +226,12 @@ const findSavingGoals = (state: CrystalInputState, data: CrystalData, currentInd
   return { names, cost }
 }
 
-const findDoneNotes = (state: CrystalInputState, data: CrystalData) => {
-  const upgradeById = new Map(data.upgrades.map((upgrade) => [upgrade.id, upgrade] as const))
+const findDoneNotes = (state: CrystalInputState, data: PreparedCrystalData) => {
+  const { upgradeById } = data
 
   return data.steps.flatMap((step) => {
     if (!step.doneNote || !isStepActive(step, state.se)) return []
-    const isDone = expandTargets(step).every((target) => {
+    const isDone = step.targets.every((target) => {
       const upgrade = upgradeById.get(target.id)
       return !upgrade || levelOf(state.levels, target.id) >= resolveGoal(upgrade, target.level)
     })
@@ -257,53 +244,46 @@ export const calculateCrystalRecommendations = (
   data: CrystalData,
   count: number,
 ): CrystalRecommendation => {
-  const first = findCurrentStep(state, data)
+  const prepared: PreparedCrystalData = {
+    steps: data.steps.map((step) => ({ ...step, targets: expandTargets(step) })),
+    upgradeById: new Map(data.upgrades.map((upgrade) => [upgrade.id, upgrade] as const)),
+  }
+  const first = findCurrentStep(state, prepared)
 
   const actions: CrystalAction[] = []
-  let levels = state.levels
+  const simulated = { ...state, levels: { ...state.levels } }
   for (let i = 0; i < MAX_SIMULATED_ACTIONS && actions.length <= count; i++) {
-    const next = pickNextAction({ ...state, levels }, data)
+    const next = pickNextAction(simulated, i === 0 ? first : findCurrentStep(simulated, prepared))
     if (!next) break
 
     // Consecutive chunks of the same upgrade are shown as one row.
     const last = actions[actions.length - 1]
-    if (last && last.id === next.action.id) {
-      last.targetLevel = next.action.targetLevel
-      last.cost = addCost(last.cost, next.action.cost)
+    if (last && last.id === next.id) {
+      last.targetLevel = next.targetLevel
+      last.cost = addCost(last.cost, next.cost)
     } else {
-      actions.push({ ...next.action })
+      actions.push(next)
     }
-    levels = { ...levels, [next.action.id]: next.action.targetLevel }
+    simulated.levels[next.id] = next.targetLevel
   }
 
   return {
     actions: actions.slice(0, count),
-    step: first?.step ?? null,
+    step: first ? data.steps[first.index] : null,
     stepIndex: first?.index ?? -1,
-    savingFor: findSavingGoals(state, data, first?.index ?? -1),
-    doneNotes: findDoneNotes(state, data),
+    savingFor: findSavingGoals(state, prepared, first?.index ?? -1),
+    doneNotes: findDoneNotes(state, prepared),
   }
 }
 
-// Levels after buying exactly `count` levels of the best next upgrade (capped at its goal).
-export const buyUpgradeLevels = (state: CrystalInputState, data: CrystalData, count: number): CrystalLevels => {
-  const next = pickNextAction(state, data)
-  if (!next) return state.levels
-  const { id, currentLevel } = next.action
-  return { ...state.levels, [id]: Math.min(next.goal, currentLevel + count) }
+// Levels after buying `count` levels of the first listed action.
+export const levelsAfterBuying = (actions: CrystalAction[], count: number): CrystalLevels => {
+  const first = actions[0]
+  return first ? { [first.id]: first.currentLevel + count } : {}
 }
 
-// Levels after completing the rest of the current step.
-export const completeCurrentStep = (state: CrystalInputState, data: CrystalData): CrystalLevels => {
-  let levels = state.levels
-  const stepId = calculateCrystalRecommendations(state, data, 1).step?.id
-
-  for (let i = 0; i < 100000; i++) {
-    const next = pickNextAction({ ...state, levels }, data)
-    if (!next) break
-    if (stepId && next.action.stepId !== stepId) break
-    levels = { ...levels, [next.action.id]: next.action.targetLevel }
-  }
-
-  return levels
+// Levels after completing the first listed action.
+export const levelsAfterCompletingFirst = (actions: CrystalAction[]): CrystalLevels => {
+  const first = actions[0]
+  return first ? { [first.id]: first.targetLevel } : {}
 }

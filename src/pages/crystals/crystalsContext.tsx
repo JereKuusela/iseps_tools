@@ -5,12 +5,12 @@ import { PARTICLE_ORDER, type UnlockedParticle } from "../../lib/particles"
 import { createSyncedSignal } from "../../lib/persistedSignal"
 import { SHARED_PLAYER_LEVEL_KEY, SHARED_SE_KEY } from "../../shared/tokenSharedInputs"
 import {
-  completeCurrentStep,
-  buyUpgradeLevels,
   calculateCrystalRecommendations,
   calculateCrystalsSpent,
   isUpgradeUnlocked,
   levelOf,
+  levelsAfterBuying,
+  levelsAfterCompletingFirst,
 } from "./crystalCalculator"
 import { CRYSTAL_DATA } from "./crystalData"
 import type {
@@ -81,7 +81,7 @@ export const CrystalsProvider = (props: ParentProps) => {
   // Per-id memos so a level change only re-renders rows whose unlock state actually flipped.
   const unlockedById = new Map(
     CRYSTAL_DATA.upgrades.map(
-      (upgrade) => [upgrade.id, createMemo(() => isUpgradeUnlocked(upgrade, state(), upgradeById))] as const,
+      (upgrade) => [upgrade.id, createMemo(() => isUpgradeUnlocked(upgrade, state()))] as const,
     ),
   )
 
@@ -94,6 +94,8 @@ export const CrystalsProvider = (props: ParentProps) => {
       if (level !== levelOf(levels(), id)) setLevel(id, String(level))
     }
   }
+
+  const applyCount = (count: number) => writeLevels(levelsAfterBuying(recommendation().actions, count))
 
   return (
     <CrystalsContext.Provider
@@ -110,12 +112,9 @@ export const CrystalsProvider = (props: ParentProps) => {
         isUnlocked: (id) => unlockedById.get(id)?.() ?? false,
         recommendation,
         crystalsSpent,
-        applyBest: () => {
-          const best = recommendation().actions[0]
-          if (best) setLevel(best.id, String(best.currentLevel + 1))
-        },
-        applyCount: (count) => writeLevels(buyUpgradeLevels(state(), CRYSTAL_DATA, count)),
-        applyStep: () => writeLevels(completeCurrentStep(state(), CRYSTAL_DATA)),
+        applyBest: () => applyCount(1),
+        applyCount,
+        applyStep: () => writeLevels(levelsAfterCompletingFirst(recommendation().actions)),
       }}
     >
       {props.children}

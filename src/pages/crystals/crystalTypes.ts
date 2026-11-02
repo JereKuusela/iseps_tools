@@ -20,6 +20,7 @@ export type CrystalUpgrade = {
   costs?: number[]
   maxLevel: number
   requires: CrystalRequirements
+  fullRequires: CrystalRequirements[]
 }
 
 export type CrystalTargetLevel = number | "max"

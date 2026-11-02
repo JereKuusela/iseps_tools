@@ -1,7 +1,14 @@
 import crystalGuideJson from "../../../data/crystal_guide.json"
 import crystalUpgradesJson from "../../../data/crystal_upgrades.json"
 import { PARTICLE_ORDER } from "../../lib/particles"
-import type { CrystalData, CrystalGroup, CrystalGuideStep, CrystalTargetLevel, CrystalUpgrade } from "./crystalTypes"
+import type {
+  CrystalData,
+  CrystalGroup,
+  CrystalGuideStep,
+  CrystalRequirements,
+  CrystalTargetLevel,
+  CrystalUpgrade,
+} from "./crystalTypes"
 
 const GROUPS: readonly string[] = ["output", "cost", "special", "oneTimer"]
 
@@ -14,10 +21,29 @@ const toParticle = (value: unknown) =>
     ? (value as (typeof PARTICLE_ORDER)[number])
     : undefined
 
+const collectCrystalRequirements = (
+  upgrade: CrystalUpgrade,
+  upgradeById: Map<string, CrystalUpgrade>,
+): CrystalRequirements[] => {
+  const fullRequires: CrystalRequirements[] = []
+  const visited = new Set<string>()
+  const visit = (current: CrystalUpgrade) => {
+    if (visited.has(current.id)) return
+    visited.add(current.id)
+    for (const prerequisite of current.requires.upgrades) {
+      const required = upgradeById.get(prerequisite.id)
+      if (required) visit(required)
+    }
+    fullRequires.push(current.requires)
+  }
+  visit(upgrade)
+  return fullRequires
+}
+
 export const parseCrystalUpgrades = (raw: unknown): CrystalUpgrade[] => {
   if (!Array.isArray(raw)) return []
 
-  return raw.flatMap((entry): CrystalUpgrade[] => {
+  const upgrades = raw.flatMap((entry): CrystalUpgrade[] => {
     if (!isRecord(entry)) return []
     if (typeof entry.id !== "string" || typeof entry.name !== "string") return []
     if (typeof entry.group !== "string" || !GROUPS.includes(entry.group)) return []
@@ -38,6 +64,7 @@ export const parseCrystalUpgrades = (raw: unknown): CrystalUpgrade[] => {
             ? (entry.costs as number[])
             : undefined,
         maxLevel: Math.max(1, toOptionalNumber(entry.maxLevel) ?? 1),
+        fullRequires: [],
         requires: {
           particle: toParticle(requires.particle),
           se: toOptionalNumber(requires.se),
@@ -52,6 +79,10 @@ export const parseCrystalUpgrades = (raw: unknown): CrystalUpgrade[] => {
       },
     ]
   })
+
+  const upgradeById = new Map(upgrades.map((upgrade) => [upgrade.id, upgrade] as const))
+  for (const upgrade of upgrades) upgrade.fullRequires = collectCrystalRequirements(upgrade, upgradeById)
+  return upgrades
 }
 
 const parseTargetLevel = (value: unknown): CrystalTargetLevel | null => {
