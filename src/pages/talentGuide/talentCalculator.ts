@@ -15,7 +15,7 @@ const ROW6_MAX_LP = 300
 const ROW6_ORDER = ["IC6-1", "PP6-1", "IC6-3", "PP6-3", "IC6-2", "PP6-2"]
 const EXTRA_ORDER = ["PP1-1", "PP2-1", "PP3-1", "IC2-2", "IC2-3", "IC3-3"]
 const G_CORP_ZEROED = new Set(["PP1-1", "PP2-1"])
-const G_RUN_WEIGHT_MULTIPLIER = 2
+const G_RUN_WEIGHT_MULTIPLIER = 10
 const G_RUN_BOOSTED = new Set(["PP5-2", "IC5-1", "IC5-2"])
 const SKIPPED_ROW6_NON_SE = new Set(["IC6-3", "PP6-3"])
 
