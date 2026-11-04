@@ -117,7 +117,7 @@ export const FactoryProductionResults = () => {
                 <th />
                 <th class={TABLE_HEAD_CELL_CLASS}>Supply</th>
                 <th class={TABLE_HEAD_CELL_CLASS}>Needed</th>
-                <th class={TABLE_HEAD_CELL_CLASS}>Wasted %</th>
+                <th class={TABLE_HEAD_CELL_CLASS}>Wasted</th>
               </tr>
             </TableHead>
             <tbody>
