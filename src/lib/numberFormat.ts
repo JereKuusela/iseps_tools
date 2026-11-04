@@ -12,7 +12,7 @@ export const formatFixed = (value: number, digits = 2, fallback = zeroWithDigits
 
 export const formatPercent = (value: number, digits = 2, fallback = "0%") => {
   if (!Number.isFinite(value)) return fallback
-  return `${value.toFixed(digits)}%`
+  return `${trimTrailingZeros(value.toFixed(digits))}%`
 }
 
 const trimTrailingZeros = (text: string) => (text.includes(".") ? text.replace(/\.?0+$/, "") : text)
