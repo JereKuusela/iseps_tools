@@ -165,3 +165,14 @@ export class LargeNumber {
     this.exponent += magnitude
   }
 }
+
+export const parseLargeNumberSafe = (value: string): LargeNumber => {
+  const raw = value.trim()
+  if (raw === "") return LargeNumber.zero()
+
+  try {
+    return LargeNumber.parse(raw)
+  } catch {
+    return LargeNumber.zero()
+  }
+}

@@ -1,26 +1,18 @@
 import { Panel } from "../../components/layout/Panel"
 import { SplitColumns } from "../../components/layout/SplitColumns"
 import { PerkDataProvider } from "../../shared/perkContext"
-import { PerkGuideLeftColumn } from "./PerkGuideLeftColumn"
-import { PerkGuideRightColumn } from "./PerkGuideRightColumn"
+import { PerkGuideInputs } from "./PerkGuideInputs"
+import { PerkGuideResults } from "./PerkGuideResults"
 import { PerkGuideProvider } from "./perkGuideContext"
 
-const PerkGuideContent = () => {
-  return (
-    <Panel title="Perk Guide" tooltip="perkGuide.panel">
-      <SplitColumns layoutClass="xl:grid-cols-[1.02fr_1.75fr]" right={<PerkGuideRightColumn />}>
-        <PerkGuideLeftColumn />
-      </SplitColumns>
-    </Panel>
-  )
-}
-
-export const PerkGuidePage = () => {
-  return (
-    <PerkDataProvider>
-      <PerkGuideProvider>
-        <PerkGuideContent />
-      </PerkGuideProvider>
-    </PerkDataProvider>
-  )
-}
+export const PerkGuidePage = () => (
+  <PerkDataProvider>
+    <PerkGuideProvider>
+      <Panel title="Perk Guide" tooltip="perkGuide.panel">
+        <SplitColumns layoutClass="xl:grid-cols-[1.02fr_1.75fr]" right={<PerkGuideResults />}>
+          <PerkGuideInputs />
+        </SplitColumns>
+      </Panel>
+    </PerkGuideProvider>
+  </PerkDataProvider>
+)

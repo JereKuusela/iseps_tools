@@ -1,4 +1,4 @@
-import type { TalentSide } from "./talentData"
+import type { TalentSide } from "./talentGuideData"
 
 export type TalentTheme = {
   title: string

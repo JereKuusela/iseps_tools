@@ -75,6 +75,18 @@ const buildResources = (): FactoryProductionResourceMeta[] => {
   return resources
 }
 
+export type FactoryProductionTimeUnit = "s" | "m" | "h" | "d"
+
+export const FACTORY_PRODUCTION_TIME_UNITS: { value: FactoryProductionTimeUnit; label: string; seconds: number }[] = [
+  { value: "s", label: "Second", seconds: 1 },
+  { value: "m", label: "Minute", seconds: 60 },
+  { value: "h", label: "Hour", seconds: 3600 },
+  { value: "d", label: "Day", seconds: 86400 },
+]
+
+export const FACTORY_PRODUCTION_TIME_UNIT_SECONDS = (unit: FactoryProductionTimeUnit) =>
+  FACTORY_PRODUCTION_TIME_UNITS.find((entry) => entry.value === unit)?.seconds ?? 3600
+
 export const FACTORY_PRODUCTION_RESOURCE_META = buildResources()
 export const FACTORY_PRODUCTION_RESOURCES = FACTORY_PRODUCTION_RESOURCE_META.map((entry) => entry.id)
 

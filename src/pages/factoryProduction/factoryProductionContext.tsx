@@ -1,7 +1,6 @@
 import { createContext, createMemo, type ParentProps, useContext } from "solid-js"
 import { createSyncedSignal } from "../../lib/persistedSignal"
-import { LargeNumber } from "../../lib/largeNumber"
-import { SECONDS_PER_HOUR } from "../../lib/timeFormat"
+import { parseLargeNumberish } from "../../lib/parseNumber"
 import { formatOptimality } from "../../lib/numberFormat"
 import {
   calculateFactoryProductionFillEmptyManufacturers,
@@ -16,8 +15,10 @@ import {
   FACTORY_PRODUCTION_ITEMS,
   FACTORY_PRODUCTION_NONE_PRODUCT_ID,
   FACTORY_PRODUCTION_RESOURCES,
+  FACTORY_PRODUCTION_TIME_UNIT_SECONDS,
   type FactoryProductionCategoryId,
   type FactoryProductionResourceId,
+  type FactoryProductionTimeUnit,
 } from "./factoryProductionTypes"
 
 type PersistedManufacturerRow = {
@@ -26,6 +27,10 @@ type PersistedManufacturerRow = {
 }
 
 type FactoryProductionContextValue = {
+  resourceUnit: () => FactoryProductionTimeUnit
+  setResourceUnit: (next: FactoryProductionTimeUnit) => FactoryProductionTimeUnit
+  statsUnit: () => FactoryProductionTimeUnit
+  setStatsUnit: (next: FactoryProductionTimeUnit) => FactoryProductionTimeUnit
   twentyFourHourShifts: () => boolean
   setTwentyFourHourShifts: (next: boolean) => boolean
   qualityControlLevel: () => string
@@ -64,37 +69,23 @@ const RESOURCE_DOT_BY_ID: Record<FactoryProductionResourceId, string> = {
   gray: "⚪",
 }
 
-const parseNumberish = (value: string) => {
-  const parsed = Number(value)
-  if (Number.isFinite(parsed)) return parsed
-
-  try {
-    const large = LargeNumber.parse(value)
-    if (large.compare(0) <= 0) return 0
-    if (large.exponent > 308) return Number.MAX_VALUE
-    return large.mantissa * 10 ** large.exponent
-  } catch {
-    return 0
-  }
-}
-
 const clampToFiniteNonNegative = (value: number, fallback = 1) => {
   if (!Number.isFinite(value)) return fallback
   return Math.max(0, value)
 }
 
 const parseMultiplierish = (value: string) => {
-  const parsed = parseNumberish(value)
+  const parsed = parseLargeNumberish(value)
   return clampToFiniteNonNegative(parsed, 1)
 }
 
 const parseResourceOutput = (value: string) => {
-  const parsed = parseNumberish(value)
+  const parsed = parseLargeNumberish(value)
   return clampToFiniteNonNegative(parsed, 0)
 }
 
 const parseQualityControl = (value: string) => {
-  const parsed = parseNumberish(value)
+  const parsed = parseLargeNumberish(value)
   if (!Number.isFinite(parsed)) return 0
   return parsed
 }
@@ -115,6 +106,11 @@ const defaultRows = (): PersistedManufacturerRow[] => [
 ]
 
 export const FactoryProductionProvider = (props: ParentProps) => {
+  const [resourceUnit, setResourceUnit] = createSyncedSignal<FactoryProductionTimeUnit>(
+    "factoryProduction.resourceUnit",
+    "h",
+  )
+  const [statsUnit, setStatsUnit] = createSyncedSignal<FactoryProductionTimeUnit>("factoryProduction.statsUnit", "h")
   const [twentyFourHourShifts, setTwentyFourHourShifts] = createSyncedSignal(
     "factoryProduction.twentyFourHourShifts",
     defaultState.pricing.twentyFourHourShifts,
@@ -232,8 +228,9 @@ export const FactoryProductionProvider = (props: ParentProps) => {
   const normalizedResourceOutputs = createMemo(() => {
     const normalized = createEmptyResourceOutputMap()
     for (const resource of FACTORY_PRODUCTION_RESOURCES) {
-      // UI uses /h values; calculator expects /s.
-      normalized[resource] = parseResourceOutput(resourceOutputs()[resource] ?? "0") / SECONDS_PER_HOUR
+      // UI uses per-unit values; calculator expects /s.
+      normalized[resource] =
+        parseResourceOutput(resourceOutputs()[resource] ?? "0") / FACTORY_PRODUCTION_TIME_UNIT_SECONDS(resourceUnit())
     }
     return normalized
   })
@@ -342,6 +339,10 @@ export const FactoryProductionProvider = (props: ParentProps) => {
   return (
     <FactoryProductionContext.Provider
       value={{
+        resourceUnit,
+        setResourceUnit,
+        statsUnit,
+        setStatsUnit,
         twentyFourHourShifts,
         setTwentyFourHourShifts,
         qualityControlLevel,

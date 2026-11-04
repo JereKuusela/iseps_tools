@@ -1,4 +1,5 @@
 import { For } from "solid-js"
+import { capitalize } from "../../lib/textFormat"
 import { InfoCard } from "../../components/layout/contentBlocks"
 import { DataTable, GRID_CELL_BORDER_CLASS, TableHead } from "../../components/layout/dataTable"
 import { IntegerField } from "../../components/ui/formControls"
@@ -10,7 +11,7 @@ import {
 } from "../../components/ui/GridCellInputs"
 import { PARTICLE_ORDER } from "../../lib/particles"
 import { useTokensContext } from "./tokensContext"
-import type { TokenId } from "./tokenTypes"
+import type { TokenId } from "./tokensTypes"
 
 const RESOURCE_ORDER = ["cash", ...PARTICLE_ORDER] as const
 const GROUPS = ["output", "supplies", "bbbot"] as const
@@ -32,8 +33,6 @@ type SpecialRow = {
   label: string
   maxLevel: number
 }
-
-const toTitle = (value: string) => value.charAt(0).toUpperCase() + value.slice(1)
 
 const borderClass = GRID_CELL_BORDER_CLASS
 
@@ -125,7 +124,7 @@ export const TokensLevelInputs = () => {
           <tr>
             <th class={`${labelCellClass} bg-mist/80 dark:bg-[#1a2a3f]`}>Track</th>
             <For each={RESOURCE_ORDER}>
-              {(resource) => <th class={`${borderClass} px-1 py-1.5 text-center`}>{toTitle(resource)}</th>}
+              {(resource) => <th class={`${borderClass} px-1 py-1.5 text-center`}>{capitalize(resource)}</th>}
             </For>
           </tr>
         </TableHead>
@@ -163,7 +162,7 @@ export const TokensLevelInputs = () => {
             {(resource) => (
               <tr>
                 <td class={`${labelCellClass} bg-white font-semibold text-ink dark:bg-[#22344d] dark:text-white`}>
-                  {toTitle(resource)}
+                  {capitalize(resource)}
                 </td>
                 <For each={GROUPS}>{(group) => <td class={valueCellClass}>{renderCell(group, resource)}</td>}</For>
               </tr>

@@ -2,9 +2,9 @@ import { createContext, createMemo, createSignal, type ParentProps, useContext }
 import { createSyncedSignal } from "../../lib/persistedSignal"
 import { parseNumberish } from "../../lib/parseNumber"
 import { perkDataBundle } from "../../shared/perkContext"
-import { computeTalentAllocation, type TalentAllocation, type TalentRunType } from "./talentCalculator"
+import { computeTalentAllocation, type TalentAllocation, type TalentRunType } from "./talentGuideCalculator"
 import { SHARED_SE_KEY } from "../../shared/tokenSharedInputs"
-import { talentDefs } from "./talentData"
+import { talentDefs } from "./talentGuideData"
 
 const runOptions: { value: TalentRunType; label: string }[] = [
   { value: "se", label: "SE Push" },

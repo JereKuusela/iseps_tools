@@ -15,14 +15,19 @@ export const formatPercent = (value: number, digits = 2, fallback = "0%") => {
   return `${value.toFixed(digits)}%`
 }
 
-// Switches to exponential from 1e6 and drops decimals from 1000.
+const trimTrailingZeros = (text: string) => (text.includes(".") ? text.replace(/\.?0+$/, "") : text)
+
+// Switches to exponential from 1e6 and drops decimals from 1000; trailing zeros are trimmed.
 export const formatCompactValue = (value: number, digits = 2) => {
   if (!Number.isFinite(value)) return "0"
   const abs = Math.abs(value)
   if (abs === 0) return "0"
-  if (abs >= 1e6) return value.toExponential(2)
+  if (abs >= 1e6) {
+    const [mantissa, exponent] = value.toExponential(2).split("e")
+    return `${trimTrailingZeros(mantissa)}e${exponent.replace("+", "")}`
+  }
   if (abs >= 1000) return value.toFixed(0)
-  return value.toFixed(digits)
+  return trimTrailingZeros(value.toFixed(digits))
 }
 
 // Current-vs-optimal ratio as a label: "100%" when optimal is zero, "Nx" above 999.99%.

@@ -11,15 +11,15 @@ import {
   levelOf,
   levelsAfterBuying,
   levelsAfterCompletingFirst,
-} from "./crystalCalculator"
-import { CRYSTAL_DATA } from "./crystalData"
+} from "./crystalsCalculator"
+import { CRYSTAL_DATA } from "./crystalsData"
 import type {
   CrystalCost,
   CrystalInputState,
   CrystalLevels,
   CrystalRecommendation,
   CrystalUpgrade,
-} from "./crystalTypes"
+} from "./crystalsTypes"
 
 const UPCOMING_ACTION_COUNT = 8
 

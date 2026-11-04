@@ -1,4 +1,4 @@
-import { TokenId } from "../pages/tokens/tokenTypes"
+import { TokenId } from "../pages/tokens/tokensTypes"
 import { readFromStorage, writeToStorage } from "../lib/storage"
 
 export const TOKEN_SHARED_KEYS = {

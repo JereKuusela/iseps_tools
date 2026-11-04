@@ -12,7 +12,7 @@ import { INPUT_BASE_CLASS, TEXT_INPUT_CLASS } from "./inputStyles"
 import { Tooltip } from "./Tooltip"
 
 type NumberFieldProps = {
-  label: string
+  label: JSX.Element
   value: string
   onInput: (next: string) => void
   placeholder?: string

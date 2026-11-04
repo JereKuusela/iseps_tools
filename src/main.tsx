@@ -7,12 +7,13 @@ import { CrystalsPage } from "./pages/crystals/CrystalsPage"
 import { CruisePage } from "./pages/cruise/CruisePage"
 import { FactoryPage } from "./pages/factory/FactoryPage"
 import { FactoryProductionPage } from "./pages/factoryProduction/FactoryProductionPage"
-import { HomePage } from "./pages/HomePage"
-import { OgTechPage } from "./pages/og/OgTechPage"
+import { HomePage } from "./pages/home/HomePage"
+import { OgTechPage } from "./pages/ogTech/OgTechPage"
 import { PerkGuidePage } from "./pages/perkGuide/PerkGuidePage"
-import { PremiumCrystalTokenPage, PremiumHaulerMinePage } from "./pages/PremiumPage"
+import { PremiumCrystalTokenPage } from "./pages/premium/PremiumCrystalTokenPage"
+import { PremiumHaulerMinePage } from "./pages/premium/PremiumHaulerMinePage"
 import { ScPage } from "./pages/sc/ScPage"
-import { SettingsPage } from "./pages/SettingsPage"
+import { SettingsPage } from "./pages/settings/SettingsPage"
 import { TalentGuidePage } from "./pages/talentGuide/TalentGuidePage"
 import { TokensPage } from "./pages/tokens/TokensPage"
 import { ZatGuidePage } from "./pages/zatGuide/ZatGuidePage"
@@ -25,109 +26,31 @@ migrateTokenSharedInputs()
 migrateCrystalSharedInputs()
 initCloudSync()
 
-const HomeRoute = () => (
-  <App>
-    <HomePage />
-  </App>
-)
-
-const OgTechRoute = () => (
-  <App>
-    <OgTechPage />
-  </App>
-)
-
-const PerkGuideRoute = () => (
-  <App>
-    <PerkGuidePage />
-  </App>
-)
-
-const TalentGuideRoute = () => (
-  <App>
-    <TalentGuidePage />
-  </App>
-)
-
-const TokensRoute = () => (
-  <App>
-    <TokensPage />
-  </App>
-)
-
-const CrystalsRoute = () => (
-  <App>
-    <CrystalsPage />
-  </App>
-)
-
-const ZatGuideRoute = () => (
-  <App>
-    <ZatGuidePage />
-  </App>
-)
-
-const ScRoute = () => (
-  <App>
-    <ScPage />
-  </App>
-)
-
-const CruiseRoute = () => (
-  <App>
-    <CruisePage />
-  </App>
-)
-
-const FactoryRoute = () => (
-  <App>
-    <FactoryPage />
-  </App>
-)
-
-const FactoryProductionRoute = () => (
-  <App>
-    <FactoryProductionPage />
-  </App>
-)
-
-const SettingsRoute = () => (
-  <App>
-    <SettingsPage />
-  </App>
-)
-
-const PremiumCrystalRoute = () => (
-  <App>
-    <PremiumCrystalTokenPage />
-  </App>
-)
-
-const PremiumHaulerRoute = () => (
-  <App>
-    <PremiumHaulerMinePage />
-  </App>
-)
+const pageRoutes = [
+  { path: ROUTES.home, component: HomePage },
+  { path: ROUTES.ogTech, component: OgTechPage },
+  { path: ROUTES.tokens, component: TokensPage },
+  { path: ROUTES.crystals, component: CrystalsPage },
+  { path: ROUTES.perks, component: PerkGuidePage },
+  { path: ROUTES.talents, component: TalentGuidePage },
+  { path: ROUTES.cruise, component: CruisePage },
+  { path: ROUTES.factory, component: FactoryPage },
+  { path: ROUTES.factoryProduction, component: FactoryProductionPage },
+  { path: ROUTES.zatGuide, component: ZatGuidePage },
+  { path: ROUTES.sc, component: ScPage },
+  { path: ROUTES.settings, component: SettingsPage },
+  { path: ROUTES.premiumCrystal, component: PremiumCrystalTokenPage },
+  { path: ROUTES.premiumHauler, component: PremiumHaulerMinePage },
+  { path: "/*all", component: HomePage },
+]
 
 render(
   () => (
     <ScProvider>
-      <Router>
-        <Route path={ROUTES.home} component={HomeRoute} />
-        <Route path={ROUTES.ogTech} component={OgTechRoute} />
-        <Route path={ROUTES.tokens} component={TokensRoute} />
-        <Route path={ROUTES.crystals} component={CrystalsRoute} />
-        <Route path={ROUTES.perks} component={PerkGuideRoute} />
-        <Route path={ROUTES.talents} component={TalentGuideRoute} />
-        <Route path={ROUTES.cruise} component={CruiseRoute} />
-        <Route path={ROUTES.factory} component={FactoryRoute} />
-        <Route path={ROUTES.factoryProduction} component={FactoryProductionRoute} />
-        <Route path={ROUTES.zatGuide} component={ZatGuideRoute} />
-        <Route path={ROUTES.sc} component={ScRoute} />
-        <Route path={ROUTES.settings} component={SettingsRoute} />
-        <Route path={ROUTES.premiumCrystal} component={PremiumCrystalRoute} />
-        <Route path={ROUTES.premiumHauler} component={PremiumHaulerRoute} />
-        <Route path="/*all" component={HomeRoute} />
+      <Router root={App}>
+        {pageRoutes.map((route) => (
+          <Route path={route.path} component={route.component} />
+        ))}
       </Router>
     </ScProvider>
   ),

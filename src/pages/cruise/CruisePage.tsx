@@ -1,23 +1,15 @@
 import { Panel } from "../../components/layout/Panel"
 import { SplitColumns } from "../../components/layout/SplitColumns"
 import { CruiseProvider } from "./cruiseContext"
-import { CruiseLeftColumn } from "./CruiseLeftColumn"
-import { CruiseRightColumn } from "./CruiseRightColumn"
+import { CruiseInputs } from "./CruiseInputs"
+import { CruiseResults } from "./CruiseResults"
 
-const CruiseContent = () => {
-  return (
+export const CruisePage = () => (
+  <CruiseProvider>
     <Panel title="Cruise" tooltip="cruise.panel">
-      <SplitColumns layoutClass="xl:grid-cols-[1.02fr_1.45fr]" right={<CruiseRightColumn />}>
-        <CruiseLeftColumn />
+      <SplitColumns layoutClass="xl:grid-cols-[1.02fr_1.45fr]" right={<CruiseResults />}>
+        <CruiseInputs />
       </SplitColumns>
     </Panel>
-  )
-}
-
-export const CruisePage = () => {
-  return (
-    <CruiseProvider>
-      <CruiseContent />
-    </CruiseProvider>
-  )
-}
+  </CruiseProvider>
+)

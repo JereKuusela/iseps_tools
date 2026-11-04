@@ -1,4 +1,5 @@
 import { For } from "solid-js"
+import { capitalize } from "../../lib/textFormat"
 import { InfoCard } from "../../components/layout/contentBlocks"
 import { DataTable, GRID_CELL_BORDER_CLASS, TableHead } from "../../components/layout/dataTable"
 import { CheckboxField, IntegerField } from "../../components/ui/formControls"
@@ -10,15 +11,13 @@ import {
 } from "../../components/ui/GridCellInputs"
 import { PARTICLE_ORDER } from "../../lib/particles"
 import { useCrystalsContext } from "./crystalsContext"
-import type { CrystalUpgrade } from "./crystalTypes"
+import type { CrystalUpgrade } from "./crystalsTypes"
 
 const GROUPS = [
   { group: "output", label: "Output" },
   { group: "cost", label: "Cost" },
   { group: "oneTimer", label: "Bundle" },
 ] as const
-
-const toTitle = (value: string) => value.charAt(0).toUpperCase() + value.slice(1)
 
 export const CrystalsLevelInputs = () => {
   const crystals = useCrystalsContext()
@@ -67,7 +66,7 @@ export const CrystalsLevelInputs = () => {
           <tr>
             <th class={`${labelCellClass} bg-mist/80 dark:bg-[#1a2a3f]`}>Track</th>
             <For each={PARTICLE_ORDER}>
-              {(particle) => <th class={`${GRID_CELL_BORDER_CLASS} px-1 py-1.5 text-center`}>{toTitle(particle)}</th>}
+              {(particle) => <th class={`${GRID_CELL_BORDER_CLASS} px-1 py-1.5 text-center`}>{capitalize(particle)}</th>}
             </For>
           </tr>
         </TableHead>
@@ -105,7 +104,7 @@ export const CrystalsLevelInputs = () => {
             {(particle) => (
               <tr>
                 <td class={`${labelCellClass} bg-white font-semibold text-ink dark:bg-[#22344d] dark:text-white`}>
-                  {toTitle(particle)}
+                  {capitalize(particle)}
                 </td>
                 <For each={GROUPS}>
                   {({ group }) => <td class={valueCellClass}>{renderCell(find(group, particle))}</td>}
