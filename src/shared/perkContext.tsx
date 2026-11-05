@@ -3,7 +3,7 @@ import perksJson from "../../data/perks.json"
 import perksMetaJson from "../../data/perks_meta.json"
 import { toInt } from "../lib/parseNumber"
 
-export type PerkRunType = "se" | "grun"
+export type PerkRunType = "se" | "grun" | "crun"
 
 export type PerkRun = {
   value: PerkRunType
@@ -326,6 +326,33 @@ for (const [run, perks] of perksByRun.entries()) {
     previousPerks = new Set(perks)
     previousIpByRow = cloneIpByRowState(nextIpByRow)
   }
+}
+
+const CASH_YELLOW_PERKS = ["Y1", "Y2", "Y3", "Y4", "Y5", "Y6", "Y7"]
+const CASH_BANNED_PERKS = new Set(["G4", "G5", "G6", "G7"])
+const CASH_NOTES = "Same as SE run but with full yellow and only G1-G3."
+const CASH_MIN_SE = 95
+
+// Cash run = SE run with full yellows and G1-3 only; WIP absorbs the point difference.
+for (const entry of perkGuides.filter((guide) => guide.run === "se" && guide.se >= CASH_MIN_SE)) {
+  const perks = entry.perks.filter((id) => !CASH_BANNED_PERKS.has(id))
+  for (const id of CASH_YELLOW_PERKS) {
+    if (!perks.includes(id)) perks.push(id)
+  }
+
+  const ipByRow = cloneIpByRowState(entry.ipByRow)
+  const wip = (ipByRow.W ?? 0) + entry.perks.length - perks.length
+  if (wip < 0) continue
+  if (wip > 0) ipByRow.W = wip
+  else delete ipByRow.W
+
+  perkGuides.push({
+    se: entry.se,
+    run: "crun",
+    perks: sortPerkTokens(perks, definitions.rowOrder),
+    ipByRow,
+    notes: CASH_NOTES,
+  })
 }
 
 export const perkDataBundle: PerkDataBundle = {

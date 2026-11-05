@@ -9,6 +9,10 @@
       "label": "G-Points"
     },
     {
+      "value": "crun",
+      "label": "Cash"
+    },
+    {
       "value": "jrun",
       "label": "Juno"
     }
