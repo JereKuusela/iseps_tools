@@ -29,8 +29,12 @@ export type CrystalGuideStep = {
   id: string
   minSe?: number
   maxSe?: number
+  player?: number
+  maxPlayer?: number
+  particle?: UnlockedParticle
   doneNote?: string
-  targets: { id: string; level: CrystalTargetLevel }[]
+  totalOutputLevels?: number
+  add: { id: string; level: CrystalTargetLevel }[]
 }
 
 export type CrystalData = {

@@ -90,25 +90,37 @@ const parseTargetLevel = (value: unknown): CrystalTargetLevel | null => {
   return typeof value === "number" && Number.isFinite(value) ? value : null
 }
 
+const parseTargets = (raw: unknown) =>
+  (typeof raw === "string" ? [raw] : Array.isArray(raw) ? raw : []).flatMap((target) => {
+    if (typeof target === "string") {
+      const match = /^([a-zA-Z][\w.-]*)(?:\s+(\d+))?$/.exec(target.trim())
+      if (!match) return []
+      const level: CrystalTargetLevel = match[2] === undefined ? "max" : Number(match[2])
+      if (level !== "max" && !Number.isSafeInteger(level)) return []
+      return [{ id: match[1], level }]
+    }
+    if (!Array.isArray(target) || typeof target[0] !== "string") return []
+    const level = parseTargetLevel(target[1])
+    return level === null ? [] : [{ id: target[0], level }]
+  })
+
 export const parseCrystalGuide = (raw: unknown): CrystalGuideStep[] => {
   if (!Array.isArray(raw)) return []
 
-  return raw.flatMap((entry): CrystalGuideStep[] => {
-    if (!isRecord(entry) || typeof entry.id !== "string") return []
-
-    const targets = (Array.isArray(entry.targets) ? entry.targets : []).flatMap((target) => {
-      if (!Array.isArray(target) || typeof target[0] !== "string") return []
-      const level = parseTargetLevel(target[1])
-      return level === null ? [] : [{ id: target[0], level }]
-    })
+  return raw.flatMap((entry, index): CrystalGuideStep[] => {
+    if (!isRecord(entry)) return []
 
     return [
       {
-        id: entry.id,
-        minSe: toOptionalNumber(entry.minSe),
+        id: typeof entry.id === "string" ? entry.id : `step-${index}`,
+        minSe: toOptionalNumber(entry.se) ?? toOptionalNumber(entry.minSe),
         maxSe: toOptionalNumber(entry.maxSe),
+        player: toOptionalNumber(entry.player) ?? toOptionalNumber(entry.minPlayer),
+        maxPlayer: toOptionalNumber(entry.maxPlayer),
+        particle: toParticle(entry.particle),
         doneNote: typeof entry.doneNote === "string" ? entry.doneNote : undefined,
-        targets,
+        totalOutputLevels: toOptionalNumber(entry.totalOutputLevels),
+        add: parseTargets(entry.add),
       },
     ]
   })

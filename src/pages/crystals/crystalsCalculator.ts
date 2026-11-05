@@ -1,4 +1,4 @@
-import { PARTICLE_ORDER } from "../../lib/particles"
+import { PARTICLE_ORDER, type UnlockedParticle } from "../../lib/particles"
 import type {
   CrystalAction,
   CrystalCost,
@@ -31,7 +31,7 @@ type Candidate = {
 }
 
 type PreparedCrystalData = {
-  steps: CrystalGuideStep[]
+  steps: (CrystalGuideStep & { sourceIndex: number })[]
   upgradeById: Map<string, CrystalUpgrade>
 }
 
@@ -47,8 +47,18 @@ export const isUpgradeUnlocked = (upgrade: CrystalUpgrade, state: CrystalInputSt
       (playerLevel === undefined || state.playerLevel >= playerLevel),
   )
 
-export const isStepActive = (step: CrystalGuideStep, se: number) =>
-  (step.minSe === undefined || se >= step.minSe) && (step.maxSe === undefined || se <= step.maxSe)
+export const isStepActive = (
+  step: CrystalGuideStep,
+  se: number,
+  playerLevel = 0,
+  unlockedParticle?: UnlockedParticle,
+) =>
+  (step.particle === undefined ||
+    (unlockedParticle !== undefined && particleRank(step.particle) <= particleRank(unlockedParticle))) &&
+  (step.minSe === undefined || se >= step.minSe) &&
+  (step.maxSe === undefined || se <= step.maxSe) &&
+  (step.player === undefined || playerLevel >= step.player) &&
+  (step.maxPlayer === undefined || playerLevel <= step.maxPlayer)
 
 export const calculateUpgradeCost = (upgrade: CrystalUpgrade, from: number, to: number): CrystalCost => {
   const count = Math.max(0, to - from)
@@ -78,9 +88,27 @@ const resolveGoal = (upgrade: CrystalUpgrade, level: CrystalTargetLevel) =>
   Math.min(upgrade.maxLevel, level === "max" ? upgrade.maxLevel : Math.max(0, Math.floor(level)))
 
 const expandTargets = (step: CrystalGuideStep) =>
-  step.targets.flatMap((target) =>
+  step.add.flatMap((target) =>
     target.id === ERM_GROUP_ID ? ERM_UPGRADE_IDS.map((id) => ({ id, level: target.level })) : [target],
   )
+
+const resolveStepTargets = (step: CrystalGuideStep, state: CrystalInputState, data: PreparedCrystalData) => {
+  if (step.totalOutputLevels === undefined) return step.add
+
+  const preferred = step.add.find((target) => data.upgradeById.get(target.id)?.group === "output")
+  if (!preferred) return step.add
+
+  let otherOutputLevels = 0
+  for (const upgrade of data.upgradeById.values()) {
+    if (upgrade.group === "output" && upgrade.id !== preferred.id) {
+      otherOutputLevels += Math.min(upgrade.maxLevel, Math.max(0, levelOf(state.levels, upgrade.id)))
+    }
+  }
+
+  const upgrade = data.upgradeById.get(preferred.id)!
+  const level = Math.max(resolveGoal(upgrade, preferred.level), step.totalOutputLevels - otherOutputLevels)
+  return step.add.map((target) => (target === preferred ? { ...target, level } : target))
+}
 
 // Finds the first unmet prerequisite in dependency order; null when locked or complete.
 const resolveCandidate = (
@@ -138,18 +166,20 @@ const findCurrentStep = (state: CrystalInputState, data: PreparedCrystalData) =>
 
   for (let index = 0; index < data.steps.length; index++) {
     const step = data.steps[index]
-    if (!isStepActive(step, state.se)) continue
+    if (!isStepActive(step, state.se, state.playerLevel, state.unlockedParticle)) continue
 
-    const targets = step.targets
+    const targets = resolveStepTargets(step, state, data)
     const candidates = new Map<string, Candidate>()
     for (const target of targets) {
-      const candidate = resolveCandidate(target.id, target.level, state, upgradeById, previousGoals)
-      if (candidate && !candidates.has(candidate.upgrade.id)) candidates.set(candidate.upgrade.id, candidate)
+      for (const expanded of expandTargets({ ...step, add: [target] })) {
+        const candidate = resolveCandidate(expanded.id, expanded.level, state, upgradeById, previousGoals)
+        if (candidate && !candidates.has(candidate.upgrade.id)) candidates.set(candidate.upgrade.id, candidate)
+      }
+
+      if (candidates.size > 0) return { step, index, candidates: [...candidates.values()] }
     }
 
-    if (candidates.size > 0) return { step, index, candidates: [...candidates.values()] }
-
-    for (const target of targets) {
+    for (const target of expandTargets({ ...step, add: targets })) {
       const upgrade = upgradeById.get(target.id)
       if (!upgrade) continue
       previousGoals.set(target.id, Math.max(previousGoals.get(target.id) ?? 0, resolveGoal(upgrade, target.level)))
@@ -193,11 +223,11 @@ const findSavingGoals = (state: CrystalInputState, data: PreparedCrystalData, cu
 
   for (let index = 0; index < data.steps.length; index++) {
     const step = data.steps[index]
-    if (!isStepActive(step, state.se)) continue
+    if (!isStepActive(step, state.se, state.playerLevel, state.unlockedParticle)) continue
 
     let hasActionable = false
     const stepLocked: [string, number][] = []
-    for (const target of step.targets) {
+    for (const target of expandTargets({ ...step, add: resolveStepTargets(step, state, data) })) {
       const upgrade = upgradeById.get(target.id)
       if (!upgrade) continue
       const goal = resolveGoal(upgrade, target.level)
@@ -230,8 +260,9 @@ const findDoneNotes = (state: CrystalInputState, data: PreparedCrystalData) => {
   const { upgradeById } = data
 
   return data.steps.flatMap((step) => {
-    if (!step.doneNote || !isStepActive(step, state.se)) return []
-    const isDone = step.targets.every((target) => {
+    if (!step.doneNote || !isStepActive(step, state.se, state.playerLevel, state.unlockedParticle)) return []
+    const targets = resolveStepTargets(step, state, data)
+    const isDone = expandTargets({ ...step, add: targets }).every((target) => {
       const upgrade = upgradeById.get(target.id)
       return !upgrade || levelOf(state.levels, target.id) >= resolveGoal(upgrade, target.level)
     })
@@ -245,20 +276,55 @@ export const calculateCrystalRecommendations = (
   count: number,
 ): CrystalRecommendation => {
   const prepared: PreparedCrystalData = {
-    steps: data.steps.map((step) => ({ ...step, targets: expandTargets(step) })),
+    steps: [],
     upgradeById: new Map(data.upgrades.map((upgrade) => [upgrade.id, upgrade] as const)),
   }
-  const first = findCurrentStep(state, prepared)
+  const includedSteps = new Set<number>()
+  const futureSteps: number[] = []
+  for (const [sourceIndex, step] of data.steps.entries()) {
+    if (step.maxSe !== undefined && state.se > step.maxSe) continue
+    if (step.maxPlayer !== undefined && state.playerLevel > step.maxPlayer) continue
+
+    if (isStepActive(step, state.se, state.playerLevel, state.unlockedParticle)) includedSteps.add(sourceIndex)
+    else futureSteps.push(sourceIndex)
+  }
+  const rebuildPlan = () => {
+    prepared.steps = []
+    for (const [sourceIndex, step] of data.steps.entries()) {
+      if (!includedSteps.has(sourceIndex)) continue
+
+      const active = isStepActive(step, state.se, state.playerLevel, state.unlockedParticle)
+      prepared.steps.push({
+        ...step,
+        sourceIndex,
+        ...(active ? {} : { minSe: undefined, player: undefined, particle: undefined, doneNote: undefined }),
+      })
+    }
+  }
+  rebuildPlan()
+  let futureIndex = 0
+  const findNextStep = (current: CrystalInputState) => {
+    let found = findCurrentStep(current, prepared)
+    while (!found && futureIndex < futureSteps.length) {
+      includedSteps.add(futureSteps[futureIndex++])
+      rebuildPlan()
+      found = findCurrentStep(current, prepared)
+    }
+    return found
+  }
+  const first = findNextStep(state)
+  const savingFor = findSavingGoals(state, prepared, first?.index ?? -1)
+  const doneNotes = findDoneNotes(state, prepared)
 
   const actions: CrystalAction[] = []
   const simulated = { ...state, levels: { ...state.levels } }
   for (let i = 0; i < MAX_SIMULATED_ACTIONS && actions.length <= count; i++) {
-    const next = pickNextAction(simulated, i === 0 ? first : findCurrentStep(simulated, prepared))
+    const next = pickNextAction(simulated, i === 0 ? first : findNextStep(simulated))
     if (!next) break
 
     // Consecutive chunks of the same upgrade are shown as one row.
     const last = actions[actions.length - 1]
-    if (last && last.id === next.id) {
+    if (last && last.id === next.id && last.stepId === next.stepId) {
       last.targetLevel = next.targetLevel
       last.cost = addCost(last.cost, next.cost)
     } else {
@@ -269,10 +335,10 @@ export const calculateCrystalRecommendations = (
 
   return {
     actions: actions.slice(0, count),
-    step: first ? data.steps[first.index] : null,
-    stepIndex: first?.index ?? -1,
-    savingFor: findSavingGoals(state, prepared, first?.index ?? -1),
-    doneNotes: findDoneNotes(state, prepared),
+    step: first ? data.steps[first.step.sourceIndex] : null,
+    stepIndex: first?.step.sourceIndex ?? -1,
+    savingFor,
+    doneNotes,
   }
 }
 

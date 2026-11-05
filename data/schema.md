@@ -287,9 +287,16 @@ All crystal shop upgrades. The id doubles as the storage key suffix (`crystal.<i
 
 ## crystal_guide.json
 
-Ordered list of guide steps. The first step with an unmet, unlocked target is the current step.
+Ordered list of guide entries. Eligible entries are kept in file order. The first entry with an unmet, unlocked target is the current step.
 
-- `id`: Unique step id.
-- `minSe`, `maxSe`: Optional SE window where the step applies.
+When no current target is actionable, the calculator scans future entries in file order, ignoring their minimum SE and player thresholds. Completed and blocked entries do not stop the search. Actual upgrade unlock requirements and maximum SE/player bounds remain enforced. Recommendation previews continue through future entries in the same way; blocked targets remain saving goals. Future entries do not produce completion notes before their thresholds are met.
+
+- `id`: Optional step label. When omitted, an internal id is generated from the entry's position to preserve purchase boundaries.
+- `se`: Optional inclusive minimum SE. The legacy name `minSe` is also accepted.
+- `maxSe`: Optional inclusive maximum SE, retained for bounded tier plans.
+- `player`: Optional inclusive minimum player level. The legacy name `minPlayer` is also accepted.
+- `particle`: Optional minimum unlocked particle (such as `kappa`). Like `se` and `player`, it is ignored when scanning future entries.
+- `maxPlayer`: Optional inclusive maximum player level. Expired entries contribute no purchases, saving goals, or completion notes.
 - `doneNote`: Optional text shown once every target of the step is met.
-- `targets`: Array of `[upgradeId, level]`. Level is a number or `"max"`. The id `"erm"` stands for Bulk Extractions, Bulk Researches and Bulk DC Milestones.
+- `totalOutputLevels`: Optional total level target across upgrades in the `output` group. Requires an Output target in `add`; the first such target supplies any shortfall while retaining its own minimum level. Recalculated during recommendation simulation.
+- `add`: A single string such as `"output.alpha 50"` or an ordered array of such strings, added to the end of the existing target list when the step is active. An id without a level, such as `"erm"`, means max level. Complete each unlocked target before advancing to the next; locked targets are skipped. The id `"erm"` stands for Bulk Extractions, Bulk Researches and Bulk DC Milestones, balanced together before advancing to the next target. Purchases remain separate across step boundaries, even for the same upgrade. Legacy `[upgradeId, level]` entries are also accepted.
