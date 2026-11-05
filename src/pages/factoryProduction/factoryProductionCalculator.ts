@@ -161,43 +161,6 @@ const cloneManufacturers = (
   }))
 }
 
-const getConsumerCountsByResource = (manufacturers: FactoryProductionManufacturerInput[]) => {
-  const counts: Record<FactoryProductionResourceId, number> = {
-    orange: 0,
-    blue: 0,
-    green: 0,
-    purple: 0,
-    gray: 0,
-  }
-
-  for (const row of manufacturers) {
-    const item = FACTORY_PRODUCTION_ITEM_BY_ID[row.productId]
-    if (!item) continue
-
-    for (const resource of FACTORY_PRODUCTION_RESOURCES) {
-      if (item.costs[resource] > 0) {
-        counts[resource] += 1
-      }
-    }
-  }
-
-  return counts
-}
-
-const canAssignItemWithResourceLimit = (
-  currentManufacturers: FactoryProductionManufacturerInput[],
-  item: FactoryProductionItem,
-) => {
-  const consumerCounts = getConsumerCountsByResource(currentManufacturers)
-
-  for (const resource of FACTORY_PRODUCTION_RESOURCES) {
-    if (item.costs[resource] <= 0) continue
-    if (consumerCounts[resource] >= MAX_MANUFACTURERS_PER_RESOURCE) return false
-  }
-
-  return true
-}
-
 const calculateGreedyAddition = (
   input: FactoryProductionOptimizerInput,
   startManufacturers: FactoryProductionManufacturerInput[],
@@ -208,12 +171,6 @@ const calculateGreedyAddition = (
   const candidates = getCandidateItems(resourceOutputs)
   const current = cloneManufacturers(startManufacturers)
 
-  let baseline = calculateFactoryProduction({
-    pricing,
-    resourceOutputs,
-    manufacturers: current,
-  })
-
   let nextId =
     current.reduce((max, row) => {
       const parsed = Number(row.id)
@@ -221,42 +178,77 @@ const calculateGreedyAddition = (
       return Math.max(max, Math.floor(parsed))
     }, 0) + 1
 
-  while (current.length < targetCount) {
-    const rowId = String(nextId)
-    nextId += 1
+  // Exhaustive search over multisets: resources are split evenly, so greedy addition can miss better combinations.
+  const slots = targetCount - current.length
+  const prices = candidates.map((item) => getEffectiveSellPrice(item, pricing))
+  const consumers = emptyDemand()
+  for (const row of current) {
+    const item = FACTORY_PRODUCTION_ITEM_BY_ID[row.productId]
+    if (!item) continue
+    for (const resource of FACTORY_PRODUCTION_RESOURCES) {
+      if (item.costs[resource] > 0) consumers[resource] += 1
+    }
+  }
 
-    let bestProductId = FACTORY_PRODUCTION_NONE_PRODUCT_ID
-    let bestDelta = 0
-    let bestResult = baseline
+  const counts = candidates.map(() => 0)
+  const fixedCounts = new Map<string, number>()
+  for (const row of current) fixedCounts.set(row.productId, (fixedCounts.get(row.productId) ?? 0) + 1)
 
-    for (const item of candidates) {
-      if (!canAssignItemWithResourceLimit(current, item)) {
+  const evaluate = () => {
+    let total = 0
+    candidates.forEach((item, index) => {
+      const n = counts[index] + (fixedCounts.get(item.id) ?? 0)
+      if (n <= 0) return
+      let output = Number.POSITIVE_INFINITY
+      let hasCost = false
+      for (const resource of FACTORY_PRODUCTION_RESOURCES) {
+        const cost = item.costs[resource]
+        if (cost <= 0) continue
+        hasCost = true
+        output = Math.min(output, resourceOutputs[resource] / consumers[resource] / cost)
+      }
+      if (hasCost && Number.isFinite(output)) total += n * output * prices[index]
+    })
+    return total
+  }
+
+  let bestProfit = evaluate()
+  let bestCounts = [...counts]
+
+  const search = (start: number, remaining: number) => {
+    if (remaining <= 0) return
+    for (let index = start; index < candidates.length; index += 1) {
+      const item = candidates[index]
+      if (
+        !FACTORY_PRODUCTION_RESOURCES.every((r) => item.costs[r] <= 0 || consumers[r] < MAX_MANUFACTURERS_PER_RESOURCE)
+      ) {
         continue
       }
+      for (const r of FACTORY_PRODUCTION_RESOURCES) if (item.costs[r] > 0) consumers[r] += 1
+      counts[index] += 1
 
-      const trialRows = [...current, { id: rowId, productId: item.id }]
-      const trial = calculateFactoryProduction({
-        pricing,
-        resourceOutputs,
-        manufacturers: trialRows,
-      })
-      const delta = trial.totalProfitPerSecond - baseline.totalProfitPerSecond
-
-      if (delta > bestDelta + 1e-9) {
-        bestDelta = delta
-        bestProductId = item.id
-        bestResult = trial
+      const profit = evaluate()
+      if (profit > bestProfit * (1 + 1e-9) + 1e-12) {
+        bestProfit = profit
+        bestCounts = [...counts]
       }
-    }
+      search(index, remaining - 1)
 
-    current.push({
-      id: rowId,
-      productId: bestProductId,
-    })
-
-    if (bestProductId !== FACTORY_PRODUCTION_NONE_PRODUCT_ID) {
-      baseline = bestResult
+      counts[index] -= 1
+      for (const r of FACTORY_PRODUCTION_RESOURCES) if (item.costs[r] > 0) consumers[r] -= 1
     }
+  }
+  search(0, slots)
+
+  bestCounts.forEach((n, index) => {
+    for (let i = 0; i < n; i += 1) {
+      current.push({ id: String(nextId), productId: candidates[index].id })
+      nextId += 1
+    }
+  })
+  while (current.length < targetCount) {
+    current.push({ id: String(nextId), productId: FACTORY_PRODUCTION_NONE_PRODUCT_ID })
+    nextId += 1
   }
 
   const result = calculateFactoryProduction({

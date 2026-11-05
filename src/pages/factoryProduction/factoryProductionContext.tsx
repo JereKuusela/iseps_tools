@@ -1,4 +1,5 @@
 import { createContext, createMemo, type ParentProps, useContext } from "solid-js"
+import { createDebounced } from "../../lib/createDebounced"
 import { createSyncedSignal } from "../../lib/persistedSignal"
 import { parseLargeNumberish } from "../../lib/parseNumber"
 import { formatOptimality } from "../../lib/numberFormat"
@@ -20,6 +21,8 @@ import {
   type FactoryProductionResourceId,
   type FactoryProductionTimeUnit,
 } from "./factoryProductionTypes"
+
+const OPTIMIZER_DEBOUNCE_MS = 300
 
 type PersistedManufacturerRow = {
   id: string
@@ -254,21 +257,27 @@ export const FactoryProductionProvider = (props: ParentProps) => {
     }),
   )
 
+  const optimizerPricing = createDebounced(normalizedPricing, OPTIMIZER_DEBOUNCE_MS)
+  const optimizerResourceOutputs = createDebounced(normalizedResourceOutputs, OPTIMIZER_DEBOUNCE_MS)
+
   const optimalManufacturers = createMemo(() =>
     calculateFactoryProductionOptimalManufacturers({
-      pricing: normalizedPricing(),
-      resourceOutputs: normalizedResourceOutputs(),
+      pricing: optimizerPricing(),
+      resourceOutputs: optimizerResourceOutputs(),
       manufacturerCount: normalizedManufacturers().length,
     }),
   )
 
-  const fillEmptyManufacturersResult = createMemo(() =>
-    calculateFactoryProductionFillEmptyManufacturers({
-      pricing: normalizedPricing(),
-      resourceOutputs: normalizedResourceOutputs(),
+  const fillEmptyManufacturersResult = createMemo(() => {
+    if (!hasEmptyManufacturers()) {
+      return { manufacturers: normalizedManufacturers(), result: result() }
+    }
+    return calculateFactoryProductionFillEmptyManufacturers({
+      pricing: optimizerPricing(),
+      resourceOutputs: optimizerResourceOutputs(),
       manufacturers: normalizedManufacturers(),
-    }),
-  )
+    })
+  })
 
   const optimalManufacturerRows = createMemo<PersistedManufacturerRow[]>(() => {
     const optimalProducts = optimalManufacturers().manufacturers.map((row) => row.productId)

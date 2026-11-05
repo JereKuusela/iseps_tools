@@ -267,6 +267,58 @@ describe("factoryProduction optimizer", () => {
     expect(optimized.result.totalProfitPerSecond).toBe(0)
   })
 
+  it("prefers 2x shocklate bar + gear over a single shocklate bar", () => {
+    const pricing = {
+      twentyFourHourShifts: true,
+      qualityControlLevel: 15,
+      globalSellMultiplier: 1.04e5,
+      categoryMultipliers: {
+        household: 3.54,
+        industrial: 2.5,
+        electronics: 2.78,
+        consumables: 2.5,
+      },
+    }
+    const resourceOutputs = { orange: 28.08, blue: 13.76, green: 10.26, purple: 0, gray: 0 }
+
+    const single = calculateFactoryProduction({
+      pricing,
+      resourceOutputs,
+      manufacturers: [{ id: "1", productId: "shocklate_bar" }],
+    })
+    const combo = calculateFactoryProduction({
+      pricing,
+      resourceOutputs,
+      manufacturers: [
+        { id: "1", productId: "shocklate_bar" },
+        { id: "2", productId: "shocklate_bar" },
+        { id: "3", productId: "gear" },
+      ],
+    })
+    expect(combo.totalProfitPerSecond).toBeGreaterThan(single.totalProfitPerSecond)
+
+    for (const manufacturerCount of [1, 2, 3]) {
+      const optimized = calculateFactoryProductionOptimalManufacturers({ pricing, resourceOutputs, manufacturerCount })
+      expect(optimized.result.totalProfitPerSecond).toBeGreaterThanOrEqual(
+        manufacturerCount === 3 ? combo.totalProfitPerSecond - 1e-6 : 0,
+      )
+    }
+  })
+
+  it("optimizes the in-game max of 4 manufacturers quickly", () => {
+    const start = performance.now()
+    const optimized = calculateFactoryProductionOptimalManufacturers({
+      pricing: basePricing,
+      resourceOutputs: { orange: 28, blue: 14, green: 10, purple: 5, gray: 3 },
+      manufacturerCount: 4,
+    })
+    const elapsedMs = performance.now() - start
+    console.log(`optimizer 4 manufacturers: ${elapsedMs.toFixed(1)} ms`)
+
+    expect(optimized.manufacturers).toHaveLength(4)
+    expect(elapsedMs).toBeLessThan(200)
+  })
+
   it("respects max 3 manufacturers per resource in optimizer", () => {
     const optimized = calculateFactoryProductionOptimalManufacturers({
       pricing: basePricing,
