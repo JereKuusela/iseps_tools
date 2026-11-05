@@ -11,15 +11,17 @@ import {
 export const TALENT_ROW5_UNLOCK_LP = 47
 export const TALENT_ROW6_START_LP = 350
 export const TALENT_ROW6_LP_PER_LEVEL = 10
+const TALENT_ROW6_UNLOCK_ROW5_POINTS = 10
 const ROW6_MAX_LP = 300
 const ROW6_ORDER = ["IC6-1", "PP6-1", "IC6-3", "PP6-3", "IC6-2", "PP6-2"]
+const CASH_ROW6_ORDER = ["IC6-1", "IC6-2", "PP6-2", "PP6-1", "IC6-3", "PP6-3"]
 const EXTRA_ORDER = ["PP1-1", "PP2-1", "PP3-1", "IC2-2", "IC2-3", "IC3-3"]
 const G_CORP_ZEROED = new Set(["PP1-1", "PP2-1"])
 const G_RUN_WEIGHT_MULTIPLIER = 10
 const G_RUN_BOOSTED = new Set(["PP5-2", "IC5-1", "IC5-2"])
 const SKIPPED_ROW6_NON_SE = new Set(["IC6-3", "PP6-3"])
 
-export type TalentRunType = "se" | "grun" | "jrun"
+export type TalentRunType = "se" | "grun" | "jrun" | "cash"
 
 export type TalentInput = {
   run?: TalentRunType
@@ -43,9 +45,9 @@ const hasColor = (perks: ReadonlySet<string>, row: string) => {
   return false
 }
 
-type Share = { id: string; weight: number; cap: number }
+type Share = { id: string; weight: number; cap: number; min?: number }
 
-// Weighted split with largest-remainder rounding; capped shares hand their excess to the rest.
+// Weighted split with largest-remainder rounding; capped shares hand their excess to the rest, and shares under their min are pinned to it.
 const distribute = (pool: number, shares: Share[]) => {
   const result: TalentLevels = {}
   let active = shares.filter((share) => share.weight > 0 && share.cap > 0)
@@ -63,6 +65,19 @@ const distribute = (pool: number, shares: Share[]) => {
       if (leftover <= 0) break
       floors[index] += 1
       leftover -= 1
+    }
+
+    const short = active.filter(
+      (share, index) => Math.min(share.min ?? 0, share.cap) > (result[share.id] ?? 0) + floors[index],
+    )
+    if (short.length > 0) {
+      for (const share of short) {
+        const take = Math.min(Math.min(share.min ?? 0, share.cap) - (result[share.id] ?? 0), remaining)
+        result[share.id] = (result[share.id] ?? 0) + take
+        remaining -= take
+      }
+      active = active.filter((share) => !short.includes(share))
+      continue
     }
 
     const capped = active.filter((share, index) => (result[share.id] ?? 0) + floors[index] >= share.cap)
@@ -127,6 +142,29 @@ const computeLevels = (input: TalentInput, se: number, lp: number): TalentLevels
   const levels: TalentLevels = { ...talentBase }
   const rows1to5Budget = lp > TALENT_ROW6_START_LP + row6Max ? lp - row6Max : Math.min(lp, TALENT_ROW6_START_LP)
   let pool = rows1to5Budget - Object.values(levels).reduce((sum, level) => sum + level, 0)
+
+  let row6Left =
+    lp >= TALENT_ROW6_START_LP
+      ? Math.min(Math.floor((lp - TALENT_ROW6_START_LP) / TALENT_ROW6_LP_PER_LEVEL) * TALENT_ROW6_LP_PER_LEVEL, row6Max)
+      : 0
+  for (const id of input.run === "cash" ? CASH_ROW6_ORDER : ROW6_ORDER) {
+    if (input.run && input.run !== "se" && SKIPPED_ROW6_NON_SE.has(id)) {
+      levels[id] = 0
+      continue
+    }
+    const max = talentDefById.get(id)?.max ?? 0
+    const levelsTaken = Math.min(max, Math.floor(row6Left / TALENT_ROW6_LP_PER_LEVEL))
+    levels[id] = levelsTaken
+    row6Left -= levelsTaken * TALENT_ROW6_LP_PER_LEVEL
+  }
+
+  // A row 6 talent needs 10 points in the row 5 talent above it; that is a floor, weights still decide the total.
+  const row5Floors: Record<string, number> = {}
+  for (const def of talentDefs) {
+    if (def.row === 6 && (levels[def.id] ?? 0) > 0)
+      row5Floors[`${def.side}5-${def.col}`] = TALENT_ROW6_UNLOCK_ROW5_POINTS
+  }
+
   const weights = getRow5Weights({ ...input, se, lp })
   const row5Defs = talentDefs.filter((def) => def.row === 5)
 
@@ -156,23 +194,12 @@ const computeLevels = (input: TalentInput, se: number, lp: number): TalentLevels
     pool -= take
   }
 
-  const row5 = distribute(pool, caps())
-  for (const [id, added] of Object.entries(row5)) levels[id] = (levels[id] ?? 0) + added
-
-  let row6Left =
-    lp >= TALENT_ROW6_START_LP
-      ? Math.min(Math.floor((lp - TALENT_ROW6_START_LP) / TALENT_ROW6_LP_PER_LEVEL) * TALENT_ROW6_LP_PER_LEVEL, row6Max)
-      : 0
-  for (const id of ROW6_ORDER) {
-    if (input.run && input.run !== "se" && SKIPPED_ROW6_NON_SE.has(id)) {
-      levels[id] = 0
-      continue
-    }
-    const max = talentDefById.get(id)?.max ?? 0
-    const levelsTaken = Math.min(max, Math.floor(row6Left / TALENT_ROW6_LP_PER_LEVEL))
-    levels[id] = levelsTaken
-    row6Left -= levelsTaken * TALENT_ROW6_LP_PER_LEVEL
-  }
+  const row5Total = pool + row5Defs.reduce((sum, def) => sum + (levels[def.id] ?? 0), 0)
+  const row5 = distribute(
+    row5Total,
+    row5Defs.map((def) => ({ id: def.id, weight: weights[def.id] ?? 0, cap: def.max, min: Math.max(row5Floors[def.id] ?? 0, levels[def.id] ?? 0) })),
+  )
+  for (const def of row5Defs) levels[def.id] = row5[def.id] ?? 0
 
   return levels
 }

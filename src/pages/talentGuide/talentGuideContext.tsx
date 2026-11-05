@@ -10,6 +10,7 @@ const runOptions: { value: TalentRunType; label: string }[] = [
   { value: "se", label: "SE Push" },
   { value: "grun", label: "G-Points" },
   { value: "jrun", label: "Juno" },
+  { value: "cash", label: "Cash" },
 ]
 
 type TalentGuideContextValue = {
