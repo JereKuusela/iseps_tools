@@ -180,62 +180,104 @@ const calculateGreedyAddition = (
 
   // Exhaustive search over multisets: resources are split evenly, so greedy addition can miss better combinations.
   const slots = targetCount - current.length
+  const resourceCount = FACTORY_PRODUCTION_RESOURCES.length
+  const supply = FACTORY_PRODUCTION_RESOURCES.map((resource) => resourceOutputs[resource])
   const prices = candidates.map((item) => getEffectiveSellPrice(item, pricing))
-  const consumers = emptyDemand()
+  const uses = candidates.map((item) =>
+    FACTORY_PRODUCTION_RESOURCES.flatMap((resource, r) => (item.costs[resource] > 0 ? [r] : [])),
+  )
+  const costs = candidates.map((item) => FACTORY_PRODUCTION_RESOURCES.map((resource) => item.costs[resource]))
+  // Profit earned per unit of resource r consumed by item i.
+  const ratios = candidates.map((_, i) => costs[i].map((cost, r) => (cost > 0 ? prices[i] / cost : 0)))
+
+  const consumers = new Array<number>(resourceCount).fill(0)
+  const counts = candidates.map(() => 0)
+  const fixedCounts = candidates.map(() => 0)
+  const candidateIndexById = new Map(candidates.map((item, i) => [item.id, i]))
   for (const row of current) {
     const item = FACTORY_PRODUCTION_ITEM_BY_ID[row.productId]
     if (!item) continue
-    for (const resource of FACTORY_PRODUCTION_RESOURCES) {
-      if (item.costs[resource] > 0) consumers[resource] += 1
-    }
+    FACTORY_PRODUCTION_RESOURCES.forEach((resource, r) => {
+      if (item.costs[resource] > 0) consumers[r] += 1
+    })
+    const index = candidateIndexById.get(row.productId)
+    if (index !== undefined) fixedCounts[index] += 1
   }
 
-  const counts = candidates.map(() => 0)
-  const fixedCounts = new Map<string, number>()
-  for (const row of current) fixedCounts.set(row.productId, (fixedCounts.get(row.productId) ?? 0) + 1)
+  // B dominates A when B uses a subset of A's resources and earns at least as much per unit on each:
+  // swapping A for B never lowers profit nor raises any consumer count, so A need not be searched.
+  const dominates = (b: number, a: number) => {
+    for (const r of uses[b]) if (costs[a][r] <= 0 || ratios[b][r] < ratios[a][r]) return false
+    if (uses[b].length < uses[a].length) return true
+    return uses[b].some((r) => ratios[b][r] > ratios[a][r]) || b < a
+  }
+  const searchable = candidates
+    .map((_, i) => i)
+    .filter((a) => uses[a].length > 0 && !candidates.some((_, b) => b !== a && dominates(b, a)))
 
+  // suffixMax[p][r]: best ratio on resource r among searchable[p..].
+  const suffixMax = Array.from({ length: searchable.length + 1 }, () => new Array<number>(resourceCount).fill(0))
+  for (let p = searchable.length - 1; p >= 0; p -= 1) {
+    const i = searchable[p]
+    for (let r = 0; r < resourceCount; r += 1) suffixMax[p][r] = Math.max(suffixMax[p + 1][r], ratios[i][r])
+  }
+
+  const presentMax = new Array<number>(resourceCount).fill(0)
+
+  // Returns current profit and fills presentMax with the best ratio per resource among chosen items.
   const evaluate = () => {
+    presentMax.fill(0)
     let total = 0
-    candidates.forEach((item, index) => {
-      const n = counts[index] + (fixedCounts.get(item.id) ?? 0)
-      if (n <= 0) return
+    for (let i = 0; i < candidates.length; i += 1) {
+      const n = counts[i] + fixedCounts[i]
+      if (n <= 0) continue
+      const itemUses = uses[i]
+      if (itemUses.length === 0) continue
       let output = Number.POSITIVE_INFINITY
-      let hasCost = false
-      for (const resource of FACTORY_PRODUCTION_RESOURCES) {
-        const cost = item.costs[resource]
-        if (cost <= 0) continue
-        hasCost = true
-        output = Math.min(output, resourceOutputs[resource] / consumers[resource] / cost)
+      for (const r of itemUses) {
+        output = Math.min(output, supply[r] / consumers[r] / costs[i][r])
+        if (ratios[i][r] > presentMax[r]) presentMax[r] = ratios[i][r]
       }
-      if (hasCost && Number.isFinite(output)) total += n * output * prices[index]
-    })
+      total += n * output * prices[i]
+    }
     return total
   }
+
+  // Each item's revenue is capped by any one of its resources, and a resource's consumers share its supply,
+  // so profit <= sum over r of supply[r] * (best ratio among items that may end up using r).
+  const upperBound = (start: number, remaining: number) => {
+    let bound = 0
+    for (let r = 0; r < resourceCount; r += 1) {
+      let best = presentMax[r]
+      if (remaining > 0 && consumers[r] < MAX_MANUFACTURERS_PER_RESOURCE) best = Math.max(best, suffixMax[start][r])
+      bound += supply[r] * best
+    }
+    return bound
+  }
+
+  const improves = (value: number, best: number) => value > best * (1 + 1e-9) + 1e-12
 
   let bestProfit = evaluate()
   let bestCounts = [...counts]
 
   const search = (start: number, remaining: number) => {
     if (remaining <= 0) return
-    for (let index = start; index < candidates.length; index += 1) {
-      const item = candidates[index]
-      if (
-        !FACTORY_PRODUCTION_RESOURCES.every((r) => item.costs[r] <= 0 || consumers[r] < MAX_MANUFACTURERS_PER_RESOURCE)
-      ) {
-        continue
-      }
-      for (const r of FACTORY_PRODUCTION_RESOURCES) if (item.costs[r] > 0) consumers[r] += 1
+    for (let p = start; p < searchable.length; p += 1) {
+      const index = searchable[p]
+      const itemUses = uses[index]
+      if (itemUses.some((r) => consumers[r] >= MAX_MANUFACTURERS_PER_RESOURCE)) continue
+      for (const r of itemUses) consumers[r] += 1
       counts[index] += 1
 
       const profit = evaluate()
-      if (profit > bestProfit * (1 + 1e-9) + 1e-12) {
+      if (improves(profit, bestProfit)) {
         bestProfit = profit
         bestCounts = [...counts]
       }
-      search(index, remaining - 1)
+      if (remaining > 1 && improves(upperBound(p, remaining - 1), bestProfit)) search(p, remaining - 1)
 
       counts[index] -= 1
-      for (const r of FACTORY_PRODUCTION_RESOURCES) if (item.costs[r] > 0) consumers[r] -= 1
+      for (const r of itemUses) consumers[r] -= 1
     }
   }
   search(0, slots)
