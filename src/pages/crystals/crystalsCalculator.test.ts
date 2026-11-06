@@ -68,8 +68,7 @@ describe("parseCrystalGuide", () => {
     const before = calculateCrystalRecommendations(state({ se: 6, playerLevel: 89 }), data, 1)
     expect(before.savingFor.names).toEqual([])
     expect(before.doneNotes).toEqual([])
-    const saving = calculateCrystalRecommendations(state({ se: 6, playerLevel: 90 }), data, 1)
-    expect(saving.actions[0].id).toBe("a")
+    const saving = calculateCrystalRecommendations(state({ se: 6, playerLevel: 90, levels: { a: 1 } }), data, 1)
     expect(saving.savingFor).toEqual({ names: ["locked"], cost: { cost: 10, unknown: false } })
     expect(saving.doneNotes).toEqual([])
     expect(
@@ -394,7 +393,9 @@ describe("calculateCrystalRecommendations", () => {
     }
     const active = calculateCrystalRecommendations(state({ playerLevel: 40 }), bounded, 1)
     expect(active.actions[0].id).toBe("gp")
-    expect(active.savingFor.names).toEqual(["locked"])
+    expect(active.savingFor.names).toEqual([])
+    const saving = calculateCrystalRecommendations(state({ playerLevel: 40, levels: { gp: 4 } }), bounded, 1)
+    expect(saving.savingFor.names).toEqual(["locked"])
     const expired = calculateCrystalRecommendations(state({ playerLevel: 41 }), bounded, 1)
     expect(expired.actions).toEqual([])
     expect(expired.savingFor.names).toEqual([])
@@ -553,7 +554,7 @@ describe("calculateCrystalRecommendations", () => {
       ["a", 1],
       ["b", 2],
     ])
-    expect(result.savingFor).toEqual({ names: ["locked"], cost: { cost: 20, unknown: false } })
+    expect(result.savingFor).toEqual({ names: ["locked"], cost: { cost: 10, unknown: false } })
   })
 
   it("does not revive expired entries or let future entries preempt current purchases", () => {
@@ -642,6 +643,8 @@ describe("notes", () => {
 })
 
 describe("bundled guide data", () => {
+  const ERM_IDS = ["special.bulkExtractions", "special.bulkResearches", "special.bulkDcMilestones"]
+
   it.each([
     {
       se: 55,
@@ -710,8 +713,14 @@ describe("bundled guide data", () => {
     let previous = columns.map(() => 0)
     for (const row of rows) {
       row.forEach((level, index) => {
-        if (level > previous[index]) {
+        if (level <= previous[index]) return
+        if (columns[index] !== "erm") {
           expected.push({ id: columns[index], level: index >= 5 ? "max" : level })
+          return
+        }
+        // ERM is written out as round-robin targets in steps of 5 levels.
+        for (let step = previous[index] + 5; step <= level; step += 5) {
+          for (const id of ERM_IDS) expected.push({ id, level: step })
         }
       })
       previous = row
@@ -720,9 +729,7 @@ describe("bundled guide data", () => {
       ...target,
       level:
         target.level === "max"
-          ? CRYSTAL_DATA.upgrades.find(
-              (upgrade) => upgrade.id === (target.id === "erm" ? "special.bulkExtractions" : target.id),
-            )!.maxLevel
+          ? CRYSTAL_DATA.upgrades.find((upgrade) => upgrade.id === target.id)!.maxLevel
           : target.level,
     })
     const step = CRYSTAL_DATA.steps.find((entry) => entry.minSe === se - 5)
@@ -842,7 +849,7 @@ describe("bundled guide data", () => {
     const ids = new Set(CRYSTAL_DATA.upgrades.map((entry) => entry.id))
     for (const step of CRYSTAL_DATA.steps) {
       for (const target of step.add) {
-        expect(target.id === "erm" || ids.has(target.id), `${step.id}: ${target.id}`).toBe(true)
+        expect(ids.has(target.id), `${step.id}: ${target.id}`).toBe(true)
       }
     }
   })

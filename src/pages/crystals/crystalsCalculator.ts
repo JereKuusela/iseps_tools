@@ -11,13 +11,6 @@ import type {
   CrystalUpgrade,
 } from "./crystalsTypes"
 
-export const ERM_GROUP_ID = "erm"
-export const ERM_UPGRADE_IDS = [
-  "special.bulkExtractions",
-  "special.bulkResearches",
-  "special.bulkDcMilestones",
-] as const
-
 // Fraction of a target's span bought per recommended action.
 const CHUNK_FRACTION = 0.1
 const MAX_SIMULATED_ACTIONS = 1000
@@ -86,11 +79,6 @@ export const calculateCrystalsSpent = (levels: CrystalLevels, data: CrystalData)
 
 const resolveGoal = (upgrade: CrystalUpgrade, level: CrystalTargetLevel) =>
   Math.min(upgrade.maxLevel, level === "max" ? upgrade.maxLevel : Math.max(0, Math.floor(level)))
-
-const expandTargets = (step: CrystalGuideStep) =>
-  step.add.flatMap((target) =>
-    target.id === ERM_GROUP_ID ? ERM_UPGRADE_IDS.map((id) => ({ id, level: target.level })) : [target],
-  )
 
 const resolveStepTargets = (step: CrystalGuideStep, state: CrystalInputState, data: PreparedCrystalData) => {
   if (step.totalOutputLevels === undefined) return step.add
@@ -169,17 +157,12 @@ const findCurrentStep = (state: CrystalInputState, data: PreparedCrystalData) =>
     if (!isStepActive(step, state.se, state.playerLevel, state.unlockedParticle)) continue
 
     const targets = resolveStepTargets(step, state, data)
-    const candidates = new Map<string, Candidate>()
     for (const target of targets) {
-      for (const expanded of expandTargets({ ...step, add: [target] })) {
-        const candidate = resolveCandidate(expanded.id, expanded.level, state, upgradeById, previousGoals)
-        if (candidate && !candidates.has(candidate.upgrade.id)) candidates.set(candidate.upgrade.id, candidate)
-      }
-
-      if (candidates.size > 0) return { step, index, candidates: [...candidates.values()] }
+      const candidate = resolveCandidate(target.id, target.level, state, upgradeById, previousGoals)
+      if (candidate) return { step, index, candidates: [candidate] }
     }
 
-    for (const target of expandTargets({ ...step, add: targets })) {
+    for (const target of targets) {
       const upgrade = upgradeById.get(target.id)
       if (!upgrade) continue
       previousGoals.set(target.id, Math.max(previousGoals.get(target.id) ?? 0, resolveGoal(upgrade, target.level)))
@@ -216,32 +199,26 @@ const pickNextAction = (state: CrystalInputState, found: ReturnType<typeof findC
   return toAction(best.candidate, levelOf(state.levels, best.candidate.upgrade.id), found.step.id)
 }
 
-// Locked upgrades the user should save for: those in or before the current step, plus the next fully blocked step.
-const findSavingGoals = (state: CrystalInputState, data: PreparedCrystalData, currentIndex: number) => {
+// Locked upgrades the user should save for: unmet locked targets in guide order, up to the first buyable one.
+const findSavingGoals = (state: CrystalInputState, data: PreparedCrystalData) => {
   const { upgradeById } = data
   const lockedGoals = new Map<string, number>()
 
-  for (let index = 0; index < data.steps.length; index++) {
-    const step = data.steps[index]
+  scan: for (const step of data.steps) {
     if (!isStepActive(step, state.se, state.playerLevel, state.unlockedParticle)) continue
 
-    let hasActionable = false
-    const stepLocked: [string, number][] = []
-    for (const target of expandTargets({ ...step, add: resolveStepTargets(step, state, data) })) {
+    for (const target of resolveStepTargets(step, state, data)) {
       const upgrade = upgradeById.get(target.id)
       if (!upgrade) continue
       const goal = resolveGoal(upgrade, target.level)
       if (levelOf(state.levels, target.id) >= goal) continue
 
-      if (resolveCandidate(target.id, target.level, state, upgradeById, new Map())) hasActionable = true
-      else stepLocked.push([target.id, goal])
+      if (resolveCandidate(target.id, target.level, state, upgradeById, new Map())) break scan
+      lockedGoals.set(target.id, Math.max(lockedGoals.get(target.id) ?? 0, goal))
     }
 
-    const fullyBlocked = !hasActionable && stepLocked.length > 0
-    if (index > currentIndex && !fullyBlocked) continue
-
-    for (const [id, goal] of stepLocked) lockedGoals.set(id, Math.max(lockedGoals.get(id) ?? 0, goal))
-    if (index > currentIndex) break
+    // Nothing buyable yet: only the first step with locked targets is next.
+    if (lockedGoals.size > 0) break
   }
 
   const names: string[] = []
@@ -262,7 +239,7 @@ const findDoneNotes = (state: CrystalInputState, data: PreparedCrystalData) => {
   return data.steps.flatMap((step) => {
     if (!step.doneNote || !isStepActive(step, state.se, state.playerLevel, state.unlockedParticle)) return []
     const targets = resolveStepTargets(step, state, data)
-    const isDone = expandTargets({ ...step, add: targets }).every((target) => {
+    const isDone = targets.every((target) => {
       const upgrade = upgradeById.get(target.id)
       return !upgrade || levelOf(state.levels, target.id) >= resolveGoal(upgrade, target.level)
     })
@@ -313,7 +290,7 @@ export const calculateCrystalRecommendations = (
     return found
   }
   const first = findNextStep(state)
-  const savingFor = findSavingGoals(state, prepared, first?.index ?? -1)
+  const savingFor = findSavingGoals(state, prepared)
   const doneNotes = findDoneNotes(state, prepared)
 
   const actions: CrystalAction[] = []
