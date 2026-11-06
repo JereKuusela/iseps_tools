@@ -61,6 +61,7 @@
   "token.panel": "Calculates the most valuable token upgrades.",
   "token.onlineHours": "Active play time per day.\nAffects the value of Supplies.",
   "token.tokensPerStep": "Combines low cost upgrades to bigger chunks.\nAffects how often the recommendation changes.",
+  "crystal.gpBooster": "G-Point Booster can be purchased from Gamma Corp.",
   "crystal.panel": "Follows the community crystal guide and shows the next crystal purchases based on your levels, SE and player level.",
   "factoryProduction.panel": "Calculates the most valuable produicts.\nShows various output related stats.",
   "og.panel": "Calculates the most valuable tech upgrades.\nTracks progression towards next cycle.\nShows various Juno related stats.",

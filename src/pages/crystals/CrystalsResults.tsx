@@ -1,5 +1,6 @@
 import { For, Show } from "solid-js"
 import { BestNextSummary } from "../../components/layout/BestNextSummary"
+import { getTooltip } from "../../lib/tooltips"
 import { formatCrystalCost } from "./crystalsFormat"
 import { useCrystalsContext } from "./crystalsContext"
 
@@ -14,7 +15,8 @@ export const CrystalsResults = () => {
     const extra = names.length - MAX_LISTED_NAMES
     return extra > 0 ? `${names.slice(0, MAX_LISTED_NAMES).join(", ")} and ${extra} more` : names.join(", ")
   }
-  const hasNotes = () => savingFor().names.length > 0 || recommendation().doneNotes.length > 0
+  const showGpBoosterNote = () => recommendation().actions.some((action) => action.id === "special.gpBooster")
+  const hasNotes = () => savingFor().names.length > 0 || recommendation().doneNotes.length > 0 || showGpBoosterNote()
 
   return (
     <div class="grid gap-3">
@@ -49,6 +51,9 @@ export const CrystalsResults = () => {
           <Show when={hasNotes()}>
             <div class="grid gap-2 p-3 text-sm text-ink/85 dark:text-white/85">
               <For each={recommendation().doneNotes}>{(note) => <p>{note}</p>}</For>
+              <Show when={showGpBoosterNote()}>
+                <p>{getTooltip("crystal.gpBooster")}</p>
+              </Show>
               <Show when={savingFor().names.length > 0}>
                 <p>
                   Save up {formatCrystalCost(savingFor().cost)} crystals for: {savingNames()}.

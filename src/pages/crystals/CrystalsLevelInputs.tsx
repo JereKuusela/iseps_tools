@@ -13,6 +13,8 @@ import { PARTICLE_ORDER } from "../../lib/particles"
 import { useCrystalsContext } from "./crystalsContext"
 import type { CrystalUpgrade } from "./crystalsTypes"
 
+const GP_BOOSTER_ID = "special.gpBooster"
+
 const GROUPS = [
   { group: "output", label: "Output" },
   { group: "cost", label: "Cost" },
@@ -131,6 +133,7 @@ export const CrystalsLevelInputs = () => {
               {(upgrade) => (
                 <IntegerField
                   label={upgrade.name}
+                  tooltip={upgrade.id === GP_BOOSTER_ID ? "crystal.gpBooster" : undefined}
                   value={crystals.levelText(upgrade.id)}
                   min={0}
                   max={upgrade.maxLevel}
