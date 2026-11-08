@@ -112,7 +112,10 @@ export const PerkGuideProvider = (props: ParentProps) => {
   const selectedEntry = createMemo(() => {
     const exactMatch = availableGuides()[0]
     if (exactMatch) return exactMatch
-    return runGuides()[0]
+    const guides = runGuides()
+    const currentSe = normalizedSe()
+    // Past the last row (or between rows) the nearest earlier guide stays in effect.
+    return guides.filter((entry) => entry.se <= currentSe).at(-1) ?? guides[0]
   })
 
   const rowLookup = createMemo<PerkRowLookup>(() => {
