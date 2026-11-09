@@ -736,7 +736,7 @@
     "name": "Alpha bundle",
     "group": "oneTimer",
     "particle": "alpha",
-    "baseCost": 1000
+    "baseCost": 750
   },
   {
     "id": "bundle.beta",
