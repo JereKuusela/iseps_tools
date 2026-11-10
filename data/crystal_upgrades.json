@@ -651,13 +651,19 @@
     "id": "bundle.leveling",
     "name": "Leveling bundle",
     "group": "oneTimer",
-    "baseCost": 2000
+    "baseCost": 2000,
+    "requires": {
+      "playerLevel": 140
+    }
   },
   {
     "id": "bundle.taskmaster",
     "name": "Taskmaster bundle",
     "group": "oneTimer",
-    "baseCost": 2000
+    "baseCost": 2000,
+    "requires": {
+      "playerLevel": 160
+    }
   },
   {
     "id": "bundle.ultima",

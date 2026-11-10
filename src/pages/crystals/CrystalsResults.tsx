@@ -15,7 +15,7 @@ export const CrystalsResults = () => {
     const extra = names.length - MAX_LISTED_NAMES
     return extra > 0 ? `${names.slice(0, MAX_LISTED_NAMES).join(", ")} and ${extra} more` : names.join(", ")
   }
-  const showGpBoosterNote = () => recommendation().actions.some((action) => action.id === "special.gpBooster")
+  const showGpBoosterNote = () => recommendation().actions[0]?.id === "special.gpBooster"
   const hasNotes = () => savingFor().names.length > 0 || recommendation().doneNotes.length > 0 || showGpBoosterNote()
 
   return (
