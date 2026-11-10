@@ -106,6 +106,8 @@ export type TokenInputState = {
   blendPercent: number
   tokensPerStep: string
   onlineHoursPerDay: string
+  // Delta is scored like Ceti until Helion is unlocked.
+  deltaLikeCeti?: boolean
 }
 
 export type TokenRecommendationRow = {

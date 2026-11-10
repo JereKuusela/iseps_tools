@@ -43,6 +43,7 @@ type TokensContextValue = {
   applyBest: () => void
   applyBestAll: () => void
   applyBestCount: (count: number) => void
+  resetAll: () => void
 }
 
 const TokensContext = createContext<TokensContextValue>()
@@ -170,6 +171,7 @@ export const TokensProvider = (props: ParentProps) => {
         blendPercent: blendPercent(),
         tokensPerStep: tokensPerStep(),
         onlineHoursPerDay: onlineHoursPerDay(),
+        deltaLikeCeti: PARTICLE_ORDER.indexOf(unlockedParticle()) < PARTICLE_ORDER.indexOf("helion"),
       },
       tokenData() ?? null,
     ),
@@ -254,6 +256,10 @@ export const TokensProvider = (props: ParentProps) => {
     applyRecommendationToLevel(best, best.currentLevel + requestedLevels)
   }
 
+  const resetAll = () => {
+    for (const upgradeId of TOKEN_UPGRADE_IDS as TokenId[]) writeUpgradeLevel(upgradeId, "0")
+  }
+
   return (
     <TokensContext.Provider
       value={{
@@ -283,6 +289,7 @@ export const TokensProvider = (props: ParentProps) => {
         applyBest,
         applyBestAll,
         applyBestCount,
+        resetAll,
       }}
     >
       {props.children}

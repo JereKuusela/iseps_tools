@@ -23,7 +23,7 @@ export const OgTechResults = () => {
         bulkActions={[
           { label: "Auto buy < 1h", onClick: og.autoBuyUnderHour },
           { label: "Auto buy < 1d", onClick: og.autoBuyUnderDay },
-          { label: "Clear tech", onClick: og.clearTechLevels },
+          { label: "Reset all purchases", onClick: og.clearTechLevels, confirm: "Reset all tech purchases?" },
         ]}
         footer={<MetricRow label="Total techs" value={og.totalTechLevels()} withBorder={false} />}
         rows={og.topSix().map((entry) => ({

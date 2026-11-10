@@ -138,12 +138,30 @@ const buildBaseRecommendation = (
   const longTermValue = levelCount <= 0 ? 0 : totalLongTermTerm / levelCount
   const blendedPerCost = longTermValue * blend + shortTermValue * (1 - blend)
 
+  let score = blendedPerCost * valueScale
+  if (input.deltaLikeCeti && upgrade.resource === "delta") {
+    const cetiUpgrade = data.upgrades.find(
+      (candidate) => candidate.group === upgrade.group && candidate.resource === "ceti",
+    )
+    if (cetiUpgrade) {
+      const cetiLevel = Math.min(currentLevel, cetiUpgrade.maxLevel - 1)
+      score = buildBaseRecommendation(
+        { ...input, deltaLikeCeti: false },
+        data,
+        cetiUpgrade,
+        cetiLevel,
+        blend,
+        tokensPerStep,
+      ).score
+    }
+  }
+
   return {
     id: upgrade.id,
     currentLevel,
     nextLevel,
     cost: remainingCost,
-    score: blendedPerCost * valueScale,
+    score,
     bucketIndex,
   }
 }

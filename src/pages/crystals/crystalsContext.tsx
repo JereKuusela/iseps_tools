@@ -39,6 +39,7 @@ type CrystalsContextValue = {
   applyBest: () => void
   applyCount: (count: number) => void
   applyStep: () => void
+  resetAll: () => void
 }
 
 const CrystalsContext = createContext<CrystalsContextValue>()
@@ -115,6 +116,9 @@ export const CrystalsProvider = (props: ParentProps) => {
         applyBest: () => applyCount(1),
         applyCount,
         applyStep: () => writeLevels(levelsAfterCompletingFirst(recommendation().actions)),
+        resetAll: () => {
+          for (const id of levelSignals.keys()) setLevel(id, "0")
+        },
       }}
     >
       {props.children}

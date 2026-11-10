@@ -15,6 +15,7 @@ export type BestNextRow = {
 export type BulkActionOption = {
   label: string
   onClick: () => void
+  confirm?: string
 }
 
 type BestNextSummaryProps = {
@@ -75,9 +76,10 @@ export const BestNextSummary = (props: BestNextSummaryProps) => {
     })
   })
 
-  const handleBulkAction = (action: () => void) => {
-    action()
+  const handleBulkAction = (option: BulkActionOption) => {
     setIsActionsOpen(false)
+    if (option.confirm && !window.confirm(option.confirm)) return
+    option.onClick()
   }
 
   return (
@@ -127,7 +129,7 @@ export const BestNextSummary = (props: BestNextSummaryProps) => {
                           <button
                             type="button"
                             class="block w-full cursor-pointer px-3 py-2 text-left text-xs font-semibold text-ink/85 transition-colors duration-150 hover:bg-ink hover:text-white focus-visible:bg-ink focus-visible:text-white focus-visible:outline-none dark:text-white/85 dark:hover:bg-white dark:hover:text-ink dark:focus-visible:bg-white dark:focus-visible:text-ink"
-                            onClick={() => handleBulkAction(option.onClick)}
+                            onClick={() => handleBulkAction(option)}
                           >
                             {option.label}
                           </button>

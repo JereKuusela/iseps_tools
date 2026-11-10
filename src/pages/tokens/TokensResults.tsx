@@ -26,12 +26,13 @@ export const TokensResults = () => {
         buyDisabled={!best()}
         buyLabel="Buy best next"
         bulkActions={[
-          { label: "Buy all", onClick: tokens.applyBestAll },
+          { label: "Complete step", onClick: tokens.applyBestAll },
           { label: "Buy 5", onClick: () => tokens.applyBestCount(5) },
           { label: "Buy 10", onClick: () => tokens.applyBestCount(10) },
           { label: "Buy 25", onClick: () => tokens.applyBestCount(25) },
           { label: "Buy 50", onClick: () => tokens.applyBestCount(50) },
           { label: "Buy 100", onClick: () => tokens.applyBestCount(100) },
+          { label: "Reset all purchases", onClick: tokens.resetAll, confirm: "Reset all token purchases?" },
         ]}
         footer={
           <div class="p-4">

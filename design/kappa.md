@@ -57,6 +57,7 @@ Card example
 ## DC Boost Comparison
 
 Comparing the potential DC boosts from Kappa
+
 - AP/DC base/counter: mirrored live from the cards above, no separate input
 - Inputs for
   - Data Center Kappa: manual Cost
@@ -64,6 +65,50 @@ Comparing the potential DC boosts from Kappa
 - Efficiency value for each item here between the DC boosts only
 
 ## Other notes
+
 ### Efficiency color coding
 
 - Color-code efficiency on every card and DC comparison. Color could be just green for the best upgrade. Other ways to highlight are also fine.
+
+## Costs
+
+- Amplifiers
+- Genesis Pod
+  - Note: Helion has weird starting cost!
+- Data center
+  - Each upgrade gives x1.15 DC
+  - Each has own initial cost 1.0eXXX.
+  - Levels 1-5 increase cost by e1, levels 6-10 increase cost by e2, levels 11-25 increase cost by e3, levels 26-50 increase cost by e4, levels 51+ increase cost by e5
+  - Alpha: e750
+  - Beta: e893
+  - Ceti: e933
+  - Delta: e633
+  - Epsilon: e945
+  - Fenix: e800
+  - Gamma: e890
+  - Helion: e700
+  - Ixion: e360
+  - Juno: e155
+  - Kappa has different scaling
+    - Competes with DC Amplifier and Sequencing
+    - Initial cost: 100
+    - Levels 1-10 increase cost by x1.4
+    - At level 11, increase is multiplied by x1.05
+    - At level 21, increase is multiplied by x1.1
+    - At level 31, increase is multiplied by x1.1
+    - At level 41, increase is multiplied by x1.1
+    - At level 51, increase is multiplied by x1.15
+    - At level 61, increase is multiplied by x1.2
+    - At level 71, increase is multiplied by x1.3
+    - At level 81, increase is multiplied by x1.4
+    - At level 91, increase is multiplied by x1.5 (total increase per level is x7.37)
+    - At level 101, increase is multiplied by x2
+- Sequencing
+  - Kappa initial cost: 2e07
+  - Kappa multiplier: x1.5 per level
+  - Levels 11, 21, 31 and 41 multiply multiplier by x1.25 (totl at level 41 is x3.66)
+  - Level 51 multiplies multiplier by x2
+  - Cash initial cost: e1200
+  - Cash multiplier: e5 per level
+  - Levels 11, 21, 31 and 41 multiply multiplier by e1 (total at level 41 is e9)
+  - Level 51 behavior is unknown.
