@@ -6,7 +6,7 @@ import zatGuidesJson from "../../data/zat_guides.json"
 import zatNodesJson from "../../data/zat_nodes.json"
 import { LargeNumber } from "../lib/largeNumber"
 import { clamp } from "../lib/mathUtils"
-import { buildGuideNodeAmountMap, parseGuideNodes } from "./zatGuideNodes"
+import { buildGuideNodeAmountMap, parseGuideNodes, type GuideNode } from "./zatGuideNodes"
 import { getPrecomputedTechCost } from "./techCostData"
 
 export type ZatMode = "juno" | "dc"
@@ -42,6 +42,7 @@ type TechData = {
 
 type ZatNodeData = {
   id: string
+  req?: string
   maxLv?: number
   techMul: number
   shareMul?: number
@@ -50,20 +51,23 @@ type ZatNodeData = {
   sqrt?: boolean
 }
 
+type ZatGuideJsonData = {
+  cycle: number
+  run: "se" | "jrun" | "crun" | "grun"
+  nodes: string[]
+}
+
 type ZatGuideData = {
   cycle: number
   run: "se" | "jrun" | "crun" | "grun"
-  nodes: Array<{
-    id: string
-    amount?: number
-  }>
+  nodes: GuideNode[]
 }
 
-const parseZatGuides = (raw: ZatGuideData[]) => {
+const parseZatGuides = (raw: ZatGuideJsonData[]): ZatGuideData[] => {
   return raw.map((entry) => ({
     cycle: entry.cycle,
     run: entry.run,
-    nodes: parseGuideNodes(entry.nodes),
+    nodes: parseGuideNodes(entry.nodes, zatNodesJson as ZatNodeData[]),
   }))
 }
 
@@ -91,7 +95,7 @@ const techs: TechData[] = (techsJson as TechData[]).slice().sort((a, b) => a.id 
 
 const premiumRules: PremiumRule[] = premiumJson as PremiumRule[]
 const zatNodes: ZatNodeData[] = (zatNodesJson as ZatNodeData[]).slice()
-const junoGuides: ZatGuideData[] = parseZatGuides(zatGuidesJson as ZatGuideData[])
+const junoGuides: ZatGuideData[] = parseZatGuides(zatGuidesJson as ZatGuideJsonData[])
   .filter((entry) => entry.run === "jrun")
   .slice()
   .sort((a, b) => a.cycle - b.cycle)

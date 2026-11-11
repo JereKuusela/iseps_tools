@@ -76,10 +76,7 @@ type ZatGuideJson = {
   cycle: number
   run: string
   title?: string
-  nodes: Array<{
-    id: string
-    amount?: number
-  }>
+  nodes: string[]
   note?: string
 }
 
@@ -170,7 +167,7 @@ const junoExponent = (
   .sort((a, b) => a.level - b.level)
 
 const zatGuides = (zatGuidesJson as ZatGuideJson[]).map((entry) => {
-  const nodes = buildGuideNodeAmountMap(parseGuideNodes(entry.nodes))
+  const nodes = buildGuideNodeAmountMap(parseGuideNodes(entry.nodes, zatNodesJson as ZatNodeRule[]))
   return {
     cycle: entry.cycle,
     run: entry.run,

@@ -1,16 +1,12 @@
 import type { LargeNumber } from "../../lib/largeNumber"
+import type { GuideNode } from "../../shared/zatGuideNodes"
 
 export type GuideRunType = "se" | "grun" | "jrun" | "crun"
-
-export type GuideNodeAmount = {
-  id: string
-  amount?: number
-}
 
 export type GuideEntry = {
   cycle: number
   run: string
-  nodes: GuideNodeAmount[]
+  nodes: GuideNode[]
   nodeAmounts: Map<string, number>
   note?: string
 }

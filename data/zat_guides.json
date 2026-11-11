@@ -3,34 +3,21 @@
     "cycle": 1,
     "run": "se",
     "nodes": [
-      {
-        "id": "centre"
-      }
+      "centre"
     ]
   },
   {
     "cycle": 2,
     "run": "se",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha"
-      }
+      "alpha"
     ]
   },
   {
     "cycle": 3,
     "run": "se",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 2
-      }
+      "2 alpha"
     ],
     "note": "1 Alpha + 1 DC  only gives an additional ~x1.5 more DC at the cost of ~x1e7 Cash, so 2 Alpha nodes is better here."
   },
@@ -38,13 +25,7 @@
     "cycle": 4,
     "run": "se",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      }
+      "3 alpha"
     ],
     "note": "2 Alpha + 1 DC node is often better as it gives ~x3 more DC, but ~x1e9 less Cash than 3 Alpha. Only when the extra Cash is needed to get an important research, should 3 Alpha be used."
   },
@@ -52,16 +33,8 @@
     "cycle": 5,
     "run": "se",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "dc"
-      }
+      "3 alpha",
+      "dc"
     ],
     "note": "2 Alpha + 2 DC gives ~x2.2 more DC, but ~x1e11 less cash.  The 3 Alpha + 1 DC option is generally better here."
   },
@@ -69,132 +42,52 @@
     "cycle": 6,
     "run": "se",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "dc",
-        "amount": 2
-      }
+      "3 alpha",
+      "2 dc"
     ]
   },
   {
     "cycle": 7,
     "run": "se",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      }
+      "3 alpha",
+      "3 dc"
     ]
   },
   {
     "cycle": 8,
     "run": "se",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "delta"
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      }
+      "3 alpha",
+      "delta",
+      "3 dc"
     ]
   },
   {
     "cycle": 9,
     "run": "se",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "delta"
-      },
-      {
-        "id": "ixion"
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      }
+      "3 alpha",
+      "ixion",
+      "3 dc"
     ]
   },
   {
     "cycle": 10,
     "run": "se",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "delta"
-      },
-      {
-        "id": "ixion"
-      },
-      {
-        "id": "ap"
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      }
+      "3 alpha",
+      "ap",
+      "3 dc"
     ]
   },
   {
     "cycle": 11,
     "run": "se",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma"
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "dc",
-        "amount": 2
-      }
+      "3 alpha",
+      "solutions",
+      "2 dc"
     ],
     "note": "Solutions node is better than 2 AP here because it ends up with slightly more DC which helps in Quantum menu alot."
   },
@@ -202,61 +95,19 @@
     "cycle": 12,
     "run": "se",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma"
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      }
+      "3 alpha",
+      "solutions",
+      "3 dc"
     ]
   },
   {
     "cycle": 13,
     "run": "se",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma"
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "delta"
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      }
+      "3 alpha",
+      "solutions",
+      "delta",
+      "3 dc"
     ]
   },
   {
@@ -264,30 +115,10 @@
     "run": "se",
     "title": "Main",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma",
-        "amount": 3
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      }
+      "3 alpha",
+      "3 gamma",
+      "solutions",
+      "3 dc"
     ],
     "note": "Gamma nodes are the best option because of G-Corp overclock modules."
   },
@@ -296,35 +127,10 @@
     "run": "se",
     "title": "Alternative",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma"
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      },
-      {
-        "id": "beta"
-      },
-      {
-        "id": "fenix"
-      }
+      "3 alpha",
+      "solutions",
+      "3 dc",
+      "fenix"
     ],
     "note": "Alternative older build. Fenix is better than Ixion node because of the larger multiplier."
   },
@@ -332,115 +138,30 @@
     "cycle": 15,
     "run": "se",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma"
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "delta"
-      },
-      {
-        "id": "ixion"
-      },
-      {
-        "id": "ap"
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      }
+      "3 alpha",
+      "solutions",
+      "ap",
+      "3 dc"
     ]
   },
   {
     "cycle": 16,
     "run": "se",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "helion"
-      },
-      {
-        "id": "juno"
-      },
-      {
-        "id": "artifacts"
-      },
-      {
-        "id": "gamma"
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      }
+      "3 alpha",
+      "artifacts",
+      "solutions",
+      "3 dc"
     ]
   },
   {
     "cycle": 17,
     "run": "se",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma"
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "delta"
-      },
-      {
-        "id": "ixion"
-      },
-      {
-        "id": "ap",
-        "amount": 3
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      }
+      "3 alpha",
+      "solutions",
+      "3 ap",
+      "3 dc"
     ]
   },
   {
@@ -449,40 +170,11 @@
     "title": "Gamma",
     "note": "Should be slightly better if you can afford the last G-Corp overclock module.",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma",
-        "amount": 2
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "delta"
-      },
-      {
-        "id": "ixion"
-      },
-      {
-        "id": "ap",
-        "amount": 3
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      }
+      "3 alpha",
+      "2 gamma",
+      "solutions",
+      "3 ap",
+      "3 dc"
     ]
   },
   {
@@ -491,315 +183,102 @@
     "title": "Ixion",
     "note": "Probably slightly worse. unless you can't afford the last G-Corp overclock module yet.",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma"
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "delta"
-      },
-      {
-        "id": "ixion",
-        "amount": 2
-      },
-      {
-        "id": "ap",
-        "amount": 3
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      }
+      "3 alpha",
+      "solutions",
+      "2 ixion",
+      "3 ap",
+      "3 dc"
     ]
   },
   {
     "cycle": 19,
     "run": "se",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "helion"
-      },
-      {
-        "id": "juno"
-      },
-      {
-        "id": "artifacts"
-      },
-      {
-        "id": "gamma"
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "delta"
-      },
-      {
-        "id": "ixion"
-      },
-      {
-        "id": "ap"
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      }
+      "3 alpha",
+      "artifacts",
+      "solutions",
+      "ap",
+      "3 dc"
     ]
   },
   {
     "cycle": 20,
     "run": "se",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "helion"
-      },
-      {
-        "id": "juno"
-      },
-      {
-        "id": "artifacts"
-      },
-      {
-        "id": "gamma"
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "delta"
-      },
-      {
-        "id": "ixion"
-      },
-      {
-        "id": "ap",
-        "amount": 2
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      }
+      "3 alpha",
+      "artifacts",
+      "solutions",
+      "2 ap",
+      "3 dc"
     ]
   },
   {
     "cycle": 21,
     "run": "se",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "helion"
-      },
-      {
-        "id": "juno"
-      },
-      {
-        "id": "artifacts"
-      },
-      {
-        "id": "gamma"
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "delta"
-      },
-      {
-        "id": "ixion"
-      },
-      {
-        "id": "ap",
-        "amount": 3
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      }
+      "3 alpha",
+      "artifacts",
+      "solutions",
+      "3 ap",
+      "3 dc"
     ]
   },
   {
     "cycle": 45,
     "run": "se",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "helion",
-        "amount": 3
-      },
-      {
-        "id": "juno",
-        "amount": 3
-      },
-      {
-        "id": "artifacts"
-      },
-      {
-        "id": "gamma",
-        "amount": 3
-      },
-      {
-        "id": "ceti",
-        "amount": 3
-      },
-      {
-        "id": "epsilon",
-        "amount": 3
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "delta",
-        "amount": 3
-      },
-      {
-        "id": "ixion",
-        "amount": 3
-      },
-      {
-        "id": "ap",
-        "amount": 3
-      },
-      {
-        "id": "emblems"
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      },
-      {
-        "id": "beta",
-        "amount": 3
-      },
-      {
-        "id": "fenix",
-        "amount": 3
-      },
-      {
-        "id": "g_points"
-      }
+      "3 alpha",
+      "3 helion",
+      "3 juno",
+      "artifacts",
+      "3 gamma",
+      "3 ceti",
+      "3 epsilon",
+      "solutions",
+      "3 delta",
+      "3 ixion",
+      "3 ap",
+      "emblems",
+      "3 dc",
+      "3 beta",
+      "3 fenix",
+      "g_points"
     ]
   },
   {
     "cycle": 1,
     "run": "grun",
     "nodes": [
-      {
-        "id": "centre"
-      }
+      "centre"
     ]
   },
   {
     "cycle": 2,
     "run": "grun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "gamma"
-      }
+      "gamma"
     ]
   },
   {
     "cycle": 3,
     "run": "grun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "gamma",
-        "amount": 2
-      }
+      "2 gamma"
     ]
   },
   {
     "cycle": 4,
     "run": "grun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "gamma",
-        "amount": 3
-      }
+      "3 gamma"
     ]
   },
   {
     "cycle": 5,
     "run": "grun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha"
-      },
-      {
-        "id": "gamma",
-        "amount": 3
-      }
+      "alpha",
+      "3 gamma"
     ],
     "note": "For the 5th node, Alpha comes out better than Delta for a GP run due mostly extra DC upgrades from the Alpha"
   },
@@ -807,142 +286,50 @@
     "cycle": 6,
     "run": "grun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "gamma"
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      }
+      "solutions"
     ]
   },
   {
     "cycle": 7,
     "run": "grun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "gamma",
-        "amount": 2
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      }
+      "2 gamma",
+      "solutions"
     ]
   },
   {
     "cycle": 8,
     "run": "grun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "gamma",
-        "amount": 3
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      }
+      "3 gamma",
+      "solutions"
     ]
   },
   {
     "cycle": 9,
     "run": "grun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha"
-      },
-      {
-        "id": "gamma",
-        "amount": 3
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      }
+      "alpha",
+      "3 gamma",
+      "solutions"
     ]
   },
   {
     "cycle": 10,
     "run": "grun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 2
-      },
-      {
-        "id": "gamma",
-        "amount": 3
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      }
+      "2 alpha",
+      "3 gamma",
+      "solutions"
     ]
   },
   {
     "cycle": 11,
     "run": "grun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma",
-        "amount": 3
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      }
+      "3 alpha",
+      "3 gamma",
+      "solutions"
     ],
     "note": "GP end node is not worthwhile here as the losses from dropping Gamma and Alpha nodes are too much"
   },
@@ -950,29 +337,10 @@
     "cycle": 12,
     "run": "grun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma",
-        "amount": 3
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "dc"
-      }
+      "3 alpha",
+      "3 gamma",
+      "solutions",
+      "dc"
     ],
     "note": "GP end node is not worthwhile here as the losses from dropping Gamma and Alpha nodes are too much"
   },
@@ -980,30 +348,10 @@
     "cycle": 13,
     "run": "grun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma",
-        "amount": 3
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "dc",
-        "amount": 2
-      }
+      "3 alpha",
+      "3 gamma",
+      "solutions",
+      "2 dc"
     ],
     "note": "GP end node appears still not worthwhile over dropping from DC and Alpha nodes"
   },
@@ -1011,30 +359,10 @@
     "cycle": 14,
     "run": "grun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma",
-        "amount": 3
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      }
+      "3 alpha",
+      "3 gamma",
+      "solutions",
+      "3 dc"
     ],
     "note": "GP end node appears still not worthwhile over dropping from DC and Alpha nodes"
   },
@@ -1042,33 +370,11 @@
     "cycle": 15,
     "run": "grun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma",
-        "amount": 3
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      },
-      {
-        "id": "beta"
-      }
+      "3 alpha",
+      "3 gamma",
+      "solutions",
+      "3 dc",
+      "beta"
     ],
     "note": "GP end node appears still not worthwhile over dropping from DC and Alpha nodes"
   },
@@ -1076,36 +382,11 @@
     "cycle": 16,
     "run": "grun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma",
-        "amount": 3
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      },
-      {
-        "id": "beta"
-      },
-      {
-        "id": "fenix"
-      }
+      "3 alpha",
+      "3 gamma",
+      "solutions",
+      "3 dc",
+      "fenix"
     ],
     "note": "In testing, this beat 1xDC + GP by xe4 GP at SE152. Results may vary at earlier SEs"
   },
@@ -1113,215 +394,64 @@
     "cycle": 17,
     "run": "grun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma",
-        "amount": 3
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "dc",
-        "amount": 2
-      },
-      {
-        "id": "beta"
-      },
-      {
-        "id": "fenix"
-      },
-      {
-        "id": "g_points"
-      }
+      "3 alpha",
+      "3 gamma",
+      "solutions",
+      "2 dc",
+      "g_points"
     ]
   },
   {
     "cycle": 18,
     "run": "grun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma",
-        "amount": 3
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      },
-      {
-        "id": "beta"
-      },
-      {
-        "id": "fenix"
-      },
-      {
-        "id": "g_points"
-      }
+      "3 alpha",
+      "3 gamma",
+      "solutions",
+      "3 dc",
+      "g_points"
     ]
   },
   {
     "cycle": 19,
     "run": "grun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma",
-        "amount": 3
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      },
-      {
-        "id": "beta"
-      },
-      {
-        "id": "fenix",
-        "amount": 2
-      },
-      {
-        "id": "g_points"
-      }
+      "3 alpha",
+      "3 gamma",
+      "solutions",
+      "3 dc",
+      "2 fenix",
+      "g_points"
     ]
   },
   {
     "cycle": 20,
     "run": "grun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma",
-        "amount": 3
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      },
-      {
-        "id": "beta"
-      },
-      {
-        "id": "fenix",
-        "amount": 3
-      },
-      {
-        "id": "g_points"
-      }
+      "3 alpha",
+      "3 gamma",
+      "solutions",
+      "3 dc",
+      "3 fenix",
+      "g_points"
     ]
   },
   {
     "cycle": 21,
     "run": "grun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma",
-        "amount": 3
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "dc"
-      },
-      {
-        "id": "beta"
-      },
-      {
-        "id": "fenix"
-      },
-      {
-        "id": "g_points"
-      },
-      {
-        "id": "delta"
-      },
-      {
-        "id": "ixion"
-      },
-      {
-        "id": "ap",
-        "amount": 3
-      }
+      "3 alpha",
+      "3 gamma",
+      "solutions",
+      "g_points",
+      "3 ap"
     ]
   },
   {
     "cycle": 1,
     "run": "jrun",
     "nodes": [
-      {
-        "id": "centre"
-      }
+      "centre"
     ],
     "note": "Juno run not feasible until 4 cycles"
   },
@@ -1329,12 +459,7 @@
     "cycle": 2,
     "run": "jrun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha"
-      }
+      "alpha"
     ],
     "note": "Juno run not feasible until 4 cycles"
   },
@@ -1342,13 +467,7 @@
     "cycle": 3,
     "run": "jrun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 2
-      }
+      "2 alpha"
     ],
     "note": "Juno run not feasible until 4 cycles"
   },
@@ -1356,18 +475,7 @@
     "cycle": 4,
     "run": "jrun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha"
-      },
-      {
-        "id": "helion"
-      },
-      {
-        "id": "juno"
-      }
+      "juno"
     ],
     "note": "If you complete the 5th cycle in your run, put it in Juno and continue for a bit."
   },
@@ -1375,19 +483,7 @@
     "cycle": 5,
     "run": "jrun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha"
-      },
-      {
-        "id": "helion"
-      },
-      {
-        "id": "juno",
-        "amount": 2
-      }
+      "2 juno"
     ],
     "note": "If you complete the 6th cycle in your run, put it in Juno and continue for a bit."
   },
@@ -1395,19 +491,7 @@
     "cycle": 6,
     "run": "jrun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha"
-      },
-      {
-        "id": "helion"
-      },
-      {
-        "id": "juno",
-        "amount": 3
-      }
+      "3 juno"
     ],
     "note": "If you complete the 7th cycle in your run, put it in Alpha and continue for a bit."
   },
@@ -1415,22 +499,8 @@
     "cycle": 7,
     "run": "jrun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha"
-      },
-      {
-        "id": "helion"
-      },
-      {
-        "id": "juno",
-        "amount": 2
-      },
-      {
-        "id": "artifacts"
-      }
+      "2 juno",
+      "artifacts"
     ],
     "note": "Artifacts node + 2 Juno is generally better, but around SE 119-122, 2 Alpha + 3 Juno may be better if it gets Research 122 when Artifacts node wouldn't. If you complete the 8th cycle in your run, put it in Juno and continue for a bit."
   },
@@ -1438,22 +508,8 @@
     "cycle": 8,
     "run": "jrun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha"
-      },
-      {
-        "id": "helion"
-      },
-      {
-        "id": "juno",
-        "amount": 3
-      },
-      {
-        "id": "artifacts"
-      }
+      "3 juno",
+      "artifacts"
     ],
     "note": "If you complete the 9th cycle in your run, put it in Alpha and continue for a bit."
   },
@@ -1461,23 +517,9 @@
     "cycle": 9,
     "run": "jrun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 2
-      },
-      {
-        "id": "helion"
-      },
-      {
-        "id": "juno",
-        "amount": 3
-      },
-      {
-        "id": "artifacts"
-      }
+      "2 alpha",
+      "3 juno",
+      "artifacts"
     ],
     "note": "If you complete the 10th cycle in your run, put it in Alpha and continue for a bit."
   },
@@ -1485,23 +527,9 @@
     "cycle": 10,
     "run": "jrun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "helion"
-      },
-      {
-        "id": "juno",
-        "amount": 3
-      },
-      {
-        "id": "artifacts"
-      }
+      "3 alpha",
+      "3 juno",
+      "artifacts"
     ],
     "note": "With ZAT 10, when you can get to e800 DC (or are very close), it can be better to use 2 Alpha and 1 DC for ~x12 DC boost and e18 cash loss.  This works as long as you can still reach Research 126 at e970 Cash with the cash loss."
   },
@@ -1509,26 +537,10 @@
     "cycle": 11,
     "run": "jrun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "helion"
-      },
-      {
-        "id": "juno",
-        "amount": 3
-      },
-      {
-        "id": "artifacts"
-      },
-      {
-        "id": "dc"
-      }
+      "3 alpha",
+      "3 juno",
+      "artifacts",
+      "dc"
     ],
     "note": "If you complete the 12th cycle in your run, put it in DC and continue for a bit."
   },
@@ -1536,27 +548,10 @@
     "cycle": 12,
     "run": "jrun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "helion"
-      },
-      {
-        "id": "juno",
-        "amount": 3
-      },
-      {
-        "id": "artifacts"
-      },
-      {
-        "id": "dc",
-        "amount": 2
-      }
+      "3 alpha",
+      "3 juno",
+      "artifacts",
+      "2 dc"
     ],
     "note": "If you complete the 13th cycle in your run, put it in DC and continue for a bit."
   },
@@ -1564,27 +559,10 @@
     "cycle": 13,
     "run": "jrun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "helion"
-      },
-      {
-        "id": "juno",
-        "amount": 3
-      },
-      {
-        "id": "artifacts"
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      }
+      "3 alpha",
+      "3 juno",
+      "artifacts",
+      "3 dc"
     ],
     "note": "If you complete the 14th cycle in your run, put it in Beta and continue for a bit."
   },
@@ -1592,30 +570,11 @@
     "cycle": 14,
     "run": "jrun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "helion"
-      },
-      {
-        "id": "juno",
-        "amount": 3
-      },
-      {
-        "id": "artifacts"
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      },
-      {
-        "id": "beta"
-      }
+      "3 alpha",
+      "3 juno",
+      "artifacts",
+      "3 dc",
+      "beta"
     ],
     "note": "A bit unsure here.  Dropping DC is not worth it for AP node.  Beta (boosting Scientist rounds for talent IC6-1) seems mathematically better than Gamma (boosting C41 levels) for Juno boost."
   },
@@ -1623,33 +582,10 @@
     "cycle": 15,
     "run": "jrun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "helion"
-      },
-      {
-        "id": "juno",
-        "amount": 3
-      },
-      {
-        "id": "artifacts"
-      },
-      {
-        "id": "delta"
-      },
-      {
-        "id": "ixion"
-      },
-      {
-        "id": "ap",
-        "amount": 3
-      }
+      "3 alpha",
+      "3 juno",
+      "artifacts",
+      "3 ap"
     ],
     "note": "At this point, trade-off with DC vs. AP nodes is 1-to-1 and each AP node level is better than DC, so we swap to 3 AP here. If you complete the 16th cycle in your run, put it in DC and continue for a bit."
   },
@@ -1657,36 +593,11 @@
     "cycle": 16,
     "run": "jrun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "helion"
-      },
-      {
-        "id": "juno",
-        "amount": 3
-      },
-      {
-        "id": "artifacts"
-      },
-      {
-        "id": "delta"
-      },
-      {
-        "id": "ixion"
-      },
-      {
-        "id": "ap",
-        "amount": 3
-      },
-      {
-        "id": "dc"
-      }
+      "3 alpha",
+      "3 juno",
+      "artifacts",
+      "3 ap",
+      "dc"
     ],
     "note": "If you complete the 17th cycle in your run, put it in DC and continue for a bit."
   },
@@ -1694,37 +605,11 @@
     "cycle": 17,
     "run": "jrun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "helion"
-      },
-      {
-        "id": "juno",
-        "amount": 3
-      },
-      {
-        "id": "artifacts"
-      },
-      {
-        "id": "delta"
-      },
-      {
-        "id": "ixion"
-      },
-      {
-        "id": "ap",
-        "amount": 3
-      },
-      {
-        "id": "dc",
-        "amount": 2
-      }
+      "3 alpha",
+      "3 juno",
+      "artifacts",
+      "3 ap",
+      "2 dc"
     ],
     "note": "If you complete the 18th cycle in your run, put it in DC and continue for a bit."
   },
@@ -1732,37 +617,11 @@
     "cycle": 18,
     "run": "jrun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "helion"
-      },
-      {
-        "id": "juno",
-        "amount": 3
-      },
-      {
-        "id": "artifacts"
-      },
-      {
-        "id": "delta"
-      },
-      {
-        "id": "ixion"
-      },
-      {
-        "id": "ap",
-        "amount": 3
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      }
+      "3 alpha",
+      "3 juno",
+      "artifacts",
+      "3 ap",
+      "3 dc"
     ],
     "note": "If you complete the 19th cycle in your run, put it in Beta and continue for a bit."
   },
@@ -1771,43 +630,12 @@
     "run": "jrun",
     "title": "Start",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "helion"
-      },
-      {
-        "id": "juno",
-        "amount": 3
-      },
-      {
-        "id": "artifacts"
-      },
-      {
-        "id": "gamma"
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "delta"
-      },
-      {
-        "id": "ixion"
-      },
-      {
-        "id": "ap",
-        "amount": 3
-      },
-      {
-        "id": "dc",
-        "amount": 2
-      }
+      "3 alpha",
+      "3 juno",
+      "artifacts",
+      "ceti",
+      "3 ap",
+      "2 dc"
     ],
     "note": "Ceti is used to unlock Kaiper upgrades.\nUse this build until about e1220 DC."
   },
@@ -1816,45 +644,11 @@
     "run": "jrun",
     "title": "Late",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 2
-      },
-      {
-        "id": "helion"
-      },
-      {
-        "id": "juno",
-        "amount": 3
-      },
-      {
-        "id": "artifacts"
-      },
-      {
-        "id": "gamma"
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "delta"
-      },
-      {
-        "id": "ixion"
-      },
-      {
-        "id": "ap",
-        "amount": 3
-      }
+      "2 alpha",
+      "3 juno",
+      "artifacts",
+      "solutions",
+      "3 ap"
     ],
     "note": "With enough DC, Solutions node ends up being better.\nIf you can't reach e1195 DC, use the previous build."
   },
@@ -1862,45 +656,11 @@
     "cycle": 20,
     "run": "jrun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "helion"
-      },
-      {
-        "id": "juno",
-        "amount": 3
-      },
-      {
-        "id": "artifacts"
-      },
-      {
-        "id": "gamma"
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "delta"
-      },
-      {
-        "id": "ixion"
-      },
-      {
-        "id": "ap",
-        "amount": 3
-      }
+      "3 alpha",
+      "3 juno",
+      "artifacts",
+      "solutions",
+      "3 ap"
     ],
     "note": "If you complete the 21st cycle in your run, put it in DC and continue for a bit."
   },
@@ -1908,48 +668,12 @@
     "cycle": 21,
     "run": "jrun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "helion"
-      },
-      {
-        "id": "juno",
-        "amount": 3
-      },
-      {
-        "id": "artifacts"
-      },
-      {
-        "id": "gamma"
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "delta"
-      },
-      {
-        "id": "ixion"
-      },
-      {
-        "id": "ap",
-        "amount": 3
-      },
-      {
-        "id": "dc"
-      }
+      "3 alpha",
+      "3 juno",
+      "artifacts",
+      "solutions",
+      "3 ap",
+      "dc"
     ],
     "note": "End of guide. Good luck."
   },
@@ -1957,9 +681,7 @@
     "cycle": 1,
     "run": "crun",
     "nodes": [
-      {
-        "id": "centre"
-      }
+      "centre"
     ],
     "note": "These runs are minimally useful at this stage in part because companion 34 isn't level 50 yet, so sacrificing GP can hurt your cash some."
   },
@@ -1967,12 +689,7 @@
     "cycle": 2,
     "run": "crun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha"
-      }
+      "alpha"
     ],
     "note": "These runs are minimally useful at this stage in part because companion 34 isn't level 50 yet, so sacrificing GP can hurt your cash some."
   },
@@ -1980,13 +697,7 @@
     "cycle": 3,
     "run": "crun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 2
-      }
+      "2 alpha"
     ],
     "note": "Once companion 34 is level 50, a cash run might be good for a small boost in SE 102-104 push, but generally isn't very important to do."
   },
@@ -1994,13 +705,7 @@
     "cycle": 4,
     "run": "crun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      }
+      "3 alpha"
     ],
     "note": "These runs are not generally recommended and are minimally useful, but could be worthwhile for reaching level 600 reward."
   },
@@ -2008,16 +713,8 @@
     "cycle": 5,
     "run": "crun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "dc"
-      }
+      "3 alpha",
+      "dc"
     ],
     "note": "These runs are not generally recommended and are minimally useful, but are good for reaching level 630 reward before ZAT 6 push."
   },
@@ -2025,17 +722,8 @@
     "cycle": 6,
     "run": "crun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "dc",
-        "amount": 2
-      }
+      "3 alpha",
+      "2 dc"
     ],
     "note": "These runs are not generally recommended and are minimally useful."
   },
@@ -2043,17 +731,8 @@
     "cycle": 7,
     "run": "crun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      }
+      "3 alpha",
+      "3 dc"
     ],
     "note": "These runs are not generally recommended and are minimally useful."
   },
@@ -2061,20 +740,9 @@
     "cycle": 8,
     "run": "crun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      },
-      {
-        "id": "beta"
-      }
+      "3 alpha",
+      "3 dc",
+      "beta"
     ],
     "note": "Sticking with DC over 2 AP was found to be better.  Beta is best use of last point."
   },
@@ -2082,335 +750,108 @@
     "cycle": 9,
     "run": "crun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma"
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      }
+      "3 alpha",
+      "solutions"
     ]
   },
   {
     "cycle": 10,
     "run": "crun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma"
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "dc"
-      }
+      "3 alpha",
+      "solutions",
+      "dc"
     ]
   },
   {
     "cycle": 11,
     "run": "crun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma"
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "dc",
-        "amount": 2
-      }
+      "3 alpha",
+      "solutions",
+      "2 dc"
     ]
   },
   {
     "cycle": 12,
     "run": "crun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma"
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      }
+      "3 alpha",
+      "solutions",
+      "3 dc"
     ]
   },
   {
     "cycle": 13,
     "run": "crun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma"
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      },
-      {
-        "id": "beta"
-      }
+      "3 alpha",
+      "solutions",
+      "3 dc",
+      "beta"
     ]
   },
   {
     "cycle": 14,
     "run": "crun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma"
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      },
-      {
-        "id": "beta"
-      },
-      {
-        "id": "fenix"
-      }
+      "3 alpha",
+      "solutions",
+      "3 dc",
+      "fenix"
     ]
   },
   {
     "cycle": 15,
     "run": "crun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma"
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "delta"
-      },
-      {
-        "id": "ixion"
-      },
-      {
-        "id": "ap",
-        "amount": 3
-      },
-      {
-        "id": "dc"
-      }
+      "3 alpha",
+      "solutions",
+      "3 ap",
+      "dc"
     ]
   },
   {
     "cycle": 16,
     "run": "crun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma"
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "delta"
-      },
-      {
-        "id": "ixion"
-      },
-      {
-        "id": "ap",
-        "amount": 3
-      },
-      {
-        "id": "dc",
-        "amount": 2
-      }
+      "3 alpha",
+      "solutions",
+      "3 ap",
+      "2 dc"
     ]
   },
   {
     "cycle": 17,
     "run": "crun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma"
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "delta"
-      },
-      {
-        "id": "ixion"
-      },
-      {
-        "id": "ap",
-        "amount": 3
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      }
+      "3 alpha",
+      "solutions",
+      "3 ap",
+      "3 dc"
     ]
   },
   {
     "cycle": 18,
     "run": "crun",
     "nodes": [
-      {
-        "id": "centre"
-      },
-      {
-        "id": "alpha",
-        "amount": 3
-      },
-      {
-        "id": "gamma"
-      },
-      {
-        "id": "ceti"
-      },
-      {
-        "id": "epsilon"
-      },
-      {
-        "id": "solutions"
-      },
-      {
-        "id": "delta"
-      },
-      {
-        "id": "ixion",
-        "amount": 2
-      },
-      {
-        "id": "ap",
-        "amount": 3
-      },
-      {
-        "id": "dc",
-        "amount": 3
-      }
+      "3 alpha",
+      "solutions",
+      "2 ixion",
+      "3 ap",
+      "3 dc"
     ],
     "note": "SE Push meta (adding 2nd Ixion) is better for Cash than other options such as Artifacts, Emblems, or Beta."
+  },
+  {
+    "cycle": 19,
+    "run": "crun",
+    "nodes": [
+      "3 alpha",
+      "solutions",
+      "3 ap",
+      "dc",
+      "artifacts"
+    ]
   }
 ]
