@@ -30,7 +30,9 @@ export const CrystalsLevelInputs = () => {
   const renderCell = (upgrade: CrystalUpgrade | undefined) => {
     if (!upgrade) return <GridEmptyCell />
 
-    const dimmed = () => (crystals.isUnlocked(upgrade.id) ? "" : " opacity-40")
+    const owned = () => Number(crystals.levelText(upgrade.id)) > 0
+    const isDimmed = () => !crystals.isUnlocked(upgrade.id) && !owned()
+    const dimmed = () => (isDimmed() ? " opacity-40" : "")
 
     if (upgrade.maxLevel === 1) {
       return (
@@ -49,7 +51,7 @@ export const CrystalsLevelInputs = () => {
         value={crystals.levelText(upgrade.id)}
         max={upgrade.maxLevel}
         title={upgrade.name}
-        dimmed={!crystals.isUnlocked(upgrade.id)}
+        dimmed={isDimmed()}
         onInput={(next) => crystals.setLevel(upgrade.id, next)}
       />
     )
