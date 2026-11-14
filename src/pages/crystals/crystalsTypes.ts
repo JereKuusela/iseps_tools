@@ -14,7 +14,7 @@ export type CrystalUpgrade = {
   name: string
   group: CrystalGroup
   particle?: UnlockedParticle
-  baseCost: number | null
+  baseCost: number
   costStep: number
   // Explicit cost per level (index 0 = level 1); overrides baseCost/costStep.
   costs?: number[]
@@ -53,8 +53,6 @@ export type CrystalInputState = {
 
 export type CrystalCost = {
   cost: number
-  // True when at least one level in the range has no known price.
-  unknown: boolean
 }
 
 export type CrystalAction = {

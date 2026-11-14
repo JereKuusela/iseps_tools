@@ -76,7 +76,7 @@ export const Tooltip = (props: TooltipProps) => {
         <KTooltip.Content
           onEscapeKeyDown={closePinned}
           onPointerDownOutside={closePinned}
-          class="z-50 max-w-sm rounded-xl border border-ink/15 bg-ink px-3 py-2 text-xs leading-5 text-white shadow-xl dark:border-white/20 dark:bg-[#0d1625]"
+          class="z-[70] max-w-sm rounded-xl border border-ink/15 bg-ink px-3 py-2 text-xs leading-5 text-white shadow-xl dark:border-white/20 dark:bg-[#0d1625]"
         >
           <For each={split()}>{(line) => <p>{line}</p>}</For>
           <KTooltip.Arrow class="fill-ink dark:fill-[#0d1625]" />

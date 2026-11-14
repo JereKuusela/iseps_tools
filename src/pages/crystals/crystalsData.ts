@@ -50,6 +50,17 @@ export const parseCrystalUpgrades = (raw: unknown): CrystalUpgrade[] => {
 
     const requires = isRecord(entry.requires) ? entry.requires : {}
     const prerequisites = Array.isArray(requires.upgrades) ? requires.upgrades : []
+    const maxLevel = Math.max(1, toOptionalNumber(entry.maxLevel) ?? 1)
+    const costs =
+      Array.isArray(entry.costs) &&
+      entry.costs.length >= maxLevel &&
+      entry.costs.every((cost) => typeof cost === "number" && Number.isFinite(cost) && cost >= 0)
+        ? (entry.costs as number[])
+        : undefined
+    const baseCost = toOptionalNumber(entry.baseCost) ?? costs?.[0]
+    if (baseCost === undefined || baseCost < 0 || (entry.costs !== undefined && !costs)) {
+      throw new Error(`Missing or invalid crystal prices for ${entry.id}`)
+    }
 
     return [
       {
@@ -57,13 +68,10 @@ export const parseCrystalUpgrades = (raw: unknown): CrystalUpgrade[] => {
         name: entry.name,
         group: entry.group as CrystalGroup,
         particle: toParticle(entry.particle),
-        baseCost: toOptionalNumber(entry.baseCost) ?? null,
+        baseCost,
         costStep: toOptionalNumber(entry.costStep) ?? 0,
-        costs:
-          Array.isArray(entry.costs) && entry.costs.every((cost) => typeof cost === "number")
-            ? (entry.costs as number[])
-            : undefined,
-        maxLevel: Math.max(1, toOptionalNumber(entry.maxLevel) ?? 1),
+        costs,
+        maxLevel,
         fullRequires: [],
         requires: {
           particle: toParticle(requires.particle),

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 import {
   calculateCrystalRecommendations,
+  calculateCrystalSpendingReport,
   calculateCrystalsSpent,
   calculateUpgradeCost,
   isUpgradeUnlocked,
@@ -69,7 +70,7 @@ describe("parseCrystalGuide", () => {
     expect(before.savingFor.names).toEqual([])
     expect(before.doneNotes).toEqual([])
     const saving = calculateCrystalRecommendations(state({ se: 6, playerLevel: 90, levels: { a: 1 } }), data, 1)
-    expect(saving.savingFor).toEqual({ names: ["locked"], cost: { cost: 10, unknown: false } })
+    expect(saving.savingFor).toEqual({ names: ["locked"], cost: { cost: 10 } })
     expect(saving.doneNotes).toEqual([])
     expect(
       calculateCrystalRecommendations(state({ se: 6, playerLevel: 100, levels: { a: 1 } }), data, 1).actions[0].id,
@@ -121,18 +122,60 @@ describe("parseCrystalGuide", () => {
 })
 
 describe("calculateUpgradeCost", () => {
-  it("handles flat, stepped and unknown costs", () => {
-    expect(calculateUpgradeCost(upgrade("a"), 0, 5)).toEqual({ cost: 50, unknown: false })
-    // levels 2,3: (10+2*1) + (10+3*1)
-    expect(calculateUpgradeCost(upgrade("a", { costStep: 1 }), 2, 4)).toEqual({ cost: 25, unknown: false })
-    expect(calculateUpgradeCost(upgrade("a", { baseCost: null }), 0, 3)).toEqual({ cost: 0, unknown: true })
-    expect(calculateUpgradeCost(upgrade("a"), 4, 4)).toEqual({ cost: 0, unknown: false })
+  it("reports every upgrade once and reconciles section spending with the total", () => {
+    const data: CrystalData = {
+      upgrades: [
+        upgrade("a"),
+        upgrade("b", { group: "cost", costStep: 5 }),
+        upgrade("c", { group: "oneTimer", maxLevel: 1, baseCost: 100 }),
+        upgrade("d", { group: "special", maxLevel: 2, costs: [20, 50] }),
+      ],
+      steps: [],
+    }
+    const levels = { a: 2, b: 3, c: 1, d: 2 }
+    const report = calculateCrystalSpendingReport(levels, data)
+    expect(report.sections.map((section) => section.spent)).toEqual([20, 45, 70, 100])
+    expect(report.total).toBe(235)
+    expect(report.total).toBe(calculateCrystalsSpent(levels, data).cost)
+    expect(
+      report.sections
+        .flatMap((section) => section.rows)
+        .map((row) => row.id)
+        .sort(),
+    ).toEqual(["a", "b", "c", "d"])
+    expect(calculateCrystalSpendingReport({}, data).total).toBe(0)
+    expect(calculateCrystalSpendingReport({ a: 200 }, data).sections[0].rows[0].level).toBe(100)
   })
 
-  it("sums crystals spent and flags unknown prices", () => {
-    const data: CrystalData = { upgrades: [upgrade("a"), upgrade("b", { baseCost: null })], steps: [] }
-    expect(calculateCrystalsSpent({ a: 3, b: 0 }, data)).toEqual({ cost: 30, unknown: false })
-    expect(calculateCrystalsSpent({ a: 3, b: 1 }, data)).toEqual({ cost: 30, unknown: true })
+  it("handles flat, stepped and explicit costs", () => {
+    expect(calculateUpgradeCost(upgrade("a"), 0, 5)).toEqual({ cost: 50 })
+    // levels 2,3: (10+2*1) + (10+3*1)
+    expect(calculateUpgradeCost(upgrade("a", { costStep: 1 }), 2, 4)).toEqual({ cost: 25 })
+    expect(calculateUpgradeCost(upgrade("a", { maxLevel: 3, costs: [10, 25, 50] }), 1, 3)).toEqual({ cost: 75 })
+    expect(calculateUpgradeCost(upgrade("a"), 4, 4)).toEqual({ cost: 0 })
+  })
+
+  it("sums crystals spent", () => {
+    const data: CrystalData = { upgrades: [upgrade("a"), upgrade("b", { baseCost: 25 })], steps: [] }
+    expect(calculateCrystalsSpent({ a: 3, b: 0 }, data)).toEqual({ cost: 30 })
+    expect(calculateCrystalsSpent({ a: 3, b: 1 }, data)).toEqual({ cost: 55 })
+  })
+
+  it("rejects missing prices and incomplete per-level prices", () => {
+    const entry = { id: "a", name: "a", group: "output", maxLevel: 2 }
+    expect(() => parseCrystalUpgrades([entry])).toThrow("Missing or invalid crystal prices for a")
+    expect(() => parseCrystalUpgrades([{ ...entry, baseCost: null }])).toThrow()
+    expect(() => parseCrystalUpgrades([{ ...entry, baseCost: 10, costs: [10] }])).toThrow()
+    expect(parseCrystalUpgrades([{ ...entry, costs: [10, 25] }])[0].baseCost).toBe(10)
+  })
+
+  it("has complete prices for every bundled upgrade", () => {
+    expect(CRYSTAL_DATA.upgrades.length).toBeGreaterThan(0)
+    for (const item of CRYSTAL_DATA.upgrades) {
+      expect(Number.isFinite(item.baseCost)).toBe(true)
+      if (item.costs) expect(item.costs.length).toBeGreaterThanOrEqual(item.maxLevel)
+      expect(Number.isFinite(calculateUpgradeCost(item, 0, item.maxLevel).cost)).toBe(true)
+    }
   })
 })
 
@@ -554,7 +597,7 @@ describe("calculateCrystalRecommendations", () => {
       ["a", 1],
       ["b", 2],
     ])
-    expect(result.savingFor).toEqual({ names: ["locked"], cost: { cost: 10, unknown: false } })
+    expect(result.savingFor).toEqual({ names: ["locked"], cost: { cost: 10 } })
   })
 
   it("does not revive expired entries or let future entries preempt current purchases", () => {
@@ -578,7 +621,7 @@ describe("calculateCrystalRecommendations", () => {
     }
     const result = calculateCrystalRecommendations(state(), future, 1)
     expect(result.actions).toEqual([])
-    expect(result.savingFor).toEqual({ names: ["locked"], cost: { cost: 20, unknown: false } })
+    expect(result.savingFor).toEqual({ names: ["locked"], cost: { cost: 20 } })
   })
 })
 
@@ -589,7 +632,7 @@ describe("applying listed actions", () => {
     currentLevel,
     targetLevel,
     maxLevel: 100,
-    cost: { cost: 0, unknown: false },
+    cost: { cost: 0 },
     stepId,
   })
 
@@ -612,7 +655,7 @@ describe("notes", () => {
     upgrades: parseCrystalUpgrades([
       upgrade("a", { maxLevel: 10 }),
       upgrade("late", { maxLevel: 10, requires: { playerLevel: 50, upgrades: [] } }),
-      upgrade("later", { maxLevel: 5, baseCost: null, requires: { playerLevel: 80, upgrades: [] } }),
+      upgrade("later", { maxLevel: 5, requires: { playerLevel: 80, upgrades: [] } }),
     ]),
     steps: [
       { id: "s1", doneNote: "Convert crystals to tokens.", add: [{ id: "a", level: 10 }] },
@@ -631,12 +674,12 @@ describe("notes", () => {
   it("lists locked upgrades up to the next fully blocked step", () => {
     const { savingFor } = calculateCrystalRecommendations(state({ levels: { a: 10 } }), data, 1)
     expect(savingFor.names).toEqual(["late"])
-    expect(savingFor.cost).toEqual({ cost: 100, unknown: false })
+    expect(savingFor.cost).toEqual({ cost: 100 })
   })
 
-  it("flags unknown costs and includes everything when no step is actionable", () => {
+  it("keeps the saving goal at the first blocked step when no step is actionable", () => {
     const { savingFor } = calculateCrystalRecommendations(state({ levels: { a: 10 } }), data, 1)
-    expect(savingFor.cost.unknown).toBe(false)
+    expect(savingFor.cost).toEqual({ cost: 100 })
     const all = calculateCrystalRecommendations(state({ playerLevel: 10, levels: { a: 10 } }), data, 1)
     expect(all.savingFor.names).toEqual(["late"])
   })
@@ -807,7 +850,7 @@ describe("bundled guide data", () => {
       id: "output.alpha",
       currentLevel: alpha,
       targetLevel: target,
-      cost: { cost: (target - alpha) * 20, unknown: false },
+      cost: { cost: (target - alpha) * 20 },
     })
     expect(result.actions[1].id).toBe("bundle.alpha")
 
@@ -854,18 +897,28 @@ describe("bundled guide data", () => {
     }
   })
 
-  it("balances ERM once player level allows it", () => {
+  it.each([
+    { playerLevel: 130, targetLevel: 10 },
+    { playerLevel: 140, targetLevel: 5 },
+  ])("balances ERM at player level $playerLevel", ({ playerLevel, targetLevel }) => {
     const result = calculateCrystalRecommendations(
       state({
         se: 12,
-        playerLevel: 140,
+        playerLevel,
         unlockedParticle: "kappa",
         levels: { "bundle.tiberius": 1, "special.bulkExtractions": 10 },
       }),
-      { ...CRYSTAL_DATA, steps: CRYSTAL_DATA.steps.filter((step) => step.player === 90) },
+      {
+        ...CRYSTAL_DATA,
+        steps: CRYSTAL_DATA.steps.filter((step) => step.add.some((target) => target.id === "special.bulkExtractions")),
+      },
       1,
     )
-    expect(result.step?.player).toBe(90)
-    expect(result.actions[0].id).not.toBe("special.bulkExtractions")
+    expect(result.step?.player).toBe(playerLevel)
+    expect(result.actions[0]).toMatchObject({
+      id: "special.bulkResearches",
+      currentLevel: 0,
+      targetLevel,
+    })
   })
 })

@@ -32,6 +32,11 @@ export const TokensResults = () => {
           { label: "Buy 25", onClick: () => tokens.applyBestCount(25) },
           { label: "Buy 50", onClick: () => tokens.applyBestCount(50) },
           { label: "Buy 100", onClick: () => tokens.applyBestCount(100) },
+          {
+            label: "Buy everything",
+            onClick: tokens.completeAll,
+            confirm: "Set every token upgrade to its maximum level, including locked upgrades?",
+          },
           { label: "Reset all purchases", onClick: tokens.resetAll, confirm: "Reset all token purchases?" },
         ]}
         footer={

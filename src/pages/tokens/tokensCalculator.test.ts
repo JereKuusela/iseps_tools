@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest"
-import { calculateTokenRecommendations, calculateTotalTokensSpent } from "./tokensCalculator"
+import {
+  calculateTokenRecommendations,
+  calculateTokenSpendingReport,
+  calculateTotalTokensSpent,
+} from "./tokensCalculator"
 import type { TokenInputState, TokenLoadedData } from "./tokensTypes"
 
 const baseInput: TokenInputState = {
@@ -470,6 +474,23 @@ describe("calculateTokenRecommendations", () => {
   it("calculates total spent from current levels", () => {
     const result = calculateTotalTokensSpent(baseInput, testData)
     expect(result).toBe(1000)
+  })
+
+  it("reports section and upgrade spending including disabled purchases", () => {
+    const input = {
+      ...baseInput,
+      levels: { ...baseInput.levels, "bbbot.duration": "12.8", "supplies.alpha": "2" },
+      enabled: { ...baseInput.enabled, "bbbot.duration": false },
+      outputLevelsByResource: { alpha: "2.7" },
+    }
+    const report = calculateTokenSpendingReport(input, testData)
+    expect(report.sections.map((section) => section.spent)).toEqual([2, 20, 0, 100])
+    expect(report.total).toBe(122)
+    expect(report.total).toBe(calculateTotalTokensSpent(input, testData))
+    expect(report.sections[3].rows[0]).toMatchObject({ id: "bbbot.duration", level: 10, spent: 100 })
+    expect(report.sections.flatMap((section) => section.rows)).toHaveLength(testData.upgrades.length)
+    expect(calculateTokenSpendingReport(input, null).total).toBe(0)
+    expect(calculateTokenSpendingReport(input, null).sections.every((section) => section.rows.length === 0)).toBe(true)
   })
 
   it("floors and caps levels when calculating total spent", () => {

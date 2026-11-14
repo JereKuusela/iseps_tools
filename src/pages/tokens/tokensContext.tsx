@@ -1,7 +1,7 @@
-import { createContext, createMemo, createResource, type ParentProps, useContext } from "solid-js"
+import { batch, createContext, createMemo, createResource, type ParentProps, useContext } from "solid-js"
 import { createSyncedSignal } from "../../lib/persistedSignal"
 import { getTokenKey, TOKEN_SHARED_KEYS } from "../../shared/tokenSharedInputs"
-import { calculateTokenRecommendations, calculateTotalTokensSpent } from "./tokensCalculator"
+import { calculateTokenRecommendations, calculateTokenSpendingReport } from "./tokensCalculator"
 import { loadTokenData, TOKEN_UPGRADES } from "./tokensData"
 import { OUTPUT_RESOURCES, type TokenLevelMap, type TokenUpgradeDefinition, type TokenId } from "./tokensTypes"
 import { parseNumberish } from "../../lib/parseNumber"
@@ -40,9 +40,11 @@ type TokensContextValue = {
   recommendationRows: () => ReturnType<typeof calculateTokenRecommendations>["rows"]
   bestRecommendation: () => ReturnType<typeof calculateTokenRecommendations>["best"]
   totalTokensSpent: () => number
+  spendingReport: () => ReturnType<typeof calculateTokenSpendingReport>
   applyBest: () => void
   applyBestAll: () => void
   applyBestCount: (count: number) => void
+  completeAll: () => void
   resetAll: () => void
 }
 
@@ -177,8 +179,8 @@ export const TokensProvider = (props: ParentProps) => {
     ),
   )
 
-  const totalTokensSpent = createMemo(() =>
-    calculateTotalTokensSpent(
+  const spendingReport = createMemo(() =>
+    calculateTokenSpendingReport(
       {
         levels: normalizedLevels(),
         enabled: normalizedEnabled(),
@@ -190,6 +192,8 @@ export const TokensProvider = (props: ParentProps) => {
       tokenData() ?? null,
     ),
   )
+
+  const totalTokensSpent = createMemo(() => spendingReport().total)
 
   const setOutputLevelByResource = (resource: string, next: string) => {
     const normalized = String(Math.max(0, Math.floor(parseNumberish(next))))
@@ -286,9 +290,14 @@ export const TokensProvider = (props: ParentProps) => {
         recommendationRows: () => recommendation().rows,
         bestRecommendation: () => recommendation().best,
         totalTokensSpent,
+        spendingReport,
         applyBest,
         applyBestAll,
         applyBestCount,
+        completeAll: () =>
+          batch(() => {
+            for (const upgrade of TOKEN_UPGRADES) writeUpgradeLevel(upgrade.id, String(upgrade.maxLevel))
+          }),
         resetAll,
       }}
     >

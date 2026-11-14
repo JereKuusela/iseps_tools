@@ -7,6 +7,7 @@ import type {
 } from "./tokensTypes"
 import { getSupplyRatio } from "../../lib/boosts"
 import { parseNumberish, toInt } from "../../lib/parseNumber"
+import { buildSpendingReport } from "../../lib/spendingReport"
 
 const TERM_SCALE = 100000000
 
@@ -227,17 +228,26 @@ export const calculateTokenRecommendations = (
   }
 }
 
-export const calculateTotalTokensSpent = (input: TokenInputState, data: TokenLoadedData | null) => {
-  if (!data) return 0
+export const calculateTokenSpendingReport = (input: TokenInputState, data: TokenLoadedData | null) =>
+  buildSpendingReport(
+    (data?.upgrades ?? []).map((upgrade) => {
+      const level = resolveCurrentLevel(input, upgrade)
+      return {
+        id: upgrade.id,
+        name: upgrade.label,
+        group: upgrade.group,
+        level,
+        maxLevel: upgrade.maxLevel,
+        spent: getAccumulatedCost(data!, upgrade, level),
+      }
+    }),
+    [
+      { id: "output", name: "Output" },
+      { id: "supplies", name: "Supplies" },
+      { id: "bbbot", name: "BB-Bot" },
+      { id: "special", name: "Special" },
+    ],
+  )
 
-  let totalSpent = 0
-
-  for (const upgrade of data.upgrades) {
-    const currentLevel = resolveCurrentLevel(input, upgrade)
-    if (currentLevel <= 0) continue
-
-    totalSpent += getAccumulatedCost(data, upgrade, currentLevel)
-  }
-
-  return totalSpent
-}
+export const calculateTotalTokensSpent = (input: TokenInputState, data: TokenLoadedData | null) =>
+  calculateTokenSpendingReport(input, data).total

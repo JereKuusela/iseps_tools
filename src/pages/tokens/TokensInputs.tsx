@@ -1,4 +1,5 @@
 import { InfoCard, MetricRow } from "../../components/layout/contentBlocks"
+import { SpendingReport } from "../../components/layout/SpendingReport"
 import { CheckboxField, IntegerField, SelectField } from "../../components/ui/formControls"
 import { LargeNumber } from "../../lib/largeNumber"
 import { formatLargeNumber } from "../../lib/numberFormat"
@@ -56,13 +57,26 @@ export const TokensInputs = () => {
 
         <div class="rounded border border-ink/20 bg-white dark:border-white/15 dark:bg-[#253a56] mt-1.25">
           <MetricRow
-            label="Tokens spent"
+            label={
+              <span class="flex items-center gap-2">
+                Tokens spent
+                <SpendingReport
+                  title="Token spending"
+                  currency="tokens"
+                  report={tokens.spendingReport()}
+                  disabled={tokens.isLoading() || !!tokens.loadError()}
+                  formatAmount={formatSpent}
+                />
+              </span>
+            }
             value={
               tokens.isLoading() || tokens.loadError()
                 ? "-"
                 : formatLargeNumber(LargeNumber.from(tokens.totalTokensSpent()), 2)
             }
             withBorder={false}
+            class="items-center gap-2"
+            valueClass="min-w-0 break-all text-right text-accent dark:text-[#8ce3ff]"
           />
         </div>
       </div>

@@ -1,4 +1,5 @@
 import { InfoCard, MetricRow } from "../../components/layout/contentBlocks"
+import { SpendingReport } from "../../components/layout/SpendingReport"
 import { IntegerField, SelectField } from "../../components/ui/formControls"
 import { PARTICLE_ORDER, type UnlockedParticle } from "../../lib/particles"
 import { formatCrystalCost } from "./crystalsFormat"
@@ -28,7 +29,23 @@ export const CrystalsInputs = () => {
         />
 
         <div class="mt-1.25 rounded border border-ink/20 bg-white dark:border-white/15 dark:bg-[#253a56]">
-          <MetricRow label="Crystals spent" value={formatCrystalCost(crystals.crystalsSpent())} withBorder={false} />
+          <MetricRow
+            label={
+              <span class="flex items-center gap-2">
+                Crystals spent
+                <SpendingReport
+                  title="Crystal spending"
+                  currency="crystals"
+                  report={crystals.spendingReport()}
+                  formatAmount={(value) => formatCrystalCost({ cost: value })}
+                />
+              </span>
+            }
+            value={formatCrystalCost(crystals.crystalsSpent())}
+            class="items-center gap-2"
+            valueClass="min-w-0 break-all text-right text-accent dark:text-[#8ce3ff]"
+            withBorder={false}
+          />
         </div>
       </div>
     </InfoCard>

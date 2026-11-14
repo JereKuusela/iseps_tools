@@ -1,4 +1,5 @@
 import { PARTICLE_ORDER, type UnlockedParticle } from "../../lib/particles"
+import { buildSpendingReport } from "../../lib/spendingReport"
 import type {
   CrystalAction,
   CrystalCost,
@@ -55,27 +56,43 @@ export const isStepActive = (
 
 export const calculateUpgradeCost = (upgrade: CrystalUpgrade, from: number, to: number): CrystalCost => {
   const count = Math.max(0, to - from)
-  if (count === 0) return { cost: 0, unknown: false }
-  if (upgrade.costs) return { cost: upgrade.costs.slice(from, to).reduce((sum, cost) => sum + cost, 0), unknown: false }
-  if (upgrade.baseCost === null) return { cost: 0, unknown: true }
+  if (count === 0) return { cost: 0 }
+  if (upgrade.costs) return { cost: upgrade.costs.slice(from, to).reduce((sum, cost) => sum + cost, 0) }
 
   const stepTotal = (upgrade.costStep * (from + to - 1) * count) / 2
-  return { cost: upgrade.baseCost * count + stepTotal, unknown: false }
+  return { cost: upgrade.baseCost * count + stepTotal }
 }
 
 const addCost = (a: CrystalCost, b: CrystalCost): CrystalCost => ({
   cost: a.cost + b.cost,
-  unknown: a.unknown || b.unknown,
 })
 
-const NO_COST: CrystalCost = { cost: 0, unknown: false }
+const NO_COST: CrystalCost = { cost: 0 }
 
-export const calculateCrystalsSpent = (levels: CrystalLevels, data: CrystalData): CrystalCost =>
-  data.upgrades.reduce(
-    (sum, upgrade) =>
-      addCost(sum, calculateUpgradeCost(upgrade, 0, Math.min(upgrade.maxLevel, levelOf(levels, upgrade.id)))),
-    NO_COST,
+export const calculateCrystalSpendingReport = (levels: CrystalLevels, data: CrystalData) =>
+  buildSpendingReport(
+    data.upgrades.map((upgrade) => {
+      const level = Math.min(upgrade.maxLevel, Math.max(0, Math.floor(levelOf(levels, upgrade.id))))
+      return {
+        id: upgrade.id,
+        name: upgrade.name,
+        group: upgrade.group,
+        level,
+        maxLevel: upgrade.maxLevel,
+        spent: calculateUpgradeCost(upgrade, 0, level).cost,
+      }
+    }),
+    [
+      { id: "output", name: "Output" },
+      { id: "cost", name: "Cost" },
+      { id: "special", name: "Special" },
+      { id: "oneTimer", name: "One-timers" },
+    ],
   )
+
+export const calculateCrystalsSpent = (levels: CrystalLevels, data: CrystalData): CrystalCost => ({
+  cost: calculateCrystalSpendingReport(levels, data).total,
+})
 
 const resolveGoal = (upgrade: CrystalUpgrade, level: CrystalTargetLevel) =>
   Math.min(upgrade.maxLevel, level === "max" ? upgrade.maxLevel : Math.max(0, Math.floor(level)))

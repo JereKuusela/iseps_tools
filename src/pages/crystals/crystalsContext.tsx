@@ -1,4 +1,4 @@
-import { createContext, createMemo, type ParentProps, useContext } from "solid-js"
+import { batch, createContext, createMemo, type ParentProps, useContext } from "solid-js"
 import { getCrystalKey } from "../../shared/crystalSharedInputs"
 import { parseNumberish } from "../../lib/parseNumber"
 import { PARTICLE_ORDER, type UnlockedParticle } from "../../lib/particles"
@@ -6,7 +6,7 @@ import { createSyncedSignal } from "../../lib/persistedSignal"
 import { SHARED_PLAYER_LEVEL_KEY, SHARED_SE_KEY } from "../../shared/tokenSharedInputs"
 import {
   calculateCrystalRecommendations,
-  calculateCrystalsSpent,
+  calculateCrystalSpendingReport,
   isUpgradeUnlocked,
   levelOf,
   levelsAfterBuying,
@@ -36,9 +36,11 @@ type CrystalsContextValue = {
   isUnlocked: (id: string) => boolean
   recommendation: () => CrystalRecommendation
   crystalsSpent: () => CrystalCost
+  spendingReport: () => ReturnType<typeof calculateCrystalSpendingReport>
   applyBest: () => void
   applyCount: (count: number) => void
   applyStep: () => void
+  completeAll: () => void
   resetAll: () => void
 }
 
@@ -77,7 +79,8 @@ export const CrystalsProvider = (props: ParentProps) => {
   }))
 
   const recommendation = createMemo(() => calculateCrystalRecommendations(state(), CRYSTAL_DATA, UPCOMING_ACTION_COUNT))
-  const crystalsSpent = createMemo(() => calculateCrystalsSpent(levels(), CRYSTAL_DATA))
+  const spendingReport = createMemo(() => calculateCrystalSpendingReport(levels(), CRYSTAL_DATA))
+  const crystalsSpent = createMemo(() => ({ cost: spendingReport().total }))
 
   // Per-id memos so a level change only re-renders rows whose unlock state actually flipped.
   const unlockedById = new Map(
@@ -113,9 +116,14 @@ export const CrystalsProvider = (props: ParentProps) => {
         isUnlocked: (id) => unlockedById.get(id)?.() ?? false,
         recommendation,
         crystalsSpent,
+        spendingReport,
         applyBest: () => applyCount(1),
         applyCount,
         applyStep: () => writeLevels(levelsAfterCompletingFirst(recommendation().actions)),
+        completeAll: () =>
+          batch(() => {
+            for (const upgrade of CRYSTAL_DATA.upgrades) setLevel(upgrade.id, String(upgrade.maxLevel))
+          }),
         resetAll: () => {
           for (const id of levelSignals.keys()) setLevel(id, "0")
         },

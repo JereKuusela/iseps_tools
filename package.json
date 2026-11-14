@@ -15,6 +15,7 @@
     "@kobalte/core": "0.13.14",
     "@solidjs/router": "1.0.1",
     "firebase": "13.2.0",
+    "lucide-solid": "1.73.0",
     "lz-string": "1.5.0",
     "solid-js": "1.9.18"
   },
