@@ -1,4 +1,5 @@
 import { GRID_CELL_BORDER_CLASS } from "../layout/dataTable"
+import { setHoverTitle } from "./hoverTitle"
 
 // Outline instead of border color so the highlight is not swallowed by collapsed borders.
 export const GRID_VALUE_CELL_CLASS = `${GRID_CELL_BORDER_CLASS} p-0 text-center align-middle focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-brand/40`
@@ -17,7 +18,7 @@ type GridNumberInputProps = {
   disabled?: boolean
   // Greyed out but still editable.
   dimmed?: boolean
-  title?: string
+  title?: () => string | undefined
 }
 
 export const GridNumberInput = (props: GridNumberInputProps) => (
@@ -27,7 +28,7 @@ export const GridNumberInput = (props: GridNumberInputProps) => (
     min={0}
     max={props.max}
     step={1}
-    title={props.title}
+    onMouseEnter={(event) => setHoverTitle(event.currentTarget, props.title)}
     disabled={props.disabled}
     onInput={(event) => props.onInput(event.currentTarget.value)}
     class={`${INPUT_CLASS}${props.dimmed ? " opacity-40" : ""}`}

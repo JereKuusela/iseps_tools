@@ -4,7 +4,8 @@ import { getTokenKey, SHARED_SE_KEY, TOKEN_SHARED_KEYS } from "../../shared/toke
 import {
   calculateTokenRecommendations,
   calculateTokenSpendingReport,
-  isSupplyOrBbBotUnlocked as isSupplyOrBbBotUnlockedAtSe,
+  getTokenUnmetRequirements,
+  type UnmetTokenRequirement,
 } from "./tokensCalculator"
 import { loadTokenData, TOKEN_UPGRADES } from "./tokensData"
 import { OUTPUT_RESOURCES, type TokenLevelMap, type TokenUpgradeDefinition, type TokenId } from "./tokensTypes"
@@ -34,7 +35,7 @@ type TokensContextValue = {
   setCurrentSe: (next: string) => string
   unlockedParticle: () => UnlockedParticle
   setUnlockedParticle: (next: UnlockedParticle) => UnlockedParticle
-  isSupplyOrBbBotUnlocked: (resource: string) => boolean
+  unmetRequirements: (id: TokenId) => UnmetTokenRequirement[]
   outputLevelsByResource: () => TokenLevelMap
   setOutputLevelByResource: (resource: string, next: string) => void
   levels: () => TokenLevelMap
@@ -65,9 +66,6 @@ export const TokensProvider = (props: ParentProps) => {
     "kappa",
   )
   const [currentSe, setCurrentSe] = createSyncedSignal(SHARED_SE_KEY, "1")
-  const isSupplyOrBbBotUnlocked = (resource: string) =>
-    isSupplyOrBbBotUnlockedAtSe(resource, Math.max(0, Math.floor(parseNumberish(currentSe()))))
-
   const upgradeLevelSignals = new Map(
     TOKEN_UPGRADE_IDS.map((upgradeId) => [upgradeId, createSyncedSignal(getTokenKey(upgradeId), "0")] as const),
   )
@@ -99,46 +97,6 @@ export const TokensProvider = (props: ParentProps) => {
     return BLEND_STEP_TO_SHORT_TERM_PERCENT[parsed] ?? 0.5
   })
 
-  const resourceRank = createMemo(() => {
-    const rank = new Map<string, number>()
-    PARTICLE_ORDER.forEach((id, index) => rank.set(id, index))
-    return rank
-  })
-
-  const normalizedEnabled = createMemo(() => {
-    const upgrades = TOKEN_UPGRADES
-    const currentUnlocked = unlockedParticle()
-    const unlockedRank = resourceRank().get(currentUnlocked) ?? Number.POSITIVE_INFINITY
-    const result: Record<string, boolean> = {}
-
-    for (const upgrade of upgrades) {
-      if (!upgrade.resource) {
-        result[upgrade.id] = true
-        continue
-      }
-
-      if (upgrade.group === "output") {
-        if (upgrade.resource === "cash") {
-          result[upgrade.id] = true
-          continue
-        }
-
-        const rank = resourceRank().get(upgrade.resource) ?? Number.POSITIVE_INFINITY
-        result[upgrade.id] = rank <= unlockedRank
-        continue
-      }
-
-      if (upgrade.group === "supplies" || upgrade.group === "bbbot") {
-        result[upgrade.id] = isSupplyOrBbBotUnlocked(upgrade.resource ?? "")
-        continue
-      }
-
-      result[upgrade.id] = true
-    }
-
-    return result
-  })
-
   const normalizedOutputLevels = createMemo(() => {
     const levelMap = normalizedLevels()
     const result = createDefaultLevelMap(OUTPUT_RESOURCES)
@@ -152,9 +110,26 @@ export const TokensProvider = (props: ParentProps) => {
     }
   })
 
+  const requirementInput = createMemo(() => ({
+    se: Math.max(0, Math.floor(parseNumberish(currentSe()))),
+    unlockedParticle: unlockedParticle(),
+    levels: normalizedLevels(),
+  }))
+
+  const unmetById = createMemo(() => new Map(
+    TOKEN_UPGRADES.map((upgrade) => [
+      upgrade.id, getTokenUnmetRequirements(upgrade, requirementInput()),
+    ]),
+  ))
+
+  const normalizedEnabled = createMemo(() => Object.fromEntries(
+    [...unmetById()].map(([id, unmet]) => [id, unmet.length === 0]),
+  ))
+
   const recommendation = createMemo(() =>
     calculateTokenRecommendations(
       {
+        ...requirementInput(),
         levels: normalizedLevels(),
         enabled: normalizedEnabled(),
         outputLevelsByResource: normalizedOutputLevels(),
@@ -268,7 +243,7 @@ export const TokensProvider = (props: ParentProps) => {
         setCurrentSe,
         unlockedParticle,
         setUnlockedParticle,
-        isSupplyOrBbBotUnlocked,
+        unmetRequirements: (id) => unmetById().get(id) ?? [],
         outputLevelsByResource: normalizedOutputLevels,
         setOutputLevelByResource,
         levels: normalizedLevels,

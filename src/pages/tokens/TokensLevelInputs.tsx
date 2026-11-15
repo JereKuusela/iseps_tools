@@ -11,6 +11,7 @@ import {
 } from "../../components/ui/GridCellInputs"
 import { PARTICLE_ORDER } from "../../lib/particles"
 import { useTokensContext } from "./tokensContext"
+import { formatTokenRequirement } from "./tokensCalculator"
 import type { TokenId } from "./tokensTypes"
 
 const RESOURCE_ORDER = ["cash", ...PARTICLE_ORDER] as const
@@ -38,20 +39,13 @@ const borderClass = GRID_CELL_BORDER_CLASS
 
 export const TokensLevelInputs = () => {
   const tokens = useTokensContext()
+  const requirementTitle = (id: TokenId) =>
+    tokens
+      .unmetRequirements(id)
+      .map((requirement) => formatTokenRequirement(requirement, tokens.upgrades()))
+      .join("\n") || undefined
   const upgradeMaxById = () => new Map(tokens.upgrades().map((upgrade) => [upgrade.id, upgrade.maxLevel] as const))
   const upgradeById = () => new Map(tokens.upgrades().map((upgrade) => [upgrade.id, upgrade] as const))
-
-  const resourceRank = (resource: string) => PARTICLE_ORDER.indexOf(resource as (typeof PARTICLE_ORDER)[number])
-  const unlockedRank = () => resourceRank(tokens.unlockedParticle())
-
-  const isOutputUnlocked = (resource: string) => {
-    if (resource === "cash") return true
-    const rank = resourceRank(resource)
-    if (rank < 0) return false
-    return rank <= unlockedRank()
-  }
-
-  const isSupplyOrBbBotUnlocked = (resource: string) => tokens.isSupplyOrBbBotUnlocked(resource)
 
   const getUpgradeId = (group: "supplies" | "bbbot", resource: string) => {
     const id = `${group}.${resource}` as TokenId
@@ -82,7 +76,6 @@ export const TokensLevelInputs = () => {
 
   const renderCell = (group: "output" | "supplies" | "bbbot", resource: string) => {
     if (group === "output") {
-      const unlocked = isOutputUnlocked(resource)
       const outputId = getOutputUpgradeId(resource)
       if (!outputId) return <GridEmptyCell />
 
@@ -92,7 +85,8 @@ export const TokensLevelInputs = () => {
         <GridNumberInput
           value={tokens.outputLevelsByResource()[resource] ?? "0"}
           max={maxLevel}
-          disabled={!unlocked}
+          dimmed={tokens.unmetRequirements(outputId).length > 0}
+          title={() => requirementTitle(outputId)}
           onInput={(next) => tokens.setOutputLevelByResource(resource, clampToRange(next, maxLevel))}
         />
       )
@@ -101,13 +95,13 @@ export const TokensLevelInputs = () => {
     const id = getUpgradeId(group, resource)
     if (!id) return <GridEmptyCell />
 
-    const unlocked = isSupplyOrBbBotUnlocked(resource)
     const maxLevel = upgradeMaxById().get(id) ?? 0
     return (
       <GridNumberInput
         value={tokens.levels()[id] ?? "0"}
         max={maxLevel}
-        dimmed={!unlocked}
+        dimmed={tokens.unmetRequirements(id).length > 0}
+        title={() => requirementTitle(id)}
         onInput={(next) => tokens.setUpgradeLevel(id, clampToRange(next, maxLevel))}
       />
     )
@@ -183,6 +177,8 @@ export const TokensLevelInputs = () => {
               <IntegerField
                 label={row.label}
                 value={tokens.levels()[row.id] ?? "0"}
+                dimmed={tokens.unmetRequirements(row.id).length > 0}
+                title={() => requirementTitle(row.id)}
                 min={0}
                 max={row.maxLevel}
                 step={1}

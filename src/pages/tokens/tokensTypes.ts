@@ -1,3 +1,5 @@
+import { UnlockedParticle } from "../../lib/particles"
+
 export type TokenUpgradeGroup = "output" | "supplies" | "bbbot" | "special"
 
 export type TokenResourceId =
@@ -62,8 +64,9 @@ export type CostAnchor = {
 }
 
 export type UpgradeRequirement = {
-  id: TokenId
-  minLevel: number
+  se?: number
+  id?: TokenId
+  minLevel?: number
 }
 
 export type TokenUpgradeDefinition = {
@@ -100,6 +103,8 @@ export type TokenLevelMap = Record<string, string>
 export type TokenToggleMap = Record<string, boolean>
 
 export type TokenInputState = {
+  se?: number
+  unlockedParticle?: UnlockedParticle
   levels: TokenLevelMap
   enabled: TokenToggleMap
   outputLevelsByResource: Record<string, string>

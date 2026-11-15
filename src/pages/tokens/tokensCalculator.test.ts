@@ -3,8 +3,10 @@ import {
   calculateTokenRecommendations,
   calculateTokenSpendingReport,
   calculateTotalTokensSpent,
-  isSupplyOrBbBotUnlocked,
+  formatTokenRequirement,
+  getTokenUnmetRequirements,
 } from "./tokensCalculator"
+import { TOKEN_UPGRADES } from "./tokensData"
 import type { TokenInputState, TokenLoadedData } from "./tokensTypes"
 
 const baseInput: TokenInputState = {
@@ -176,12 +178,56 @@ const testData: TokenLoadedData = withFullLevelRows({
 })
 
 describe("token resource unlock requirements", () => {
+  it("filters recommendations using data-backed SE requirements", () => {
+    const data = withFullLevelRows({
+      upgrades: TOKEN_UPGRADES.filter((upgrade) =>
+        ["supplies.gamma", "supplies.helion", "bbbot.gamma", "bbbot.helion"].includes(upgrade.id),
+      ),
+      rowByKey: new Map(),
+    })
+    const idsAt = (se: number) =>
+      calculateTokenRecommendations({ ...baseInput, se }, data)
+        .rows.map((row) => row.id)
+        .sort()
+    expect(idsAt(79)).toEqual([])
+    expect(idsAt(80)).toEqual(["bbbot.helion", "supplies.helion"])
+    expect(idsAt(90)).toEqual(["bbbot.gamma", "bbbot.helion", "supplies.gamma", "supplies.helion"])
+  })
   it("unlocks Gamma at SE90 and Helion at SE80", () => {
-    expect(isSupplyOrBbBotUnlocked("gamma", 89)).toBe(false)
-    expect(isSupplyOrBbBotUnlocked("gamma", 90)).toBe(true)
-    expect(isSupplyOrBbBotUnlocked("helion", 79)).toBe(false)
-    expect(isSupplyOrBbBotUnlocked("helion", 80)).toBe(true)
-    expect(isSupplyOrBbBotUnlocked("fenix", 1)).toBe(true)
+    for (const group of ["supplies", "bbbot"]) {
+      for (const [resource, se] of [
+        ["gamma", 90],
+        ["helion", 80],
+      ] as const) {
+        const upgrade = TOKEN_UPGRADES.find((candidate) => candidate.id === `${group}.${resource}`)!
+        const unmet = getTokenUnmetRequirements(upgrade, { ...baseInput, se: se - 1 })
+        expect(unmet).toEqual([{ type: "se", minimum: se }])
+        expect(unmet.map((requirement) => formatTokenRequirement(requirement, TOKEN_UPGRADES))).toEqual([
+          `Requires SE${se}`,
+        ])
+        expect(getTokenUnmetRequirements(upgrade, { ...baseInput, se })).toEqual([])
+      }
+    }
+  })
+  it("describes missing particle and upgrade requirements", () => {
+    const output = TOKEN_UPGRADES.find((upgrade) => upgrade.id === "output.gamma")!
+    const outputUnmet = getTokenUnmetRequirements(output, { ...baseInput, unlockedParticle: "alpha" })
+    expect(outputUnmet).toEqual([{ type: "particle", resource: "gamma" }])
+    expect(outputUnmet.map((requirement) => formatTokenRequirement(requirement, TOKEN_UPGRADES))).toEqual([
+      "Unlock Gamma",
+    ])
+    const bonus = TOKEN_UPGRADES.find((upgrade) => upgrade.id === "bbbot.tokenBonus")!
+    const bonusUnmet = getTokenUnmetRequirements(bonus, baseInput)
+    expect(bonusUnmet).toEqual([{ type: "upgrade", id: "bbbot.duration", minimum: 40 }])
+    expect(bonusUnmet.map((requirement) => formatTokenRequirement(requirement, TOKEN_UPGRADES))).toEqual([
+      "Requires BB-Bot Duration level 40",
+    ])
+    expect(
+      getTokenUnmetRequirements(bonus, {
+        ...baseInput,
+        levels: { "bbbot.duration": "40" },
+      }),
+    ).toEqual([])
   })
 })
 

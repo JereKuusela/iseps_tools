@@ -3,6 +3,7 @@ import { capitalize } from "../../lib/textFormat"
 import { InfoCard } from "../../components/layout/contentBlocks"
 import { DataTable, GRID_CELL_BORDER_CLASS, TableHead } from "../../components/layout/dataTable"
 import { CheckboxField, IntegerField } from "../../components/ui/formControls"
+import { setHoverTitle } from "../../components/ui/hoverTitle"
 import {
   GRID_LABEL_CELL_CLASS as labelCellClass,
   GRID_VALUE_CELL_CLASS as valueCellClass,
@@ -24,20 +25,22 @@ const GROUPS = [
 export const CrystalsLevelInputs = () => {
   const crystals = useCrystalsContext()
 
+  const isDimmed = (id: string) => !crystals.isUnlocked(id) && Number(crystals.levelText(id)) <= 0
+  const requirementTitle = (id: string) => (isDimmed(id) ? crystals.unmetRequirements(id).join("\n") : undefined)
+
   const find = (group: CrystalUpgrade["group"], particle: string) =>
     crystals.upgrades().find((upgrade) => upgrade.group === group && upgrade.particle === particle)
 
   const renderCell = (upgrade: CrystalUpgrade | undefined) => {
     if (!upgrade) return <GridEmptyCell />
 
-    const owned = () => Number(crystals.levelText(upgrade.id)) > 0
-    const isDimmed = () => !crystals.isUnlocked(upgrade.id) && !owned()
-    const dimmed = () => (isDimmed() ? " opacity-40" : "")
+    const dimmed = () => (isDimmed(upgrade.id) ? " opacity-40" : "")
 
     if (upgrade.maxLevel === 1) {
       return (
         <input
           type="checkbox"
+          onMouseEnter={(event) => setHoverTitle(event.currentTarget, () => requirementTitle(upgrade.id))}
           checked={crystals.levelText(upgrade.id) === "1"}
           onChange={(event) => crystals.setLevel(upgrade.id, event.currentTarget.checked ? "1" : "0")}
           class={`accent-accent${dimmed()}`}
@@ -50,8 +53,8 @@ export const CrystalsLevelInputs = () => {
       <GridNumberInput
         value={crystals.levelText(upgrade.id)}
         max={upgrade.maxLevel}
-        title={upgrade.name}
-        dimmed={isDimmed()}
+        title={() => requirementTitle(upgrade.id)}
+        dimmed={isDimmed(upgrade.id)}
         onInput={(next) => crystals.setLevel(upgrade.id, next)}
       />
     )
@@ -70,7 +73,9 @@ export const CrystalsLevelInputs = () => {
           <tr>
             <th class={`${labelCellClass} bg-mist/80 dark:bg-[#1a2a3f]`}>Track</th>
             <For each={PARTICLE_ORDER}>
-              {(particle) => <th class={`${GRID_CELL_BORDER_CLASS} px-1 py-1.5 text-center`}>{capitalize(particle)}</th>}
+              {(particle) => (
+                <th class={`${GRID_CELL_BORDER_CLASS} px-1 py-1.5 text-center`}>{capitalize(particle)}</th>
+              )}
             </For>
           </tr>
         </TableHead>
@@ -137,6 +142,8 @@ export const CrystalsLevelInputs = () => {
                   label={upgrade.name}
                   tooltip={upgrade.id === GP_BOOSTER_ID ? "crystal.gpBooster" : undefined}
                   value={crystals.levelText(upgrade.id)}
+                  dimmed={isDimmed(upgrade.id)}
+                  title={() => requirementTitle(upgrade.id)}
                   min={0}
                   max={upgrade.maxLevel}
                   step={1}
@@ -154,6 +161,8 @@ export const CrystalsLevelInputs = () => {
                 <CheckboxField
                   label={upgrade.name}
                   checked={crystals.levelText(upgrade.id) === "1"}
+                  dimmed={isDimmed(upgrade.id)}
+                  title={() => requirementTitle(upgrade.id)}
                   onChange={(checked) => crystals.setLevel(upgrade.id, checked ? "1" : "0")}
                 />
               )}

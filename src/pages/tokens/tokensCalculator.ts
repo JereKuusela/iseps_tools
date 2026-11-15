@@ -8,12 +8,48 @@ import type {
 import { getSupplyRatio } from "../../lib/boosts"
 import { parseNumberish, toInt } from "../../lib/parseNumber"
 import { buildSpendingReport } from "../../lib/spendingReport"
+import { PARTICLE_ORDER } from "../../lib/particles"
+import { capitalize } from "../../lib/textFormat"
 
 const TERM_SCALE = 100000000
 
-export const isSupplyOrBbBotUnlocked = (resource: string, seLevel: number) => {
-  const requiredSe = resource === "gamma" ? 90 : resource === "helion" ? 80 : 0
-  return seLevel >= requiredSe
+export type UnmetTokenRequirement =
+  | { type: "particle"; resource: NonNullable<TokenUpgradeDefinition["resource"]> }
+  | { type: "se"; minimum: number }
+  | { type: "upgrade"; id: TokenId; minimum: number }
+
+export const getTokenUnmetRequirements = (
+  upgrade: TokenUpgradeDefinition,
+  input: Pick<TokenInputState, "se" | "unlockedParticle" | "levels">,
+): UnmetTokenRequirement[] => {
+  const unmet: UnmetTokenRequirement[] = []
+  if (
+    upgrade.group === "output" &&
+    upgrade.resource &&
+    upgrade.resource !== "cash" &&
+    input.unlockedParticle &&
+    PARTICLE_ORDER.indexOf(upgrade.resource) > PARTICLE_ORDER.indexOf(input.unlockedParticle)
+  ) {
+    unmet.push({ type: "particle", resource: upgrade.resource })
+  }
+  const requirement = upgrade.requires
+  if (requirement?.se !== undefined && (input.se ?? 0) < requirement.se) {
+    unmet.push({ type: "se", minimum: requirement.se })
+  }
+  if (requirement?.id && toInt(input.levels[requirement.id] ?? "0") < (requirement.minLevel ?? 0)) {
+    unmet.push({ type: "upgrade", id: requirement.id, minimum: requirement.minLevel ?? 0 })
+  }
+  return unmet
+}
+
+export const formatTokenRequirement = (
+  requirement: UnmetTokenRequirement,
+  upgrades: TokenUpgradeDefinition[],
+): string => {
+  if (requirement.type === "particle") return `Unlock ${capitalize(requirement.resource)}`
+  if (requirement.type === "se") return `Requires SE${requirement.minimum}`
+  const prerequisite = upgrades.find((candidate) => candidate.id === requirement.id)
+  return `Requires ${prerequisite?.label ?? requirement.id} level ${requirement.minimum}`
 }
 
 const normalizePerCostTerm = (rawTerm: number) => {
@@ -37,12 +73,6 @@ const getAccumulatedCost = (data: TokenLoadedData, upgrade: TokenUpgradeDefiniti
 const isUpgradeEnabled = (upgradeId: TokenId, enabledMap: TokenInputState["enabled"]) => {
   const current = enabledMap[upgradeId]
   return current == null ? true : Boolean(current)
-}
-
-const isUnlocked = (upgrade: TokenUpgradeDefinition, levels: TokenInputState["levels"]) => {
-  if (!upgrade.requires) return true
-  const currentLevel = Math.floor(parseNumberish(levels[upgrade.requires.id] ?? "0"))
-  return currentLevel >= upgrade.requires.minLevel
 }
 
 const isSuppliesScaledUpgrade = (upgrade: TokenUpgradeDefinition) => {
@@ -185,7 +215,7 @@ export const calculateTokenRecommendations = (
 
   const rows = data.upgrades.flatMap((upgrade) => {
     const enabled = isUpgradeEnabled(upgrade.id, input.enabled)
-    const unlocked = isUnlocked(upgrade, input.levels)
+    const unlocked = getTokenUnmetRequirements(upgrade, input).length === 0
     const currentLevel = resolveCurrentLevel(input, upgrade)
 
     if (!enabled || !unlocked || currentLevel >= upgrade.maxLevel) return []

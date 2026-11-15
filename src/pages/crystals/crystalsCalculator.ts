@@ -1,5 +1,6 @@
 import { PARTICLE_ORDER, type UnlockedParticle } from "../../lib/particles"
 import { buildSpendingReport } from "../../lib/spendingReport"
+import { capitalize } from "../../lib/textFormat"
 import type {
   CrystalAction,
   CrystalCost,
@@ -40,6 +41,21 @@ export const isUpgradeUnlocked = (upgrade: CrystalUpgrade, state: CrystalInputSt
       (se === undefined || state.se >= se) &&
       (playerLevel === undefined || state.playerLevel >= playerLevel),
   )
+
+export const getCrystalUnmetRequirements = (upgrade: CrystalUpgrade, state: CrystalInputState): string[] => {
+  const unmet = upgrade.fullRequires.flatMap(({ particle, se, playerLevel }) => {
+    const messages: string[] = []
+    if (particle && particleRank(particle) > particleRank(state.unlockedParticle)) {
+      messages.push(`Unlock ${capitalize(particle)}`)
+    }
+    if (se !== undefined && state.se < se) messages.push(`Requires SE${se}`)
+    if (playerLevel !== undefined && state.playerLevel < playerLevel) {
+      messages.push(`Requires player level ${playerLevel}`)
+    }
+    return messages
+  })
+  return [...new Set(unmet)]
+}
 
 export const isStepActive = (
   step: CrystalGuideStep,

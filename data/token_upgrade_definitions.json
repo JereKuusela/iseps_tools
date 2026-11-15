@@ -335,6 +335,7 @@
     },
     {
       "id": "supplies.gamma",
+      "requires": { "se": 90 },
       "label": "Gamma Supplies",
       "group": "supplies",
       "resource": "gamma",
@@ -350,6 +351,7 @@
     },
     {
       "id": "supplies.helion",
+      "requires": { "se": 80 },
       "label": "Helion Supplies",
       "group": "supplies",
       "resource": "helion",
@@ -470,6 +472,7 @@
     },
     {
       "id": "bbbot.gamma",
+      "requires": { "se": 90 },
       "label": "Gamma BB-Bot",
       "group": "bbbot",
       "resource": "gamma",
@@ -485,6 +488,7 @@
     },
     {
       "id": "bbbot.helion",
+      "requires": { "se": 80 },
       "label": "Helion BB-Bot",
       "group": "bbbot",
       "resource": "helion",

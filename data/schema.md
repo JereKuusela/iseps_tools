@@ -172,8 +172,9 @@ Upgrade definitions for the Token calculator.
   - `baseValue`: Optional fallback value used when precomputed rows are missing.
   - `baseline`: Optional baseline for additive tracks (such as BB-Bot percentage baselines).
   - `requires`: Optional prerequisite rule.
-    - `id`: Required upgrade ID.
-    - `minLevel`: Minimum level needed for unlock.
+    - `se`: Optional minimum SE needed for unlock.
+    - `id`: Optional required upgrade ID.
+    - `minLevel`: Minimum level needed for the required upgrade.
   - `costAnchors`: Piecewise linear cost anchors.
     - `level`: Anchor level.
     - `cost`: Cost at this anchor level.

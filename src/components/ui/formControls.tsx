@@ -9,6 +9,7 @@ import {
 import { LargeNumber } from "../../lib/largeNumber"
 import type { TooltipKey } from "../../lib/tooltips"
 import { INPUT_BASE_CLASS, TEXT_INPUT_CLASS } from "./inputStyles"
+import { setHoverTitle } from "./hoverTitle"
 import { Tooltip } from "./Tooltip"
 
 type NumberFieldProps = {
@@ -35,6 +36,8 @@ type DecimalFieldProps = NumberFieldProps & {
 }
 
 type IntegerFieldProps = {
+  dimmed?: boolean
+  title?: () => string | undefined
   label: JSX.Element
   value: string
   onInput: (next: string) => void
@@ -455,11 +458,12 @@ export const IntegerField = (props: IntegerFieldProps) => {
             max={props.max}
             step={props.step}
             placeholder={props.placeholder}
+            onMouseEnter={(event) => setHoverTitle(event.currentTarget, props.title)}
             onKeyDown={blurOnEnterOrEscape}
             onBlur={(event) => onBlur(event.currentTarget.value)}
             class={`${INPUT_BASE_CLASS} px-2.5 py-1.5 text-sm font-medium ${
               isRightAligned() ? "w-[4rem] min-w-[4rem]" : "w-full"
-            }`}
+            }${props.dimmed ? " opacity-40" : ""}`}
           />
         </div>
       </div>
@@ -725,6 +729,8 @@ export const DisplayField = (props: DisplayFieldProps) => {
 }
 
 type CheckboxFieldProps = {
+  dimmed?: boolean
+  title?: () => string | undefined
   label: string
   checked: boolean
   onChange: (checked: boolean) => void
@@ -733,7 +739,10 @@ type CheckboxFieldProps = {
 
 export const CheckboxField = (props: CheckboxFieldProps) => {
   return (
-    <label class="flex min-h-[34px] cursor-pointer items-center justify-between gap-2">
+    <label
+      onMouseEnter={(event) => setHoverTitle(event.currentTarget, props.title)}
+      class={`flex min-h-[34px] cursor-pointer items-center justify-between gap-2${props.dimmed ? " opacity-40" : ""}`}
+    >
       {/* Input must come first: a label activates its first labelable descendant, and the tooltip trigger is a button. */}
       <input
         type="checkbox"

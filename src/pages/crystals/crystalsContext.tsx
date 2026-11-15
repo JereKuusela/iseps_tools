@@ -7,6 +7,7 @@ import { SHARED_PLAYER_LEVEL_KEY, SHARED_SE_KEY } from "../../shared/tokenShared
 import {
   calculateCrystalRecommendations,
   calculateCrystalSpendingReport,
+  getCrystalUnmetRequirements,
   isUpgradeUnlocked,
   levelOf,
   levelsAfterBuying,
@@ -34,6 +35,7 @@ type CrystalsContextValue = {
   levelText: (id: string) => string
   setLevel: (id: string, next: string) => void
   isUnlocked: (id: string) => boolean
+  unmetRequirements: (id: string) => string[]
   recommendation: () => CrystalRecommendation
   crystalsSpent: () => CrystalCost
   spendingReport: () => ReturnType<typeof calculateCrystalSpendingReport>
@@ -114,6 +116,10 @@ export const CrystalsProvider = (props: ParentProps) => {
         levelText: (id) => String(levels()[id] ?? 0),
         setLevel,
         isUnlocked: (id) => unlockedById.get(id)?.() ?? false,
+        unmetRequirements: (id) => {
+          const upgrade = upgradeById.get(id)
+          return upgrade ? getCrystalUnmetRequirements(upgrade, state()) : []
+        },
         recommendation,
         crystalsSpent,
         spendingReport,

@@ -4,6 +4,7 @@ import {
   calculateCrystalSpendingReport,
   calculateCrystalsSpent,
   calculateUpgradeCost,
+  getCrystalUnmetRequirements,
   isUpgradeUnlocked,
   levelsAfterBuying,
   levelsAfterCompletingFirst,
@@ -31,6 +32,20 @@ const state = (overrides: Partial<CrystalInputState> = {}): CrystalInputState =>
   unlockedParticle: "alpha",
   levels: {},
   ...overrides,
+})
+
+describe("crystal requirement descriptions", () => {
+  it("describes unmet particle, SE, and player requirements", () => {
+    const locked = upgrade("locked", {
+      requires: { particle: "gamma", se: 90, playerLevel: 100, upgrades: [] },
+    })
+    expect(getCrystalUnmetRequirements(locked, state())).toEqual([
+      "Unlock Gamma", "Requires SE90", "Requires player level 100",
+    ])
+    expect(getCrystalUnmetRequirements(locked, state({
+      unlockedParticle: "gamma", se: 90, playerLevel: 100,
+    }))).toEqual([])
+  })
 })
 
 describe("parseCrystalGuide", () => {
