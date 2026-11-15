@@ -1,7 +1,11 @@
 import { batch, createContext, createMemo, createResource, type ParentProps, useContext } from "solid-js"
 import { createSyncedSignal } from "../../lib/persistedSignal"
-import { getTokenKey, TOKEN_SHARED_KEYS } from "../../shared/tokenSharedInputs"
-import { calculateTokenRecommendations, calculateTokenSpendingReport } from "./tokensCalculator"
+import { getTokenKey, SHARED_SE_KEY, TOKEN_SHARED_KEYS } from "../../shared/tokenSharedInputs"
+import {
+  calculateTokenRecommendations,
+  calculateTokenSpendingReport,
+  isSupplyOrBbBotUnlocked as isSupplyOrBbBotUnlockedAtSe,
+} from "./tokensCalculator"
 import { loadTokenData, TOKEN_UPGRADES } from "./tokensData"
 import { OUTPUT_RESOURCES, type TokenLevelMap, type TokenUpgradeDefinition, type TokenId } from "./tokensTypes"
 import { parseNumberish } from "../../lib/parseNumber"
@@ -26,12 +30,11 @@ type TokensContextValue = {
   setTokensPerStep: (next: string) => string
   onlineHoursPerDay: () => string
   setOnlineHoursPerDay: (next: string) => string
+  currentSe: () => string
+  setCurrentSe: (next: string) => string
   unlockedParticle: () => UnlockedParticle
   setUnlockedParticle: (next: UnlockedParticle) => UnlockedParticle
-  unlockGammaSuppliesBbBot: () => boolean
-  setUnlockGammaSuppliesBbBot: (checked: boolean) => boolean
-  unlockHelionSuppliesBbBot: () => boolean
-  setUnlockHelionSuppliesBbBot: (checked: boolean) => boolean
+  isSupplyOrBbBotUnlocked: (resource: string) => boolean
   outputLevelsByResource: () => TokenLevelMap
   setOutputLevelByResource: (resource: string, next: string) => void
   levels: () => TokenLevelMap
@@ -61,14 +64,9 @@ export const TokensProvider = (props: ParentProps) => {
     "token.unlockedParticle",
     "kappa",
   )
-  const [unlockGammaSuppliesBbBot, setUnlockGammaSuppliesBbBot] = createSyncedSignal(
-    "token.unlockGammaSuppliesBbBot",
-    true,
-  )
-  const [unlockHelionSuppliesBbBot, setUnlockHelionSuppliesBbBot] = createSyncedSignal(
-    "token.unlockHelionSuppliesBbBot",
-    true,
-  )
+  const [currentSe, setCurrentSe] = createSyncedSignal(SHARED_SE_KEY, "1")
+  const isSupplyOrBbBotUnlocked = (resource: string) =>
+    isSupplyOrBbBotUnlockedAtSe(resource, Math.max(0, Math.floor(parseNumberish(currentSe()))))
 
   const upgradeLevelSignals = new Map(
     TOKEN_UPGRADE_IDS.map((upgradeId) => [upgradeId, createSyncedSignal(getTokenKey(upgradeId), "0")] as const),
@@ -131,17 +129,7 @@ export const TokensProvider = (props: ParentProps) => {
       }
 
       if (upgrade.group === "supplies" || upgrade.group === "bbbot") {
-        if (upgrade.resource === "gamma") {
-          result[upgrade.id] = unlockGammaSuppliesBbBot()
-          continue
-        }
-
-        if (upgrade.resource === "helion") {
-          result[upgrade.id] = unlockHelionSuppliesBbBot()
-          continue
-        }
-
-        result[upgrade.id] = true
+        result[upgrade.id] = isSupplyOrBbBotUnlocked(upgrade.resource ?? "")
         continue
       }
 
@@ -276,12 +264,11 @@ export const TokensProvider = (props: ParentProps) => {
         setTokensPerStep,
         onlineHoursPerDay,
         setOnlineHoursPerDay,
+        currentSe,
+        setCurrentSe,
         unlockedParticle,
         setUnlockedParticle,
-        unlockGammaSuppliesBbBot,
-        setUnlockGammaSuppliesBbBot,
-        unlockHelionSuppliesBbBot,
-        setUnlockHelionSuppliesBbBot,
+        isSupplyOrBbBotUnlocked,
         outputLevelsByResource: normalizedOutputLevels,
         setOutputLevelByResource,
         levels: normalizedLevels,

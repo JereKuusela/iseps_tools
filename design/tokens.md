@@ -5,7 +5,7 @@ Combination of various guides.
 - Most resources have output, supplies and BB-Bot upgrades.
   - Output and BB-bot can simply calculate which one is better.
   - Supplies depends on active hours per day.
-- Some resources have supplies and BB-Bot initially disabled.
+- Gamma supplies and BB-Bot unlock at SE90; Helion supplies and BB-Bot unlock at SE80.
 - Calculator needs value for each resource to calculate best upgrade (per token cost).
   - Should have input for tokens per step (cost-based buckets for all upgrades) so that recommendation doesn't change all the time.
 - There are unique upgrades that can't be directly valued.

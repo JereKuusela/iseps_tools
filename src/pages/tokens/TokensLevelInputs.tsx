@@ -51,11 +51,7 @@ export const TokensLevelInputs = () => {
     return rank <= unlockedRank()
   }
 
-  const isSupplyOrBbBotUnlocked = (resource: string) => {
-    if (resource === "gamma") return tokens.unlockGammaSuppliesBbBot()
-    if (resource === "helion") return tokens.unlockHelionSuppliesBbBot()
-    return true
-  }
+  const isSupplyOrBbBotUnlocked = (resource: string) => tokens.isSupplyOrBbBotUnlocked(resource)
 
   const getUpgradeId = (group: "supplies" | "bbbot", resource: string) => {
     const id = `${group}.${resource}` as TokenId
@@ -111,7 +107,7 @@ export const TokensLevelInputs = () => {
       <GridNumberInput
         value={tokens.levels()[id] ?? "0"}
         max={maxLevel}
-        disabled={!unlocked}
+        dimmed={!unlocked}
         onInput={(next) => tokens.setUpgradeLevel(id, clampToRange(next, maxLevel))}
       />
     )

@@ -492,7 +492,7 @@
       "rowId": "G",
       "tier": 4,
       "label": "G4",
-      "tooltip": "G-LOAD (CORE-FUELED TRANSPORT CARTS)\n+1,500% Gamma per Green perk\nx1.04 GP per perk\nx0.87 Gamma Spawn Rate cost per Gamma Rank\nUnlocks Gamme rewards from Supply Bot and BB-Bot"
+      "tooltip": "G-LOAD (CORE-FUELED TRANSPORT CARTS)\n+1,500% Gamma per Green perk\nx1.04 GP per perk\nx0.87 Gamma Spawn Rate cost per Gamma Rank"
     },
     {
       "id": "G5",
@@ -548,7 +548,7 @@
       "rowId": "Bu",
       "tier": 5,
       "label": "Bu5",
-      "tooltip": "HELION EXPLORATION\n+400% Helion per Burgundy, Blue and Yellow perk\n+0.6% Corvus Wasta bonus per Radar\n+0.6% Corvus Shiva Ten bonus per Radar\nx2 Corvus automation effect\nUnlocks Helion rewards from Supply Bot and BB-Bot"
+      "tooltip": "HELION EXPLORATION\n+400% Helion per Burgundy, Blue and Yellow perk\n+0.6% Corvus Wasta bonus per Radar\n+0.6% Corvus Shiva Ten bonus per Radar\nx2 Corvus automation effect"
     },
     {
       "id": "Bu6",

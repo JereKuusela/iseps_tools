@@ -6,7 +6,7 @@ export const GRID_VALUE_CELL_CLASS = `${GRID_CELL_BORDER_CLASS} p-0 text-center 
 export const GRID_LABEL_CELL_CLASS = `${GRID_CELL_BORDER_CLASS} px-2 py-1`
 
 const INPUT_CLASS =
-  "w-full bg-transparent px-1 py-1 text-center text-xs font-medium text-ink outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none disabled:cursor-not-allowed disabled:opacity-40 dark:text-white"
+  "w-full bg-transparent px-1 py-1 text-center text-xs font-medium text-ink outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none disabled:cursor-default disabled:opacity-40 dark:text-white"
 
 export const GridEmptyCell = () => <span class="block px-1 py-1 text-ink/40 dark:text-white/40">-</span>
 

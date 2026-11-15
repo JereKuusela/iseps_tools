@@ -3,6 +3,7 @@ import {
   calculateTokenRecommendations,
   calculateTokenSpendingReport,
   calculateTotalTokensSpent,
+  isSupplyOrBbBotUnlocked,
 } from "./tokensCalculator"
 import type { TokenInputState, TokenLoadedData } from "./tokensTypes"
 
@@ -172,6 +173,16 @@ const testData: TokenLoadedData = withFullLevelRows({
       },
     ],
   ]),
+})
+
+describe("token resource unlock requirements", () => {
+  it("unlocks Gamma at SE90 and Helion at SE80", () => {
+    expect(isSupplyOrBbBotUnlocked("gamma", 89)).toBe(false)
+    expect(isSupplyOrBbBotUnlocked("gamma", 90)).toBe(true)
+    expect(isSupplyOrBbBotUnlocked("helion", 79)).toBe(false)
+    expect(isSupplyOrBbBotUnlocked("helion", 80)).toBe(true)
+    expect(isSupplyOrBbBotUnlocked("fenix", 1)).toBe(true)
+  })
 })
 
 describe("calculateTokenRecommendations", () => {

@@ -11,6 +11,11 @@ import { buildSpendingReport } from "../../lib/spendingReport"
 
 const TERM_SCALE = 100000000
 
+export const isSupplyOrBbBotUnlocked = (resource: string, seLevel: number) => {
+  const requiredSe = resource === "gamma" ? 90 : resource === "helion" ? 80 : 0
+  return seLevel >= requiredSe
+}
+
 const normalizePerCostTerm = (rawTerm: number) => {
   // New CSV format stores short/long terms as scaled integers.
   return rawTerm >= 1 ? rawTerm / TERM_SCALE : rawTerm

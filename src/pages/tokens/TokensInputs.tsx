@@ -1,6 +1,6 @@
 import { InfoCard, MetricRow } from "../../components/layout/contentBlocks"
 import { SpendingReport } from "../../components/layout/SpendingReport"
-import { CheckboxField, IntegerField, SelectField } from "../../components/ui/formControls"
+import { IntegerField, SelectField } from "../../components/ui/formControls"
 import { LargeNumber } from "../../lib/largeNumber"
 import { formatLargeNumber } from "../../lib/numberFormat"
 import { PARTICLE_ORDER, type UnlockedParticle } from "../../lib/particles"
@@ -37,22 +37,18 @@ export const TokensInputs = () => {
           min={0}
           step={1}
         />
+        <IntegerField
+          label="Current SE"
+          value={tokens.currentSe()}
+          onInput={tokens.setCurrentSe}
+          min={0}
+          step={1}
+        />
         <SelectField
           label="Unlocked particle"
           value={tokens.unlockedParticle()}
           onChange={(next) => tokens.setUnlockedParticle(next as UnlockedParticle)}
           options={unlockedParticleOptions()}
-        />
-
-        <CheckboxField
-          label="Gamma Supplies and BB-Bot"
-          checked={tokens.unlockGammaSuppliesBbBot()}
-          onChange={tokens.setUnlockGammaSuppliesBbBot}
-        />
-        <CheckboxField
-          label="Helion Supplies and BB-Bot"
-          checked={tokens.unlockHelionSuppliesBbBot()}
-          onChange={tokens.setUnlockHelionSuppliesBbBot}
         />
 
         <div class="rounded border border-ink/20 bg-white dark:border-white/15 dark:bg-[#253a56] mt-1.25">
