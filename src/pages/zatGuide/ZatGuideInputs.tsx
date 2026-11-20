@@ -49,13 +49,13 @@ export const ZatGuideInputs = () => {
     <>
       <InfoCard>
         <div class="grid gap-2">
-          <IntegerField label="Cycles" value={cycles()} onInput={setCycles} min={1} max={100} step={1} />
           <SelectField
             label="Run type"
             value={runType()}
             onChange={(next) => setRunType(next as GuideRunType)}
             options={runOptions()}
           />
+          <IntegerField label="Cycles" value={cycles()} onInput={setCycles} min={1} max={100} step={1} />
           <Show when={guideOptions().length > 1}>
             <div class="grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2">
               <p class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">Guide</p>

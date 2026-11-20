@@ -1033,7 +1033,7 @@
     "se": 150,
     "run": "jrun",
     "add": "G6",
-    "notes": "G-Corp overclock modules give some good boosts.\nNot fully sure when this becomes better than WIP."
+    "notes": "Extra level in G-Corp C41 makes G6 about same as White IP.\nG6 becomes better after G-Corp overclock modules are unlocked."
   },
   {
     "se": 151,
@@ -1044,7 +1044,8 @@
     "se": 167,
     "run": "jrun",
     "remove": "9 WIP",
-    "add": "10 RIP"
+    "add": "10 RIP",
+    "notes": "Red IP should boost Kaiper more which can end up slighly better than with White IP."
   },
   {
     "se": 168,

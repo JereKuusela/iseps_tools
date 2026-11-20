@@ -24,13 +24,13 @@ export const PerkGuideInputs = () => {
     <>
       <InfoCard>
         <div class="grid gap-2">
-          <IntegerField label="SE" value={se()} onInput={setSe} min={1} max={200} step={1} />
           <SelectField
             label="Run type"
             value={runType()}
             onChange={(next) => setRunType(next as PerkRunType)}
             options={runOptions()}
           />
+          <IntegerField label="SE" value={se()} onInput={setSe} min={1} max={200} step={1} />
         </div>
       </InfoCard>
 
