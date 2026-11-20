@@ -1033,7 +1033,7 @@
     "se": 150,
     "run": "jrun",
     "add": "G6",
-    "notes": "Extra level in G-Corp C41 makes G6 about same as White IP.\nG6 becomes better after G-Corp overclock modules are unlocked."
+    "notes": "Extra level in G-Corp C41 makes G6 about same as WIP.\nG6 becomes better after overclock modules are unlocked."
   },
   {
     "se": 151,
@@ -1045,7 +1045,7 @@
     "run": "jrun",
     "remove": "9 WIP",
     "add": "10 RIP",
-    "notes": "Red IP should boost Kaiper more which can end up slighly better than with White IP."
+    "notes": "RIP should boost Kaiper more which can end up slighly better than with WIP."
   },
   {
     "se": 168,
