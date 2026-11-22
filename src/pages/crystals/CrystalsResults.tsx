@@ -1,5 +1,7 @@
 import { For, Show } from "solid-js"
 import { BestNextSummary } from "../../components/layout/BestNextSummary"
+import { UpgradeItemLabel } from "../../components/ui/UpgradeItemLabel"
+import { resourceTextOnly } from "../../lib/resourceDisplay"
 import { getTooltip } from "../../lib/tooltips"
 import { formatCrystalCost } from "./crystalsFormat"
 import { useCrystalsContext } from "./crystalsContext"
@@ -39,23 +41,39 @@ export const CrystalsResults = () => {
           },
           { label: "Reset all purchases", onClick: crystals.resetAll, confirm: "Reset all crystal purchases?" },
         ]}
-        rows={recommendation().actions.map((action, index) => ({
-          item:
+        rows={recommendation().actions.map((action, index) => {
+          const cost = formatCrystalCost(action.cost)
+          const levelSuffix =
             action.maxLevel === 1
-              ? action.name
+              ? ""
               : index === 0 && action.targetLevel > action.currentLevel + 1
-                ? `${action.name}: ${action.currentLevel} → ${action.targetLevel}`
-                : `${action.name}: ${action.targetLevel}`,
-          targetLevel: null,
-          value: "",
-          data: `${formatCrystalCost(action.cost)}${index === 0 ? " crystals" : ""}`,
-        }))}
+                ? `: ${action.currentLevel} → ${action.targetLevel}`
+                : `: ${action.targetLevel}`
+
+          return {
+            item: `${action.name}${levelSuffix}`,
+            tableItem:
+              index > 0 ? (
+                <UpgradeItemLabel
+                  name={
+                    resourceTextOnly()
+                      ? action.name
+                      : action.name.replace(/^Bulk | Gains$/g, "").replace(/\bbundle\b/, "Bundle")
+                  }
+                  levelSuffix={action.maxLevel === 1 ? "" : ` ${action.targetLevel}`}
+                />
+              ) : undefined,
+            targetLevel: null,
+            value: "",
+            data: index === 0 ? `${cost} crystals` : cost,
+          }
+        })}
         dataHeader="Cost"
         minRows={7}
         columnRatios={[75, 0, 25]}
         hideValue
         footer={
-          <Show when={hasNotes()}>
+          hasNotes() ? (
             <div class="grid gap-2 p-3 text-sm text-ink/85 dark:text-white/85">
               <For each={recommendation().doneNotes}>{(note) => <p>{note}</p>}</For>
               <Show when={showGpBoosterNote()}>
@@ -67,7 +85,7 @@ export const CrystalsResults = () => {
                 </p>
               </Show>
             </div>
-          </Show>
+          ) : undefined
         }
       />
     </div>

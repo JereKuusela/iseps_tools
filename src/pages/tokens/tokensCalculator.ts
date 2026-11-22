@@ -260,10 +260,9 @@ export const calculateTokenRecommendations = (
       const successor = buildRecommendation(upgrade, row.nextLevel)
       if (!successor || successor.nextLevel === null) break
 
-      const lastScore = ranked[ranked.length - 1].score
-      if (successor.score <= lastScore) break
-      const nextScore = ranked[index + 1]?.score ?? Number.NEGATIVE_INFINITY
-      if (successor.score > nextScore) {
+      if (compareRecommendationRows(successor, ranked[ranked.length - 1]) >= 0) break
+      const next = ranked[index + 1]
+      if (compareRecommendationRows(successor, next) < 0) {
         row.nextLevel = successor.nextLevel
         row.cost += successor.cost
         continue

@@ -3,7 +3,7 @@
     "se": 1,
     "run": "se",
     "add": "B1",
-    "notes": "Congratulations on reaching your first Singularity!\n\nThe key to progressing quickly during the first few Singularity Events (SEs) is to use your crystals and tokens to upgrade your Alpha/Energy output as much as possible. This is going to be the main driver of progression until around SE4/5."
+    "notes": "Congratulations on reaching your first Singularity!\n\nThe key to progressing quickly during the first few Singularity Events (SEs) is to use your crystals and tokens to upgrade your [[Alpha]]/Energy output as much as possible. This is going to be the main driver of progression until around SE4/5."
   },
   {
     "se": 2,
@@ -19,13 +19,13 @@
     "se": 4,
     "run": "se",
     "add": "R1",
-    "notes": "It is a good idea to start levelling up your G-Point multiplier (at the bottom of the G-Corporation menu) in SE4. This will drive your progression for the next few Singularities."
+    "notes": "It is a good idea to start levelling up your [[gp|G-Point]] multiplier (at the bottom of the [[gp|G-Corporation]] menu) in SE4. This will drive your progression for the next few Singularities."
   },
   {
     "se": 5,
     "run": "se",
     "add": "W1",
-    "notes": "SE5 and the next few Singularities will be slower than anything up to this point. Put a few levels into the G-Point multiplier (at the bottom of the G-Corporation menu) if you haven't already done so and focus on levelling up your Companions."
+    "notes": "SE5 and the next few Singularities will be slower than anything up to this point. Put a few levels into the [[gp|G-Point]] multiplier (at the bottom of the [[gp|G-Corporation]] menu) if you haven't already done so and focus on levelling up your Companions."
   },
   {
     "se": 6,
@@ -627,13 +627,13 @@
     "se": 105,
     "run": "se",
     "remove": "G6",
-    "notes": "G6 becomes less useful once you get C35 and C36 to level 50. You could optionally keep G6 in your build if you are not doing separate GP runs.",
+    "notes": "G6 becomes less useful once you get C35 and C36 to level 50. You could optionally keep G6 in your build if you are not doing separate [[GP]] runs.",
     "add": "2 WIP"
   },
   {
     "se": 106,
     "run": "se",
-    "notes": "G6 becomes less useful once you get C35 and C36 to level 50. You could optionally keep G6 in your build if you are not doing separate GP runs.",
+    "notes": "G6 becomes less useful once you get C35 and C36 to level 50. You could optionally keep G6 in your build if you are not doing separate [[GP]] runs.",
     "add": "WIP"
   },
   {
@@ -657,39 +657,39 @@
       "Y2",
       "Y4"
     ],
-    "notes": "Y2 and Y4 are worthwhile here to get 3 more Juno stability levels once you can get to DCM 83",
+    "notes": "Y2 and Y4 are worthwhile here to get 3 more [[Juno]] stability levels once you can get to [[DCM]] 83",
     "remove": "WIP"
   },
   {
     "se": 117,
     "run": "se",
-    "notes": "Y2 and Y4 are worthwhile here to get 3 more Juno stability levels once you can get to DCM 83",
+    "notes": "Y2 and Y4 are worthwhile here to get 3 more [[Juno]] stability levels once you can get to [[DCM]] 83",
     "add": "WIP"
   },
   {
     "se": 119,
     "run": "se",
     "add": "G6",
-    "notes": "G6 becomes worthwhile again for more GP to unlock and boost C39"
+    "notes": "G6 becomes worthwhile again for more [[GP]] to unlock and boost C39"
   },
   {
     "se": 120,
     "run": "se",
-    "notes": "G6 becomes worthwhile again for more GP to boost C39",
+    "notes": "G6 becomes worthwhile again for more [[GP]] to boost C39",
     "add": "WIP"
   },
   {
     "se": 124,
     "run": "se",
     "remove": "Y4",
-    "notes": "Y4 is removed once Juno stability reaches 98+ without it",
+    "notes": "Y4 is removed once [[Juno]] stability reaches 98+ without it",
     "add": "2 WIP"
   },
   {
     "se": 125,
     "run": "se",
     "remove": "Y2",
-    "notes": "Y2 is removed once Juno stability reaches 99+ without it.",
+    "notes": "Y2 is removed once [[Juno]] stability reaches 99+ without it.",
     "add": "2 WIP"
   },
   {
@@ -709,7 +709,7 @@
       "G6",
       "13 WIP"
     ],
-    "notes": "You can skip Red M1 to get to Red M3 early which is slightly better than adding 1 IP.  Also removing G6 here, because you will want to get C39 to level 50 in a GP run."
+    "notes": "You can skip Red M1 to get to Red M3 early which is slightly better than adding 1 IP.  Also removing G6 here, because you will want to get C39 to level 50 in a [[GP]] run."
   },
   {
     "se": 128,
@@ -724,14 +724,14 @@
   {
     "se": 133,
     "run": "se",
-    "notes": "At this point, if you have reached ZAT 11 and take Solutions node, you will then get Companion 41 and then perk G6 becomes worth taking to boost this.",
+    "notes": "At this point, if you have reached ZAT 11 and take [[Solutions]] node, you will then get Companion 41 and then perk G6 becomes worth taking to boost this.",
     "add": "WIP"
   },
   {
     "se": 134,
     "run": "se",
     "add": "G6",
-    "notes": "At this point, if you have reached ZAT 11 and take Solutions node, you will then get Companion 41 and then perk G6 becomes worth taking to boost this."
+    "notes": "At this point, if you have reached ZAT 11 and take [[Solutions]] node, you will then get Companion 41 and then perk G6 becomes worth taking to boost this."
   },
   {
     "se": 135,
@@ -756,7 +756,7 @@
       "Y2",
       "Y4"
     ],
-    "notes": "Y2 and Y4 are always good when Juno Stability is not capped."
+    "notes": "Y2 and Y4 are always good when [[Juno]] Stability is not capped."
   },
   {
     "se": 153,
@@ -897,7 +897,7 @@
       "Y4"
     ],
     "remove": "WIP",
-    "notes": "Y2 and Y4 are always good when Juno Stability is not capped."
+    "notes": "Y2 and Y4 are always good when [[Juno]] Stability is not capped."
   },
   {
     "se": 153,
@@ -996,7 +996,7 @@
       "RM2"
     ],
     "remove": "7 WIP",
-    "notes": "RM2 significantly increases DC but reduces AP. Quantum reactor might make it worth it."
+    "notes": "RM2 significantly increases [[DC]] but reduces [[AP]]. Quantum reactor might make it worth it."
   },
   {
     "se": 114,
@@ -1011,7 +1011,7 @@
       "RM3"
     ],
     "remove": "15 WIP",
-    "notes": "Quantum reactor is very strong at this point making DC important."
+    "notes": "Quantum reactor is very strong at this point making [[DC]] important."
   },
   {
     "se": 134,
@@ -1022,7 +1022,7 @@
     "se": 145,
     "run": "jrun",
     "add": "G4",
-    "notes": "Gamma Spawn Rate cost reduction increases AP from PP 6-1 talent.\nNot fully sure when this becomes better than WIP."
+    "notes": "[[Gamma]] Spawn Rate cost reduction increases [[AP]] from PP 6-1 talent.\nNot fully sure when this becomes better than WIP."
   },
   {
     "se": 146,
@@ -1033,7 +1033,7 @@
     "se": 150,
     "run": "jrun",
     "add": "G6",
-    "notes": "Extra level in G-Corp C41 makes G6 about same as WIP.\nG6 becomes better after overclock modules are unlocked."
+    "notes": "Extra level in [[gp|G-Corp]] C41 makes G6 about same as WIP.\nG6 becomes better after overclock modules are unlocked."
   },
   {
     "se": 151,

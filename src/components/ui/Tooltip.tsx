@@ -1,8 +1,15 @@
 import * as KTooltip from "@kobalte/core/tooltip"
 import { For, batch, createEffect, createSignal, type ParentProps } from "solid-js"
 import { getTooltip, TooltipKey } from "../../lib/tooltips"
+import { ResourceText } from "./ResourceText"
 
-type TooltipProps = ParentProps<{ content: TooltipKey | string; asChild?: boolean; raw?: boolean }>
+type TooltipProps = ParentProps<{
+  content: TooltipKey | string
+  asChild?: boolean
+  raw?: boolean
+  resourceIcons?: boolean
+  compactResourceLists?: boolean
+}>
 
 // Pinning open can open multiple tooltips, so have track all of them to just keep one open.
 let tooltipInstanceCounter = 0
@@ -78,7 +85,17 @@ export const Tooltip = (props: TooltipProps) => {
           onPointerDownOutside={closePinned}
           class="z-[70] max-w-sm rounded-xl border border-ink/15 bg-ink px-3 py-2 text-xs leading-5 text-white shadow-xl dark:border-white/20 dark:bg-[#0d1625]"
         >
-          <For each={split()}>{(line) => <p>{line}</p>}</For>
+          <For each={split()}>
+            {(line, index) => (
+              <p>
+                {props.resourceIcons && index() > 0 ? (
+                  <ResourceText text={line} compactLists={props.compactResourceLists} />
+                ) : (
+                  line
+                )}
+              </p>
+            )}
+          </For>
           <KTooltip.Arrow class="fill-ink dark:fill-[#0d1625]" />
         </KTooltip.Content>
       </KTooltip.Portal>

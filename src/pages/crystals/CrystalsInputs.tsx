@@ -1,6 +1,7 @@
 import { InfoCard, MetricRow } from "../../components/layout/contentBlocks"
 import { SpendingReport } from "../../components/layout/SpendingReport"
 import { IntegerField, SelectField } from "../../components/ui/formControls"
+import { ResourceLabel } from "../../components/ui/ResourceLabel"
 import { PARTICLE_ORDER, type UnlockedParticle } from "../../lib/particles"
 import { formatCrystalCost } from "./crystalsFormat"
 import { useCrystalsContext } from "./crystalsContext"
@@ -26,13 +27,18 @@ export const CrystalsInputs = () => {
           value={crystals.unlockedParticle()}
           onChange={(next) => crystals.setUnlockedParticle(next as UnlockedParticle)}
           options={particleOptions()}
+          renderOption={(option) => (
+            <ResourceLabel resource={option.value} showText>
+              {option.label}
+            </ResourceLabel>
+          )}
         />
 
         <div class="mt-1.25 rounded border border-ink/20 bg-white dark:border-white/15 dark:bg-[#253a56]">
           <MetricRow
             label={
               <span class="flex items-center gap-2">
-                Crystals spent
+                <span>Crystals spent</span>
                 <SpendingReport
                   title="Crystal spending"
                   currency="crystals"

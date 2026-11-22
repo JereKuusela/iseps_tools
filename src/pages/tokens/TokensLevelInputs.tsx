@@ -3,6 +3,8 @@ import { capitalize } from "../../lib/textFormat"
 import { InfoCard } from "../../components/layout/contentBlocks"
 import { DataTable, GRID_CELL_BORDER_CLASS, TableHead } from "../../components/layout/dataTable"
 import { IntegerField } from "../../components/ui/formControls"
+import { ResourceLabel } from "../../components/ui/ResourceLabel"
+import { UpgradeItemLabel } from "../../components/ui/UpgradeItemLabel"
 import {
   GRID_LABEL_CELL_CLASS as labelCellClass,
   GRID_VALUE_CELL_CLASS as valueCellClass,
@@ -114,7 +116,11 @@ export const TokensLevelInputs = () => {
           <tr>
             <th class={`${labelCellClass} bg-mist/80 dark:bg-[#1a2a3f]`}>Track</th>
             <For each={RESOURCE_ORDER}>
-              {(resource) => <th class={`${borderClass} px-1 py-1.5 text-center`}>{capitalize(resource)}</th>}
+              {(resource) => (
+                <th class={`${borderClass} px-1 py-1.5 text-center`}>
+                  <ResourceLabel resource={resource}>{capitalize(resource)}</ResourceLabel>
+                </th>
+              )}
             </For>
           </tr>
         </TableHead>
@@ -151,9 +157,12 @@ export const TokensLevelInputs = () => {
           <For each={RESOURCE_ORDER}>
             {(resource) => (
               <tr>
-                <td class={`${labelCellClass} bg-white font-semibold text-ink dark:bg-[#22344d] dark:text-white`}>
-                  {capitalize(resource)}
-                </td>
+                <th
+                  scope="row"
+                  class={`${labelCellClass} bg-white text-left font-semibold text-ink dark:bg-[#22344d] dark:text-white`}
+                >
+                  <ResourceLabel resource={resource}>{capitalize(resource)}</ResourceLabel>
+                </th>
                 <For each={GROUPS}>{(group) => <td class={valueCellClass}>{renderCell(group, resource)}</td>}</For>
               </tr>
             )}
@@ -175,7 +184,11 @@ export const TokensLevelInputs = () => {
           <For each={specialRows()}>
             {(row) => (
               <IntegerField
-                label={row.label}
+                label={
+                  <span class="inline-flex items-center gap-1.5">
+                    <UpgradeItemLabel name={row.label} leadingIcon />
+                  </span>
+                }
                 value={tokens.levels()[row.id] ?? "0"}
                 dimmed={tokens.unmetRequirements(row.id).length > 0}
                 title={() => requirementTitle(row.id)}

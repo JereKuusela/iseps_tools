@@ -10,7 +10,7 @@ import {
 } from "./formControls"
 
 type SummaryInputModalProps = {
-  label: string
+  label: JSX.Element
   value: string
   tooltip?: TooltipKey
   onInput?: (next: string) => void

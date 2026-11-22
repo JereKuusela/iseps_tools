@@ -14,6 +14,7 @@ export type GuideEntry = {
 export type GuideNodeView = {
   id: string
   name: string
+  resource: string
   info: string
   x: number
   y: number

@@ -1,4 +1,5 @@
-import { For, createSignal, onCleanup, onMount } from "solid-js"
+import { For, Show, createSignal, onCleanup, onMount } from "solid-js"
+import { ResourceLabel } from "../../components/ui/ResourceLabel"
 import { clamp } from "../../lib/mathUtils"
 import { formatLargeNumberMultiplier } from "../../lib/numberFormat"
 import type { GuideNodeView } from "./zatGuideTypes"
@@ -95,6 +96,7 @@ export const ZatGuideResults = () => {
               const position = nodePosition(node)
               const isActive = node.activeLevel > 0
               const isSelected = () => guide.selectedNode()?.id === node.id
+              const isCentre = node.id === "centre"
               const nodeSize = node.isSingleLevel ? "90px" : "68px"
 
               return (
@@ -113,6 +115,8 @@ export const ZatGuideResults = () => {
                     height: nodeSize,
                   }}
                   role="button"
+                  aria-label={isCentre ? node.name : undefined}
+                  title={isCentre ? node.name : undefined}
                   tabindex={0}
                   onClick={() => guide.selectNode(node.id)}
                   onKeyDown={(event) => {
@@ -132,17 +136,19 @@ export const ZatGuideResults = () => {
                         "border-white bg-ink": isActive,
                       }}
                     >
-                      {node.activeLevel > 0 ? (node.maxLv === 1 ? "X" : String(node.activeLevel)) : "0"}
+                      {isCentre || (isActive && node.isSingleLevel) ? "X" : String(node.activeLevel)}
                     </div>
-                    <p
-                      class="font-semibold"
-                      classList={{
-                        "text-[11px] leading-3.5": !node.isSingleLevel,
-                        "text-sm leading-4": node.isSingleLevel,
-                      }}
-                    >
-                      {node.name}
-                    </p>
+                    <Show when={!isCentre}>
+                      <p
+                        class="flex min-h-4 items-center justify-center font-semibold"
+                        classList={{
+                          "text-[11px] leading-3.5": !node.isSingleLevel,
+                          "text-sm leading-4": node.isSingleLevel,
+                        }}
+                      >
+                        <ResourceLabel resource={node.resource}>{node.name}</ResourceLabel>
+                      </p>
+                    </Show>
                     <p
                       class="text-white/80"
                       classList={{

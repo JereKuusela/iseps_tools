@@ -1,4 +1,6 @@
 import { BestNextSummary } from "../../components/layout/BestNextSummary"
+import { ResourceLabel } from "../../components/ui/ResourceLabel"
+import { UpgradeItemLabel } from "../../components/ui/UpgradeItemLabel"
 import { formatPercentFromRatio } from "../../lib/numberFormat"
 import { useTokensContext } from "./tokensContext"
 import type { TokenId } from "./tokensTypes"
@@ -58,18 +60,33 @@ export const TokensResults = () => {
           .recommendationRows()
           .slice(0, 8)
           .map((row, index) => {
-            const label = upgradeLabel(row.id)
+            const upgrade = tokens.upgrades().find((candidate) => candidate.id === row.id)
+            const label = upgrade?.label ?? row.id
+            const cost = formatCost(row.cost)
+            const level =
+              row.nextLevel === null
+                ? ""
+                : row.nextLevel > row.currentLevel + 1
+                  ? `${row.currentLevel} → ${row.nextLevel}`
+                  : `${row.nextLevel}`
+            const tableLevelSuffix = level ? ` ${level}` : ""
+
+            const tableItem = () =>
+              upgrade?.group === "output" && upgrade.resource ? (
+                <>
+                  <ResourceLabel resource={upgrade.resource}>{label}</ResourceLabel>
+                  {tableLevelSuffix}
+                </>
+              ) : (
+                <UpgradeItemLabel name={label} levelSuffix={tableLevelSuffix} />
+              )
 
             return {
-              item:
-                row.nextLevel === null
-                  ? label
-                  : row.nextLevel > row.currentLevel + 1
-                    ? `${label}: ${row.currentLevel} → ${row.nextLevel}`
-                    : `${label}: ${row.nextLevel}`,
+              item: level ? `${label}: ${level}` : label,
+              tableItem: index > 0 ? tableItem() : undefined,
               targetLevel: null,
               value: formatPercentFromRatio(relativeValueRatio(row.score), 0),
-              data: `${formatCost(row.cost)}${index === 0 ? " tokens" : ""}`,
+              data: index === 0 ? `${cost} tokens` : cost,
             }
           })}
         dataHeader="Cost"

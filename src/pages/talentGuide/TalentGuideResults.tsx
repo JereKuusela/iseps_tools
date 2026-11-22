@@ -23,7 +23,7 @@ const TalentCell = (props: { id: string; side: TalentSide }) => {
   const level = () => allocation().levels[props.id] ?? 0
 
   return (
-    <Tooltip content={def.tooltip} raw asChild>
+    <Tooltip content={def.tooltip} raw asChild resourceIcons compactResourceLists>
       <div class="relative z-10 flex flex-col items-center gap-1">
         <img
           src={iconById.get(props.id)}

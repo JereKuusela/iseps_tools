@@ -1,6 +1,7 @@
 import { For, Index, Show, createMemo } from "solid-js"
 import { MetricRow } from "../../components/layout/contentBlocks"
 import { blurOnEnterOrEscape, MetricField } from "../../components/ui/formControls"
+import { ResourceLabel } from "../../components/ui/ResourceLabel"
 import { LargeNumber, parseLargeNumberSafe } from "../../lib/largeNumber"
 import { formatCompactMultiplier, formatLargeNumber, formatPercent } from "../../lib/numberFormat"
 import {
@@ -205,7 +206,14 @@ export const ScResults = () => {
                   />
                 </Show>
                 <Show when={panel().goalType != "customSc" && panel().goalType != "customDc"}>
-                  <MetricRow label="DC Cost" value={formatLargeNumber(panel().dcCost, 2)} />
+                  <MetricRow
+                    label={
+                      <>
+                        <ResourceLabel resource="dc">DC</ResourceLabel> Cost
+                      </>
+                    }
+                    value={formatLargeNumber(panel().dcCost, 2)}
+                  />
                 </Show>
                 <MetricRow label="Total Time" value={formatTimeDuration(panel().totalMinutes)} />
                 <MetricRow label="Progress" value={formatPercent(panel().progressPct, 2)} withBorder={false} />
@@ -229,12 +237,37 @@ export const ScResults = () => {
                     Projected Values
                   </h4>
                   <MetricRow label="Progress" value={formatPercent(panel().projectedProgressPct, 0)} />
-                  <MetricRow label="DC Cost" value={formatLargeNumber(panel().projectedDcCost, 2)} />
-                  <MetricRow label="SC Gained" value={formatLargeNumber(panel().projectedScGained, 2)} />
-                  <MetricRow label="Daily Boost" value={formatCompactMultiplier(panel().projectedDailyBoost)} />
-                  <MetricRow label="SC Replic." value={formatCompactMultiplier(panel().projectedScReplicator)} />
                   <MetricRow
-                    label="DC Replic."
+                    label={
+                      <>
+                        <ResourceLabel resource="dc">DC</ResourceLabel> Cost
+                      </>
+                    }
+                    value={formatLargeNumber(panel().projectedDcCost, 2)}
+                  />
+                  <MetricRow
+                    label={
+                      <>
+                        <ResourceLabel resource="sc">SC</ResourceLabel> Gained
+                      </>
+                    }
+                    value={formatLargeNumber(panel().projectedScGained, 2)}
+                  />
+                  <MetricRow label="Daily Boost" value={formatCompactMultiplier(panel().projectedDailyBoost)} />
+                  <MetricRow
+                    label={
+                      <>
+                        <ResourceLabel resource="sc">SC</ResourceLabel> Replicated
+                      </>
+                    }
+                    value={formatCompactMultiplier(panel().projectedScReplicator)}
+                  />
+                  <MetricRow
+                    label={
+                      <>
+                        <ResourceLabel resource="dc">DC</ResourceLabel> Replicated
+                      </>
+                    }
                     value={formatCompactMultiplier(panel().projectedDcReplicator)}
                     withBorder={false}
                   />

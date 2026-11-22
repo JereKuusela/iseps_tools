@@ -45,7 +45,7 @@ const PerkTierCell = (props: { perk: Perk | undefined; isTaken: boolean; color: 
   <td class={tableCellClass}>
     <div class={tableCellInnerClass}>
       <Show when={props.perk} fallback={<TableUnavailableContent />}>
-        <Tooltip content={props.perk!.tooltip} raw asChild>
+        <Tooltip content={props.perk!.tooltip} raw asChild resourceIcons>
           <span class="inline-flex h-5 w-5 items-center justify-center">
             <Show when={props.isTaken} fallback={<TableEmptyNodeSlot />}>
               <TableDot color={props.color} />
@@ -61,7 +61,7 @@ const ExtraValueCell = (props: { tooltip: string | undefined; value: number }) =
   <td class={tableCellClass}>
     <div class={tableCellInnerClass}>
       <Show when={props.tooltip} fallback={<TableUnavailableContent />}>
-        <Tooltip content={props.tooltip!} raw asChild>
+        <Tooltip content={props.tooltip!} raw asChild resourceIcons>
           <span class="inline-flex h-5 min-w-5 items-center justify-center leading-none">{props.value}</span>
         </Tooltip>
       </Show>
@@ -73,7 +73,7 @@ const ExtraDotCell = (props: { tooltip: string | undefined; active: number | boo
   <td class={tableCellClass}>
     <div class={tableCellInnerClass}>
       <Show when={props.tooltip} fallback={<TableUnavailableContent />}>
-        <Tooltip content={props.tooltip!} raw asChild>
+        <Tooltip content={props.tooltip!} raw asChild resourceIcons>
           <span class="inline-flex h-5 w-5 items-center justify-center">
             <Show when={props.active} fallback={<TableEmptyNodeSlot />}>
               <TableDot color={props.color} />

@@ -10,6 +10,7 @@ import {
   GridEmptyCell,
   GridNumberInput,
 } from "../../components/ui/GridCellInputs"
+import { ResourceLabel } from "../../components/ui/ResourceLabel"
 import { PARTICLE_ORDER } from "../../lib/particles"
 import { useCrystalsContext } from "./crystalsContext"
 import type { CrystalUpgrade } from "./crystalsTypes"
@@ -74,7 +75,9 @@ export const CrystalsLevelInputs = () => {
             <th class={`${labelCellClass} bg-mist/80 dark:bg-[#1a2a3f]`}>Track</th>
             <For each={PARTICLE_ORDER}>
               {(particle) => (
-                <th class={`${GRID_CELL_BORDER_CLASS} px-1 py-1.5 text-center`}>{capitalize(particle)}</th>
+                <th class={`${GRID_CELL_BORDER_CLASS} px-1 py-1.5 text-center`}>
+                  <ResourceLabel resource={particle}>{capitalize(particle)}</ResourceLabel>
+                </th>
               )}
             </For>
           </tr>
@@ -113,7 +116,7 @@ export const CrystalsLevelInputs = () => {
             {(particle) => (
               <tr>
                 <td class={`${labelCellClass} bg-white font-semibold text-ink dark:bg-[#22344d] dark:text-white`}>
-                  {capitalize(particle)}
+                  <ResourceLabel resource={particle}>{capitalize(particle)}</ResourceLabel>
                 </td>
                 <For each={GROUPS}>
                   {({ group }) => <td class={valueCellClass}>{renderCell(find(group, particle))}</td>}

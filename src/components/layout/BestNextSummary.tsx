@@ -7,9 +7,10 @@ import { DataTable, TABLE_FRAME_CLASS, TABLE_HEAD_CELL_CLASS, TABLE_ROW_CLASS, T
 
 export type BestNextRow = {
   item: string
+  tableItem?: JSX.Element
   targetLevel: string | number | null
   value: string
-  data: string
+  data: JSX.Element
   id?: string | number
 }
 
@@ -22,7 +23,7 @@ export type BulkActionOption = {
 type RecommendationTileProps = {
   heading: string
   item: string
-  data: string
+  data: JSX.Element
   note?: string
   buyAction: (event: MouseEvent) => void
   buyLabel: string
@@ -67,7 +68,7 @@ type BestNextSummaryProps = {
   secondaryRecommendation?: Omit<RecommendationTileProps, "children">
   rows: BestNextRow[]
   minRows?: number
-  dataHeader: string
+  dataHeader: JSX.Element
   columnRatios?: [number, number, number]
   hideValue?: boolean
 }
@@ -214,7 +215,13 @@ export const BestNextSummary = (props: BestNextSummaryProps) => {
               <For each={tableRows()}>
                 {(row) => (
                   <tr class={TABLE_ROW_CLASS}>
-                    <td class="truncate px-2 py-1 font-semibold text-ink dark:text-white">{row.item}</td>
+                    <td class="truncate px-2 py-1 font-semibold text-ink dark:text-white">
+                      {row.tableItem == null ? (
+                        row.item
+                      ) : (
+                        <span class="inline-flex items-center gap-1 align-middle">{row.tableItem}</span>
+                      )}
+                    </td>
                     <Show when={!props.hideValue}>
                       <td class="whitespace-nowrap px-2 py-1 text-ink/80 dark:text-white/80">{row.value}</td>
                     </Show>

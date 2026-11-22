@@ -5,6 +5,12 @@ import { useZatData, ZatGuideEntry } from "../../shared/zatContext"
 import type { GuideNodeView, GuideRunType } from "./zatGuideTypes"
 import { parseNumberish } from "../../lib/parseNumber"
 
+const nodeResourceAliases: Record<string, string> = {
+  dc: "dc",
+  "g-points": "gp",
+  solutions: "solutions",
+}
+
 const runOptions: { value: GuideRunType; label: string }[] = [
   { value: "se", label: "SE Push" },
   { value: "grun", label: "G-Points" },
@@ -109,9 +115,11 @@ export const ZatGuideProvider = (props: ParentProps) => {
           boost = boost.multiply(shareBoost ** shares)
         }
 
+        const resource = node.name.toLowerCase()
         return {
           id: node.id,
           name: node.name,
+          resource: nodeResourceAliases[resource] ?? resource,
           info: node.info,
           x: node.x,
           y: node.y,

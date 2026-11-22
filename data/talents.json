@@ -73,7 +73,7 @@
       "col": 1,
       "name": "BANNER CONSULTANTS",
       "max": 5,
-      "tooltip": "BANNER CONSULTANTS\n+0.5% Gamma per Player Level"
+      "tooltip": "BANNER CONSULTANTS\n+0.5% [[Gamma]] per Player Level"
     },
     {
       "id": "PP1-2",
@@ -82,7 +82,7 @@
       "col": 2,
       "name": "QUANTUM CONNECTIONS",
       "max": 5,
-      "tooltip": "QUANTUM CONNECTIONS\n+0.4% Beta, Ceti and Delta per Alpha Velocity level"
+      "tooltip": "QUANTUM CONNECTIONS\n+0.4% [[Beta]], [[Ceti]] and [[Delta]] per [[Alpha]] Velocity level"
     },
     {
       "id": "PP2-1",
@@ -91,7 +91,7 @@
       "col": 1,
       "name": "THINKIN' WITH GAMMA",
       "max": 5,
-      "tooltip": "THINKIN' WITH GAMMA\n+1% Gamma per Gamma Volatility level"
+      "tooltip": "THINKIN' WITH GAMMA\n+1% [[Gamma]] per [[Gamma]] Volatility level"
     },
     {
       "id": "PP2-2",
@@ -100,7 +100,7 @@
       "col": 2,
       "name": "QUANTUM CONNECTIONS MK.2",
       "max": 5,
-      "tooltip": "QUANTUM CONNECTIONS MK.2\n+0.2% Epsilon, Fenix and Gamma per Beta Sphere Size level"
+      "tooltip": "QUANTUM CONNECTIONS MK.2\n+0.2% [[Epsilon]], [[Fenix]] and [[Gamma]] per [[Beta]] Sphere Size level"
     },
     {
       "id": "PP2-3",
@@ -118,7 +118,7 @@
       "col": 1,
       "name": "BEST BETA BUDS",
       "max": 5,
-      "tooltip": "BEST BETA BUDS\n+5% Beta per Player Level"
+      "tooltip": "BEST BETA BUDS\n+5% [[Beta]] per Player Level"
     },
     {
       "id": "PP3-2",
@@ -127,7 +127,7 @@
       "col": 2,
       "name": "QUANTUM CONNECTIONS MK.3",
       "max": 5,
-      "tooltip": "QUANTUM CONNECTIONS MK.3\n+0.2% Helion and Ixion per Fenix Horizon level"
+      "tooltip": "QUANTUM CONNECTIONS MK.3\n+0.2% [[Helion]] and [[Ixion]] per [[Fenix]] Horizon level"
     },
     {
       "id": "PP3-3",
@@ -136,7 +136,7 @@
       "col": 3,
       "name": "SINGULARITY PERFECTIONIST",
       "max": 2,
-      "tooltip": "SINGULARITY PERFECTIONIST\n+5% AP per White perk"
+      "tooltip": "SINGULARITY PERFECTIONIST\n+5% [[AP]] per White perk"
     },
     {
       "id": "PP4-1",
@@ -145,7 +145,7 @@
       "col": 2,
       "name": "PARTICLE MASTERY",
       "max": 1,
-      "tooltip": "PARTICLE MASTERY\n+5% AP per Player Level"
+      "tooltip": "PARTICLE MASTERY\n+5% [[AP]] per Player Level"
     },
     {
       "id": "PP5-1",
@@ -154,7 +154,7 @@
       "col": 1,
       "name": "ASHES OF THE FENIX",
       "max": 100,
-      "tooltip": "ASHES OF THE FENIX\n+10% Alpha, Beta and Fenix per Orange perk"
+      "tooltip": "ASHES OF THE FENIX\n+10% [[Alpha]], [[Beta]] and [[Fenix]] per Orange perk"
     },
     {
       "id": "PP5-2",
@@ -163,7 +163,7 @@
       "col": 2,
       "name": "THE STRANGE CONNECTION",
       "max": 100,
-      "tooltip": "THE STRANGE CONNECTION\n+30% Ceti, Gamma and Helion per Yellow perk"
+      "tooltip": "THE STRANGE CONNECTION\n+30% [[Ceti]], [[Gamma]] and [[Helion]] per Yellow perk"
     },
     {
       "id": "PP5-3",
@@ -172,7 +172,7 @@
       "col": 3,
       "name": "PLANET OF THE FUTURE",
       "max": 100,
-      "tooltip": "PLANET OF THE FUTURE\n+30% Delta, Epsilon and Ixion per Purple perk"
+      "tooltip": "PLANET OF THE FUTURE\n+30% [[Delta]], [[Epsilon]] and [[Ixion]] per Purple perk"
     },
     {
       "id": "PP6-1",
@@ -181,7 +181,7 @@
       "col": 1,
       "name": "SPAWN RATE COMPOUNDER",
       "max": 5,
-      "tooltip": "SPAWN RATE COMPOUNDER\nx1.000178 AP per Spawn Rate level"
+      "tooltip": "SPAWN RATE COMPOUNDER\nx1.000178 [[AP]] per Spawn Rate level"
     },
     {
       "id": "PP6-2",
@@ -190,7 +190,7 @@
       "col": 2,
       "name": "LIFE TIME COMPOUNDER",
       "max": 5,
-      "tooltip": "LIFE TIME COMPOUNDER\nx1.00048 Cash per Lifetime level"
+      "tooltip": "LIFE TIME COMPOUNDER\nx1.00048 [[Cash]] per Lifetime level"
     },
     {
       "id": "PP6-3",
@@ -199,7 +199,7 @@
       "col": 3,
       "name": "ATTRACTION COMPOUNDER",
       "max": 5,
-      "tooltip": "ATTRACTION COMPOUNDER\nx1.0007 DC per Attraction level"
+      "tooltip": "ATTRACTION COMPOUNDER\nx1.0007 [[DC]] per Attraction level"
     },
     {
       "id": "IC1-1",
@@ -208,7 +208,7 @@
       "col": 1,
       "name": "EGETUARIAN REGULAR",
       "max": 5,
-      "tooltip": "EGETUARIAN REGULAR\n+0.2% Artifacts per Player Level"
+      "tooltip": "EGETUARIAN REGULAR\n+0.2% [[Artifacts]] per Player Level"
     },
     {
       "id": "IC1-2",
@@ -217,7 +217,7 @@
       "col": 3,
       "name": "QUALITY AND QUANTITY",
       "max": 5,
-      "tooltip": "QUALITY AND QUANTITY\n+0.02% Equipment and Morale bonuses per Scientist round"
+      "tooltip": "QUALITY AND QUANTITY\n+0.02% [[Equipment]] and [[Morale]] bonuses per [[Scientist]] round"
     },
     {
       "id": "IC2-1",
@@ -226,7 +226,7 @@
       "col": 1,
       "name": "SOLUTIONIZATION",
       "max": 2,
-      "tooltip": "SOLUTIONIZATION\n+1% Solutions per Player Level"
+      "tooltip": "SOLUTIONIZATION\n+1% [[Solutions]] per Player Level"
     },
     {
       "id": "IC2-2",
@@ -235,7 +235,7 @@
       "col": 2,
       "name": "REFLECTION IS PERFECTION",
       "max": 1,
-      "tooltip": "REFLECTION IS PERFECTION\n+0.0000000006% GP and Gamma per Solution"
+      "tooltip": "REFLECTION IS PERFECTION\n+0.0000000006% [[GP]] and [[Gamma]] per [[solutions|Solution]]"
     },
     {
       "id": "IC2-3",
@@ -244,7 +244,7 @@
       "col": 3,
       "name": "QUALITY AND QUANTITY 2",
       "max": 5,
-      "tooltip": "QUALITY AND QUANTITY 2\n+0.03% Trinket and Outpost bonuses per Arch-Bot round"
+      "tooltip": "QUALITY AND QUANTITY 2\n+0.03% [[trinkets|Trinket]] and [[outposts|Outpost]] bonuses per [[arch-bots|Arch-Bot]] round"
     },
     {
       "id": "IC3-1",
@@ -253,7 +253,7 @@
       "col": 1,
       "name": "THE MISSING LINK",
       "max": 5,
-      "tooltip": "THE MISSING LINK\n+0.2% Cash per Outpost"
+      "tooltip": "THE MISSING LINK\n+0.2% [[Cash]] per [[outposts|Outpost]]"
     },
     {
       "id": "IC3-2",
@@ -262,7 +262,7 @@
       "col": 2,
       "name": "QUANTITY AND QUALITY 4",
       "max": 5,
-      "tooltip": "QUANTITY AND QUALITY 4\n+1 base Scientist, Arch-Bot and Rebirthologist per Blue, Yellow and Orange perk"
+      "tooltip": "QUANTITY AND QUALITY 4\n+1 base [[Scientist]], [[arch-bots|Arch-Bot]] and [[Rebirthologist]] per Blue, Yellow and Orange perk"
     },
     {
       "id": "IC3-3",
@@ -271,7 +271,7 @@
       "col": 3,
       "name": "QUALITY AND QUANTITY 3",
       "max": 5,
-      "tooltip": "QUALITY AND QUANTITY 3\n+0.04% DNA Infusion and Foundation bonuses per Rebirthologist round"
+      "tooltip": "QUALITY AND QUANTITY 3\n+0.04% [[infusion|DNA Infusion]] and Foundation bonuses per [[Rebirthologist]] round"
     },
     {
       "id": "IC4-1",
@@ -280,7 +280,7 @@
       "col": 2,
       "name": "EGETUARIAN SECRETS",
       "max": 1,
-      "tooltip": "EGETUARIAN SECRETS\n+25% Morale, Outpost and Foundation bonuses per Lime perk"
+      "tooltip": "EGETUARIAN SECRETS\n+25% [[Morale]], [[outposts|Outpost]] and Foundation bonuses per Lime perk"
     },
     {
       "id": "IC5-1",
@@ -289,7 +289,7 @@
       "col": 1,
       "name": "G-CORP OPTIMIZATION",
       "max": 100,
-      "tooltip": "G-CORP OPTIMIZATION\n+0.1% GP per Player Level"
+      "tooltip": "G-CORP OPTIMIZATION\n+0.1% [[GP]] per Player Level"
     },
     {
       "id": "IC5-2",
@@ -298,7 +298,7 @@
       "col": 2,
       "name": "TIPS FROM THE BOTS",
       "max": 100,
-      "tooltip": "TIPS FROM THE BOTS\n/100 Corvus Extraction and Tiberius Emblem costs\n+0.15% Tiberius Emblems per perk (excluding IP)"
+      "tooltip": "TIPS FROM THE BOTS\n/100 [[extractions|Corvus Extraction]] and [[emblems|Tiberius Emblem]] costs\n+0.15% [[emblems|Tiberius Emblems]] per perk (excluding IP)"
     },
     {
       "id": "IC5-3",
@@ -307,7 +307,7 @@
       "col": 3,
       "name": "IMPROVED COMMUNICATION",
       "max": 100,
-      "tooltip": "IMPROVED COMMUNICATION\n+0.1% Beta Lab, Archive Initiative and Fenix Institute per Player Level"
+      "tooltip": "IMPROVED COMMUNICATION\n+0.1% [[Beta]] Lab, Archive Initiative and [[institutes|Fenix Institute]] per Player Level"
     },
     {
       "id": "IC6-1",
@@ -316,7 +316,7 @@
       "col": 1,
       "name": "SCIENTIST COMPOUNDER",
       "max": 5,
-      "tooltip": "SCIENTIST COMPOUNDER\nx1.00076 AP per Scientist round"
+      "tooltip": "SCIENTIST COMPOUNDER\nx1.00076 [[AP]] per [[Scientist]] round"
     },
     {
       "id": "IC6-2",
@@ -325,7 +325,7 @@
       "col": 2,
       "name": "ARCH-BOT COMPOUNDER",
       "max": 5,
-      "tooltip": "ARCH-BOT COMPOUNDER\nx1.00032 Cash per Arch-Bot round"
+      "tooltip": "ARCH-BOT COMPOUNDER\nx1.00032 [[Cash]] per [[arch-bots|Arch-Bot]] round"
     },
     {
       "id": "IC6-3",
@@ -334,7 +334,7 @@
       "col": 3,
       "name": "REBIRTHOLOGIST COMPOUNDER",
       "max": 5,
-      "tooltip": "REBIRTHOLOGIST COMPOUNDER\nx1.00061 DC per Rebirthologist round"
+      "tooltip": "REBIRTHOLOGIST COMPOUNDER\nx1.00061 [[DC]] per [[Rebirthologist]] round"
     }
   ],
   "connections": [

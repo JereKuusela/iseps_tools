@@ -206,7 +206,7 @@ export const ScInputs = () => {
           />
           <NumberField label="Current DC" value={sc.currentDc()} onInput={sc.setCurrentDc} tooltip="sc.current" />
           <NumberFieldWithUnit
-            label="Output"
+            label="DC Output"
             value={sc.dcGainValue()}
             onInput={sc.setDcGainValue}
             tooltip="sc.gain"
@@ -274,10 +274,31 @@ export const ScInputs = () => {
           value={formatTimeDurationFromMinutes(totalSkipMinutes())}
           tooltip="sc.timeskip"
         >
-          <div class="grid grid-cols-3 gap-2">
-            <IntegerField label="S" value={sc.timeSkipSmall()} onInput={sc.setTimeSkipSmall} min={0} step={1} />
-            <IntegerField label="M" value={sc.timeSkipMedium()} onInput={sc.setTimeSkipMedium} min={0} step={1} />
-            <IntegerField label="L" value={sc.timeSkipLarge()} onInput={sc.setTimeSkipLarge} min={0} step={1} />
+          <div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,8rem),1fr))] gap-2">
+            <IntegerField
+              compactLabel
+              label="Small"
+              value={sc.timeSkipSmall()}
+              onInput={sc.setTimeSkipSmall}
+              min={0}
+              step={1}
+            />
+            <IntegerField
+              compactLabel
+              label="Medium"
+              value={sc.timeSkipMedium()}
+              onInput={sc.setTimeSkipMedium}
+              min={0}
+              step={1}
+            />
+            <IntegerField
+              compactLabel
+              label="Large"
+              value={sc.timeSkipLarge()}
+              onInput={sc.setTimeSkipLarge}
+              min={0}
+              step={1}
+            />
           </div>
         </SummaryInputModal>
 

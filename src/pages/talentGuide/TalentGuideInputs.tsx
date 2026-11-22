@@ -1,6 +1,9 @@
 import { For, Show } from "solid-js"
 import { InfoCard } from "../../components/layout/contentBlocks"
-import { CheckboxField, DisplayField, IntegerField, SelectField } from "../../components/ui/formControls"
+import { CheckboxField, IntegerField, SelectField } from "../../components/ui/formControls"
+import { ResourceLabel } from "../../components/ui/ResourceLabel"
+import { ResourceText } from "../../components/ui/ResourceText"
+import { RunTypeOption } from "../../components/ui/RunTypeOption"
 import type { TalentRunType } from "./talentGuideCalculator"
 import { useTalentGuideContext } from "./talentGuideContext"
 
@@ -30,11 +33,29 @@ export const TalentGuideInputs = () => {
             value={runType()}
             onChange={(next) => setRunType(next as TalentRunType)}
             options={runOptions()}
+            renderOption={(option) => <RunTypeOption {...option} />}
           />
           <IntegerField label="SE" value={se()} onInput={setSe} min={1} max={200} step={1} />
-          <IntegerField label="Total LP" value={lp()} onInput={setLp} min={0} step={1} />
+          <IntegerField
+            label={
+              <span class="inline-flex items-center gap-1.5">
+                <ResourceLabel resource="lp" showText>
+                  Total LP
+                </ResourceLabel>
+              </span>
+            }
+            value={lp()}
+            onInput={setLp}
+            min={0}
+            step={1}
+          />
           <CheckboxField
-            label="G-Corp multiplier maxed"
+            label={
+              <span class="inline-flex items-center gap-1.5">
+                <ResourceLabel resource="gp">G-Corp</ResourceLabel>
+                <span>multiplier maxed</span>
+              </span>
+            }
             checked={gCorpMaxed()}
             onChange={setGCorpMaxed}
             tooltip="talentGuide.gCorp"
@@ -52,7 +73,13 @@ export const TalentGuideInputs = () => {
                 </For>
               </div>
             </Show>
-            <For each={[...changeNotes(), ...allocation().notes]}>{(note) => <p>{note}</p>}</For>
+            <For each={[...changeNotes(), ...allocation().notes]}>
+              {(note) => (
+                <p>
+                  <ResourceText text={note} />
+                </p>
+              )}
+            </For>
           </div>
         </InfoCard>
       </Show>

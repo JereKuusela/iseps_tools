@@ -1,6 +1,8 @@
 import { For, Show } from "solid-js"
 import { InfoCard } from "../../components/layout/contentBlocks"
 import { IntegerField, SelectField } from "../../components/ui/formControls"
+import { ResourceText } from "../../components/ui/ResourceText"
+import { RunTypeOption } from "../../components/ui/RunTypeOption"
 import type { PerkRunType } from "../../shared/perkContext"
 import { usePerkGuideContext } from "./perkGuideContext"
 
@@ -29,6 +31,7 @@ export const PerkGuideInputs = () => {
             value={runType()}
             onChange={(next) => setRunType(next as PerkRunType)}
             options={runOptions()}
+            renderOption={(option) => <RunTypeOption {...option} />}
           />
           <IntegerField label="SE" value={se()} onInput={setSe} min={1} max={200} step={1} />
         </div>
@@ -58,7 +61,9 @@ export const PerkGuideInputs = () => {
 
         <Show when={selectedEntry()!.notes}>
           <InfoCard title="Useful notes">
-            <p class="text-sm leading-6 text-ink/80 dark:text-white/80 whitespace-pre-wrap">{selectedEntry()!.notes}</p>
+            <p class="text-sm leading-6 text-ink/80 dark:text-white/80 whitespace-pre-wrap">
+              <ResourceText text={selectedEntry()!.notes} />
+            </p>
           </InfoCard>
         </Show>
       </Show>

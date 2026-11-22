@@ -1,6 +1,7 @@
 import { InfoCard, MetricRow } from "../../components/layout/contentBlocks"
 import { SpendingReport } from "../../components/layout/SpendingReport"
 import { IntegerField, SelectField } from "../../components/ui/formControls"
+import { ResourceLabel } from "../../components/ui/ResourceLabel"
 import { LargeNumber } from "../../lib/largeNumber"
 import { formatLargeNumber } from "../../lib/numberFormat"
 import { PARTICLE_ORDER, type UnlockedParticle } from "../../lib/particles"
@@ -37,25 +38,24 @@ export const TokensInputs = () => {
           min={0}
           step={1}
         />
-        <IntegerField
-          label="Current SE"
-          value={tokens.currentSe()}
-          onInput={tokens.setCurrentSe}
-          min={0}
-          step={1}
-        />
+        <IntegerField label="Current SE" value={tokens.currentSe()} onInput={tokens.setCurrentSe} min={0} step={1} />
         <SelectField
           label="Unlocked particle"
           value={tokens.unlockedParticle()}
           onChange={(next) => tokens.setUnlockedParticle(next as UnlockedParticle)}
           options={unlockedParticleOptions()}
+          renderOption={(option) => (
+            <ResourceLabel resource={option.value} showText>
+              {option.label}
+            </ResourceLabel>
+          )}
         />
 
         <div class="rounded border border-ink/20 bg-white dark:border-white/15 dark:bg-[#253a56] mt-1.25">
           <MetricRow
             label={
               <span class="flex items-center gap-2">
-                Tokens spent
+                <span>Tokens spent</span>
                 <SpendingReport
                   title="Token spending"
                   currency="tokens"

@@ -1,5 +1,7 @@
+import * as Select from "@kobalte/core/select"
 import * as TextField from "@kobalte/core/text-field"
-import { createEffect, createMemo, createSignal, For, type JSX } from "solid-js"
+import { ChevronDown } from "lucide-solid"
+import { createEffect, createMemo, createSignal, createUniqueId, For, type JSX } from "solid-js"
 import {
   formatFixed,
   formatLargeNumberMultiplier,
@@ -36,6 +38,7 @@ type DecimalFieldProps = NumberFieldProps & {
 }
 
 type IntegerFieldProps = {
+  compactLabel?: boolean
   dimmed?: boolean
   title?: () => string | undefined
   label: JSX.Element
@@ -63,7 +66,7 @@ type TextInputFieldProps = {
 }
 
 type PercentFieldProps = {
-  label: string
+  label: JSX.Element
   value: string
   onInput: (next: string) => void
   placeholder?: string
@@ -434,10 +437,12 @@ export const IntegerField = (props: IntegerFieldProps) => {
   return (
     <TextField.Root value={props.value} onChange={onChange} class="grid gap-1.5">
       <div
-        class={`grid items-center gap-2 ${
-          props.wide
-            ? "grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
-            : "grid-cols-[minmax(0,3fr)_minmax(0,2fr)] sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
+        class={`grid items-center ${
+          props.compactLabel
+            ? "grid-cols-[auto_minmax(0,1fr)] gap-1.5"
+            : props.wide
+              ? "grid-cols-[minmax(0,2fr)_minmax(0,3fr)] gap-2"
+              : "grid-cols-[minmax(0,3fr)_minmax(0,2fr)] gap-2 sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
         }`}
       >
         <div class={"min-w-0 flex items-center gap-2"}>
@@ -731,7 +736,7 @@ export const DisplayField = (props: DisplayFieldProps) => {
 type CheckboxFieldProps = {
   dimmed?: boolean
   title?: () => string | undefined
-  label: string
+  label: JSX.Element
   checked: boolean
   onChange: (checked: boolean) => void
   tooltip?: TooltipKey
@@ -772,11 +777,15 @@ type SelectFieldProps = {
   value: string
   onChange: (next: string) => void
   options: SelectOption[]
+  renderOption?: (option: SelectOption) => JSX.Element
   tooltip?: TooltipKey
   wide?: boolean
 }
 
 export const SelectField = (props: SelectFieldProps) => {
+  const id = createUniqueId()
+  const labelId = `${id}-label`
+
   return (
     <div class="grid gap-1.5">
       <div
@@ -787,22 +796,67 @@ export const SelectField = (props: SelectFieldProps) => {
         }`}
       >
         <div class={"min-w-0 flex items-center gap-2"}>
-          <label class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">
+          <label
+            id={labelId}
+            for={id}
+            class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75"
+          >
             {props.label}
           </label>
           {props.tooltip ? <Tooltip content={props.tooltip} /> : null}
         </div>
         <div class={"min-w-0"}>
-          <select
-            value={props.value}
-            onChange={(event) => props.onChange(event.currentTarget.value)}
-            onKeyDown={blurOnEnterOrEscape}
-            class={TEXT_INPUT_CLASS}
-          >
-            {props.options.map((option) => (
-              <option value={option.value}>{option.label}</option>
-            ))}
-          </select>
+          {props.renderOption ? (
+            <Select.Root<SelectOption>
+              options={props.options}
+              optionValue="value"
+              optionTextValue="label"
+              value={props.options.find((option) => option.value === props.value) ?? null}
+              onChange={(option) => option && props.onChange(option.value)}
+              disallowEmptySelection
+              sameWidth
+              itemComponent={(itemProps) => (
+                <Select.Item
+                  item={itemProps.item}
+                  class="cursor-default rounded px-2.5 py-1.5 outline-none data-[highlighted]:bg-mist data-[selected]:font-semibold dark:data-[highlighted]:bg-white/15"
+                >
+                  <Select.ItemLabel class="flex items-center gap-2">
+                    {props.renderOption?.(itemProps.item.rawValue)}
+                  </Select.ItemLabel>
+                </Select.Item>
+              )}
+            >
+              <Select.Trigger
+                id={id}
+                aria-labelledby={labelId}
+                class={`${TEXT_INPUT_CLASS} flex items-center justify-between gap-2 text-left`}
+              >
+                <Select.Value<SelectOption> class="flex items-center gap-2">
+                  {(state) => props.renderOption?.(state.selectedOption())}
+                </Select.Value>
+                <Select.Icon>
+                  <ChevronDown size={16} aria-hidden="true" />
+                </Select.Icon>
+              </Select.Trigger>
+              <Select.Portal>
+                <Select.Content class="z-50 rounded border border-ink/20 bg-white text-sm text-ink shadow-lg dark:border-white/15 dark:bg-[#253a56] dark:text-white">
+                  <Select.Listbox class="max-h-64 overflow-y-auto p-1" />
+                </Select.Content>
+              </Select.Portal>
+            </Select.Root>
+          ) : (
+            <select
+              id={id}
+              value={props.value}
+              onChange={(event) => props.onChange(event.currentTarget.value)}
+              onKeyDown={blurOnEnterOrEscape}
+              class={TEXT_INPUT_CLASS}
+            >
+              {props.options.map((option) => (
+                <option value={option.value}>{option.label}</option>
+              ))}
+            </select>
+          )}
         </div>
       </div>
     </div>

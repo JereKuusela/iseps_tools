@@ -19,7 +19,7 @@
     "nodes": [
       "2 alpha"
     ],
-    "note": "1 Alpha + 1 DC  only gives an additional ~x1.5 more DC at the cost of ~x1e7 Cash, so 2 Alpha nodes is better here."
+    "note": "1 [[Alpha]] + 1 [[DC]]  only gives an additional ~x1.5 more [[DC]] at the cost of ~x1e7 [[Cash]], so 2 [[Alpha]] nodes is better here."
   },
   {
     "cycle": 4,
@@ -27,7 +27,7 @@
     "nodes": [
       "3 alpha"
     ],
-    "note": "2 Alpha + 1 DC node is often better as it gives ~x3 more DC, but ~x1e9 less Cash than 3 Alpha. Only when the extra Cash is needed to get an important research, should 3 Alpha be used."
+    "note": "2 [[Alpha]] + 1 [[DC]] node is often better as it gives ~x3 more [[DC]], but ~x1e9 less [[Cash]] than 3 [[Alpha]]. Only when the extra [[Cash]] is needed to get an important research, should 3 [[Alpha]] be used."
   },
   {
     "cycle": 5,
@@ -36,7 +36,7 @@
       "3 alpha",
       "dc"
     ],
-    "note": "2 Alpha + 2 DC gives ~x2.2 more DC, but ~x1e11 less cash.  The 3 Alpha + 1 DC option is generally better here."
+    "note": "2 [[Alpha]] + 2 [[DC]] gives ~x2.2 more [[DC]], but ~x1e11 less [[cash]].  The 3 [[Alpha]] + 1 [[DC]] option is generally better here."
   },
   {
     "cycle": 6,
@@ -89,7 +89,7 @@
       "solutions",
       "2 dc"
     ],
-    "note": "Solutions node is better than 2 AP here because it ends up with slightly more DC which helps in Quantum menu alot."
+    "note": "[[Solutions]] node is better than 2 [[AP]] here because it ends up with slightly more [[DC]] which helps in Quantum menu alot."
   },
   {
     "cycle": 12,
@@ -120,7 +120,7 @@
       "solutions",
       "3 dc"
     ],
-    "note": "Gamma nodes are the best option because of G-Corp overclock modules."
+    "note": "[[Gamma]] nodes are the best option because of [[gp|G-Corp]] overclock modules."
   },
   {
     "cycle": 14,
@@ -132,7 +132,7 @@
       "3 dc",
       "fenix"
     ],
-    "note": "Alternative older build. Fenix is better than Ixion node because of the larger multiplier."
+    "note": "Alternative older build. [[Fenix]] is better than [[Ixion]] node because of the larger multiplier."
   },
   {
     "cycle": 15,
@@ -168,7 +168,7 @@
     "cycle": 18,
     "run": "se",
     "title": "Gamma",
-    "note": "Should be slightly better if you can afford the last G-Corp overclock module.",
+    "note": "Should be slightly better if you can afford the last [[gp|G-Corp]] overclock module.",
     "nodes": [
       "3 alpha",
       "2 gamma",
@@ -181,7 +181,7 @@
     "cycle": 18,
     "run": "se",
     "title": "Ixion",
-    "note": "Probably slightly worse. unless you can't afford the last G-Corp overclock module yet.",
+    "note": "Probably slightly worse. unless you can't afford the last [[gp|G-Corp]] overclock module yet.",
     "nodes": [
       "3 alpha",
       "solutions",
@@ -280,7 +280,7 @@
       "alpha",
       "3 gamma"
     ],
-    "note": "For the 5th node, Alpha comes out better than Delta for a GP run due mostly extra DC upgrades from the Alpha"
+    "note": "For the 5th node, [[Alpha]] comes out better than [[Delta]] for a [[GP]] run due mostly extra [[DC]] upgrades from the [[Alpha]]"
   },
   {
     "cycle": 6,
@@ -331,7 +331,7 @@
       "3 gamma",
       "solutions"
     ],
-    "note": "GP end node is not worthwhile here as the losses from dropping Gamma and Alpha nodes are too much"
+    "note": "[[GP]] end node is not worthwhile here as the losses from dropping [[Gamma]] and [[Alpha]] nodes are too much"
   },
   {
     "cycle": 12,
@@ -342,7 +342,7 @@
       "solutions",
       "dc"
     ],
-    "note": "GP end node is not worthwhile here as the losses from dropping Gamma and Alpha nodes are too much"
+    "note": "[[GP]] end node is not worthwhile here as the losses from dropping [[Gamma]] and [[Alpha]] nodes are too much"
   },
   {
     "cycle": 13,
@@ -353,7 +353,7 @@
       "solutions",
       "2 dc"
     ],
-    "note": "GP end node appears still not worthwhile over dropping from DC and Alpha nodes"
+    "note": "[[GP]] end node appears still not worthwhile over dropping from [[DC]] and [[Alpha]] nodes"
   },
   {
     "cycle": 14,
@@ -364,7 +364,7 @@
       "solutions",
       "3 dc"
     ],
-    "note": "GP end node appears still not worthwhile over dropping from DC and Alpha nodes"
+    "note": "[[GP]] end node appears still not worthwhile over dropping from [[DC]] and [[Alpha]] nodes"
   },
   {
     "cycle": 15,
@@ -376,7 +376,7 @@
       "3 dc",
       "beta"
     ],
-    "note": "GP end node appears still not worthwhile over dropping from DC and Alpha nodes"
+    "note": "[[GP]] end node appears still not worthwhile over dropping from [[DC]] and [[Alpha]] nodes"
   },
   {
     "cycle": 16,
@@ -388,7 +388,7 @@
       "3 dc",
       "fenix"
     ],
-    "note": "In testing, this beat 1xDC + GP by xe4 GP at SE152. Results may vary at earlier SEs"
+    "note": "In testing, this beat 1x[[DC]] + [[GP]] by xe4 [[GP]] at SE152. Results may vary at earlier SEs"
   },
   {
     "cycle": 17,
@@ -423,7 +423,7 @@
       "2 fenix",
       "g_points"
     ],
-    "note": "Fenix node boosts Emblems which increases Gamma output"
+    "note": "The [[Fenix]] node boosts [[Emblems]], which increases [[Gamma]]."
   },
   {
     "cycle": 20,
@@ -454,7 +454,7 @@
     "nodes": [
       "centre"
     ],
-    "note": "Juno run not feasible until 4 cycles"
+    "note": "[[Juno]] run not feasible until 4 cycles"
   },
   {
     "cycle": 2,
@@ -462,7 +462,7 @@
     "nodes": [
       "alpha"
     ],
-    "note": "Juno run not feasible until 4 cycles"
+    "note": "[[Juno]] run not feasible until 4 cycles"
   },
   {
     "cycle": 3,
@@ -470,7 +470,7 @@
     "nodes": [
       "2 alpha"
     ],
-    "note": "Juno run not feasible until 4 cycles"
+    "note": "[[Juno]] run not feasible until 4 cycles"
   },
   {
     "cycle": 4,
@@ -478,7 +478,7 @@
     "nodes": [
       "juno"
     ],
-    "note": "If you complete the 5th cycle in your run, put it in Juno and continue for a bit."
+    "note": "If you complete the 5th cycle in your run, put it in [[Juno]] and continue for a bit."
   },
   {
     "cycle": 5,
@@ -486,7 +486,7 @@
     "nodes": [
       "2 juno"
     ],
-    "note": "If you complete the 6th cycle in your run, put it in Juno and continue for a bit."
+    "note": "If you complete the 6th cycle in your run, put it in [[Juno]] and continue for a bit."
   },
   {
     "cycle": 6,
@@ -494,7 +494,7 @@
     "nodes": [
       "3 juno"
     ],
-    "note": "If you complete the 7th cycle in your run, put it in Alpha and continue for a bit."
+    "note": "If you complete the 7th cycle in your run, put it in [[Alpha]] and continue for a bit."
   },
   {
     "cycle": 7,
@@ -503,7 +503,7 @@
       "2 juno",
       "artifacts"
     ],
-    "note": "Artifacts node + 2 Juno is generally better, but around SE 119-122, 2 Alpha + 3 Juno may be better if it gets Research 122 when Artifacts node wouldn't. If you complete the 8th cycle in your run, put it in Juno and continue for a bit."
+    "note": "[[Artifacts]] node + 2 [[Juno]] is generally better, but around SE 119-122, 2 [[Alpha]] + 3 [[Juno]] may be better if it gets Research 122 when [[Artifacts]] node wouldn't. If you complete the 8th cycle in your run, put it in [[Juno]] and continue for a bit."
   },
   {
     "cycle": 8,
@@ -512,7 +512,7 @@
       "3 juno",
       "artifacts"
     ],
-    "note": "If you complete the 9th cycle in your run, put it in Alpha and continue for a bit."
+    "note": "If you complete the 9th cycle in your run, put it in [[Alpha]] and continue for a bit."
   },
   {
     "cycle": 9,
@@ -522,7 +522,7 @@
       "3 juno",
       "artifacts"
     ],
-    "note": "If you complete the 10th cycle in your run, put it in Alpha and continue for a bit."
+    "note": "If you complete the 10th cycle in your run, put it in [[Alpha]] and continue for a bit."
   },
   {
     "cycle": 10,
@@ -532,7 +532,7 @@
       "3 juno",
       "artifacts"
     ],
-    "note": "With ZAT 10, when you can get to e800 DC (or are very close), it can be better to use 2 Alpha and 1 DC for ~x12 DC boost and e18 cash loss.  This works as long as you can still reach Research 126 at e970 Cash with the cash loss."
+    "note": "With ZAT 10, when you can get to e800 [[DC]] (or are very close), it can be better to use 2 [[Alpha]] and 1 [[DC]] for ~x12 [[DC]] boost and e18 [[cash]] loss.  This works as long as you can still reach Research 126 at e970 [[Cash]] with the [[cash]] loss."
   },
   {
     "cycle": 11,
@@ -543,7 +543,7 @@
       "artifacts",
       "dc"
     ],
-    "note": "If you complete the 12th cycle in your run, put it in DC and continue for a bit."
+    "note": "If you complete the 12th cycle in your run, put it in [[DC]] and continue for a bit."
   },
   {
     "cycle": 12,
@@ -554,7 +554,7 @@
       "artifacts",
       "2 dc"
     ],
-    "note": "If you complete the 13th cycle in your run, put it in DC and continue for a bit."
+    "note": "If you complete the 13th cycle in your run, put it in [[DC]] and continue for a bit."
   },
   {
     "cycle": 13,
@@ -565,7 +565,7 @@
       "artifacts",
       "3 dc"
     ],
-    "note": "If you complete the 14th cycle in your run, put it in Beta and continue for a bit."
+    "note": "If you complete the 14th cycle in your run, put it in [[Beta]] and continue for a bit."
   },
   {
     "cycle": 14,
@@ -577,7 +577,7 @@
       "3 dc",
       "beta"
     ],
-    "note": "A bit unsure here.  Dropping DC is not worth it for AP node.  Beta (boosting Scientist rounds for talent IC6-1) seems mathematically better than Gamma (boosting C41 levels) for Juno boost."
+    "note": "A bit unsure here.  Dropping [[DC]] is not worth it for [[AP]] node.  [[Beta]] (boosting [[Scientist]] rounds for talent IC6-1) seems mathematically better than [[Gamma]] (boosting C41 levels) for [[Juno]] boost."
   },
   {
     "cycle": 15,
@@ -588,7 +588,7 @@
       "artifacts",
       "3 ap"
     ],
-    "note": "At this point, trade-off with DC vs. AP nodes is 1-to-1 and each AP node level is better than DC, so we swap to 3 AP here. If you complete the 16th cycle in your run, put it in DC and continue for a bit."
+    "note": "At this point, trade-off with [[DC]] vs. [[AP]] nodes is 1-to-1 and each [[AP]] node level is better than [[DC]], so we swap to 3 [[AP]] here. If you complete the 16th cycle in your run, put it in [[DC]] and continue for a bit."
   },
   {
     "cycle": 16,
@@ -600,7 +600,7 @@
       "3 ap",
       "dc"
     ],
-    "note": "If you complete the 17th cycle in your run, put it in DC and continue for a bit."
+    "note": "If you complete the 17th cycle in your run, put it in [[DC]] and continue for a bit."
   },
   {
     "cycle": 17,
@@ -612,7 +612,7 @@
       "3 ap",
       "2 dc"
     ],
-    "note": "If you complete the 18th cycle in your run, put it in DC and continue for a bit."
+    "note": "If you complete the 18th cycle in your run, put it in [[DC]] and continue for a bit."
   },
   {
     "cycle": 18,
@@ -624,7 +624,7 @@
       "3 ap",
       "3 dc"
     ],
-    "note": "If you complete the 19th cycle in your run, put it in Beta and continue for a bit."
+    "note": "If you complete the 19th cycle in your run, put it in [[Beta]] and continue for a bit."
   },
   {
     "cycle": 19,
@@ -638,7 +638,7 @@
       "3 ap",
       "2 dc"
     ],
-    "note": "Ceti is used to unlock Kaiper upgrades.\nUse this build until about e1220 DC."
+    "note": "[[Ceti]] is used to unlock Kaiper upgrades.\nUse this build until about e1220 [[DC]]."
   },
   {
     "cycle": 19,
@@ -651,7 +651,7 @@
       "solutions",
       "3 ap"
     ],
-    "note": "With enough DC, Solutions node ends up being better.\nIf you can't reach e1195 DC, use the previous build."
+    "note": "With enough [[DC]], [[Solutions]] node ends up being better.\nIf you can't reach e1195 [[DC]], use the previous build."
   },
   {
     "cycle": 20,
@@ -663,7 +663,7 @@
       "solutions",
       "3 ap"
     ],
-    "note": "If you complete the 21st cycle in your run, put it in DC and continue for a bit."
+    "note": "If you complete the 21st cycle in your run, put it in [[DC]] and continue for a bit."
   },
   {
     "cycle": 21,
@@ -684,7 +684,7 @@
     "nodes": [
       "centre"
     ],
-    "note": "These runs are minimally useful at this stage in part because companion 34 isn't level 50 yet, so sacrificing GP can hurt your cash some."
+    "note": "These runs are minimally useful at this stage in part because companion 34 isn't level 50 yet, so sacrificing [[GP]] can hurt your [[cash]] some."
   },
   {
     "cycle": 2,
@@ -692,7 +692,7 @@
     "nodes": [
       "alpha"
     ],
-    "note": "These runs are minimally useful at this stage in part because companion 34 isn't level 50 yet, so sacrificing GP can hurt your cash some."
+    "note": "These runs are minimally useful at this stage in part because companion 34 isn't level 50 yet, so sacrificing [[GP]] can hurt your [[cash]] some."
   },
   {
     "cycle": 3,
@@ -700,7 +700,7 @@
     "nodes": [
       "2 alpha"
     ],
-    "note": "Once companion 34 is level 50, a cash run might be good for a small boost in SE 102-104 push, but generally isn't very important to do."
+    "note": "Once companion 34 is level 50, a [[cash]] run might be good for a small boost in SE 102-104 push, but generally isn't very important to do."
   },
   {
     "cycle": 4,
@@ -745,7 +745,7 @@
       "3 dc",
       "beta"
     ],
-    "note": "Sticking with DC over 2 AP was found to be better.  Beta is best use of last point."
+    "note": "Sticking with [[DC]] over 2 [[AP]] was found to be better.  [[Beta]] is best use of last point."
   },
   {
     "cycle": 9,
@@ -842,7 +842,7 @@
       "3 ap",
       "3 dc"
     ],
-    "note": "Same as SE Push. Dropping all DC nodes for Artifacts ends up losing too many cash boosts"
+    "note": "Same as SE Push. Dropping all [[DC]] nodes for [[Artifacts]] ends up losing too many [[cash]] boosts"
   },
   {
     "cycle": 19,
@@ -854,7 +854,7 @@
       "dc",
       "artifacts"
     ],
-    "note": "Gives about 2 more OG shares than SE push."
+    "note": "Gives about 2 more OG [[shares]] than SE push."
   },
   {
     "cycle": 20,

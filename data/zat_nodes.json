@@ -8,7 +8,7 @@
     "dcMul": 0.04,
     "x": 0,
     "y": 0,
-    "info": "AP multiplied by x1.04 per tech and x1.02 per share."
+    "info": "[[AP]] multiplied by x1.04 per [[tech]] and x1.02 per [[shares|share]]."
   },
   {
     "id": "alpha",
@@ -19,7 +19,7 @@
     "x": 0,
     "y": 3,
     "req": "centre",
-    "info": "Alpha multiplied by x1.03 per tech."
+    "info": "[[Alpha]] multiplied by x1.03 per [[tech]]."
   },
   {
     "id": "gamma",
@@ -29,7 +29,7 @@
     "x": 3,
     "y": 0,
     "req": "centre",
-    "info": "Gamma multiplied by x1.08 per tech."
+    "info": "[[Gamma]] multiplied by x1.08 per [[tech]]."
   },
   {
     "id": "delta",
@@ -39,7 +39,7 @@
     "x": 0,
     "y": -3,
     "req": "centre",
-    "info": "Delta multiplied by x1.04 per tech."
+    "info": "[[Delta]] multiplied by x1.04 per [[tech]]."
   },
   {
     "id": "dc",
@@ -49,7 +49,7 @@
     "dcMul": 0.03,
     "x": -3,
     "req": "centre",
-    "info": "DC multiplied by x1.03 per tech."
+    "info": "[[DC]] multiplied by x1.03 per [[tech]]."
   },
   {
     "id": "helion",
@@ -59,7 +59,7 @@
     "x": 2,
     "y": 5,
     "req": "alpha",
-    "info": "Helion multiplied by x1.08 per tech."
+    "info": "[[Helion]] multiplied by x1.08 per [[tech]]."
   },
   {
     "id": "ceti",
@@ -69,7 +69,7 @@
     "x": 3,
     "y": -3,
     "req": "gamma",
-    "info": "Ceti multiplied by x1.15 per tech."
+    "info": "[[Ceti]] multiplied by x1.15 per [[tech]]."
   },
   {
     "id": "ixion",
@@ -79,7 +79,7 @@
     "x": -2,
     "y": -5,
     "req": "delta",
-    "info": "Ixion multiplied by x1.05 per tech."
+    "info": "[[Ixion]] multiplied by x1.05 per [[tech]]."
   },
   {
     "id": "beta",
@@ -89,7 +89,7 @@
     "x": -5.5,
     "y": 1.5,
     "req": "dc",
-    "info": "Beta multiplied by x1.10 per tech."
+    "info": "[[Beta]] multiplied by x1.10 per [[tech]]."
   },
   {
     "id": "juno",
@@ -100,7 +100,7 @@
     "x": 5,
     "y": 5,
     "req": "helion",
-    "info": "Juno multiplied by x1.012 per tech."
+    "info": "[[Juno]] multiplied by x1.012 per [[tech]]."
   },
   {
     "id": "epsilon",
@@ -110,7 +110,7 @@
     "x": 6,
     "y": -3,
     "req": "ceti",
-    "info": "Epsilon multiplied by x1.15 per tech."
+    "info": "[[Epsilon]] multiplied by x1.15 per [[tech]]."
   },
   {
     "id": "ap",
@@ -122,7 +122,7 @@
     "x": -2,
     "y": -7.5,
     "req": "ixion",
-    "info": "AP multiplied by x1.008 per tech."
+    "info": "[[AP]] multiplied by x1.008 per [[tech]]."
   },
   {
     "id": "fenix",
@@ -132,7 +132,7 @@
     "x": -3,
     "y": 3,
     "req": "beta",
-    "info": "Fenix multiplied by x1.15 per tech."
+    "info": "[[Fenix]] multiplied by x1.15 per [[tech]]."
   },
   {
     "id": "artifacts",
@@ -146,7 +146,7 @@
     "x": 5,
     "y": 8,
     "req": "juno",
-    "info": "Artifacts multiplied by x1.02 per tech and x1.02 per share."
+    "info": "[[Artifacts]] multiplied by x1.02 per [[tech]] and x1.02 per [[shares|share]]."
   },
   {
     "id": "solutions",
@@ -158,7 +158,7 @@
     "x": 6,
     "y": -6,
     "req": "epsilon",
-    "info": "Solutions multiplied by x1.04 per tech and x1.02 per share."
+    "info": "[[Solutions]] multiplied by x1.04 per [[tech]] and x1.02 per [[shares|share]]."
   },
   {
     "id": "emblems",
@@ -169,7 +169,7 @@
     "x": -5,
     "y": -7.5,
     "req": "ap",
-    "info": "Emblems multiplied by x1.02 per tech and x1.02 per share."
+    "info": "[[Emblems]] multiplied by x1.02 per [[tech]] and x1.02 per [[shares|share]]."
   },
   {
     "id": "g_points",
@@ -180,6 +180,6 @@
     "x": -5.5,
     "y": 5,
     "req": "fenix",
-    "info": "G-Points multiplied by x1.02 per tech and x1.02 per share."
+    "info": "[[gp|G-Points]] multiplied by x1.02 per [[tech]] and x1.02 per [[shares|share]]."
   }
 ]

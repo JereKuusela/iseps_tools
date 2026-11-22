@@ -1,6 +1,9 @@
 import { For, Show, createMemo } from "solid-js"
 import { InfoCard } from "../../components/layout/contentBlocks"
 import { DecimalField, IntegerField, SelectField } from "../../components/ui/formControls"
+import { ResourceLabel } from "../../components/ui/ResourceLabel"
+import { ResourceText } from "../../components/ui/ResourceText"
+import { RunTypeOption } from "../../components/ui/RunTypeOption"
 import type { GuideRunType } from "./zatGuideTypes"
 import { useZatGuideContext } from "./zatGuideContext"
 import { formatLargeNumberMultiplier } from "../../lib/numberFormat"
@@ -34,6 +37,7 @@ export const ZatGuideInputs = () => {
       return {
         id: nodeId,
         title: node.name,
+        resource: node.resource,
         level: node.maxLv == 1 ? "" : amount.toString(),
       }
     })
@@ -54,8 +58,22 @@ export const ZatGuideInputs = () => {
             value={runType()}
             onChange={(next) => setRunType(next as GuideRunType)}
             options={runOptions()}
+            renderOption={(option) => <RunTypeOption {...option} />}
           />
-          <IntegerField label="Cycles" value={cycles()} onInput={setCycles} min={1} max={100} step={1} />
+          <IntegerField
+            label={
+              <span class="inline-flex items-center gap-1.5">
+                <ResourceLabel resource="penrose" showText>
+                  Cycles
+                </ResourceLabel>
+              </span>
+            }
+            value={cycles()}
+            onInput={setCycles}
+            min={1}
+            max={100}
+            step={1}
+          />
           <Show when={guideOptions().length > 1}>
             <div class="grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-center gap-2">
               <p class="text-xs font-semibold uppercase tracking-[0.12em] text-ink/75 dark:text-white/75">Guide</p>
@@ -97,7 +115,11 @@ export const ZatGuideInputs = () => {
                     <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent/20 text-[11px] font-bold leading-none text-ink/85 dark:text-white/85">
                       {item.level}
                     </span>
-                    <p class="truncate text-sm font-semibold text-ink/90 dark:text-white/90">{item.title}</p>
+                    <p class="flex min-w-0 items-center gap-1.5 text-sm font-semibold text-ink/90 dark:text-white/90">
+                      <ResourceLabel resource={item.resource} showText>
+                        {item.title}
+                      </ResourceLabel>
+                    </p>
                   </div>
                 )}
               </For>
@@ -110,13 +132,19 @@ export const ZatGuideInputs = () => {
       </InfoCard>
 
       <Show when={selectedGuide()?.note}>
-        <InfoCard title="Notes">
-          <p class="text-sm leading-6 text-ink/80 dark:text-white/80 whitespace-pre-wrap">{selectedGuide()?.note}</p>
-        </InfoCard>
+        {(note) => (
+          <InfoCard title="Notes">
+            <p class="text-sm leading-6 text-ink/80 dark:text-white/80 whitespace-pre-wrap">
+              <ResourceText text={note()} />
+            </p>
+          </InfoCard>
+        )}
       </Show>
 
       <InfoCard title="Node info">
-        <p class="text-sm leading-6 text-ink/75 dark:text-white/75 whitespace-pre-wrap">{nodeInfo()}</p>
+        <p class="text-sm leading-6 text-ink/75 dark:text-white/75 whitespace-pre-wrap">
+          <ResourceText text={nodeInfo()} />
+        </p>
       </InfoCard>
 
       <InfoCard title="Total boost">
@@ -125,7 +153,13 @@ export const ZatGuideInputs = () => {
             <span class="font-semibold">Tech levels (OG Tech):</span> {techCount()}
           </div>
           <DecimalField
-            label="Shares %"
+            label={
+              <span class="inline-flex items-center gap-1.5">
+                <ResourceLabel resource="shares" showText>
+                  Shares %
+                </ResourceLabel>
+              </span>
+            }
             value={sharesPercent()}
             onInput={setSharesPercent}
             min={0}

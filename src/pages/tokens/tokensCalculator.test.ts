@@ -476,6 +476,36 @@ describe("calculateTokenRecommendations", () => {
     expect(row?.cost).toBe(20)
   })
 
+  it.each([0, 2])("uses rank tie-breakers when grouping Alpha Output at Cash level %i", async (cashLevel) => {
+    const data = await loadTokenData()
+    const upgrades = data.upgrades
+      .filter(({ id }) => id === "output.alpha" || id === "output.cash" || id === "output.beta")
+      .map((upgrade) => ({
+        ...upgrade,
+        maxLevel: upgrade.resource === "alpha" ? 2 : upgrade.resource === "cash" ? cashLevel + 1 : 1,
+      }))
+    const rowByKey = new Map(data.rowByKey)
+    const cashKey = `output.cash:${cashLevel + 1}`
+    const alphaFirst = rowByKey.get("output.alpha:1")!
+    const alphaSecond = rowByKey.get("output.alpha:2")!
+    rowByKey.set("output.alpha:1", { ...alphaFirst, value: 30 })
+    rowByKey.set("output.alpha:2", { ...alphaSecond, value: 20 })
+    rowByKey.set(cashKey, { ...rowByKey.get(cashKey)!, value: 20 })
+    rowByKey.set("output.beta:1", { ...rowByKey.get("output.beta:1")!, value: 10 })
+
+    const { rows } = calculateTokenRecommendations(
+      { ...baseInput, unlockedParticle: "beta", outputLevelsByResource: { cash: String(cashLevel) } },
+      { upgrades, rowByKey },
+    )
+
+    if (cashLevel === 0) {
+      expect(rows.map(({ id }) => id)).toEqual(["output.alpha", "output.cash", "output.alpha", "output.beta"])
+    } else {
+      expect(rows.map(({ id }) => id)).toEqual(["output.alpha", "output.cash", "output.beta"])
+      expect(rows[0]).toMatchObject({ currentLevel: 0, nextLevel: 2, cost: alphaFirst.cost + alphaSecond.cost })
+    }
+  })
+
   it("groups consecutive Supplies Tokens levels without expanding Best Special", async () => {
     const data = await loadTokenData()
     const rowByKey = new Map(data.rowByKey)
