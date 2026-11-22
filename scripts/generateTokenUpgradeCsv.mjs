@@ -319,35 +319,6 @@ const findOutputLongTermBridgeStart = (legacyShortPerCost, legacyLongPerCost, ma
   return null
 }
 
-const findClosestMatchingLowerOutputLevelByPerCost = (legacyShortTermPerCostByLevel, level) => {
-  if (level <= 1) return null
-
-  const target = legacyShortTermPerCostByLevel[level]
-  if (!Number.isFinite(target) || target <= 0) return null
-
-  let bestLevel = null
-  let bestDelta = Number.POSITIVE_INFINITY
-  const upper = Math.min(1000, level - 1)
-
-  for (let candidate = 1; candidate <= upper; candidate += 1) {
-    const current = legacyShortTermPerCostByLevel[candidate]
-    if (!Number.isFinite(current) || current <= 0) continue
-
-    const delta = Math.abs(current - target)
-    if (delta < bestDelta) {
-      bestDelta = delta
-      bestLevel = candidate
-    }
-  }
-
-  if (bestLevel == null) return null
-
-  const relativeDelta = bestDelta / target
-  if (relativeDelta > POST_1000_PER_COST_MATCH_TOLERANCE) return null
-
-  return bestLevel
-}
-
 const findClosestOutputLevelByPerCost = (targetPerCost, outputPerCostByLevel) => {
   if (!Number.isFinite(targetPerCost) || targetPerCost <= 0) return null
   if (!outputPerCostByLevel || outputPerCostByLevel.length <= 1) return null
@@ -400,17 +371,63 @@ const toTermPrecision = (value) => {
 const targetRows = parseTargetRows(readFileSync(targetsPath, "utf8"))
 const resourceTargetMap = buildResourceTargetMap(targetRows)
 const outputPerCostByResource = buildOutputPerCostByResource(upgrades)
+const specialReferenceOutputLevel = 50
+const supplyClaimsPerHour = 60 / 7
+const tokensPerCrystal = 3
+const crystalUpgrade = upgrades.find((upgrade) => upgrade.id === "supplies.crystalBonus")
+const specialGainPerHour = {
+  "supplies.tokenBonus": supplyClaimsPerHour * 0.1,
+  "supplies.crystalBonus": supplyClaimsPerHour * tokensPerCrystal,
+  "bbbot.tokenBonus": 0.5,
+}
+const alphaEfficiency = outputPerCostByResource.get("alpha").slice(1)
+for (let index = 1; index < alphaEfficiency.length; index += 1) {
+  alphaEfficiency[index] = Math.min(alphaEfficiency[index], alphaEfficiency[index - 1])
+}
+const alphaReferenceEfficiency =
+  (alphaEfficiency[specialReferenceOutputLevel - 1] + alphaEfficiency[specialReferenceOutputLevel]) / 2
+const specialEfficiencyScale =
+  (alphaReferenceEfficiency * getCostForLevel(crystalUpgrade, 1)) / specialGainPerHour[crystalUpgrade.id]
+const alphaScores = []
+const specialRows = []
 
-const lines = ["upgradeId,level,cost,accumulatedCost,shortTerm,longTerm"]
+const getSpecialValue = (gainPerCost) => {
+  const efficiency = gainPerCost * specialEfficiencyScale
+  if (efficiency <= 0) return 0
+  const upper = alphaEfficiency.findIndex((value) => value <= efficiency)
+  if (upper === -1) return Math.round((alphaScores.at(-1) * efficiency) / alphaEfficiency.at(-1))
+  if (upper === 0) return Math.round((alphaScores[0] * efficiency) / alphaEfficiency[0])
+
+  const lower = upper - 1
+  const fraction = (alphaEfficiency[lower] - efficiency) / (alphaEfficiency[lower] - alphaEfficiency[upper])
+  return Math.round(alphaScores[lower] + fraction * (alphaScores[upper] - alphaScores[lower]))
+}
+
+const getSpecialGainPerCost = (upgrade, level, cost) => {
+  if (cost <= 0) return 0
+  if (upgrade.id !== "bbbot.duration") return (specialGainPerHour[upgrade.id] ?? 0) / cost
+
+  const bonus = upgrades.find((candidate) => candidate.id === "bbbot.tokenBonus")
+  if (bonus?.requires?.id !== upgrade.id || level > bonus.requires.minLevel) return 0
+
+  let bundleCost = 0
+  for (let target = level; target <= bonus.requires.minLevel; target += 1) {
+    bundleCost += getCostForLevel(upgrade, target)
+  }
+  let best = 0
+  for (let target = 1; target <= bonus.maxLevel; target += 1) {
+    bundleCost += getCostForLevel(bonus, target)
+    if (bundleCost > 0) best = Math.max(best, (target * specialGainPerHour[bonus.id]) / bundleCost)
+  }
+  return best
+}
+
+const lines = ["upgradeId,level,cost,accumulatedCost,value"]
 
 for (const upgrade of upgrades) {
   const maxLevel = Math.max(1, Math.floor(asNumber(upgrade.maxLevel, 1)))
 
   const costsByLevel = Array(maxLevel + 1).fill(0)
-  const legacyShortTermsByLevel = Array(maxLevel + 1).fill(0)
-  const legacyShortTermPerCostByLevel = Array(maxLevel + 1).fill(0)
-
-  const prioritiesByLevel = Array(maxLevel + 1).fill(1)
   const priorityTermByLevel = Array(maxLevel + 1).fill(0)
 
   for (let level = 1; level <= maxLevel; level += 1) {
@@ -419,15 +436,12 @@ for (const upgrade of upgrades) {
     const priority = getPriorityForUpgradeLevel(upgrade, level, resourceTargetMap)
 
     costsByLevel[level] = cost
-    legacyShortTermsByLevel[level] = legacyShortTerm
-    legacyShortTermPerCostByLevel[level] = cost <= 0 ? 0 : legacyShortTerm / cost
-    prioritiesByLevel[level] = priority
 
     if (upgrade.group === "output") {
       // Output target valuation is already cost-aware through target rows.
       priorityTermByLevel[level] = priority
     } else if ((upgrade.group === "supplies" || upgrade.group === "bbbot") && upgrade.resource) {
-      const targetPerCost = legacyShortTermPerCostByLevel[level]
+      const targetPerCost = cost <= 0 ? 0 : legacyShortTerm / cost
       const outputPerCostByLevel = outputPerCostByResource.get(upgrade.resource)
       const matchedOutputLevel = findClosestOutputLevelByPerCost(targetPerCost, outputPerCostByLevel)
 
@@ -443,35 +457,16 @@ for (const upgrade of upgrades) {
     }
   }
 
-  const legacyOutputLongTermPerCostByLevel =
-    upgrade.group === "output" ? getOutputLongTermPerCostByLevel(upgrade, legacyShortTermPerCostByLevel) : null
-
-  if (upgrade.group === "output") {
+  const outputPerCost = upgrade.group === "output" ? outputPerCostByResource.get(upgrade.resource) : null
+  let bridgeStart = null
+  if (outputPerCost) {
     for (let level = 1001; level <= maxLevel; level += 1) {
-      const matchLevel = findClosestMatchingLowerOutputLevelByPerCost(legacyShortTermPerCostByLevel, level)
+      const matchLevel = findClosestOutputLevelByPerCost(outputPerCost[level], outputPerCost)
       if (matchLevel == null) continue
-      // Keep post-1000 output following tail decay; per-cost remap can only lower, never raise.
-      const matchedPriorityTerm = priorityTermByLevel[matchLevel] ?? 0
-      priorityTermByLevel[level] = Math.min(priorityTermByLevel[level] ?? 0, matchedPriorityTerm)
+      priorityTermByLevel[level] = Math.min(priorityTermByLevel[level], priorityTermByLevel[matchLevel])
     }
-  }
-
-  const priorityLongTermPerCostByLevel = Array(maxLevel + 1).fill(null)
-
-  if (upgrade.group === "output" && legacyOutputLongTermPerCostByLevel) {
-    const bridgeStart = findOutputLongTermBridgeStart(
-      legacyShortTermPerCostByLevel,
-      legacyOutputLongTermPerCostByLevel,
-      maxLevel,
-    )
-
-    if (bridgeStart != null) {
-      const bridgeValue = priorityTermByLevel[bridgeStart] ?? 0
-      const upper = Math.min(1000, maxLevel)
-      for (let level = bridgeStart; level <= upper; level += 1) {
-        priorityLongTermPerCostByLevel[level] = bridgeValue
-      }
-    }
+    const longTermPerCost = getOutputLongTermPerCostByLevel(upgrade, outputPerCost)
+    bridgeStart = findOutputLongTermBridgeStart(outputPerCost, longTermPerCost, maxLevel)
   }
 
   let accumulatedCost = 0
@@ -480,25 +475,25 @@ for (const upgrade of upgrades) {
     const cost = costsByLevel[level]
     // Sum the rounded values so the column matches what the CSV shows.
     accumulatedCost += Number(toFixedCost(cost))
-    const shortTermPerCost = priorityTermByLevel[level]
-    const longTermPerCost = priorityLongTermPerCostByLevel[level]
-
-    const scaledShortTerm = shortTermPerCost * TERM_OUTPUT_MULTIPLIER
-    const longTermCell =
-      longTermPerCost == null ? "" : toTermPrecision(Math.max(0, longTermPerCost) * TERM_OUTPUT_MULTIPLIER)
-
-    const row = [
-      upgrade.id,
-      String(level),
-      toFixedCost(cost),
-      toFixedCost(accumulatedCost),
-      toTermPrecision(Math.max(0, scaledShortTerm)),
-      longTermCell,
-    ]
-    if (row[row.length - 1] === "") row.pop()
-    lines.push(row.join(","))
+    const shortTerm = Number(toTermPrecision(priorityTermByLevel[level] * TERM_OUTPUT_MULTIPLIER))
+    const longTerm =
+      bridgeStart != null && level >= bridgeStart && level <= 1000
+        ? Number(toTermPrecision(priorityTermByLevel[bridgeStart] * TERM_OUTPUT_MULTIPLIER))
+        : shortTerm
+    const value = (shortTerm + longTerm) / 2
+    const row = [upgrade.id, String(level), toFixedCost(cost), toFixedCost(accumulatedCost), value]
+    if (upgrade.id === "output.alpha") {
+      const longTermPriority =
+        bridgeStart != null && level >= bridgeStart && level <= 1000
+          ? priorityTermByLevel[bridgeStart]
+          : priorityTermByLevel[level]
+      alphaScores.push(((priorityTermByLevel[level] + longTermPriority) * TERM_OUTPUT_MULTIPLIER) / 2)
+    }
+    if (upgrade.group === "special") specialRows.push({ row, gainPerCost: getSpecialGainPerCost(upgrade, level, cost) })
+    lines.push(row)
   }
 }
 
+for (const { row, gainPerCost } of specialRows) row[4] = getSpecialValue(gainPerCost)
 writeFileSync(outputPath, lines.join("\n") + "\n", "utf8")
 console.log(`Generated ${lines.length - 1} token rows to ${outputPath}`)

@@ -187,8 +187,8 @@ Precomputed per-level values for Token recommendations.
 - `upgradeId`: Upgrade identifier matching `token_upgrade_definitions.json`.
 - `level`: Upgrade level represented by this row.
 - `cost`: Cost for buying this level, stored with 2 decimals.
-- `shortTerm`: Immediate effect-per-cost term stored as integer (`(shortTermValue / cost) * 100000000`).
-- `longTerm`: Long-horizon effect-per-cost term stored as integer (`(longTermValue / cost) * 100000000`).
+- `accumulatedCost`: Total cost of buying all levels up to and including this one.
+- `value`: Recommendation score scaled by `100000000`. Regular upgrades use the Balanced score, averaging immediate and long-term estimates where applicable. Special scores are based on reward per active hour per token and rounded to whole numbers.
 
 This file is generated from definitions by `scripts/generateTokenUpgradeCsv.mjs`.
 

@@ -22,6 +22,7 @@ export const CrystalsResults = () => {
     <div class="grid gap-3">
       <BestNextSummary
         buyAction={crystals.applyBest}
+        buyStepAction={crystals.applyStep}
         buyDisabled={recommendation().actions.length === 0}
         buyLabel="Buy best next"
         bulkActions={[

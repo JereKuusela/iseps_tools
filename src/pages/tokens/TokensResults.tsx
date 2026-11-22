@@ -1,12 +1,12 @@
-import { For, Show } from "solid-js"
 import { BestNextSummary } from "../../components/layout/BestNextSummary"
 import { formatPercentFromRatio } from "../../lib/numberFormat"
 import { useTokensContext } from "./tokensContext"
+import type { TokenId } from "./tokensTypes"
 
 export const TokensResults = () => {
   const tokens = useTokensContext()
   const best = () => tokens.bestRecommendation()
-  const sliderLabels = ["Short term", "", "Balanced", "", "Long term"] as const
+  const upgradeLabel = (id: TokenId) => tokens.upgrades().find((candidate) => candidate.id === id)?.label ?? id
   const relativeValueRatio = (score: number) => {
     const bestScore = best()?.score ?? 0
     if (bestScore <= 0) return 0
@@ -18,13 +18,28 @@ export const TokensResults = () => {
     if (Number.isInteger(rounded)) return String(rounded)
     return rounded.toFixed(2).replace(/\.?0+$/, "")
   }
+  const specialRecommendation = () => {
+    const row = tokens.bestSpecialRecommendation()
+    if (!row) return undefined
+
+    return {
+      heading: "Best special",
+      item: `${upgradeLabel(row.id)}: ${row.nextLevel}`,
+      data: `${formatCost(row.cost)} tokens`,
+      note: row.id === "bbbot.duration" ? "Required to unlock BB-Bot Tokens" : undefined,
+      buyAction: tokens.applyBestSpecial,
+      buyLabel: "Buy best special",
+    }
+  }
 
   return (
     <div class="grid gap-3">
       <BestNextSummary
         buyAction={tokens.applyBest}
+        buyStepAction={tokens.applyBestAll}
         buyDisabled={!best()}
         buyLabel="Buy best next"
+        secondaryRecommendation={specialRecommendation()}
         bulkActions={[
           { label: "Complete step", onClick: tokens.applyBestAll },
           { label: "Buy 5", onClick: () => tokens.applyBestCount(5) },
@@ -39,39 +54,21 @@ export const TokensResults = () => {
           },
           { label: "Reset all purchases", onClick: tokens.resetAll, confirm: "Reset all token purchases?" },
         ]}
-        footer={
-          <div class="p-4">
-            <p class="text-xs uppercase tracking-[0.12em] text-ink/65 dark:text-white/65">Valuation</p>
-            <input
-              type="range"
-              min="0"
-              max="2"
-              step="1"
-              value={tokens.blendStep()}
-              onInput={(event) => tokens.setBlendStep(event.currentTarget.value)}
-              class="mt-2 w-full accent-accent"
-            />
-            <div class="mt-1 grid grid-cols-5 text-[10px] font-semibold uppercase tracking-[0.08em] text-ink/60 dark:text-white/60">
-              <For each={sliderLabels}>{(label) => <span class="text-center">{label}</span>}</For>
-            </div>
-          </div>
-        }
         rows={tokens
           .recommendationRows()
           .slice(0, 8)
           .map((row, index) => {
-            const upgrade = tokens.upgrades().find((candidate) => candidate.id === row.id)
-            const label = upgrade?.label ?? row.id
+            const label = upgradeLabel(row.id)
 
             return {
               item:
                 row.nextLevel === null
                   ? label
-                  : index === 0 && row.nextLevel > row.currentLevel + 1
+                  : row.nextLevel > row.currentLevel + 1
                     ? `${label}: ${row.currentLevel} → ${row.nextLevel}`
                     : `${label}: ${row.nextLevel}`,
               targetLevel: null,
-              value: formatPercentFromRatio(relativeValueRatio(row.score), 1).replace(/\.0+%$/, "%"),
+              value: formatPercentFromRatio(relativeValueRatio(row.score), 0),
               data: `${formatCost(row.cost)}${index === 0 ? " tokens" : ""}`,
             }
           })}

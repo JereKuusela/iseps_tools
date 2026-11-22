@@ -12,8 +12,6 @@ const asNumber = (value: string | number | undefined, fallback = 0) => {
   return Number.isFinite(parsed) ? parsed : fallback
 }
 
-const hasValue = (value: string | undefined) => value != null && value.trim().length > 0
-
 const parseLevelRowsCsv = (rawCsv: string, validUpgradeIds: Set<TokenId>): TokenLevelRow[] => {
   const lines = rawCsv
     .split(/\r?\n/)
@@ -28,8 +26,7 @@ const parseLevelRowsCsv = (rawCsv: string, validUpgradeIds: Set<TokenId>): Token
   const levelIndex = getColumnIndex("level")
   const costIndex = getColumnIndex("cost")
   const accumulatedCostIndex = getColumnIndex("accumulatedCost")
-  const shortTermIndex = getColumnIndex("shortTerm")
-  const longTermIndex = getColumnIndex("longTerm")
+  const valueIndex = getColumnIndex("value")
 
   return rows
     .map((line) => {
@@ -41,19 +38,12 @@ const parseLevelRowsCsv = (rawCsv: string, validUpgradeIds: Set<TokenId>): Token
       const level = asNumber(values[levelIndex])
       const cost = asNumber(values[costIndex])
 
-      const shortTerm = shortTermIndex >= 0 ? asNumber(values[shortTermIndex]) : 0
-
-      const longTermCell = longTermIndex >= 0 ? values[longTermIndex] : undefined
-      const longTerm =
-        longTermIndex >= 0 ? (hasValue(longTermCell) ? asNumber(longTermCell, shortTerm) : shortTerm) : shortTerm
-
       return {
         upgradeId,
         level,
         cost,
         accumulatedCost: asNumber(values[accumulatedCostIndex]),
-        shortTerm,
-        longTerm,
+        value: asNumber(values[valueIndex]),
       }
     })
     .filter((row): row is TokenLevelRow => row !== null)

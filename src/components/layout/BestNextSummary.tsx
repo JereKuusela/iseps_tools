@@ -1,5 +1,6 @@
 import { For, Show, createMemo, createSignal, onCleanup, onMount } from "solid-js"
 import type { JSX } from "solid-js"
+import { ShoppingCart } from "lucide-solid"
 import { ActionButton } from "../ui/ActionButton"
 import { InfoCard } from "./contentBlocks"
 import { DataTable, TABLE_FRAME_CLASS, TABLE_HEAD_CELL_CLASS, TABLE_ROW_CLASS, TableHead } from "./dataTable"
@@ -18,13 +19,52 @@ export type BulkActionOption = {
   confirm?: string
 }
 
+type RecommendationTileProps = {
+  heading: string
+  item: string
+  data: string
+  note?: string
+  buyAction: (event: MouseEvent) => void
+  buyLabel: string
+  buyDisabled?: boolean
+  children?: JSX.Element
+}
+
+const RecommendationTile = (props: RecommendationTileProps) => (
+  <div class="grid grid-cols-[minmax(0,1fr)_auto] items-stretch gap-2">
+    <div class="rounded-xl border border-ink/10 bg-gradient-to-br from-mist via-white to-mist/70 p-3 dark:border-white/15 dark:from-[#263954] dark:via-[#22344d] dark:to-[#1c2c41]">
+      <p class="text-xs uppercase tracking-[0.12em] text-ink/65 dark:text-white/65">{props.heading}</p>
+      <p class="mt-1 text-lg font-black text-ink dark:text-white">{props.item}</p>
+      <p class="mt-1 text-2xl font-black leading-none text-accent dark:text-[#8ce3ff]">{props.data}</p>
+      <Show when={props.note}>
+        <p class="mt-1 text-sm text-ink/75 dark:text-white/75">{props.note}</p>
+      </Show>
+    </div>
+    <div class="grid content-start gap-2">
+      <ActionButton
+        size="tile"
+        class="grid place-items-center"
+        onClick={props.buyAction}
+        disabled={props.buyDisabled}
+        title={props.buyLabel}
+        aria-label={props.buyLabel}
+      >
+        <ShoppingCart size={20} aria-hidden="true" />
+      </ActionButton>
+      {props.children}
+    </div>
+  </div>
+)
+
 type BestNextSummaryProps = {
   buyAction: () => void
+  buyStepAction?: () => void
   buyDisabled?: boolean
   buyLabel?: string
   bulkActions?: BulkActionOption[]
   rowAction?: (id: string | number) => void
   footer?: JSX.Element
+  secondaryRecommendation?: Omit<RecommendationTileProps, "children">
   rows: BestNextRow[]
   minRows?: number
   dataHeader: string
@@ -85,32 +125,24 @@ export const BestNextSummary = (props: BestNextSummaryProps) => {
   return (
     <InfoCard contentClass="">
       <div class={`grid gap-3 lg:grid-cols-[390px_minmax(0,1fr)] lg:grid-rows-[auto_1fr] lg:items-start`}>
-        <div class="grid grid-cols-[minmax(0,1fr)_auto] items-stretch gap-2 lg:col-start-1 lg:row-start-1">
-          <div class="rounded-xl border border-ink/10 bg-gradient-to-br from-mist via-white to-mist/70 p-3 dark:border-white/15 dark:from-[#263954] dark:via-[#22344d] dark:to-[#1c2c41]">
-            <p class="text-xs uppercase tracking-[0.12em] text-ink/65 dark:text-white/65">Best next</p>
-            <p class="mt-1 text-lg font-black text-ink dark:text-white">
-              {bestRow()
+        <div class="lg:col-start-1 lg:row-start-1">
+          <RecommendationTile
+            heading="Best next"
+            item={
+              bestRow()
                 ? bestRow()!.targetLevel === null
                   ? bestRow()!.item
                   : `${bestRow()!.item} → ${bestRow()!.targetLevel}`
-                : "-"}
-            </p>
-            <p class="mt-1 text-2xl font-black leading-none text-accent dark:text-[#8ce3ff]">
-              {bestRow()?.data ?? "-"}
-            </p>
-          </div>
-
-          <div class="grid grid-rows-2 gap-2">
-            <ActionButton
-              size="tile"
-              onClick={props.buyAction}
-              disabled={props.buyDisabled}
-              title={props.buyLabel ?? "Buy best next"}
-              aria-label={props.buyLabel ?? "Buy best next"}
-            >
-              🛒
-            </ActionButton>
-
+                : "-"
+            }
+            data={bestRow()?.data ?? "-"}
+            buyAction={(event) => {
+              if (event.ctrlKey && props.buyStepAction) props.buyStepAction()
+              else props.buyAction()
+            }}
+            buyDisabled={props.buyDisabled}
+            buyLabel={props.buyLabel ?? "Buy best next"}
+          >
             <Show when={(props.bulkActions?.length ?? 0) > 0} fallback={<div class="h-14 w-14" />}>
               <div class="relative" ref={actionsMenuRef}>
                 <ActionButton
@@ -140,11 +172,18 @@ export const BestNextSummary = (props: BestNextSummaryProps) => {
                 </Show>
               </div>
             </Show>
-          </div>
+          </RecommendationTile>
         </div>
 
-        <Show when={props.footer}>
-          <div class={`${TABLE_FRAME_CLASS} lg:col-start-1 lg:row-start-2`}>{props.footer}</div>
+        <Show when={props.secondaryRecommendation || props.footer}>
+          <div class="grid gap-3 lg:col-start-1 lg:row-start-2">
+            <Show when={props.secondaryRecommendation}>
+              {(recommendation) => <RecommendationTile {...recommendation()} />}
+            </Show>
+            <Show when={props.footer}>
+              <div class={TABLE_FRAME_CLASS}>{props.footer}</div>
+            </Show>
+          </div>
         </Show>
 
         <div class={`${TABLE_FRAME_CLASS} lg:col-start-2 lg:row-span-2`}>

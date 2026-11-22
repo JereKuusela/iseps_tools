@@ -90,8 +90,7 @@ export type TokenLevelRow = {
   level: number
   cost: number
   accumulatedCost: number
-  shortTerm: number
-  longTerm: number
+  value: number
 }
 
 export type TokenLoadedData = {
@@ -108,7 +107,6 @@ export type TokenInputState = {
   levels: TokenLevelMap
   enabled: TokenToggleMap
   outputLevelsByResource: Record<string, string>
-  blendPercent: number
   tokensPerStep: string
   onlineHoursPerDay: string
   // Delta is scored like Ceti until Helion is unlocked.

@@ -8,60 +8,43 @@ Combination of various guides.
 - Gamma supplies and BB-Bot unlock at SE90; Helion supplies and BB-Bot unlock at SE80.
 - Calculator needs value for each resource to calculate best upgrade (per token cost).
   - Should have input for tokens per step (cost-based buckets for all upgrades) so that recommendation doesn't change all the time.
-- There are unique upgrades that can't be directly valued.
-  - Needs some reasonable estimation to balance short and long term progression.
-  - These have 0 short term value and high long term value.
+- Compare token-income upgrades by extra tokens per day and purchase cost. Crystals and resource output need a separate progression valuation.
 
 ## Calculations
 
 - Output gives 1% additive boost until 1000 levels, then 1% multiplicative boost until maxed at 1800 levels.
   - Early levels after 1000 are more valuable than before 1001.
-  - Should calculate initial value and long term value for each level.
-    - This could be included in JSON data as fixed data.
-    - UI can have slider to balance between short term and long term value.
-- Supplies give X seconds of extra time per level, percentage calculated from cooldown and hours per day. Cash has 240 levels, others have 2 levels.
-  - SC calculator has input for this. Should reuse the same value and logic to calculate extra time per day.
-  - SC calculator also has input for Alpha supply level that should be reused.
+  - Regular upgrade scores retain the guide target scale, averaging immediate and long-term estimates where applicable.
+- Resource Supplies give 2 seconds of extra production time per level per claim. Cash has 240 levels; other available resources have 95.
 - BB-Bot gives 1% additive boost per level. Cash has 200% baseline, others start from 100%. Cash has 400 levels, others have 150 levels.
-- Supply extra tokens has 25 levels (1 base, then +0.1 per level).
-- Supply extra crystals has 8 levels (2 base, then +1 per level).
-- BB-Bot extra duration has 40 levels (20 min base, +1 min per level + 0.05 token per level).
-- BB-Bot extra tokens has 20 levels (1 base, +0.5 per level).
-  - Must max duration before this is available.
+
+## Cooldowns and Rewards
+
+- Supplies use a 7-minute interval (420 seconds, as listed for Supply Bot in the [premium notes](premium.md)). Each Supplies Tokens level adds 0.1 tokens per claim (1 base, 25 levels); each Supplies Crystals level adds 1 crystal per claim (2 base, 8 levels). Use the actual claims per day when estimating the gain.
+- BB-Bot runs last 20 minutes at base. Each Duration level adds 1 minute and 0.05 tokens per run, up to 60 minutes and 3 tokens per run at level 40. Longer runs mean fewer triggers, so Duration alone does not increase daily rewards.
+- BB-Bot Tokens unlocks at Duration 40 and adds 0.5 tokens per run per level (20 levels). When comparing token income before it unlocks, include the cost of the remaining Duration levels in the investment.
+
+## Special Recommendations
+
+- Special scores compare the extra token-equivalent reward per active hour to the purchase cost, assuming rewards are collected as soon as ready. Duration is scored using the best bundle of remaining Duration levels and subsequent BB-Bot Tokens levels, not as standalone income.
+- Supplies Crystals uses a fixed planning weight of 5 tokens per crystal in the generated scores. This is a tuning assumption, not the in-game exchange rate.
+- Generated special scores are rounded to whole numbers. Regular upgrade scores keep their existing precision.
+- Supplies Crystals level 1 is calibrated between the scores of Alpha Output levels 50 and 51, so upgrades as valuable as Alpha 50 still come first. This reference stays fixed as the player buys upgrades.
+- Other special levels use that calibration to translate their reward per cost into equivalent Alpha output efficiency, then interpolate the existing guide score at that point. Special scoring does not change regular upgrade scores.
+- Best Next can recommend a special. Best Special offers the next single special level when it differs from Best Next, even if it falls outside the main shortlist.
 
 ## Costs
 
-- Alpha level 1 costs 1, +0.01 per level, level 1000 costs 10.99
-- Alpha level 1001 costs 11, +3 per level.
-- Other particles and Cash have same costs as Alpha.
-- Juno level 1 costs 10, +0.05 per level, level 1000 costs 59.95
-- Juno level 1001 costs 150, +5 per level.
-- Kappa level 501 costs 100, +0.1 per level. Level 1 cost must be calculated.
-- Kappa level 1001 costs 500, +10 per level.
+All costs are in tokens. [Upgrade definitions](../data/token_upgrade_definitions.json) are the source of truth for cost formulas; the [generated level table](../data/token_upgrade_levels.csv) lists the cost and cumulative cost for every level.
 
-- Supply token and crystal not known. Use 1.
-- Cash level 32 costs 13.4, +0.4 per level.
-- Alpha level 10 costs 80, +8 per level.
-- Beta level 10 costs 11, +1 per level.
-- Ceti level 12 costs 10.8, +0.8 per level.
-- Delta level 7 costs 28, +4 per level.
-- Epsilon level 17 costs 10, +0.5 per level.
-- Fenix level 18 costs 10.5, +0.5 per level.
-- Gamma level 6 costs 12, +2 per level.
-- Helion level 5 costs 18, +4 per level.
-- Ixion, Juno and Kappa not available.
+| Upgrade | Level 1 | Increase per level | Final level | Total to max |
+| --- | ---: | ---: | ---: | ---: |
+| Supplies Tokens | 25 | 15 | 385 | 5,125 |
+| Supplies Crystals | 200 | 300 | 2,300 | 10,000 |
+| BB-Bot Duration | 1 | 1 | 40 | 820 |
+| BB-Bot Tokens | 10 | 25 | 485 | 4,950 |
 
-- BB-Bot duration and token not known. Use 1.
-- Cash level 110 costs 64.5, +0.5 per level.
-- Alpha not known. Probably same as Delta.
-- Beta level 21 costs 30, +1 per level.
-- Ceti level 21 costs 20, +0.5 per level.
-- Delta level 61 costs 70, +1 per level.
-- Epsilon level 21 costs 20, +0.5 per level.
-- Fenix level 21 costs 20, +0.5 per level.
-- Gamma level 61 costs 70, +1 per level.
-- Helion level 21 costs 30, +1 per level.
-- Ixion, Juno and Kappa not available.
+From scratch, maxing Duration and buying the first BB-Bot Tokens level costs 830 tokens. The BB-Bot Tokens total in the table excludes Duration.
 
 ## Inputs
 

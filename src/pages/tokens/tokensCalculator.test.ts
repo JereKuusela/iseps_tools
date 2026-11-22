@@ -6,7 +6,7 @@ import {
   formatTokenRequirement,
   getTokenUnmetRequirements,
 } from "./tokensCalculator"
-import { TOKEN_UPGRADES } from "./tokensData"
+import { loadTokenData, TOKEN_UPGRADES } from "./tokensData"
 import type { TokenInputState, TokenLoadedData } from "./tokensTypes"
 
 const baseInput: TokenInputState = {
@@ -23,7 +23,6 @@ const baseInput: TokenInputState = {
   outputLevelsByResource: {
     alpha: "1000",
   },
-  blendPercent: 0.5,
   tokensPerStep: "0",
   onlineHoursPerDay: "0",
 }
@@ -41,8 +40,7 @@ const withFullLevelRows = (data: TokenLoadedData): TokenLoadedData => {
       rowByKey.set(key, {
         upgradeId: upgrade.id,
         level,
-        shortTerm: 0,
-        longTerm: 0,
+        value: 0,
         ...existing,
         cost,
         accumulatedCost,
@@ -56,15 +54,22 @@ const testData: TokenLoadedData = withFullLevelRows({
   upgrades: [
     {
       id: "bbbot.duration",
-      label: "Special A",
+      label: "BB-Bot Duration",
       group: "special",
       maxLevel: 10,
       costAnchors: [{ level: 1, cost: 10, step: 0 }],
     },
     {
-      id: "bbbot.tokenBonus",
-      label: "Special B",
-      group: "special",
+      id: "bbbot.cash",
+      label: "Cash BB-Bot",
+      group: "bbbot",
+      maxLevel: 10,
+      costAnchors: [{ level: 1, cost: 10, step: 0 }],
+    },
+    {
+      id: "bbbot.alpha",
+      label: "Alpha BB-Bot",
+      group: "bbbot",
       maxLevel: 10,
       costAnchors: [{ level: 1, cost: 10, step: 0 }],
     },
@@ -87,47 +92,43 @@ const testData: TokenLoadedData = withFullLevelRows({
   ],
   rowByKey: new Map([
     [
-      "bbbot.duration:1",
+      "bbbot.cash:1",
       {
-        upgradeId: "bbbot.duration",
+        upgradeId: "bbbot.cash",
         level: 1,
         cost: 10,
         accumulatedCost: 10,
-        shortTerm: 300000,
-        longTerm: 300000,
+        value: 300000,
       },
     ],
     [
-      "bbbot.duration:2",
+      "bbbot.cash:2",
       {
-        upgradeId: "bbbot.duration",
+        upgradeId: "bbbot.cash",
         level: 2,
         cost: 10,
         accumulatedCost: 20,
-        shortTerm: 250000,
-        longTerm: 250000,
+        value: 250000,
       },
     ],
     [
-      "bbbot.duration:3",
+      "bbbot.cash:3",
       {
-        upgradeId: "bbbot.duration",
+        upgradeId: "bbbot.cash",
         level: 3,
         cost: 10,
         accumulatedCost: 30,
-        shortTerm: 50000,
-        longTerm: 50000,
+        value: 50000,
       },
     ],
     [
-      "bbbot.tokenBonus:1",
+      "bbbot.alpha:1",
       {
-        upgradeId: "bbbot.tokenBonus",
+        upgradeId: "bbbot.alpha",
         level: 1,
         cost: 10,
         accumulatedCost: 10,
-        shortTerm: 100000,
-        longTerm: 100000,
+        value: 100000,
       },
     ],
     [
@@ -137,8 +138,7 @@ const testData: TokenLoadedData = withFullLevelRows({
         level: 1001,
         cost: 2000,
         accumulatedCost: 3000,
-        shortTerm: 1000,
-        longTerm: 1000,
+        value: 1000,
       },
     ],
     [
@@ -148,8 +148,7 @@ const testData: TokenLoadedData = withFullLevelRows({
         level: 1050,
         cost: 140,
         accumulatedCost: 4000,
-        shortTerm: 14286,
-        longTerm: 14286,
+        value: 14286,
       },
     ],
     [
@@ -159,8 +158,7 @@ const testData: TokenLoadedData = withFullLevelRows({
         level: 1100,
         cost: 50,
         accumulatedCost: 4500,
-        shortTerm: 2000,
-        longTerm: 2000,
+        value: 2000,
       },
     ],
     [
@@ -170,8 +168,7 @@ const testData: TokenLoadedData = withFullLevelRows({
         level: 1,
         cost: 10,
         accumulatedCost: 10,
-        shortTerm: 50000,
-        longTerm: 50000,
+        value: 50000,
       },
     ],
   ]),
@@ -264,8 +261,8 @@ describe("calculateTokenRecommendations", () => {
           costAnchors: [{ level: 1, cost: 1, step: 0 }],
         },
         {
-          id: "bbbot.duration",
-          label: "Special A",
+          id: "supplies.tokenBonus",
+          label: "Supplies Tokens",
           group: "special",
           maxLevel: 10,
           costAnchors: [{ level: 1, cost: 10, step: 0 }],
@@ -279,8 +276,7 @@ describe("calculateTokenRecommendations", () => {
             level: 51,
             cost: 1,
             accumulatedCost: 51,
-            shortTerm: 100000,
-            longTerm: 100000,
+            value: 100000,
           },
         ],
         [
@@ -290,19 +286,17 @@ describe("calculateTokenRecommendations", () => {
             level: 51,
             cost: 1,
             accumulatedCost: 51,
-            shortTerm: 100000,
-            longTerm: 100000,
+            value: 100000,
           },
         ],
         [
-          "bbbot.duration:1",
+          "supplies.tokenBonus:1",
           {
-            upgradeId: "bbbot.duration",
+            upgradeId: "supplies.tokenBonus",
             level: 1,
             cost: 10,
             accumulatedCost: 10,
-            shortTerm: 999999,
-            longTerm: 999999,
+            value: 999999,
           },
         ],
       ]),
@@ -310,7 +304,8 @@ describe("calculateTokenRecommendations", () => {
 
     const result = calculateTokenRecommendations(gatedInput, gatedData)
 
-    expect(result.best?.id).toBe("bbbot.duration")
+    expect(result.best?.id).toBe("supplies.tokenBonus")
+    expect(result.bestSpecial).toBeNull()
   })
 
   it("keeps special scores stable across output-level changes", () => {
@@ -373,8 +368,7 @@ describe("calculateTokenRecommendations", () => {
             level: 1,
             cost: 10,
             accumulatedCost: 10,
-            shortTerm: 100000,
-            longTerm: 100000,
+            value: 100000,
           },
         ],
       ]),
@@ -394,7 +388,7 @@ describe("calculateTokenRecommendations", () => {
 
   it("ranks by weighted value per cost", () => {
     const result = calculateTokenRecommendations(baseInput, testData)
-    expect(result.best?.id).toBe("bbbot.duration")
+    expect(result.best?.id).toBe("bbbot.cash")
     expect(result.rows[0]?.score).toBeGreaterThan(result.rows[1]?.score ?? 0)
   })
 
@@ -477,9 +471,121 @@ describe("calculateTokenRecommendations", () => {
   it("merges sequential top recommendations but keeps first-step value", () => {
     const result = calculateTokenRecommendations(baseInput, testData)
 
-    const specialRow = result.rows.find((row) => row.id === "bbbot.duration")
-    expect(specialRow?.nextLevel).toBe(2)
-    expect(specialRow?.cost).toBe(20)
+    const row = result.rows.find((candidate) => candidate.id === "bbbot.cash")
+    expect(row?.nextLevel).toBe(2)
+    expect(row?.cost).toBe(20)
+  })
+
+  it("groups consecutive Supplies Tokens levels without expanding Best Special", async () => {
+    const data = await loadTokenData()
+    const rowByKey = new Map(data.rowByKey)
+    const suppliesLevelNine = rowByKey.get("supplies.tokenBonus:9")!
+    const suppliesLevelTen = rowByKey.get("supplies.tokenBonus:10")!
+    const alpha = rowByKey.get("output.alpha:1")!
+    rowByKey.set("output.alpha:1", { ...alpha, value: (suppliesLevelNine.value + suppliesLevelTen.value) / 2 })
+    const upgrades = data.upgrades
+      .filter(({ id }) => id === "output.cash" || id === "output.alpha" || id === "supplies.tokenBonus")
+      .map((upgrade) => (upgrade.group === "output" ? { ...upgrade, maxLevel: 1 } : upgrade))
+    const result = calculateTokenRecommendations(
+      { ...baseInput, levels: { "supplies.tokenBonus": "6" }, outputLevelsByResource: {}, tokensPerStep: "0" },
+      { upgrades, rowByKey },
+    )
+
+    expect(result.rows[1]).toMatchObject({ id: "supplies.tokenBonus", currentLevel: 6, nextLevel: 9, cost: 390 })
+    expect(result.bestSpecial).toMatchObject({ id: "supplies.tokenBonus", currentLevel: 6, nextLevel: 7, cost: 115 })
+  })
+
+  it("groups remaining Duration levels without expanding Best Special", async () => {
+    const data = await loadTokenData()
+    const rowByKey = new Map(data.rowByKey)
+    const durationScores = [38, 39, 40].map((level) => rowByKey.get(`bbbot.duration:${level}`)!.value)
+    const cash = rowByKey.get("output.cash:1")!
+    const alpha = rowByKey.get("output.alpha:1")!
+    rowByKey.set("output.cash:1", { ...cash, value: Math.max(...durationScores) + 1 })
+    rowByKey.set("output.alpha:1", { ...alpha, value: Math.min(...durationScores) - 1 })
+    const upgrades = data.upgrades
+      .filter(
+        ({ id }) =>
+          id === "output.cash" || id === "output.alpha" || id === "bbbot.duration" || id === "bbbot.tokenBonus",
+      )
+      .map((upgrade) => (upgrade.group === "output" ? { ...upgrade, maxLevel: 1 } : upgrade))
+    const result = calculateTokenRecommendations(
+      {
+        ...baseInput,
+        enabled: {},
+        unlockedParticle: "alpha",
+        levels: { "bbbot.duration": "37" },
+        outputLevelsByResource: {},
+        tokensPerStep: "0",
+      },
+      { upgrades, rowByKey },
+    )
+
+    expect(result.rows[1]).toMatchObject({ id: "bbbot.duration", currentLevel: 37, nextLevel: 40, cost: 117 })
+    expect(result.bestSpecial).toMatchObject({ id: "bbbot.duration", currentLevel: 37, nextLevel: 38, cost: 38 })
+  })
+
+  it("ranks the remaining Duration investment against Supplies Tokens using real costs", async () => {
+    const data = await loadTokenData()
+    const input: TokenInputState = {
+      ...baseInput,
+      tokensPerStep: "1000",
+      enabled: { "supplies.crystalBonus": false },
+    }
+    const atLevel = (level: number, duration = 0) =>
+      calculateTokenRecommendations(
+        {
+          ...input,
+          levels: { "supplies.tokenBonus": String(level), "bbbot.duration": String(duration) },
+        },
+        data,
+      )
+
+    expect(atLevel(21).bestSpecial).toMatchObject({ id: "supplies.tokenBonus", nextLevel: 22, cost: 340 })
+    expect(atLevel(22).bestSpecial).toMatchObject({ id: "bbbot.duration", nextLevel: 1, cost: 1 })
+    expect(atLevel(22, 40).bestSpecial).toMatchObject({ id: "bbbot.tokenBonus", nextLevel: 1, cost: 10 })
+    expect(atLevel(22, 39).bestSpecial).toMatchObject({ id: "bbbot.duration", nextLevel: 40, cost: 40 })
+    expect(
+      calculateTokenRecommendations(
+        {
+          ...input,
+          levels: { "supplies.tokenBonus": "25", "bbbot.duration": "40", "bbbot.tokenBonus": "20" },
+        },
+        data,
+      ).bestSpecial,
+    ).toBeNull()
+  })
+
+  it("places the first Supplies Crystals level just after Alpha Output 50", async () => {
+    const data = await loadTokenData()
+    const enabled = Object.fromEntries(
+      data.upgrades.map(({ id }) => [id, id === "output.alpha" || id === "supplies.crystalBonus"]),
+    )
+    const atAlphaLevel = (level: number) =>
+      calculateTokenRecommendations(
+        {
+          ...baseInput,
+          enabled,
+          unlockedParticle: "alpha",
+          outputLevelsByResource: { alpha: String(level) },
+          tokensPerStep: "0",
+        },
+        data,
+      )
+
+    expect(atAlphaLevel(49).best).toMatchObject({ id: "output.alpha", nextLevel: 50 })
+    expect(atAlphaLevel(50).best).toMatchObject({ id: "supplies.crystalBonus", nextLevel: 1 })
+  })
+
+  it("keeps the generated crystal score fixed across particle unlocks", async () => {
+    const data = await loadTokenData()
+    const input: TokenInputState = { ...baseInput, outputLevelsByResource: {}, tokensPerStep: "0", se: 100 }
+    const early = calculateTokenRecommendations({ ...input, unlockedParticle: "alpha" }, data)
+    const late = calculateTokenRecommendations({ ...input, unlockedParticle: "kappa" }, data)
+
+    expect(early.bestSpecial).toMatchObject({ id: "supplies.crystalBonus", nextLevel: 1, cost: 200 })
+    expect(late.bestSpecial).toMatchObject({ id: "supplies.crystalBonus", nextLevel: 1, cost: 200 })
+    expect(late.bestSpecial?.score).toBe(early.bestSpecial?.score)
   })
 
   it("scales supplies scores by online hours", () => {

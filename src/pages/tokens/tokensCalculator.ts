@@ -52,19 +52,13 @@ export const formatTokenRequirement = (
   return `Requires ${prerequisite?.label ?? requirement.id} level ${requirement.minimum}`
 }
 
-const normalizePerCostTerm = (rawTerm: number) => {
-  // New CSV format stores short/long terms as scaled integers.
-  return rawTerm >= 1 ? rawTerm / TERM_SCALE : rawTerm
-}
-
 const getLevelRow = (data: TokenLoadedData, upgrade: TokenUpgradeDefinition, level: number) =>
   data.rowByKey.get(`${upgrade.id}:${level}`) ?? {
     upgradeId: upgrade.id,
     level,
     cost: 0,
     accumulatedCost: 0,
-    shortTerm: 0,
-    longTerm: 0,
+    value: 0,
   }
 
 const getAccumulatedCost = (data: TokenLoadedData, upgrade: TokenUpgradeDefinition, level: number) =>
@@ -73,12 +67,6 @@ const getAccumulatedCost = (data: TokenLoadedData, upgrade: TokenUpgradeDefiniti
 const isUpgradeEnabled = (upgradeId: TokenId, enabledMap: TokenInputState["enabled"]) => {
   const current = enabledMap[upgradeId]
   return current == null ? true : Boolean(current)
-}
-
-const isSuppliesScaledUpgrade = (upgrade: TokenUpgradeDefinition) => {
-  if (upgrade.group == "supplies") return true
-  if (upgrade.id == "supplies.tokenBonus" || upgrade.id == "supplies.crystalBonus") return true
-  return false
 }
 
 const resolveCurrentLevel = (input: TokenInputState, upgrade: TokenUpgradeDefinition) => {
@@ -143,38 +131,59 @@ const resolveBucket = (
 const resolveSuppliesTimeMultiplier = (input: TokenInputState) =>
   getSupplyRatio(parseNumberish(input.onlineHoursPerDay))
 
+const buildSpecialRecommendation = (
+  input: TokenInputState,
+  data: TokenLoadedData,
+  upgrade: TokenUpgradeDefinition,
+  currentLevel: number,
+): TokenRecommendationRow | null => {
+  const nextLevel = currentLevel + 1
+  const { cost, value } = getLevelRow(data, upgrade, nextLevel)
+  if (cost <= 0) return null
+
+  const score = value / TERM_SCALE
+
+  if (upgrade.id === "bbbot.duration") {
+    const bonus = data.upgrades.find((candidate) => candidate.id === "bbbot.tokenBonus")
+    const required = bonus?.requires?.id === upgrade.id ? (bonus.requires.minLevel ?? 0) : 0
+    if (!bonus || required <= currentLevel || !isUpgradeEnabled(bonus.id, input.enabled)) return null
+    if (resolveCurrentLevel(input, bonus) >= bonus.maxLevel) return null
+  }
+
+  if (score <= 0) return null
+  return {
+    id: upgrade.id,
+    currentLevel,
+    nextLevel,
+    cost,
+    score,
+    bucketIndex: nextLevel,
+  }
+}
+
 const buildBaseRecommendation = (
   input: TokenInputState,
   data: TokenLoadedData,
   upgrade: TokenUpgradeDefinition,
   currentLevel: number,
-  blend: number,
   tokensPerStep: number,
 ): TokenRecommendationRow => {
   const { bucketIndex, blockStartLevel, nextLevel } = resolveBucket(data, upgrade, currentLevel, tokensPerStep)
-  const valueScale = isSuppliesScaledUpgrade(upgrade) ? resolveSuppliesTimeMultiplier(input) : 1
+  const valueScale = upgrade.group === "supplies" ? resolveSuppliesTimeMultiplier(input) : 1
 
   let levelCount = 0
   let remainingCost = 0
-  let totalShortTermTerm = 0
-  let totalLongTermTerm = 0
+  let totalValue = 0
 
   for (let level = blockStartLevel + 1; level <= nextLevel; level += 1) {
     const levelRow = getLevelRow(data, upgrade, level)
     const levelCost = Math.max(0, levelRow.cost)
-    const shortTermPerCost = normalizePerCostTerm(levelRow.shortTerm)
-    const longTermPerCost = normalizePerCostTerm(levelRow.longTerm)
 
     levelCount += 1
     if (level > currentLevel) remainingCost += levelCost
-    totalShortTermTerm += shortTermPerCost
-    totalLongTermTerm += longTermPerCost
+    totalValue += levelRow.value / TERM_SCALE
   }
-  const shortTermValue = levelCount <= 0 ? 0 : totalShortTermTerm / levelCount
-  const longTermValue = levelCount <= 0 ? 0 : totalLongTermTerm / levelCount
-  const blendedPerCost = longTermValue * blend + shortTermValue * (1 - blend)
-
-  let score = blendedPerCost * valueScale
+  let score = levelCount <= 0 ? 0 : (totalValue / levelCount) * valueScale
   if (input.deltaLikeCeti && upgrade.resource === "delta") {
     const cetiUpgrade = data.upgrades.find(
       (candidate) => candidate.group === upgrade.group && candidate.resource === "ceti",
@@ -186,7 +195,6 @@ const buildBaseRecommendation = (
         data,
         cetiUpgrade,
         cetiLevel,
-        blend,
         tokensPerStep,
       ).score
     }
@@ -208,10 +216,15 @@ export const calculateTokenRecommendations = (
 ): {
   rows: TokenRecommendationRow[]
   best: TokenRecommendationRow | null
+  bestSpecial: TokenRecommendationRow | null
 } => {
-  if (!data) return { rows: [], best: null }
+  if (!data) return { rows: [], best: null, bestSpecial: null }
 
   const tokensPerStep = Math.max(0, parseNumberish(input.tokensPerStep))
+  const buildRecommendation = (upgrade: TokenUpgradeDefinition, currentLevel: number) =>
+    upgrade.group === "special"
+      ? buildSpecialRecommendation(input, data, upgrade, currentLevel)
+      : buildBaseRecommendation(input, data, upgrade, currentLevel, tokensPerStep)
 
   const rows = data.upgrades.flatMap((upgrade) => {
     const enabled = isUpgradeEnabled(upgrade.id, input.enabled)
@@ -220,18 +233,22 @@ export const calculateTokenRecommendations = (
 
     if (!enabled || !unlocked || currentLevel >= upgrade.maxLevel) return []
 
-    return [buildBaseRecommendation(input, data, upgrade, currentLevel, input.blendPercent, tokensPerStep)]
+    const row = buildRecommendation(upgrade, currentLevel)
+    return row ? [row] : []
   })
 
   const upgradesById = new Map(data.upgrades.map((upgrade) => [upgrade.id, upgrade]))
+  const bestSpecial =
+    rows.filter((row) => upgradesById.get(row.id)?.group === "special").sort(compareRecommendationRows)[0] ?? null
 
   const ranked = rows
     .filter((row) => row.nextLevel !== null)
     .slice()
     .sort(compareRecommendationRows)
     .slice(0, 8)
+    .map((row) => (row === bestSpecial ? { ...row } : row))
 
-  if (ranked.length === 0) return { rows: [], best: null }
+  if (ranked.length === 0) return { rows: [], best: null, bestSpecial: null }
 
   // Last upgrade don't need to be checked.
   for (let index = 0; index < ranked.length - 1; index += 1) {
@@ -240,8 +257,8 @@ export const calculateTokenRecommendations = (
     if (!upgrade || row.nextLevel === null) continue
 
     while (row.nextLevel < upgrade.maxLevel) {
-      const successor = buildBaseRecommendation(input, data, upgrade, row.nextLevel, input.blendPercent, tokensPerStep)
-      if (successor.nextLevel === null) break
+      const successor = buildRecommendation(upgrade, row.nextLevel)
+      if (!successor || successor.nextLevel === null) break
 
       const lastScore = ranked[ranked.length - 1].score
       if (successor.score <= lastScore) break
@@ -257,9 +274,11 @@ export const calculateTokenRecommendations = (
     }
   }
 
+  const best = ranked[0] ?? null
   return {
     rows: ranked,
-    best: ranked[0] ?? null,
+    best,
+    bestSpecial: best?.id === bestSpecial?.id ? null : bestSpecial,
   }
 }
 

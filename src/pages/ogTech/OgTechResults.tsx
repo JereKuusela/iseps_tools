@@ -18,6 +18,7 @@ export const OgTechResults = () => {
     <>
       <BestNextSummary
         buyAction={og.buyNextBest}
+        buyStepAction={og.autoBuyUnderHour}
         buyDisabled={!bestTech()}
         buyLabel="Buy best next"
         bulkActions={[

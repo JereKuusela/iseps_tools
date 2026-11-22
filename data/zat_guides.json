@@ -422,7 +422,8 @@
       "3 dc",
       "2 fenix",
       "g_points"
-    ]
+    ],
+    "note": "Fenix node boosts Emblems which increases Gamma output"
   },
   {
     "cycle": 20,
@@ -837,11 +838,11 @@
     "nodes": [
       "3 alpha",
       "solutions",
-      "2 ixion",
+      "2 gamma",
       "3 ap",
       "3 dc"
     ],
-    "note": "SE Push meta (adding 2nd Ixion) is better for Cash than other options such as Artifacts, Emblems, or Beta."
+    "note": "Same as SE Push. Dropping all DC nodes for Artifacts ends up losing too many cash boosts"
   },
   {
     "cycle": 19,
@@ -852,6 +853,31 @@
       "3 ap",
       "dc",
       "artifacts"
-    ]
+    ],
+    "note": "Gives about 2 more OG shares than SE push."
+  },
+  {
+    "cycle": 20,
+    "run": "crun",
+    "nodes": [
+      "3 alpha",
+      "solutions",
+      "3 ap",
+      "2 dc",
+      "artifacts"
+    ],
+    "note": "Unknown effect compare to SE push."
+  },
+  {
+    "cycle": 21,
+    "run": "crun",
+    "nodes": [
+      "3 alpha",
+      "solutions",
+      "3 ap",
+      "3 dc",
+      "artifacts"
+    ],
+    "note": "Unknown effect compare to SE push."
   }
 ]

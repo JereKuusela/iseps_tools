@@ -13,31 +13,64 @@ const parseCsvRows = (rawCsv: string) =>
     .filter((line) => line.length > 0)
     .map((line) => line.split(","))
 
-const readOutputShortTermByKey = () => {
+const readOutputValueByKey = () => {
   const rows = parseCsvRows(readFileSync(outputPath, "utf8"))
   const [, ...dataRows] = rows
   const byKey = new Map<string, number>()
 
   for (const row of dataRows) {
-    const [upgradeId, levelCell, , , shortTermCell] = row
-    const shortTerm = Number(shortTermCell)
-    if (!Number.isFinite(shortTerm)) continue
-    byKey.set(`${upgradeId}:${levelCell}`, shortTerm)
+    const [upgradeId, levelCell, , , valueCell] = row
+    const value = Number(valueCell)
+    if (!Number.isFinite(value)) continue
+    byKey.set(`${upgradeId}:${levelCell}`, value)
   }
 
   return byKey
 }
 
 describe("generateTokenUpgradeCsv", () => {
-  it("keeps output values about equal at target levels", () => {
+  it("maps special efficiency to equivalent Alpha levels rather than scaling guide scores linearly", () => {
+    const scores = readOutputValueByKey()
+    const anchorEfficiency = (1 / 1.49 ** 2 + 1 / 1.5 ** 2) / 2
+    const equivalentAlphaLevel = (efficiencyRatio: number) =>
+      1 + 100 * (1 / Math.sqrt(anchorEfficiency * efficiencyRatio) - 1)
+    const expectedEarlyAlphaScore = (level: number) => (13 - level / 350) * 100_000_000
+
+    for (const [key, ratio] of [
+      ["supplies.crystalBonus:2", 200 / 500],
+      ["supplies.tokenBonus:1", 0.1 / 25 / (5 / 200)],
+    ] as const) {
+      const score = scores.get(key) ?? 0
+      const expected = expectedEarlyAlphaScore(equivalentAlphaLevel(ratio))
+      expect(Math.abs(score - expected)).toBeLessThan(1_000)
+    }
+  })
+  it("keeps Balanced scores for regular upgrades and rounds special scores to whole numbers", () => {
+    const [header, ...rows] = parseCsvRows(readFileSync(outputPath, "utf8"))
+    expect(header).toEqual(["upgradeId", "level", "cost", "accumulatedCost", "value"])
+    expect(rows.every((row) => row.length === header.length && row[4] !== "" && Number.isFinite(Number(row[4])))).toBe(
+      true,
+    )
+    const specialRows = rows.filter(([id]) =>
+      /^(supplies\.(tokenBonus|crystalBonus)|bbbot\.(duration|tokenBonus))$/.test(id),
+    )
+    expect(specialRows.length).toBeGreaterThan(0)
+    expect(specialRows.every((row) => /^\d+$/.test(row[4]))).toBe(true)
+
+    const valueByKey = readOutputValueByKey()
+    expect(valueByKey.get("output.cash:1000")).toBe((344_400_000 + 444_300_000) / 2)
+    expect(valueByKey.get("output.cash:1001")).toBe(343_300_000)
+  })
+
+  it("keeps output values about equal at early target levels before long-term adjustments", () => {
     const targetRows = parseCsvRows(readFileSync(targetsPath, "utf8"))
     const [resources, ...stageRows] = targetRows
-    const outputShortTermByKey = readOutputShortTermByKey()
+    const outputValueByKey = readOutputValueByKey()
     const lastLevelByResource = new Map(resources.map((resource) => [resource, Number.NEGATIVE_INFINITY]))
 
     const maxRelativeSpread = 0.02
 
-    for (const [stageIndex, stageRow] of stageRows.entries()) {
+    for (const [stageIndex, stageRow] of stageRows.slice(0, 3).entries()) {
       const values: number[] = []
 
       for (let index = 0; index < resources.length; index += 1) {
@@ -50,9 +83,9 @@ describe("generateTokenUpgradeCsv", () => {
         lastLevelByResource.set(resource, level)
 
         const key = `output.${resource}:${String(level)}`
-        const shortTerm = outputShortTermByKey.get(key)
-        expect(shortTerm, `missing row for stage ${stageIndex + 1}: ${key}`).toBeDefined()
-        if (shortTerm != null) values.push(shortTerm)
+        const value = outputValueByKey.get(key)
+        expect(value, `missing row for stage ${stageIndex + 1}: ${key}`).toBeDefined()
+        if (value != null) values.push(value)
       }
 
       expect(values.length, `no comparable values at stage ${stageIndex + 1}`).toBeGreaterThan(0)

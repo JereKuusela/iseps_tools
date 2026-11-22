@@ -18,15 +18,11 @@ const createDefaultLevelMap = (ids: string[]): TokenLevelMap => {
   return result
 }
 
-const BLEND_STEP_TO_SHORT_TERM_PERCENT = [0, 0.5, 1] as const
 const TOKEN_UPGRADE_IDS = TOKEN_UPGRADES.map((upgrade) => upgrade.id)
 
 type TokensContextValue = {
   isLoading: () => boolean
   loadError: () => string | null
-  blendStep: () => string
-  setBlendStep: (next: string) => string
-  blendPercent: () => number
   tokensPerStep: () => string
   setTokensPerStep: (next: string) => string
   onlineHoursPerDay: () => string
@@ -43,9 +39,11 @@ type TokensContextValue = {
   upgrades: () => TokenUpgradeDefinition[]
   recommendationRows: () => ReturnType<typeof calculateTokenRecommendations>["rows"]
   bestRecommendation: () => ReturnType<typeof calculateTokenRecommendations>["best"]
+  bestSpecialRecommendation: () => ReturnType<typeof calculateTokenRecommendations>["bestSpecial"]
   totalTokensSpent: () => number
   spendingReport: () => ReturnType<typeof calculateTokenSpendingReport>
   applyBest: () => void
+  applyBestSpecial: () => void
   applyBestAll: () => void
   applyBestCount: (count: number) => void
   completeAll: () => void
@@ -57,7 +55,6 @@ const TokensContext = createContext<TokensContextValue>()
 export const TokensProvider = (props: ParentProps) => {
   const [tokenData] = createResource(loadTokenData)
 
-  const [blendStep, setBlendStep] = createSyncedSignal("token.blendStep", "1")
   const [tokensPerStep, setTokensPerStep] = createSyncedSignal("token.tokensPerStep", "100")
 
   const [onlineHoursPerDay, setOnlineHoursPerDay] = createSyncedSignal(TOKEN_SHARED_KEYS.onlineHoursPerDay, "10")
@@ -92,11 +89,6 @@ export const TokensProvider = (props: ParentProps) => {
     return result
   })
 
-  const blendPercent = createMemo(() => {
-    const parsed = Math.max(0, Math.min(2, Math.floor(parseNumberish(blendStep()))))
-    return BLEND_STEP_TO_SHORT_TERM_PERCENT[parsed] ?? 0.5
-  })
-
   const normalizedOutputLevels = createMemo(() => {
     const levelMap = normalizedLevels()
     const result = createDefaultLevelMap(OUTPUT_RESOURCES)
@@ -116,24 +108,18 @@ export const TokensProvider = (props: ParentProps) => {
     levels: normalizedLevels(),
   }))
 
-  const unmetById = createMemo(() => new Map(
-    TOKEN_UPGRADES.map((upgrade) => [
-      upgrade.id, getTokenUnmetRequirements(upgrade, requirementInput()),
-    ]),
-  ))
-
-  const normalizedEnabled = createMemo(() => Object.fromEntries(
-    [...unmetById()].map(([id, unmet]) => [id, unmet.length === 0]),
-  ))
+  const unmetById = createMemo(
+    () =>
+      new Map(TOKEN_UPGRADES.map((upgrade) => [upgrade.id, getTokenUnmetRequirements(upgrade, requirementInput())])),
+  )
 
   const recommendation = createMemo(() =>
     calculateTokenRecommendations(
       {
         ...requirementInput(),
         levels: normalizedLevels(),
-        enabled: normalizedEnabled(),
+        enabled: {},
         outputLevelsByResource: normalizedOutputLevels(),
-        blendPercent: blendPercent(),
         tokensPerStep: tokensPerStep(),
         onlineHoursPerDay: onlineHoursPerDay(),
         deltaLikeCeti: PARTICLE_ORDER.indexOf(unlockedParticle()) < PARTICLE_ORDER.indexOf("helion"),
@@ -146,9 +132,8 @@ export const TokensProvider = (props: ParentProps) => {
     calculateTokenSpendingReport(
       {
         levels: normalizedLevels(),
-        enabled: normalizedEnabled(),
+        enabled: {},
         outputLevelsByResource: normalizedOutputLevels(),
-        blendPercent: blendPercent(),
         tokensPerStep: tokensPerStep(),
         onlineHoursPerDay: onlineHoursPerDay(),
       },
@@ -166,23 +151,6 @@ export const TokensProvider = (props: ParentProps) => {
   const setUpgradeLevel = (upgradeId: TokenId, next: string) => {
     const normalized = String(Math.max(0, Math.floor(parseNumberish(next))))
     writeUpgradeLevel(upgradeId, normalized)
-  }
-
-  const applyBest = () => {
-    const best = recommendation().best
-    if (!best || best.nextLevel === null) return
-
-    const upgrade = TOKEN_UPGRADES.find((candidate) => candidate.id === best.id)
-    if (!upgrade) return
-
-    const nextSingleLevel = Math.min(upgrade.maxLevel, best.currentLevel + 1)
-
-    if (upgrade.group === "output" && upgrade.resource) {
-      setOutputLevelByResource(upgrade.resource, String(nextSingleLevel))
-      return
-    }
-
-    setUpgradeLevel(best.id, String(nextSingleLevel))
   }
 
   const applyRecommendationToLevel = (
@@ -204,6 +172,10 @@ export const TokensProvider = (props: ParentProps) => {
     }
 
     setUpgradeLevel(recommendationRow.id, String(clampedTargetLevel))
+  }
+
+  const applySingleLevel = (row: ReturnType<typeof calculateTokenRecommendations>["best"]) => {
+    if (row?.nextLevel != null) applyRecommendationToLevel(row, row.currentLevel + 1)
   }
 
   const applyBestAll = () => {
@@ -232,9 +204,6 @@ export const TokensProvider = (props: ParentProps) => {
       value={{
         isLoading: () => tokenData.loading,
         loadError: () => (tokenData.error ? String(tokenData.error) : null),
-        blendStep,
-        setBlendStep,
-        blendPercent,
         tokensPerStep,
         setTokensPerStep,
         onlineHoursPerDay,
@@ -251,9 +220,11 @@ export const TokensProvider = (props: ParentProps) => {
         upgrades: () => TOKEN_UPGRADES,
         recommendationRows: () => recommendation().rows,
         bestRecommendation: () => recommendation().best,
+        bestSpecialRecommendation: () => recommendation().bestSpecial,
         totalTokensSpent,
         spendingReport,
-        applyBest,
+        applyBest: () => applySingleLevel(recommendation().best),
+        applyBestSpecial: () => applySingleLevel(recommendation().bestSpecial),
         applyBestAll,
         applyBestCount,
         completeAll: () =>
