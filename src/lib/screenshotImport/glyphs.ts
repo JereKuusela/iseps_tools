@@ -14,6 +14,9 @@ const MIN_GLYPH_HEIGHT_RATIO = 0.75
 const ASPECT_WEIGHT = 0.6
 // A single text line is much shorter than this share of the cell.
 const MAX_LINE_HEIGHT_RATIO = 0.7
+// Wider than this (width / height) means two digits fused together.
+const MAX_GLYPH_ASPECT = 0.62
+const SPLIT_VALLEY_RATIO = 0.6
 
 const otsuThreshold = (values: Uint8ClampedArray, above = -1) => {
   const histogram = new Array<number>(256).fill(0)
@@ -146,7 +149,7 @@ export const extractGlyphs = (mask: Uint8Array, width: number, top: number, bott
     for (let y = top; y <= bottom; y++) count += mask[y * width + x]
     columns.push(count)
   }
-  const boxes = runsOf(columns, 1, 1).map(({ start, end }) => {
+  const boxOf = (start: number, end: number) => {
     let first = bottom
     let last = top
     for (let y = top; y <= bottom; y++) {
@@ -157,7 +160,21 @@ export const extractGlyphs = (mask: Uint8Array, width: number, top: number, bott
       }
     }
     return { left: start, right: end, top: first, bottom: last }
-  })
+  }
+  // Blur can fuse two touching digits; cut such a wide box at its thinnest column.
+  const split = ({ start, end }: { start: number; end: number }) => {
+    const box = boxOf(start, end)
+    const boxHeight = box.bottom - box.top + 1
+    if ((end - start + 1) / boxHeight <= MAX_GLYPH_ASPECT) return [box]
+    const span = end - start
+    let cut = start + Math.round(span * 0.5)
+    for (let x = start + Math.round(span * 0.25); x <= start + Math.round(span * 0.8); x++) {
+      if (columns[x] < columns[cut]) cut = x
+    }
+    if (columns[cut] > Math.max(...columns.slice(start, end + 1)) * SPLIT_VALLEY_RATIO) return [box]
+    return [boxOf(start, cut - 1), boxOf(cut + 1, end)]
+  }
+  const boxes = runsOf(columns, 1, 1).flatMap(split)
   const tallest = Math.max(...boxes.map((box) => box.bottom - box.top + 1), 0)
   return boxes
     .filter((box) => box.bottom - box.top + 1 >= tallest * MIN_GLYPH_HEIGHT_RATIO)

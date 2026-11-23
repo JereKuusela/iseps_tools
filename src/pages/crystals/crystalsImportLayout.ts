@@ -1,8 +1,17 @@
 import { PARTICLE_ORDER } from "../../lib/particles"
+import { findPanelBorder, PURPLE_BORDER } from "../../lib/screenshotImport/panel"
 import type { ReferenceSize, ScanTarget } from "../../lib/screenshotImport/scan"
 
 // All rects are in pixels of a reference Crystal Shop Summary screenshot of this size and scale with the image.
-export const REFERENCE_SIZE: ReferenceSize = { width: 768, height: 1664 }
+// The panel box is the centers of its purple outline, so layouts follow the panel on any screen aspect ratio.
+export const REFERENCE_SIZE: ReferenceSize = {
+  width: 768,
+  height: 1664,
+  anchor: {
+    rect: { x: 78, y: 40, w: 613, h: 1600 },
+    find: (data, width, height) => findPanelBorder(data, width, height, PURPLE_BORDER),
+  },
+}
 
 const LEVEL_ROW_Y0 = 262
 const LEVEL_ROW_PITCH = 60.5
