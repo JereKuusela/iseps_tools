@@ -1,5 +1,6 @@
 import { render } from "solid-js/web"
 import { Router, Route } from "@solidjs/router"
+import { lazy } from "solid-js"
 import App from "./App"
 import { ROUTES } from "./lib/routes"
 import { ScProvider } from "./pages/sc/scContext"
@@ -41,6 +42,9 @@ const pageRoutes = [
   { path: ROUTES.settings, component: SettingsPage },
   { path: ROUTES.premiumCrystal, component: PremiumCrystalTokenPage },
   { path: ROUTES.premiumHauler, component: PremiumHaulerMinePage },
+  ...(import.meta.env.DEV
+    ? [{ path: "/dev/guide-notes", component: lazy(() => import("./pages/dev/GuideNotesPage")) }]
+    : []),
   { path: "/*all", component: HomePage },
 ]
 

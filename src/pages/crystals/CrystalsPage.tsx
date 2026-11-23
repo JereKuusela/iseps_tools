@@ -1,4 +1,5 @@
 import { Panel } from "../../components/layout/Panel"
+import { CrystalsImport } from "./CrystalsImport"
 import { CrystalsInputs } from "./CrystalsInputs"
 import { CrystalsLevelInputs } from "./CrystalsLevelInputs"
 import { CrystalsResults } from "./CrystalsResults"
@@ -6,7 +7,7 @@ import { CrystalsProvider } from "./crystalsContext"
 
 export const CrystalsPage = () => (
   <CrystalsProvider>
-    <Panel title="Crystal Guide" tooltip="crystal.panel">
+    <Panel title="Crystal Guide" tooltip="crystal.panel" titleAction={<CrystalsImport />}>
       <div class="grid gap-3 xl:grid-cols-[1.00fr_2fr] xl:items-start">
         <CrystalsInputs />
         <CrystalsResults />

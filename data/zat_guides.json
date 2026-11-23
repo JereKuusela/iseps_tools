@@ -423,7 +423,7 @@
       "2 fenix",
       "g_points"
     ],
-    "note": "The [[Fenix]] node boosts [[Emblems]], which increases [[Gamma]]."
+    "note": "[[Fenix]] node boosts [[Emblems]] which also increases [[Gamma]]."
   },
   {
     "cycle": 20,
@@ -454,7 +454,7 @@
     "nodes": [
       "centre"
     ],
-    "note": "[[Juno]] run not feasible until 4 cycles"
+    "note": "No point until 4 cycles."
   },
   {
     "cycle": 2,
@@ -462,7 +462,7 @@
     "nodes": [
       "alpha"
     ],
-    "note": "[[Juno]] run not feasible until 4 cycles"
+    "note": "No point until 4 cycles."
   },
   {
     "cycle": 3,
@@ -470,7 +470,7 @@
     "nodes": [
       "2 alpha"
     ],
-    "note": "[[Juno]] run not feasible until 4 cycles"
+    "note": "No point until 4 cycles."
   },
   {
     "cycle": 4,
@@ -478,7 +478,7 @@
     "nodes": [
       "juno"
     ],
-    "note": "If you complete the 5th cycle in your run, put it in [[Juno]] and continue for a bit."
+    "note": "[[Juno]] is the obvious choice."
   },
   {
     "cycle": 5,
@@ -486,7 +486,7 @@
     "nodes": [
       "2 juno"
     ],
-    "note": "If you complete the 6th cycle in your run, put it in [[Juno]] and continue for a bit."
+    "note": "[[Juno]] is the obvious choice."
   },
   {
     "cycle": 6,
@@ -494,16 +494,27 @@
     "nodes": [
       "3 juno"
     ],
-    "note": "If you complete the 7th cycle in your run, put it in [[Alpha]] and continue for a bit."
+    "note": "[[Juno]] is the obvious choice."
   },
   {
     "cycle": 7,
     "run": "jrun",
+    "title": "Start",
+    "nodes": [
+      "2 alpha",
+      "3 juno"
+    ],
+    "note": "[[Alpha]] de gives the best immediate gain after the 7th cycle.\nAfter some techs, respec to [[Artifacts]]."
+  },
+  {
+    "cycle": 7,
+    "run": "jrun",
+    "title": "Respec",
     "nodes": [
       "2 juno",
       "artifacts"
     ],
-    "note": "[[Artifacts]] node + 2 [[Juno]] is generally better, but around SE 119-122, 2 [[Alpha]] + 3 [[Juno]] may be better if it gets Research 122 when [[Artifacts]] node wouldn't. If you complete the 8th cycle in your run, put it in [[Juno]] and continue for a bit."
+    "note": "[[Artifacts]] is generally a better build, however the first build is better around SE 119-122 when it gets Research 122."
   },
   {
     "cycle": 8,
@@ -512,7 +523,7 @@
       "3 juno",
       "artifacts"
     ],
-    "note": "If you complete the 9th cycle in your run, put it in [[Alpha]] and continue for a bit."
+    "note": "[[Juno]] is the obvious choice."
   },
   {
     "cycle": 9,
@@ -522,17 +533,29 @@
       "3 juno",
       "artifacts"
     ],
-    "note": "If you complete the 10th cycle in your run, put it in [[Alpha]] and continue for a bit."
+    "note": "[[Alpha]] has the best overall benefit."
   },
   {
     "cycle": 10,
     "run": "jrun",
+    "title": "Main",
     "nodes": [
       "3 alpha",
       "3 juno",
       "artifacts"
     ],
-    "note": "With ZAT 10, when you can get to e800 [[DC]] (or are very close), it can be better to use 2 [[Alpha]] and 1 [[DC]] for ~x12 [[DC]] boost and e18 [[cash]] loss.  This works as long as you can still reach Research 126 at e970 [[Cash]] with the [[cash]] loss."
+    "note": "[[Alpha]] has the best overall benefit."
+  },
+  {
+    "cycle": 10,
+    "run": "jrun",
+    "title": "Alternative",
+    "nodes": [
+      "3 alpha",
+      "3 juno",
+      "artifacts"
+    ],
+    "note": "[[DC]] gives about x12 DC but loses e18 cash.\nThis is better when it helps to reach e800 DC without losing Research 126 (e970 cash)."
   },
   {
     "cycle": 11,
@@ -745,7 +768,7 @@
       "3 dc",
       "beta"
     ],
-    "note": "Sticking with [[DC]] over 2 [[AP]] was found to be better.  [[Beta]] is best use of last point."
+    "note": "Sticking with [[DC]] over 2 [[AP]] was found to be better. [[Beta]] is best use of last point."
   },
   {
     "cycle": 9,
