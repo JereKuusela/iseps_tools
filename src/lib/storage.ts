@@ -13,7 +13,11 @@ export const readFromStorage = <T>(key: string, fallbackValue: T) => {
     if (rawValue === "false") return false as unknown as T
     return fallbackValue
   }
-  return JSON.parse(rawValue) as T
+  try {
+    return JSON.parse(rawValue) as T
+  } catch {
+    return fallbackValue
+  }
 }
 
 const clearQuotes = (str: string) => str.replace(/^"(.*)"$/, "$1")

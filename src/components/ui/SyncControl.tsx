@@ -3,7 +3,8 @@ import {
   cancelPush,
   createRandomSyncHash,
   pullData,
-  SYNC_ENABLED_KEY,
+  setSyncEnabled,
+  syncEnabled,
   SYNC_HASH_KEY as SYNC_KEY,
   SYNC_TIMESTAMP_KEY,
 } from "../../lib/cloudSync"
@@ -19,7 +20,6 @@ const sanitizeKey = (value: string) =>
 
 export const SyncControl = () => {
   const [syncKey, setSyncKey] = createPersistedSignal(SYNC_KEY, "")
-  const [syncEnabled, setSyncEnabled] = createPersistedSignal(SYNC_ENABLED_KEY, false)
   const [lastSyncTimestamp] = createPersistedSignal<number>(SYNC_TIMESTAMP_KEY, 0)
 
   const isHashEmpty = () => syncKey().trim().length === 0
@@ -51,10 +51,7 @@ export const SyncControl = () => {
   }
 
   const toggleSync = () => {
-    setSyncEnabled((prev) => {
-      if (isHashEmpty()) return false
-      return !prev
-    })
+    setSyncEnabled(!isHashEmpty() && !syncEnabled())
   }
   createEffect(() => {
     if (syncEnabled()) pullData()

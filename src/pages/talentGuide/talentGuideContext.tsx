@@ -3,7 +3,7 @@ import { createSyncedSignal } from "../../lib/persistedSignal"
 import { parseNumberish } from "../../lib/parseNumber"
 import { perkDataBundle } from "../../shared/perkContext"
 import { computeTalentAllocation, type TalentAllocation, type TalentRunType } from "./talentGuideCalculator"
-import { SHARED_SE_KEY } from "../../shared/tokenSharedInputs"
+import { SHARED_SE_KEY } from "../../shared/storageKeys"
 import { talentDefs } from "./talentGuideData"
 
 const runOptions: { value: TalentRunType; label: string }[] = [

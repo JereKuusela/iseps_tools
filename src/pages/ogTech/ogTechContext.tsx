@@ -3,8 +3,7 @@ import { calculateChestsMultiplier } from "../../lib/boosts"
 import { LargeNumber, parseLargeNumberSafe } from "../../lib/largeNumber"
 import { formatPercentFromRatio } from "../../lib/numberFormat"
 import { createSyncedSignal } from "../../lib/persistedSignal"
-import { getCrystalKey } from "../../shared/crystalSharedInputs"
-import { getTokenKey, SHARED_PLAYER_LEVEL_KEY, TOKEN_SHARED_KEYS } from "../../shared/tokenSharedInputs"
+import { getCrystalKey, getTokenKey, SHARED_ONLINE_HOURS_KEY, SHARED_PLAYER_LEVEL_KEY } from "../../shared/storageKeys"
 import { useZatData, type JunoExponentType } from "../../shared/zatContext"
 import {
   calculateZatCostForCycle,
@@ -136,7 +135,7 @@ export const OgTechProvider = (props: ParentProps) => {
   const [cycles, setCycles] = createSyncedSignal("zat.og.cycles", "0")
   const [gainValue, setGainValue] = createSyncedSignal("zat.og.gain", "1.00e1")
   const [gainUnit, setGainUnit] = createSyncedSignal<GainUnit>("zat.og.gainUnit", "hour")
-  const [onlineHoursPerDay, setOnlineHoursPerDay] = createSyncedSignal(TOKEN_SHARED_KEYS.onlineHoursPerDay, "10")
+  const [onlineHoursPerDay, setOnlineHoursPerDay] = createSyncedSignal(SHARED_ONLINE_HOURS_KEY, "10")
   const [junoAmount, setJunoAmount] = createSyncedSignal("zat.og.junoAmount", "")
   const [statusAmount, setStatusAmount] = createSyncedSignal("penrose.statusAmount", "0")
   const [statusAutoIncrement, setStatusAutoIncrement] = createSyncedSignal("zat.og.statusAutoIncrement", true)

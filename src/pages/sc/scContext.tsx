@@ -1,6 +1,6 @@
 import { createContext, type ParentProps, useContext } from "solid-js"
 import { createSyncedSignal } from "../../lib/persistedSignal"
-import { getTokenKey, SHARED_SE_KEY, TOKEN_SHARED_KEYS } from "../../shared/tokenSharedInputs"
+import { getTokenKey, SHARED_ONLINE_HOURS_KEY, SHARED_SE_KEY } from "../../shared/storageKeys"
 import type { ScGoalType } from "./scCalculator"
 
 export type ScGainUnit = "min" | "hour" | "day"
@@ -84,7 +84,7 @@ export const ScProvider = (props: ParentProps) => {
   const [timeSkipSmall, setTimeSkipSmall] = createSyncedSignal("sc.timeSkipSmall", "0")
   const [timeSkipMedium, setTimeSkipMedium] = createSyncedSignal("sc.timeSkipMedium", "0")
   const [timeSkipLarge, setTimeSkipLarge] = createSyncedSignal("sc.timeSkipLarge", "0")
-  const [onlineHoursPerDay, setOnlineHoursPerDay] = createSyncedSignal(TOKEN_SHARED_KEYS.onlineHoursPerDay, "10")
+  const [onlineHoursPerDay, setOnlineHoursPerDay] = createSyncedSignal(SHARED_ONLINE_HOURS_KEY, "10")
   const [alphaSuppliesLevel, setAlphaSuppliesLevel] = createSyncedSignal(getTokenKey("supplies.alpha"), "0")
   const [futureDcBoostPct, setFutureDcBoostPct] = createSyncedSignal("sc.futureDcBoostPct", "0")
   const [futureScBoostPct, setFutureScBoostPct] = createSyncedSignal("sc.futureScBoostPct", "0")

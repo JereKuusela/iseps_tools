@@ -3,7 +3,7 @@ import { createSyncedSignal } from "../../lib/persistedSignal"
 import { type PerkGuideEntry, type PerkRowId, type PerkRunType, usePerkData } from "../../shared/perkContext"
 import type { PerkGuideRowView, PerkRowLookup, PerkRunOption } from "./perkGuideTypes"
 import { parseNumberish } from "../../lib/parseNumber"
-import { SHARED_SE_KEY } from "../../shared/tokenSharedInputs"
+import { SHARED_SE_KEY } from "../../shared/storageKeys"
 
 type PerkGuideContextValue = {
   se: () => string

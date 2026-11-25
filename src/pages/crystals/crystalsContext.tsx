@@ -1,9 +1,8 @@
 import { batch, createContext, createMemo, type ParentProps, useContext } from "solid-js"
-import { getCrystalKey } from "../../shared/crystalSharedInputs"
+import { getCrystalKey, SHARED_PLAYER_LEVEL_KEY, SHARED_SE_KEY } from "../../shared/storageKeys"
 import { parseNumberish } from "../../lib/parseNumber"
 import { PARTICLE_ORDER, type UnlockedParticle } from "../../lib/particles"
 import { createSyncedSignal } from "../../lib/persistedSignal"
-import { SHARED_PLAYER_LEVEL_KEY, SHARED_SE_KEY } from "../../shared/tokenSharedInputs"
 import {
   calculateCrystalRecommendations,
   calculateCrystalSpendingReport,

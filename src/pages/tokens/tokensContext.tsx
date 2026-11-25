@@ -1,6 +1,6 @@
 import { batch, createContext, createMemo, createResource, type ParentProps, useContext } from "solid-js"
 import { createSyncedSignal } from "../../lib/persistedSignal"
-import { getTokenKey, SHARED_SE_KEY, TOKEN_SHARED_KEYS } from "../../shared/tokenSharedInputs"
+import { getTokenKey, SHARED_ONLINE_HOURS_KEY, SHARED_SE_KEY } from "../../shared/storageKeys"
 import {
   calculateTokenRecommendations,
   calculateTokenSpendingReport,
@@ -57,7 +57,7 @@ export const TokensProvider = (props: ParentProps) => {
 
   const [tokensPerStep, setTokensPerStep] = createSyncedSignal("token.tokensPerStep", "100")
 
-  const [onlineHoursPerDay, setOnlineHoursPerDay] = createSyncedSignal(TOKEN_SHARED_KEYS.onlineHoursPerDay, "10")
+  const [onlineHoursPerDay, setOnlineHoursPerDay] = createSyncedSignal(SHARED_ONLINE_HOURS_KEY, "10")
   const [unlockedParticle, setUnlockedParticle] = createSyncedSignal<UnlockedParticle>(
     "token.unlockedParticle",
     "kappa",

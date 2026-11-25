@@ -1,8 +1,7 @@
-import { getApps, initializeApp } from "firebase/app"
-import { get, getDatabase, ref, set } from "firebase/database"
 import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from "lz-string"
+import { batch, createSignal, untrack } from "solid-js"
 import { firebaseSyncConfig } from "./firebaseConfig"
-import { readFromStorage } from "./storage"
+import { readFromStorage, writeToStorage } from "./storage"
 import { applyRawValue, updateSignal } from "./persistedSignal"
 
 export const SYNC_HASH_KEY = "sync.hash"
@@ -10,8 +9,10 @@ export const SYNC_ENABLED_KEY = "sync.enabled"
 export const SYNC_TIMESTAMP_KEY = "sync.timestamp"
 
 const PUSH_DEBOUNCE_MS = 5_000
+const RESUME_PULL_MIN_GAP_MS = 60_000
 const REMOTE_SYNC_VERSION = 1
 const HASH_LENGTH = 16
+const excludedSyncKeys = new Set([SYNC_HASH_KEY, SYNC_TIMESTAMP_KEY, SYNC_ENABLED_KEY])
 
 type SyncRecord = {
   version: number
@@ -21,38 +22,66 @@ type SyncRecord = {
 
 let pushTimer: ReturnType<typeof setTimeout> | undefined
 let applyingRemote = false
+let lastPullAt = 0
+
+const [syncEnabled, setSyncEnabledSignal] = createSignal(false)
+export { syncEnabled }
+
+export const setSyncEnabled = (enabled: boolean) => {
+  writeToStorage(SYNC_ENABLED_KEY, enabled)
+  setSyncEnabledSignal(enabled)
+}
+
+const refreshSyncEnabled = () => {
+  try {
+    setSyncEnabledSignal(readFromStorage(SYNC_ENABLED_KEY, false))
+  } catch (error) {
+    console.error("Error reading cloud sync setting:", error)
+  }
+}
 
 export const createRandomSyncHash = () => {
   return `${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`.slice(0, HASH_LENGTH)
 }
 
-const shouldSyncKey = (key: string) => {
-  // Exclude sync-related metadata keys from being synced themselves
-  if (key === SYNC_HASH_KEY) return false
-  if (key === SYNC_TIMESTAMP_KEY) return false
-  if (key === SYNC_ENABLED_KEY) return false
-  // Sync everything else by default
-  return true
-}
+const shouldSyncKey = (key: string) => !excludedSyncKeys.has(key)
 
 const getSyncPath = () => firebaseSyncConfig.syncPath.replace(/^\/+|\/+$/g, "")
 
-const getSyncDatabase = () => {
-  const app = getApps()[0]
-    ? getApps()[0]
-    : initializeApp({
-        apiKey: firebaseSyncConfig.apiKey,
-        authDomain: firebaseSyncConfig.authDomain,
-        databaseURL: firebaseSyncConfig.databaseURL,
-        projectId: firebaseSyncConfig.projectId,
-        storageBucket: firebaseSyncConfig.storageBucket,
-        messagingSenderId: firebaseSyncConfig.messagingSenderId,
-        appId: firebaseSyncConfig.appId,
-      })
+// Firebase is loaded on demand so visitors without sync don't download it.
+let syncDbPromise: ReturnType<typeof loadSyncDatabase> | undefined
+
+const loadSyncDatabase = async () => {
+  const [{ getApps, initializeApp }, { get, getDatabase, ref, set }] = await Promise.all([
+    import("firebase/app"),
+    import("firebase/database"),
+  ])
+  const app =
+    getApps()[0] ??
+    initializeApp({
+      apiKey: firebaseSyncConfig.apiKey,
+      authDomain: firebaseSyncConfig.authDomain,
+      databaseURL: firebaseSyncConfig.databaseURL,
+      projectId: firebaseSyncConfig.projectId,
+      storageBucket: firebaseSyncConfig.storageBucket,
+      messagingSenderId: firebaseSyncConfig.messagingSenderId,
+      appId: firebaseSyncConfig.appId,
+    })
 
   const db = getDatabase(app)
   if (!db) throw new Error("Failed to initialize sync database")
-  return db
+  return {
+    read: (path: string) => get(ref(db, path)),
+    write: (path: string, value: unknown) => set(ref(db, path), value),
+  }
+}
+
+const getSyncDatabase = () => {
+  syncDbPromise ??= loadSyncDatabase().catch((error) => {
+    syncDbPromise = undefined
+    throw error
+  })
+  return syncDbPromise
 }
 
 const collectSyncData = () => {
@@ -74,10 +103,12 @@ const applyRemoteData = (data: Record<string, string>) => {
   applyingRemote = true
 
   try {
-    for (const [key, rawValue] of Object.entries(data)) {
-      if (!shouldSyncKey(key)) continue
-      if (typeof rawValue === "string") applyRawValue(key, rawValue)
-    }
+    batch(() => {
+      for (const [key, rawValue] of Object.entries(data)) {
+        if (!shouldSyncKey(key)) continue
+        if (typeof rawValue === "string") applyRawValue(key, rawValue)
+      }
+    })
   } finally {
     applyingRemote = false
   }
@@ -88,7 +119,7 @@ const pushData = async () => {
     cancelPush()
     if (applyingRemote) return
 
-    const database = getSyncDatabase()
+    const database = await getSyncDatabase()
 
     const hash = readFromStorage(SYNC_HASH_KEY, "")
     if (!hash) return
@@ -97,7 +128,7 @@ const pushData = async () => {
     const data = collectSyncData()
     const payload = compressToEncodedURIComponent(JSON.stringify(data))
     const path = `${getSyncPath()}/${hash}`
-    await set(ref(database, path), {
+    await database.write(path, {
       version: REMOTE_SYNC_VERSION,
       timestamp,
       payload,
@@ -120,16 +151,20 @@ const getRemoteTimestamp = (record: Partial<SyncRecord>) => {
 
 export const pullData = async () => {
   try {
-    const database = getSyncDatabase()
-
+    if (!untrack(syncEnabled)) return
     const hash = readFromStorage(SYNC_HASH_KEY, "")
     if (!hash) return
+
+    lastPullAt = Date.now()
+    const database = await getSyncDatabase()
     const path = `${getSyncPath()}/${hash}`
-    const snapshot = await get(ref(database, path))
+    const snapshot = await database.read(path)
     if (!snapshot.exists()) return
 
     const record = snapshot.val() as Partial<SyncRecord>
     if (!record || typeof record.payload !== "string") return
+    // Data written by a newer app build may not be understood by this one.
+    if (typeof record.version === "number" && record.version > REMOTE_SYNC_VERSION) return
 
     const decodedPayload = decompressFromEncodedURIComponent(record.payload)
     if (!decodedPayload) return
@@ -165,16 +200,18 @@ const pushImmediately = () => {
 }
 
 export const handleStorageChange = (key: string) => {
-  if (applyingRemote) return
-  if (!readFromStorage(SYNC_ENABLED_KEY, false)) return
-  if (!shouldSyncKey(key)) return
+  if (applyingRemote || !shouldSyncKey(key) || !untrack(syncEnabled)) return
   schedulePush()
 }
 
 export const initCloudSync = () => {
-  window.addEventListener("visibilitychange", (e) => {
-    if (document.visibilityState === "visible") pullData()
-    else pushImmediately()
+  refreshSyncEnabled()
+  window.addEventListener("storage", (event) => {
+    if (event.key === SYNC_ENABLED_KEY || event.key === null) refreshSyncEnabled()
+  })
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState !== "visible") pushImmediately()
+    else if (Date.now() - lastPullAt >= RESUME_PULL_MIN_GAP_MS) pullData()
   })
   window.addEventListener("beforeunload", pushImmediately)
 

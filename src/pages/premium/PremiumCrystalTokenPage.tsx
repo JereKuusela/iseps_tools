@@ -6,8 +6,7 @@ import { clamp } from "../../lib/mathUtils"
 import { formatFixed as formatValue } from "../../lib/numberFormat"
 import { parseNumberish } from "../../lib/parseNumber"
 import { createSyncedSignal } from "../../lib/persistedSignal"
-import { getCrystalKey } from "../../shared/crystalSharedInputs"
-import { TOKEN_SHARED_KEYS } from "../../shared/tokenSharedInputs"
+import { getCrystalKey, SHARED_ONLINE_HOURS_KEY } from "../../shared/storageKeys"
 import type { TooltipKey } from "../../lib/tooltips"
 import { useZatData, type PremiumCrystalTokenMethod, type PremiumHaulerLayer } from "../../shared/zatContext"
 import { CheckboxField } from "../../components/ui/formControls"
@@ -29,7 +28,7 @@ const CrystalAndTokenTab = () => {
   const [bbDurationUpgrade, setBbDurationUpgrade] = createSyncedSignal("premium.bbDurationUpgrade", "0")
   const [bbTokenUpgrade, setBbTokenUpgrade] = createSyncedSignal("premium.bbTokenUpgrade", "0")
   const [chestEnhancer, setChestEnhancer] = createSyncedSignal("premium.chestEnhancer", "0")
-  const [averageHoursPerDay, setAverageHoursPerDay] = createSyncedSignal(TOKEN_SHARED_KEYS.onlineHoursPerDay, "10")
+  const [averageHoursPerDay, setAverageHoursPerDay] = createSyncedSignal(SHARED_ONLINE_HOURS_KEY, "10")
   const [includeDailyRewards, setIncludeDailyRewards] = createSyncedSignal("premium.includeDailyRewards", false)
   const [seItem, setSeItem] = createSyncedSignal("premium.seItem", "11")
   const [luckyLeafClover, setLuckyLeafClover] = createSyncedSignal("premium.luckyLeafClover", false)

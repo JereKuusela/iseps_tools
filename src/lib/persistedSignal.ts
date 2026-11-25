@@ -1,64 +1,66 @@
-import { createSignal, onCleanup, Setter, type Signal } from "solid-js"
+import { createSignal, getOwner, onCleanup, type Signal } from "solid-js"
 import { handleStorageChange } from "./cloudSync"
 import { readFromStorage, writeToStorage } from "./storage"
 
-export const updateSignal = (key: string, value: unknown) => {
-  if (signals[key]) signals[key](value)
-  else writeToStorage(key, value)
+type StoredEntry = {
+  signal: Signal<any>
+  reload: () => void
+  refs: number
 }
 
-const signals: Record<string, Setter<any>> = {}
-const reloaders: Record<string, () => void> = {}
+// One live signal per key so every component using the same key stays in sync.
+const entries = new Map<string, StoredEntry>()
+
+export const updateSignal = (key: string, value: unknown) => {
+  const entry = entries.get(key)
+  if (entry) entry.signal[1](() => value)
+  else writeToStorage(key, value)
+}
 
 // Writes the raw stored string and re-parses it into the live signal using its original type.
 export const applyRawValue = (key: string, rawValue: string) => {
   localStorage.setItem(key, rawValue)
-  reloaders[key]?.()
+  entries.get(key)?.reload()
 }
 
-export const createSyncedSignal = <T>(key: string, initialValue: T): Signal<T> => {
-  const [value, setValue] = createSignal(readFromStorage(key, initialValue))
+const createStoredSignal = <T>(key: string, initialValue: T, onWrite?: (key: string) => void): Signal<T> => {
+  let entry = entries.get(key)
 
-  const setSyncedValue = ((...args: unknown[]) => {
-    const resolvedValue = (setValue as (...setterArgs: unknown[]) => T)(...args)
-    writeToStorage(key, resolvedValue)
-    handleStorageChange(key)
-    return resolvedValue
-  }) as typeof setValue
+  if (!entry) {
+    const [value, setValue] = createSignal(readFromStorage(key, initialValue))
 
-  signals[key] = setSyncedValue
-  reloaders[key] = () => {
-    const next = readFromStorage(key, initialValue)
-    setValue(() => next)
+    const setStoredValue = ((...args: unknown[]) => {
+      const resolvedValue = (setValue as (...setterArgs: unknown[]) => T)(...args)
+      writeToStorage(key, resolvedValue)
+      onWrite?.(key)
+      return resolvedValue
+    }) as typeof setValue
+
+    entry = {
+      signal: [value, setStoredValue],
+      reload: () => {
+        const next = readFromStorage(key, initialValue)
+        setValue(() => next)
+      },
+      refs: 0,
+    }
+    entries.set(key, entry)
   }
 
-  onCleanup(() => {
-    delete signals[key]
-    delete reloaders[key]
-  })
-
-  return [value, setSyncedValue]
-}
-
-export const createPersistedSignal = <T>(key: string, initialValue: T): Signal<T> => {
-  const [value, setValue] = createSignal(readFromStorage(key, initialValue))
-
-  const setPersistedValue = ((...args: unknown[]) => {
-    const resolvedValue = (setValue as (...setterArgs: unknown[]) => T)(...args)
-    writeToStorage(key, resolvedValue)
-    return resolvedValue
-  }) as typeof setValue
-
-  signals[key] = setPersistedValue
-  reloaders[key] = () => {
-    const next = readFromStorage(key, initialValue)
-    setValue(() => next)
+  const current = entry
+  if (getOwner()) {
+    current.refs += 1
+    onCleanup(() => {
+      current.refs -= 1
+      if (current.refs <= 0 && entries.get(key) === current) entries.delete(key)
+    })
   }
 
-  onCleanup(() => {
-    delete signals[key]
-    delete reloaders[key]
-  })
-
-  return [value, setPersistedValue]
+  return current.signal as Signal<T>
 }
+
+export const createSyncedSignal = <T>(key: string, initialValue: T): Signal<T> =>
+  createStoredSignal(key, initialValue, handleStorageChange)
+
+export const createPersistedSignal = <T>(key: string, initialValue: T): Signal<T> =>
+  createStoredSignal(key, initialValue)

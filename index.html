@@ -4,6 +4,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ISEPS Tools</title>
+    <script>
+      // Recover from a stale cached index.html pointing at deleted asset hashes (blank page).
+      ;(function () {
+        var KEY = "blankReloadAt"
+        var reloadOnce = function () {
+          try {
+            var last = Number(sessionStorage.getItem(KEY) || 0)
+            if (Date.now() - last < 30000) return
+            sessionStorage.setItem(KEY, String(Date.now()))
+          } catch (e) {}
+          location.reload()
+        }
+        window.addEventListener(
+          "error",
+          function (event) {
+            var target = event.target
+            if (target && (target.tagName === "SCRIPT" || target.tagName === "LINK")) reloadOnce()
+          },
+          true,
+        )
+        window.addEventListener("load", function () {
+          var root = document.getElementById("root")
+          if (root && !root.hasChildNodes()) reloadOnce()
+        })
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>

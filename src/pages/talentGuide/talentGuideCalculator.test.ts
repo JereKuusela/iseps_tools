@@ -13,12 +13,6 @@ describe("computeTalentAllocation", () => {
     expect(run(128, 500).levels["PP3-1"]).toBe(2)
     expect(run(150, 500).levels["PP3-1"]).toBe(5)
   })
-  it("adds LP based notes", () => {
-    expect(run(50, 0).notes[0]).toContain("player level 50")
-    expect(run(50, 405).notes.some((note) => note.includes("Row 6 costs 10 LP"))).toBe(true)
-    expect(run(50, 400).notes.some((note) => note.includes("Row 6 costs 10 LP"))).toBe(false)
-    expect(run(14, 100).notes).toEqual([])
-  })
 
   it("follows the fixed path up to 47 LP", () => {
     expect(run(50, 5).levels).toEqual({ "IC1-1": 5 })

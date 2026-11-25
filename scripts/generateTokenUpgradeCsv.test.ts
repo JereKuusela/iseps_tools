@@ -31,18 +31,24 @@ const readOutputValueByKey = () => {
 describe("generateTokenUpgradeCsv", () => {
   it("maps special efficiency to equivalent Alpha levels rather than scaling guide scores linearly", () => {
     const scores = readOutputValueByKey()
-    const anchorEfficiency = (1 / 1.49 ** 2 + 1 / 1.5 ** 2) / 2
+    const alphaEfficiency = (level: number) => 1 / (1 + (level - 1) / 100) ** 2
+    const anchorEfficiency = (alphaEfficiency(50) + alphaEfficiency(51)) / 2
     const equivalentAlphaLevel = (efficiencyRatio: number) =>
       1 + 100 * (1 / Math.sqrt(anchorEfficiency * efficiencyRatio) - 1)
     const expectedEarlyAlphaScore = (level: number) => (13 - level / 350) * 100_000_000
 
     for (const [key, ratio] of [
       ["supplies.crystalBonus:2", 200 / 500],
-      ["supplies.tokenBonus:1", 0.1 / 25 / (5 / 200)],
+      ["supplies.tokenBonus:1", 0.1 / 25 / (3 / 200)],
     ] as const) {
-      const score = scores.get(key) ?? 0
-      const expected = expectedEarlyAlphaScore(equivalentAlphaLevel(ratio))
-      expect(Math.abs(score - expected)).toBeLessThan(1_000)
+      const lowerLevel = Math.floor(equivalentAlphaLevel(ratio))
+      const upperLevel = lowerLevel + 1
+      const fraction =
+        (alphaEfficiency(lowerLevel) - anchorEfficiency * ratio) /
+        (alphaEfficiency(lowerLevel) - alphaEfficiency(upperLevel))
+      const expected =
+        expectedEarlyAlphaScore(lowerLevel) * (1 - fraction) + expectedEarlyAlphaScore(upperLevel) * fraction
+      expect(scores.get(key), key).toBe(Math.round(expected))
     }
   })
   it("keeps Balanced scores for regular upgrades and rounds special scores to whole numbers", () => {

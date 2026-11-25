@@ -40,11 +40,20 @@ describe("crystal requirement descriptions", () => {
       requires: { particle: "gamma", se: 90, playerLevel: 100, upgrades: [] },
     })
     expect(getCrystalUnmetRequirements(locked, state())).toEqual([
-      "Unlock Gamma", "Requires SE90", "Requires player level 100",
+      "Unlock Gamma",
+      "Requires SE90",
+      "Requires player level 100",
     ])
-    expect(getCrystalUnmetRequirements(locked, state({
-      unlockedParticle: "gamma", se: 90, playerLevel: 100,
-    }))).toEqual([])
+    expect(
+      getCrystalUnmetRequirements(
+        locked,
+        state({
+          unlockedParticle: "gamma",
+          se: 90,
+          playerLevel: 100,
+        }),
+      ),
+    ).toEqual([])
   })
 })
 
@@ -754,7 +763,7 @@ describe("bundled guide data", () => {
         [250, 30, 20, 0, 5, 1, 1],
         [350, 39, 45, 5, 5, 1, 1],
         [450, 45, 50, 55, 5, 1, 1],
-        [525, 50, 50, 90, 5, 1, 1],
+        [525, 50, 50, 100, 5, 1, 1],
       ],
     },
   ])("matches SE$se table milestones after merging adjacent upgrade targets", ({ se, rows }) => {
