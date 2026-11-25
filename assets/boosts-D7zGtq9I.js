@@ -1,0 +1,1 @@
+var e=1440,t=(e,t)=>Math.min(1,Math.max(0,e)/t),n=e=>t(e,9.333333333333334),r=e=>t(e,10)*380,i=t=>1+r(t)/e,a=(n,i)=>1+(2*Math.max(0,i)*t(n,7)+r(n))/e;export{i as n,n as r,a as t};
