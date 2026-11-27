@@ -1,0 +1,1 @@
+import{Z as e}from"./versionCheck-DI8V_SUU.js";import{s as t}from"./inputStyles-DWjLabuF.js";var n={se:`sc`,grun:`gp`,jrun:`juno`,crun:`cash`,cash:`cash`},r=r=>e(t,{get resource(){return n[r.value]},showText:!0,get children(){return r.label}});export{r as t};

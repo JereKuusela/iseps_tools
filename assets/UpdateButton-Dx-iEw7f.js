@@ -1,1 +1,0 @@
-import{j as e,z as t}from"./versionCheck-B7JQuaSw.js";var n=t(`<button type=button class="rounded-lg bg-orange-500 px-3 py-1.5 text-sm font-semibold text-white shadow transition hover:bg-orange-600">New version available`),r=()=>(()=>{var e=n();return e.$$click=()=>window.location.reload(),e})();e([`click`]);export{r as t};
