@@ -5,8 +5,10 @@ import App from "./App"
 import { ROUTES } from "./lib/routes"
 import { ScProvider } from "./pages/sc/scContext"
 import { initCloudSync } from "./lib/cloudSync"
+import { runStorageMigrations } from "./lib/storageMigrations"
 import "./index.css"
 
+runStorageMigrations()
 initCloudSync()
 
 const page = <K extends string>(load: () => Promise<Record<K, Component>>, name: K) =>
@@ -32,6 +34,7 @@ const pageRoutes = [
   },
   { path: ROUTES.zatGuide, component: page(() => import("./pages/zatGuide/ZatGuidePage"), "ZatGuidePage") },
   { path: ROUTES.sc, component: page(() => import("./pages/sc/ScPage"), "ScPage") },
+  { path: ROUTES.kaiper, component: page(() => import("./pages/kaiper/KaiperPage"), "KaiperPage") },
   { path: ROUTES.settings, component: page(() => import("./pages/settings/SettingsPage"), "SettingsPage") },
   {
     path: ROUTES.premiumCrystal,

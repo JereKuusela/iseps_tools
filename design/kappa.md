@@ -70,13 +70,73 @@ Comparing the potential DC boosts from Kappa
 
 - Color-code efficiency on every card and DC comparison. Color could be just green for the best upgrade. Other ways to highlight are also fine.
 
+## Effects
+
+- Amplifiers:
+  - Cash: Initial 1.3, +0.1 per level, multiplied by SE after 145 + counter + 1..
+  - AP: Initial 1.12, +0.03 per level, multiplied by SE after 149 + counter + 1..
+  - GP: Initial 1.2, +0.04 per level, multiplied by SE after 153 + counter + 1..
+  - DC: Initial 1.18, +0.04 per level, multiplied by SE after 157 + counter + 1..
+  - Researches: Initial ??, +0.?? per level, multiplied by SE after 161 + counter + 1.
+  - DC Milestones: Initial ??, +0.?? per level, multiplied by SE after 165 + counter + 1.
+- Genesis Pod: +0.001 to Kappa exponent.
+  - Page should show somewhere actual multiplier to Kappa (like how Juno works),
+- Data Center: x1.15 DC per Kappa upgrade, x1.1 DC per other upgrade.
+- Sequencing: Various effects. Each upgrade improves next effect.
+  - DC: x1.03, every 3th upgrade gives extra x1.15
+  - GP: x1.03, every 4th upgrade gives extra x1.14
+  - AP: x1.02, every 6th upgrade gives extra x1.12
+  - Cash: x1.02, every 7th upgrade gives extra x1.10
+  - SC: x1.02, every 9th upgrade gives extra x1.08
+  - After fill (same as getting SC): x1.01 to all effects.
+
 ## Costs
 
 - Amplifiers
+  - Base costs
+    - Level 1-5: x2
+    - Level 6-10: x4
+    - Level 11-20: x6
+    - Level 21-30: x9
+    - Level 31-40: x13.5
+    - Level 41-50: x27
+    - Level 51-??: x81
+    - Cash: 50
+    - AP: 1e6
+    - GP: 1e25
+    - DC: 1e43
+    - Researches: Level 50 maybe 2.86e98
+    - DC Milestones: 1e100
+  - Counter costs
+    - Level 1-5: x20
+    - Level 6-10: x100
+    - Level 11-15: x500
+    - Level 16-20: x2500
+    - Level 21-25: x12500
+    - Level 26-30: x62500
+    - Level 31-35: x1250000
+    - Level 36-??: ???
+    - Cash: 1e3
+    - AP: 1e7
+    - GP: 1e27
+    - DC: 1e45
+    - Researches: Level 20 maybe 9.74e99
+    - DC Milestones: 1e110
 - Genesis Pod
-  - Note: Helion has weird starting cost!
+  - Alpha: e745, e3 per level
+  - Beta: e888, 2e4 per level
+  - Ceti: e930, 3e5 per level
+  - Delta: e598, 4e6 per level
+  - Epsilon: e942, 5e7 per level
+  - Fenix: e790, 1e9 per level
+  - Gamma: e886, 1.5e10 per level
+  - Helion: e701 (then 2e757), 2e11 per level
+    - Note: Helion has weird starting cost!
+  - Ixion: e352, 5e12 per level
+  - Juno: e150, 2e12 per level
+  - All increase multiplier by e3 at level 4 and level 11.
+    - For example Alpha level 4 costs e6 more than level 3.
 - Data center
-  - Each upgrade gives x1.15 DC
   - Each has own initial cost 1.0eXXX.
   - Levels 1-5 increase cost by e1, levels 6-10 increase cost by e2, levels 11-25 increase cost by e3, levels 26-50 increase cost by e4, levels 51+ increase cost by e5
   - Alpha: e750
@@ -112,3 +172,26 @@ Comparing the potential DC boosts from Kappa
   - Cash multiplier: e5 per level
   - Levels 11, 21, 31 and 41 multiply multiplier by e1 (total at level 41 is e9)
   - Level 51 behavior is unknown.
+
+## Kappa exponent sources
+
+- Research 131: +0.001
+- DCM 89: +0.005
+- DCM 104: +0.005
+- DCM 105: +0.005
+- Player level 950: +0.01
+- OG tech 19: +0.005
+- Crystal Meltdown bundle: +0.005
+
+Other things:
+
+- DCM 106: Amplifier costs /1.5
+- DCM 107: Genesis Pod + Data Center costs /1.5
+- DCM 108: Sequencing costs /1.5
+- OG tech 16: Amplifier costs /1.01
+- OG tech 17: Genesis Pod + Data Center costs /1.02
+- OG tech 18: Sequencing costs /1.01
+- Quantum Addon 21 (75 max levels): Amplifier costs /1.1
+- Quantum Addon 22 (75 max levels): Genesis Pod + Data Center costs /1.5
+- Quantum Addon 23 (50 max levels): Sequencing costs /1.1
+- Crystal Sequencing bundle: +5 sequencing (one full cycle)

@@ -9,6 +9,7 @@ import {
   SelectField,
 } from "../../components/ui/formControls"
 import { SummaryInputModal } from "../../components/ui/SummaryInputModal"
+import { LevelSelectField } from "../../components/ui/LevelSelectField"
 import { formatCompactMultiplier, formatFixed, formatMultiplier } from "../../lib/numberFormat"
 import { formatLocalTimestampFromMinutes } from "../../lib/timeFormat"
 import type { ZatMode } from "../../shared/zatCalculator"
@@ -16,8 +17,10 @@ import { useZatData, type JunoExponentType } from "../../shared/zatContext"
 import type { GainUnit } from "./ogTechTypes"
 import { useOgTechContext } from "./ogTechContext"
 import { parseNumberish } from "../../lib/parseNumber"
+import { PARTICLE_GAIN_UNITS } from "../../shared/particleInputs"
+import { resolvePreviousLevel } from "../../shared/levelBreakpoints"
 
-const units = ["hour", "min", "sec"] as const
+const units = PARTICLE_GAIN_UNITS
 
 const modeOptions: Array<{ value: ZatMode; label: string }> = [
   { value: "juno", label: "Juno" },
@@ -59,54 +62,17 @@ export const OgTechInputs = () => {
   const dcmLevelOptions = () => buildLevelOptions("dcm")
   const researchLevelOptions = () => buildLevelOptions("research")
 
-  const resolvePreviousLevel = (options: Array<{ value: string; label: string }>, current: string) => {
-    const currentLevel = Math.max(0, Math.floor(parseNumberish(current)))
-    const levels = options.map((option) => Math.floor(parseNumberish(option.value))).sort((a, b) => a - b)
-
-    let resolved = levels[0] ?? 0
-    for (const level of levels) {
-      if (level > currentLevel) break
-      resolved = level
-    }
-
-    return String(resolved)
-  }
-
-  const resolvedSeLevel = () => resolvePreviousLevel(seLevelOptions(), og.seLevel())
-  const resolvedPlayerLevel = () => resolvePreviousLevel(playerLevelOptions(), og.playerLevel())
-  const resolvedDcmLevel = () => resolvePreviousLevel(dcmLevelOptions(), og.dcmLevel())
-  const resolvedResearchLevel = () => resolvePreviousLevel(researchLevelOptions(), og.researchLevel())
+  const resolvedSeLevel = () =>
+    String(
+      resolvePreviousLevel(
+        seLevelOptions().map((option) => parseNumberish(option.value)),
+        Math.max(0, Math.floor(parseNumberish(og.seLevel()))),
+      ),
+    )
 
   createEffect(() => {
     const resolved = resolvedSeLevel()
     if (og.seLevel() !== resolved) og.setSeLevel(resolved)
-  })
-
-  // Player level is shared with the crystal page, so only the dropdown's minimal change is written.
-  const handlePlayerLevelSelect = (next: string) => {
-    const selected = Math.floor(parseNumberish(next))
-    const resolved = Math.floor(parseNumberish(resolvedPlayerLevel()))
-    if (selected === resolved) return
-    if (selected > resolved) {
-      og.setPlayerLevel(String(selected))
-      return
-    }
-
-    const nextBreakpoint = playerLevelOptions()
-      .map((option) => Math.floor(parseNumberish(option.value)))
-      .sort((a, b) => a - b)
-      .find((level) => level > selected)
-    og.setPlayerLevel(String(nextBreakpoint === undefined ? selected : nextBreakpoint - 1))
-  }
-
-  createEffect(() => {
-    const resolved = resolvedDcmLevel()
-    if (og.dcmLevel() !== resolved) og.setDcmLevel(resolved)
-  })
-
-  createEffect(() => {
-    const resolved = resolvedResearchLevel()
-    if (og.researchLevel() !== resolved) og.setResearchLevel(resolved)
   })
 
   const handleTotalExtraInput = (next: string) => {
@@ -210,21 +176,21 @@ export const OgTechInputs = () => {
                 onChange={og.setSeLevel}
                 options={seLevelOptions()}
               />
-              <SelectField
+              <LevelSelectField
                 label="Player level"
-                value={resolvedPlayerLevel()}
-                onChange={handlePlayerLevelSelect}
+                value={og.playerLevel()}
+                onChange={og.setPlayerLevel}
                 options={playerLevelOptions()}
               />
-              <SelectField
+              <LevelSelectField
                 label="DCM level"
-                value={resolvedDcmLevel()}
+                value={og.dcmLevel()}
                 onChange={og.setDcmLevel}
                 options={dcmLevelOptions()}
               />
-              <SelectField
+              <LevelSelectField
                 label="Research level"
-                value={resolvedResearchLevel()}
+                value={og.researchLevel()}
                 onChange={og.setResearchLevel}
                 options={researchLevelOptions()}
               />

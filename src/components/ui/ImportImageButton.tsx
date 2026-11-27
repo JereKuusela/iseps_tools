@@ -1,4 +1,4 @@
-import { ImageUp } from "lucide-solid"
+import ImageUp from "lucide-solid/icons/image-up"
 import { Show, createSignal, onCleanup, onMount } from "solid-js"
 import { ActionButton } from "./ActionButton"
 

@@ -5,6 +5,7 @@ import techsJson from "../../data/techs.json"
 import zatGuidesJson from "../../data/zat_guides.json"
 import zatNodesJson from "../../data/zat_nodes.json"
 import { LargeNumber } from "../lib/largeNumber"
+import { estimateSeconds } from "../lib/eta"
 import { clamp } from "../lib/mathUtils"
 import { buildGuideNodeAmountMap, parseGuideNodes, type GuideNode } from "./zatGuideNodes"
 import { getPrecomputedTechCost } from "./techCostData"
@@ -73,7 +74,7 @@ const parseZatGuides = (raw: ZatGuideJsonData[]): ZatGuideData[] => {
 
 type PremiumMode = "add" | "mul" | "expAdd"
 
-type PremiumRule = {
+export type PremiumRule = {
   name: string
   min?: number
   max?: number
@@ -220,15 +221,6 @@ const findActiveSeRule = (kind: "mul" | "div", seAmount: number): SeEffectRule |
 const safeLog10 = (value: number) => {
   if (value <= 0) return Number.NEGATIVE_INFINITY
   return Math.log10(value)
-}
-
-const estimateSeconds = (cost: LargeNumber, current: LargeNumber, gainPerSecond: LargeNumber) => {
-  if (gainPerSecond.compare(0) <= 0) return Number.POSITIVE_INFINITY
-  if (cost.compare(current) <= 0) return 0
-
-  const remaining = cost.subtract(current).divide(gainPerSecond)
-  if (remaining.exponent > 12) return Number.POSITIVE_INFINITY
-  return remaining.mantissa * 10 ** remaining.exponent
 }
 
 const logScore = (value: number, cost: LargeNumber) => {
@@ -588,12 +580,15 @@ export const calculateExponentIncreaseMultipliers = (
   })
 }
 
-export const calculateTotalPremiumMultiplier = (purchases: PremiumInput): number => {
+export const calculateTotalPremiumMultiplier = (
+  purchases: PremiumInput,
+  rules: PremiumRule[] = premiumRules,
+): number => {
   let multiplier = 1
   let tokenExtra = 0
   let tokenMultiplier = 1
 
-  for (const rule of premiumRules) {
+  for (const rule of rules) {
     const amount = resolvePurchaseAmount(rule, purchases)
 
     let level = amount

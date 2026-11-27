@@ -1,7 +1,7 @@
 import { A, useLocation } from "@solidjs/router"
 import { For, Show, createEffect, createSignal, onCleanup, onMount, type ParentComponent } from "solid-js"
 import { useDarkModeSignal } from "./lib/darkMode"
-import { ROUTES, eventTabs, premiumTabs, primaryTabs, type TabItem } from "./lib/routes"
+import { ROUTES, eventTabs, junoTabs, premiumTabs, primaryTabs, type TabItem } from "./lib/routes"
 import { NAV_ITEM_CLASS, navItemActive } from "./components/ui/navStyles"
 import { startVersionCheck } from "./lib/versionCheck"
 
@@ -140,6 +140,7 @@ const TopNav = (props: { darkMode: boolean; onToggleDarkMode: () => void }) => {
             )}
           </For>
 
+          <NavDropdown id="top-juno-menu" defaultLabel="Juno" tabs={junoTabs} isActivePath={isActivePath} />
           <NavDropdown id="top-premium-menu" defaultLabel="Premium" tabs={premiumTabs} isActivePath={isActivePath} />
           <NavDropdown id="top-events-menu" defaultLabel="Events" tabs={eventTabs} isActivePath={isActivePath} />
         </div>

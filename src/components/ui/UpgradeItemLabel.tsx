@@ -1,4 +1,4 @@
-import { Clock } from "lucide-solid"
+import Clock from "lucide-solid/icons/clock"
 import { For, Show } from "solid-js"
 import { resourceTextOnly } from "../../lib/resourceDisplay"
 import { splitUpgradeItemResources } from "../../lib/upgradeItemResources"

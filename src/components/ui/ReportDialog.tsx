@@ -1,5 +1,5 @@
 import * as Dialog from "@kobalte/core/dialog"
-import { X } from "lucide-solid"
+import X from "lucide-solid/icons/x"
 import type { JSX, ParentProps } from "solid-js"
 
 type ReportDialogProps = ParentProps<{

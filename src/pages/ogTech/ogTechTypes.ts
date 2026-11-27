@@ -1,4 +1,4 @@
-export type GainUnit = "sec" | "min" | "hour"
+export type { ParticleGainUnit as GainUnit } from "../../shared/particleInputs"
 
 export type TopTechEntry = {
   id: number

@@ -1,4 +1,6 @@
-import { ArrowDown, ArrowUp, ChartPie } from "lucide-solid"
+import ArrowDown from "lucide-solid/icons/arrow-down"
+import ArrowUp from "lucide-solid/icons/arrow-up"
+import ChartPie from "lucide-solid/icons/chart-pie"
 import { createMemo, createSignal, For, Show } from "solid-js"
 import {
   sortSpendingRows,

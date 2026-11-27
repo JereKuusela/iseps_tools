@@ -1,6 +1,6 @@
 import { For, Show, createMemo, createSignal, onCleanup, onMount } from "solid-js"
 import type { JSX } from "solid-js"
-import { ShoppingCart } from "lucide-solid"
+import ShoppingCart from "lucide-solid/icons/shopping-cart"
 import { ActionButton } from "../ui/ActionButton"
 import { InfoCard } from "./contentBlocks"
 import { DataTable, TABLE_FRAME_CLASS, TABLE_HEAD_CELL_CLASS, TABLE_ROW_CLASS, TableHead } from "./dataTable"

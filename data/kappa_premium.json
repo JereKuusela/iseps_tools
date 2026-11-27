@@ -1,0 +1,7 @@
+[
+  { "name": "Kappa Output", "min": 0, "max": 800, "value": 0.02, "mode": "add" },
+  { "name": "Kappa Bundle", "value": 0.5, "mode": "add" },
+  { "name": "Juno Kappa Bundle", "value": 0.75, "mode": "add" },
+  { "name": "Kappa Tokens Linear", "min": 0, "max": 1000, "value": 0.01, "mode": "add" },
+  { "name": "Kappa Tokens Post 1000", "min": 1000, "max": 1800, "value": 0.01, "mode": "mul" }
+]

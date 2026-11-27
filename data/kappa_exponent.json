@@ -1,0 +1,9 @@
+[
+  { "type": "research", "level": 131, "exp": 0.001 },
+  { "type": "dcm", "level": 89, "exp": 0.005 },
+  { "type": "dcm", "level": 104, "exp": 0.005 },
+  { "type": "dcm", "level": 105, "exp": 0.005 },
+  { "type": "player", "level": 950, "exp": 0.01 },
+  { "type": "og", "id": 19, "expPerLevel": 0.005 },
+  { "type": "crystal", "id": "bundle.meltdown", "exp": 0.005 }
+]

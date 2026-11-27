@@ -1,6 +1,6 @@
 import * as Select from "@kobalte/core/select"
 import * as TextField from "@kobalte/core/text-field"
-import { ChevronDown } from "lucide-solid"
+import ChevronDown from "lucide-solid/icons/chevron-down"
 import { createEffect, createMemo, createSignal, createUniqueId, For, type JSX } from "solid-js"
 import {
   formatFixed,

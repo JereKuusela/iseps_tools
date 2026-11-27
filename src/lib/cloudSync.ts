@@ -3,6 +3,7 @@ import { batch, createSignal, untrack } from "solid-js"
 import { firebaseSyncConfig } from "./firebaseConfig"
 import { readFromStorage, writeToStorage } from "./storage"
 import { applyRawValue, updateSignal } from "./persistedSignal"
+import { runStorageMigrations } from "./storageMigrations"
 
 export const SYNC_HASH_KEY = "sync.hash"
 export const SYNC_ENABLED_KEY = "sync.enabled"
@@ -176,6 +177,7 @@ export const pullData = async () => {
 
     if (remoteTimestamp <= localTimestamp) return
     applyRemoteData(remoteData)
+    runStorageMigrations()
     updateSignal(SYNC_TIMESTAMP_KEY, remoteTimestamp)
   } catch (error) {
     console.error("Error during pullData:", error)

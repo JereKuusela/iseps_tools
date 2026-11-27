@@ -3,7 +3,14 @@ import { calculateChestsMultiplier } from "../../lib/boosts"
 import { LargeNumber, parseLargeNumberSafe } from "../../lib/largeNumber"
 import { formatPercentFromRatio } from "../../lib/numberFormat"
 import { createSyncedSignal } from "../../lib/persistedSignal"
-import { getCrystalKey, getTokenKey, SHARED_ONLINE_HOURS_KEY, SHARED_PLAYER_LEVEL_KEY } from "../../shared/storageKeys"
+import {
+  getCrystalKey,
+  getTokenKey,
+  SHARED_DCM_LEVEL_KEY,
+  SHARED_ONLINE_HOURS_KEY,
+  SHARED_PLAYER_LEVEL_KEY,
+  SHARED_RESEARCH_LEVEL_KEY,
+} from "../../shared/storageKeys"
 import { useZatData, type JunoExponentType } from "../../shared/zatContext"
 import {
   calculateZatCostForCycle,
@@ -17,12 +24,9 @@ import {
 import type { ExponentGainEntry, GainUnit, TechCardRow, TopTechEntry } from "./ogTechTypes"
 import { parseNumberish } from "../../lib/parseNumber"
 import { loadTechCostData } from "../../shared/techCostData"
-
-const toRatePerSecond = (value: LargeNumber, unit: GainUnit) => {
-  if (unit === "min") return value.divide(60)
-  if (unit === "hour") return value.divide(3600)
-  return value
-}
+import { useParticleInputs } from "../../shared/particleInputs"
+import { estimateSeconds } from "../../lib/eta"
+import { createCrystalFlagSignal } from "../../shared/crystalFlags"
 
 const formatDuration = (hours: number) => {
   if (Number.isNaN(hours) || hours < 0) return "Unknown"
@@ -38,15 +42,6 @@ const formatDuration = (hours: number) => {
   if (days < 3650) return `${days.toFixed(1)} days`
 
   return "> 10 years"
-}
-
-const estimateSeconds = (cost: LargeNumber, current: LargeNumber, gainPerSecond: LargeNumber) => {
-  if (gainPerSecond.compare(0) <= 0) return Number.POSITIVE_INFINITY
-  if (cost.compare(current) <= 0) return 0
-
-  const remaining = cost.subtract(current).divide(gainPerSecond)
-  if (remaining.exponent > 12) return Number.POSITIVE_INFINITY
-  return remaining.mantissa * 10 ** remaining.exponent
 }
 
 type BestTech = {
@@ -122,21 +117,15 @@ type OgTechContextValue = {
 
 const OgTechContext = createContext<OgTechContextValue>()
 
-// Crystal upgrades are stored as numeric levels; one-timers are 0/1.
-const createCrystalFlagSignal = (upgradeId: string): [() => boolean, (checked: boolean) => boolean] => {
-  const [level, setLevel] = createSyncedSignal(getCrystalKey(upgradeId), "0")
-  return [() => level() === "1", (checked) => (setLevel(checked ? "1" : "0"), checked)]
-}
-
 export const OgTechProvider = (props: ParentProps) => {
   const data = useZatData()
   const [techCostData] = createResource(loadTechCostData)
 
   const [cycles, setCycles] = createSyncedSignal("zat.og.cycles", "0")
-  const [gainValue, setGainValue] = createSyncedSignal("zat.og.gain", "1.00e1")
-  const [gainUnit, setGainUnit] = createSyncedSignal<GainUnit>("zat.og.gainUnit", "hour")
+  const juno = useParticleInputs("juno")
+  const { gain: gainValue, setGain: setGainValue, unit: gainUnit, setUnit: setGainUnit } = juno
+  const { current: junoAmount, setCurrent: setJunoAmount } = juno
   const [onlineHoursPerDay, setOnlineHoursPerDay] = createSyncedSignal(SHARED_ONLINE_HOURS_KEY, "10")
-  const [junoAmount, setJunoAmount] = createSyncedSignal("zat.og.junoAmount", "")
   const [statusAmount, setStatusAmount] = createSyncedSignal("penrose.statusAmount", "0")
   const [statusAutoIncrement, setStatusAutoIncrement] = createSyncedSignal("zat.og.statusAutoIncrement", true)
   const [mode, setMode] = createSyncedSignal<ZatMode>("zat.og.mode", "juno")
@@ -152,8 +141,8 @@ export const OgTechProvider = (props: ParentProps) => {
   const [extraExponent, setExtraExponent] = createSyncedSignal("zat.og.extraExponent", "0.001")
   const [seLevel, setSeLevel] = createSyncedSignal("zat.og.seLevel", "0")
   const [playerLevel, setPlayerLevel] = createSyncedSignal(SHARED_PLAYER_LEVEL_KEY, "0")
-  const [dcmLevel, setDcmLevel] = createSyncedSignal("zat.og.dcmLevel", "0")
-  const [researchLevel, setResearchLevel] = createSyncedSignal("zat.og.researchLevel", "0")
+  const [dcmLevel, setDcmLevel] = createSyncedSignal(SHARED_DCM_LEVEL_KEY, "0")
+  const [researchLevel, setResearchLevel] = createSyncedSignal(SHARED_RESEARCH_LEVEL_KEY, "0")
   const [meltdownBundle, setMeltdownBundle] = createCrystalFlagSignal("bundle.meltdown")
   const [quantumAddon0, setQuantumAddon0] = createSyncedSignal("zat.og.qa0", false)
 
@@ -162,11 +151,9 @@ export const OgTechProvider = (props: ParentProps) => {
     Array.from({ length: data().techs.length }, () => 0),
   )
 
-  const gainPerSecond = createMemo(() => {
-    const parsed = parseLargeNumberSafe(gainValue())
-    if (parsed.compare(0) <= 0) return LargeNumber.zero()
-    return toRatePerSecond(parsed, gainUnit()).multiply(calculateChestsMultiplier(parseNumberish(onlineHoursPerDay())))
-  })
+  const gainPerSecond = createMemo(() =>
+    juno.gainPerSecond().multiply(calculateChestsMultiplier(parseNumberish(onlineHoursPerDay()))),
+  )
 
   const currentJuno = createMemo(() => parseLargeNumberSafe(junoAmount()))
   const normalizedStatusAmount = createMemo(() => parseLargeNumberSafe(statusAmount()))

@@ -1,0 +1,471 @@
+{
+  "amps": {
+    "baseSteps": [
+      {
+        "from": 2,
+        "mult": 2
+      },
+      {
+        "from": 6,
+        "mult": 4
+      },
+      {
+        "from": 11,
+        "mult": 6
+      },
+      {
+        "from": 21,
+        "mult": 9
+      },
+      {
+        "from": 31,
+        "mult": 13.5
+      },
+      {
+        "from": 41,
+        "mult": 27
+      },
+      {
+        "from": 51,
+        "mult": 81
+      }
+    ],
+    "counterSteps": [
+      {
+        "from": 2,
+        "mult": 20
+      },
+      {
+        "from": 6,
+        "mult": 100
+      },
+      {
+        "from": 11,
+        "mult": 500
+      },
+      {
+        "from": 16,
+        "mult": 2500
+      },
+      {
+        "from": 21,
+        "mult": 12500
+      },
+      {
+        "from": 26,
+        "mult": 62500
+      },
+      {
+        "from": 31,
+        "mult": 1250000
+      }
+    ],
+    "items": [
+      {
+        "id": "cash",
+        "label": "Cash",
+        "init": 1.3,
+        "step": 0.1,
+        "unlockSe": 145,
+        "baseCost": "5e1",
+        "counterCost": "1e3"
+      },
+      {
+        "id": "ap",
+        "label": "AP",
+        "init": 1.12,
+        "step": 0.03,
+        "unlockSe": 149,
+        "baseCost": "1e6",
+        "counterCost": "1e7"
+      },
+      {
+        "id": "gp",
+        "label": "GP",
+        "init": 1.2,
+        "step": 0.04,
+        "unlockSe": 153,
+        "baseCost": "1e25",
+        "counterCost": "1e27"
+      },
+      {
+        "id": "dc",
+        "label": "DC",
+        "init": 1.18,
+        "step": 0.04,
+        "unlockSe": 157,
+        "baseCost": "1e43",
+        "counterCost": "1e45"
+      },
+      {
+        "id": "research",
+        "label": "Researches",
+        "init": 0,
+        "step": 0,
+        "unlockSe": 161,
+        "baseAnchor": {
+          "level": 50,
+          "cost": "2.86e98"
+        },
+        "counterAnchor": {
+          "level": 20,
+          "cost": "9.74e99"
+        }
+      },
+      {
+        "id": "dcm",
+        "label": "DC Milestones",
+        "init": 0,
+        "step": 0,
+        "unlockSe": 165,
+        "baseCost": "1e100",
+        "counterCost": "1e110"
+      }
+    ]
+  },
+  "genesisPod": {
+    "maxLevel": 75,
+    "steps": [
+      {
+        "from": 4,
+        "exp": 3,
+        "boost": true
+      },
+      {
+        "from": 11,
+        "exp": 3,
+        "boost": true
+      }
+    ],
+    "items": [
+      {
+        "particle": "alpha",
+        "initial": "1e745",
+        "step": "1e3"
+      },
+      {
+        "particle": "beta",
+        "initial": "1e888",
+        "step": "2e4"
+      },
+      {
+        "particle": "ceti",
+        "initial": "1e930",
+        "step": "3e5"
+      },
+      {
+        "particle": "delta",
+        "initial": "1e598",
+        "step": "4e6"
+      },
+      {
+        "particle": "epsilon",
+        "initial": "1e942",
+        "step": "5e7"
+      },
+      {
+        "particle": "fenix",
+        "initial": "1e790",
+        "step": "1e9"
+      },
+      {
+        "particle": "gamma",
+        "initial": "1e886",
+        "step": "1.5e10"
+      },
+      {
+        "particle": "helion",
+        "initial": "1e701",
+        "step": "2e11",
+        "overrides": {
+          "2": "2e757"
+        }
+      },
+      {
+        "particle": "ixion",
+        "initial": "1e352",
+        "step": "5e12"
+      },
+      {
+        "particle": "juno",
+        "initial": "1e150",
+        "step": "2e12"
+      }
+    ]
+  },
+  "dataCenter": {
+    "steps": [
+      {
+        "from": 2,
+        "exp": 1
+      },
+      {
+        "from": 6,
+        "exp": 2
+      },
+      {
+        "from": 11,
+        "exp": 3
+      },
+      {
+        "from": 26,
+        "exp": 4
+      },
+      {
+        "from": 51,
+        "exp": 5
+      }
+    ],
+    "items": [
+      {
+        "particle": "alpha",
+        "initial": "1e750"
+      },
+      {
+        "particle": "beta",
+        "initial": "1e893"
+      },
+      {
+        "particle": "ceti",
+        "initial": "1e933"
+      },
+      {
+        "particle": "delta",
+        "initial": "1e633"
+      },
+      {
+        "particle": "epsilon",
+        "initial": "1e945"
+      },
+      {
+        "particle": "fenix",
+        "initial": "1e800"
+      },
+      {
+        "particle": "gamma",
+        "initial": "1e890"
+      },
+      {
+        "particle": "helion",
+        "initial": "1e700"
+      },
+      {
+        "particle": "ixion",
+        "initial": "1e360"
+      },
+      {
+        "particle": "juno",
+        "initial": "1e155"
+      }
+    ],
+    "kappa": {
+      "initial": "1e2",
+      "steps": [
+        {
+          "from": 2,
+          "mult": 1.4
+        },
+        {
+          "from": 11,
+          "mult": 1.05,
+          "boost": true
+        },
+        {
+          "from": 21,
+          "mult": 1.1,
+          "boost": true
+        },
+        {
+          "from": 31,
+          "mult": 1.1,
+          "boost": true
+        },
+        {
+          "from": 41,
+          "mult": 1.1,
+          "boost": true
+        },
+        {
+          "from": 51,
+          "mult": 1.15,
+          "boost": true
+        },
+        {
+          "from": 61,
+          "mult": 1.2,
+          "boost": true
+        },
+        {
+          "from": 71,
+          "mult": 1.3,
+          "boost": true
+        },
+        {
+          "from": 81,
+          "mult": 1.4,
+          "boost": true
+        },
+        {
+          "from": 91,
+          "mult": 1.5,
+          "boost": true
+        },
+        {
+          "from": 101,
+          "mult": 2,
+          "boost": true
+        }
+      ]
+    },
+    "kappaLevelDcMultiplier": 1.15,
+    "otherLevelDcMultiplier": 1.1
+  },
+  "sequencing": {
+    "kappa": {
+      "initial": "2e7",
+      "steps": [
+        {
+          "from": 2,
+          "mult": 1.5
+        },
+        {
+          "from": 11,
+          "mult": 1.25,
+          "boost": true
+        },
+        {
+          "from": 21,
+          "mult": 1.25,
+          "boost": true
+        },
+        {
+          "from": 31,
+          "mult": 1.25,
+          "boost": true
+        },
+        {
+          "from": 41,
+          "mult": 1.25,
+          "boost": true
+        },
+        {
+          "from": 51,
+          "mult": 2,
+          "boost": true
+        }
+      ]
+    },
+    "cash": {
+      "initial": "1e1200",
+      "steps": [
+        {
+          "from": 2,
+          "exp": 5
+        },
+        {
+          "from": 11,
+          "exp": 1,
+          "boost": true
+        },
+        {
+          "from": 21,
+          "exp": 1,
+          "boost": true
+        },
+        {
+          "from": 31,
+          "exp": 1,
+          "boost": true
+        },
+        {
+          "from": 41,
+          "exp": 1,
+          "boost": true
+        }
+      ]
+    },
+    "effects": [
+      {
+        "id": "dc",
+        "label": "DC",
+        "mult": 1.03,
+        "every": 3,
+        "bonus": 1.15
+      },
+      {
+        "id": "gp",
+        "label": "GP",
+        "mult": 1.03,
+        "every": 4,
+        "bonus": 1.14
+      },
+      {
+        "id": "ap",
+        "label": "AP",
+        "mult": 1.02,
+        "every": 6,
+        "bonus": 1.12
+      },
+      {
+        "id": "cash",
+        "label": "Cash",
+        "mult": 1.02,
+        "every": 7,
+        "bonus": 1.1
+      },
+      {
+        "id": "sc",
+        "label": "SC",
+        "mult": 1.02,
+        "every": 9,
+        "bonus": 1.08
+      }
+    ],
+    "fillMultiplier": 1.01,
+    "bundlePositions": 5
+  },
+  "costReducers": {
+    "amps": {
+      "dcm": {
+        "level": 106,
+        "div": 1.5
+      },
+      "og": {
+        "id": 16,
+        "div": 1.01
+      },
+      "qa": {
+        "id": 21,
+        "div": 1.1
+      }
+    },
+    "podAndDc": {
+      "dcm": {
+        "level": 107,
+        "div": 1.5
+      },
+      "og": {
+        "id": 17,
+        "div": 1.02
+      },
+      "qa": {
+        "id": 22,
+        "div": 1.5
+      }
+    },
+    "sequencing": {
+      "dcm": {
+        "level": 108,
+        "div": 1.5
+      },
+      "og": {
+        "id": 18,
+        "div": 1.01
+      },
+      "qa": {
+        "id": 23,
+        "div": 1.1
+      }
+    }
+  }
+}

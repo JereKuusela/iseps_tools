@@ -15,17 +15,22 @@ export const ROUTES = {
   factoryProduction: "/factory-production",
   zatGuide: "/zat",
   sc: "/sc",
+  kaiper: "/kaiper",
   premiumCrystal: "/premium",
   premiumHauler: "/hauler",
   settings: "/settings",
 } as const
 
 export const primaryTabs: TabItem[] = [
-  { href: ROUTES.ogTech, label: "OG Tech" },
   { href: ROUTES.perks, label: "Perks" },
   { href: ROUTES.talents, label: "Talents" },
-  { href: ROUTES.zatGuide, label: "ZAT" },
   { href: ROUTES.sc, label: "SC" },
+  //{ href: ROUTES.kaiper, label: "Kaiper" },
+]
+
+export const junoTabs: TabItem[] = [
+  { href: ROUTES.ogTech, label: "OG Tech" },
+  { href: ROUTES.zatGuide, label: "ZAT" },
 ]
 
 export const premiumTabs: TabItem[] = [
@@ -40,12 +45,12 @@ export const eventTabs: TabItem[] = [
 ]
 
 export const tabs: TabItem[] = [
-  primaryTabs[0],
+  ...junoTabs,
   ...premiumTabs,
+  primaryTabs[0],
   primaryTabs[1],
-  primaryTabs[2],
   ...eventTabs,
-  ...primaryTabs.slice(3),
+  ...primaryTabs.slice(2),
 ]
 
 export const toolCards: ToolCardItem[] = [
@@ -84,6 +89,13 @@ export const toolCards: ToolCardItem[] = [
     label: "SC",
     description: getTooltip("sc.panel"),
   },
+  /*
+  {
+    href: ROUTES.kaiper,
+    label: "Kaiper",
+    description: getTooltip("kaiper.panel"),
+  }
+    */
   {
     href: ROUTES.cruise,
     label: "Cruise",
