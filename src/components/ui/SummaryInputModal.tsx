@@ -1,4 +1,4 @@
-import { Show, createMemo, createSignal, type JSX } from "solid-js"
+import { Show, createMemo, createSignal, onCleanup, onMount, type JSX } from "solid-js"
 import { Tooltip } from "./Tooltip"
 import { INPUT_BASE_CLASS } from "./inputStyles"
 import { TooltipKey } from "../../lib/tooltips"
@@ -23,6 +23,18 @@ export const SummaryInputModal = (props: SummaryInputModalProps) => {
   const [isOpen, setIsOpen] = createSignal(false)
   const [isInputFocused, setIsInputFocused] = createSignal(false)
   const [editingValue, setEditingValue] = createSignal("")
+  let container: HTMLDivElement | undefined
+
+  onMount(() => {
+    const handlePointerDown = (event: PointerEvent) => {
+      if (isOpen() && container && !event.composedPath().includes(container)) {
+        setIsOpen(false)
+      }
+    }
+
+    document.addEventListener("pointerdown", handlePointerDown, true)
+    onCleanup(() => document.removeEventListener("pointerdown", handlePointerDown, true))
+  })
 
   const valueFormat = () => props.valueFormat ?? "plain"
   const isEditable = () => !!props.onInput
@@ -68,15 +80,7 @@ export const SummaryInputModal = (props: SummaryInputModalProps) => {
   }
 
   return (
-    <div
-      class="relative"
-      onFocusOut={(event) => {
-        const related = event.relatedTarget
-        if (related instanceof Node && event.currentTarget.contains(related)) return
-        setIsOpen(false)
-      }}
-      onKeyDown={(event) => event.key === "Escape" && setIsOpen(false)}
-    >
+    <div class="relative" ref={container} onKeyDown={(event) => event.key === "Escape" && setIsOpen(false)}>
       <div
         class={`grid items-start gap-2 ${
           props.wide
