@@ -14,4 +14,16 @@ export default defineConfig({
   plugins: [solid(), versionFile()],
   base: "/",
   define: { __BUILD_ID__: JSON.stringify(BUILD_ID) },
+  build: {
+    rolldownOptions: {
+      output: {
+        codeSplitting: {
+          groups: [
+            { name: "firebase", test: /node_modules[\\/]@?firebase[\\/]/, priority: 2 },
+            { name: "vendor", test: /node_modules[\\/]/, priority: 1 },
+          ],
+        },
+      },
+    },
+  },
 })

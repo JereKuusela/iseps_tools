@@ -1,49 +1,47 @@
 import { render } from "solid-js/web"
 import { Router, Route } from "@solidjs/router"
-import { ErrorBoundary, lazy, type Component } from "solid-js"
+import { ErrorBoundary, lazy } from "solid-js"
 import App from "./App"
 import { ROUTES } from "./lib/routes"
 import { ScProvider } from "./pages/sc/scContext"
 import { initCloudSync } from "./lib/cloudSync"
 import { runStorageMigrations } from "./lib/storageMigrations"
+import { HomePage } from "./pages/home/HomePage"
+import { OgTechPage } from "./pages/ogTech/OgTechPage"
+import { TokensPage } from "./pages/tokens/TokensPage"
+import { CrystalsPage } from "./pages/crystals/CrystalsPage"
+import { PerkGuidePage } from "./pages/perkGuide/PerkGuidePage"
+import { TalentGuidePage } from "./pages/talentGuide/TalentGuidePage"
+import { CruisePage } from "./pages/cruise/CruisePage"
+import { FactoryPage } from "./pages/factory/FactoryPage"
+import { FactoryProductionPage } from "./pages/factoryProduction/FactoryProductionPage"
+import { ZatGuidePage } from "./pages/zatGuide/ZatGuidePage"
+import { ScPage } from "./pages/sc/ScPage"
+import { KaiperPage } from "./pages/kaiper/KaiperPage"
+import { SettingsPage } from "./pages/settings/SettingsPage"
+import { PremiumCrystalTokenPage } from "./pages/premium/PremiumCrystalTokenPage"
+import { PremiumHaulerMinePage } from "./pages/premium/PremiumHaulerMinePage"
 import "./index.css"
 
 runStorageMigrations()
 initCloudSync()
 
-const page = <K extends string>(load: () => Promise<Record<K, Component>>, name: K) =>
-  lazy(() => load().then((module) => ({ default: module[name] })))
-
-const HomePage = page(() => import("./pages/home/HomePage"), "HomePage")
-
 const pageRoutes = [
   { path: ROUTES.home, component: HomePage },
-  { path: ROUTES.ogTech, component: page(() => import("./pages/ogTech/OgTechPage"), "OgTechPage") },
-  { path: ROUTES.tokens, component: page(() => import("./pages/tokens/TokensPage"), "TokensPage") },
-  { path: ROUTES.crystals, component: page(() => import("./pages/crystals/CrystalsPage"), "CrystalsPage") },
-  { path: ROUTES.perks, component: page(() => import("./pages/perkGuide/PerkGuidePage"), "PerkGuidePage") },
-  {
-    path: ROUTES.talents,
-    component: page(() => import("./pages/talentGuide/TalentGuidePage"), "TalentGuidePage"),
-  },
-  { path: ROUTES.cruise, component: page(() => import("./pages/cruise/CruisePage"), "CruisePage") },
-  { path: ROUTES.factory, component: page(() => import("./pages/factory/FactoryPage"), "FactoryPage") },
-  {
-    path: ROUTES.factoryProduction,
-    component: page(() => import("./pages/factoryProduction/FactoryProductionPage"), "FactoryProductionPage"),
-  },
-  { path: ROUTES.zatGuide, component: page(() => import("./pages/zatGuide/ZatGuidePage"), "ZatGuidePage") },
-  { path: ROUTES.sc, component: page(() => import("./pages/sc/ScPage"), "ScPage") },
-  { path: ROUTES.kaiper, component: page(() => import("./pages/kaiper/KaiperPage"), "KaiperPage") },
-  { path: ROUTES.settings, component: page(() => import("./pages/settings/SettingsPage"), "SettingsPage") },
-  {
-    path: ROUTES.premiumCrystal,
-    component: page(() => import("./pages/premium/PremiumCrystalTokenPage"), "PremiumCrystalTokenPage"),
-  },
-  {
-    path: ROUTES.premiumHauler,
-    component: page(() => import("./pages/premium/PremiumHaulerMinePage"), "PremiumHaulerMinePage"),
-  },
+  { path: ROUTES.ogTech, component: OgTechPage },
+  { path: ROUTES.tokens, component: TokensPage },
+  { path: ROUTES.crystals, component: CrystalsPage },
+  { path: ROUTES.perks, component: PerkGuidePage },
+  { path: ROUTES.talents, component: TalentGuidePage },
+  { path: ROUTES.cruise, component: CruisePage },
+  { path: ROUTES.factory, component: FactoryPage },
+  { path: ROUTES.factoryProduction, component: FactoryProductionPage },
+  { path: ROUTES.zatGuide, component: ZatGuidePage },
+  { path: ROUTES.sc, component: ScPage },
+  { path: ROUTES.kaiper, component: KaiperPage },
+  { path: ROUTES.settings, component: SettingsPage },
+  { path: ROUTES.premiumCrystal, component: PremiumCrystalTokenPage },
+  { path: ROUTES.premiumHauler, component: PremiumHaulerMinePage },
   ...(import.meta.env.DEV
     ? [{ path: "/dev/guide-notes", component: lazy(() => import("./pages/dev/GuideNotesPage")) }]
     : []),
